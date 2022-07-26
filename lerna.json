@@ -1,0 +1,15 @@
+{
+  "packages": ["common/*"],
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "conventionalCommits": true,
+      "conventionalPrerelease": true,
+      "allowBranch": "master",
+      "exact": true,
+      "message": "chore: released new version"
+    }
+  }
+}
