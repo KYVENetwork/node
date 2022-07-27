@@ -1,0 +1,6 @@
+[submodule "common/proto/chain"]
+	path = common/proto/chain
+	url = https://github.com/KYVENetwork/chain.git
+[submodule "common/proto/cosmos-sdk"]
+	path = common/proto/cosmos-sdk
+	url = https://github.com/KYVENetwork/cosmos-sdk.git
