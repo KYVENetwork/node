@@ -1,0 +1,86 @@
+name: integration-tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - converted_to_draft
+      - edited
+    branches: [ "main" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIRECORY: ./common/sdk
+      COSMOS_DATA: ${{github.workspace}}/chain-data/v1/chain
+    steps:
+      - name: "print context"
+        run: echo ${{github.event.pull_request.title}}
+      - name: "get branch config"
+        run: echo "TEST_WITH=$(echo ${{ github.event.pull_request.title }} | awk -F'[}{]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
+      - name: "Try to set default TEST_WITH"
+        if: ${{env.TEST_WITH == ''}}
+        run: echo "TEST_WITH=$(echo main)" >> $GITHUB_ENV
+      - name: "print TEST_WITH"
+        run: echo ${{env.TEST_WITH}}
+      - name: "copy chain test data"
+        uses: actions/checkout@v3
+        with:
+          repository: "KYVENetwork/chain-test-data"
+          path: "chain-data"
+      - name: "clone chain repo"
+        uses: actions/checkout@v3
+        with:
+          repository: "KYVENetwork/chain"
+          path: "chain"
+          ref: ${{env.TEST_WITH}}
+      - name: "install go"
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.18"
+      - name: "install ignite"
+        run: curl https://get.ignite.com/cli@v0.22.0! | bash
+      - name: "build binary"
+        run: go build -o chaind cmd/kyved/main.go
+        working-directory: ./chain
+      - name: set chain path
+        run: |
+          echo "COSMOS_BINARY=$(echo ${{github.workspace}}/chain/chaind)" >> $GITHUB_ENV
+      - name: Print COSMOS_BINARY
+        run: echo $COSMOS_BINARY
+      - name: "checkout"
+        uses: actions/checkout@v3
+        with:
+          path: "monorepo"
+      - name: install nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: install dependency
+        run: yarn install --frozen-lockfile
+        working-directory: ./monorepo
+      - name: monorepo setup
+        run: yarn lerna bootstrap
+        working-directory: ./monorepo
+      - name: monorepo build
+        run: yarn lerna run build
+        working-directory: ./monorepo
+      - name: "link dependency"
+        run: yarn link
+        working-directory: ./monorepo/common/sdk
+      - name: install dependency
+        run: yarn install --frozen-lockfile
+        working-directory: ./chain/test
+      - name: "print branch name"
+        run: echo ${{ github.event.pull_request.head.ref }}
+      - name: install current branch sdk as dependency for integration tests
+        run: yarn link "@kyve/sdk"
+        working-directory: ./chain/test
+      - name: check package.json
+        run: cat package.json
+        working-directory: ./chain/test
+      - name: run tests
+        run: yarn test
+        working-directory: ./chain/test

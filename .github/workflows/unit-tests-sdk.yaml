@@ -1,0 +1,29 @@
+name: unit-tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIRECORY: ./common/sdk
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+    steps:
+      - name: "checkout repo"
+        uses: actions/checkout@v3
+      - name: "nodejs install"
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+      - name: "dependency install"
+        run: yarn install --frozen-lockfile
+      - name: build
+        run: yarn lerna run build
+      - name: "run tests"
+        run: yarn test:unit
+        working-directory: ${{env.WORKING_DIRECORY}}
