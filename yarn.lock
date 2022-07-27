@@ -1034,16 +1034,6 @@
     big-integer "^1.6.48"
     utility-types "^3.10.0"
 
-"@kyve/proto@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kyve/proto/-/proto-1.0.0.tgz#2ffc3a9e8ccf19616535584f2a2116328f274bde"
-  integrity sha512-oMJssPQtnmbtBsZZsXhU4MMFxupyQPmDaeKAiyZJpw9Nn4Dk3CyJoKlnOUhJ8U+gi3vthgdtoCtdg0vwBsQHnA==
-  dependencies:
-    "@protobufs/cosmos" "^0.0.9"
-    "@protobufs/gogoproto" "^0.0.9"
-    "@protobufs/google" "^0.0.9"
-    ts-proto "^1.115.4"
-
 "@lerna/add@5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-5.2.0.tgz#b9d3c728e059eea67f5757ee4b8e9550295f0be6"
