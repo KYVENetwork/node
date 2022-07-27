@@ -22,9 +22,9 @@ jobs:
         run: echo "TEST_WITH=$(echo ${{ github.event.pull_request.title }} | awk -F'[}{]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: "print TEST_WITH"
         run: echo ${{env.TEST_WITH}}
-      - name: "check TEST_WITH"
+      - name: "Try to set default TEST_WITH"
         if: ${{env.TEST_WITH == ''}}
-        run: exit 1
+        run: echo "TEST_WITH=$(echo main)" >> $GITHUB_ENV
       - name: "copy chain test data"
         uses: actions/checkout@v3
         with:
@@ -53,7 +53,10 @@ jobs:
       - name: "checkout"
         uses: actions/checkout@v3
         with:
-          path: "sdk"
+          path: "monorepo"
+      - name: "link dependency"
+        run: yarn link
+        working-directory: ./monorepo/common/sdk
       - name: install nodejs
         uses: actions/setup-node@v3
         with:
@@ -64,7 +67,7 @@ jobs:
       - name: "print branch name"
         run: echo ${{ github.event.pull_request.head.ref }}
       - name: install current branch sdk as dependency for integration tests
-        run: yarn add https://github.com/${{ github.repository }}#${{ github.event.pull_request.head.ref }}
+        run: yarn link @kyve/sdk
         working-directory: ./chain/test
       - name: check package.json
         run: cat package.json
