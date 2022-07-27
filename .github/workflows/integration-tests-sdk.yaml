@@ -20,11 +20,11 @@ jobs:
         run: echo ${{github.event.pull_request.title}}
       - name: "get branch config"
         run: echo "TEST_WITH=$(echo ${{ github.event.pull_request.title }} | awk -F'[}{]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
-      - name: "print TEST_WITH"
-        run: echo ${{env.TEST_WITH}}
       - name: "Try to set default TEST_WITH"
         if: ${{env.TEST_WITH == ''}}
         run: echo "TEST_WITH=$(echo main)" >> $GITHUB_ENV
+      - name: "print TEST_WITH"
+        run: echo ${{env.TEST_WITH}}
       - name: "copy chain test data"
         uses: actions/checkout@v3
         with:
@@ -54,6 +54,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: "monorepo"
+      - name: install dependancy for monorepo
+        run: yarn lerna bootstrap
       - name: "link dependency"
         run: yarn link
         working-directory: ./monorepo/common/sdk
@@ -67,7 +69,7 @@ jobs:
       - name: "print branch name"
         run: echo ${{ github.event.pull_request.head.ref }}
       - name: install current branch sdk as dependency for integration tests
-        run: yarn link @kyve/sdk
+        run: yarn link "@kyve/sdk"
         working-directory: ./chain/test
       - name: check package.json
         run: cat package.json

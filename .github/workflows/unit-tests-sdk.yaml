@@ -23,7 +23,7 @@ jobs:
       - name: "dependency install"
         run: yarn install --frozen-lockfile
       - name: build
-        run: lerna run build
+        run: yarn lerna run build
       - name: "run tests"
         run: yarn test:unit
         working-directory: ${{env.WORKING_DIRECORY}}
