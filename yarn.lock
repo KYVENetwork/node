@@ -1044,16 +1044,6 @@
     "@protobufs/google" "^0.0.9"
     ts-proto "^1.115.4"
 
-"@kyve/proto@^1.0.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@kyve/proto/-/proto-1.2.0.tgz#08da8944f2e6145db0d236497a7b806060a8e56e"
-  integrity sha512-SMOCxPFYdhB1ekeVrtmk09yVJ8TMZAuAdl/VQDrmHzvtGgosoPClUl9CRo/3tln98cSxeE1sXDoBlxZeUvEPjw==
-  dependencies:
-    "@protobufs/cosmos" "^0.0.9"
-    "@protobufs/gogoproto" "^0.0.9"
-    "@protobufs/google" "^0.0.9"
-    ts-proto "^1.115.4"
-
 "@lerna/add@5.2.0":
   version "5.2.0"
   resolved "https://registry.npmjs.org/@lerna/add/-/add-5.2.0.tgz"
@@ -7480,7 +7470,7 @@ typescript-json-schema@^0.53.1:
     typescript "~4.6.0"
     yargs "^17.1.1"
 
-typescript@^4.4.3, typescript@^4.5.5:
+typescript@^4.4.3, typescript@^4.5.5, typescript@^4.7.3:
   version "4.7.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
   integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
