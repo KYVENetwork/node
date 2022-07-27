@@ -13,6 +13,7 @@
   "scripts": {
     "setup": "yarn --ignore-engines && yarn clean && yarn fmt && yarn build && lerna bootstrap",
     "build": "lerna run build",
+    "pub": "lerna run build && lerna publish",
     "build:changed": "lerna run --since origin/master --include-dependents build",
     "test": "lerna run test",
     "fmt": "prettier --write .",
