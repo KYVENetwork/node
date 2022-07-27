@@ -7,7 +7,7 @@ on:
       - reopened
       - converted_to_draft
       - edited
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   tests:
@@ -54,15 +54,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: "monorepo"
-      - name: install dependancy for monorepo
-        run: yarn lerna bootstrap
-      - name: "link dependency"
-        run: yarn link
-        working-directory: ./monorepo/common/sdk
       - name: install nodejs
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: install dependancy for monorepo
+        run: yarn lerna bootstrap
+        working-directory: ./monorepo
+      - name: "link dependency"
+        run: yarn link
+        working-directory: ./monorepo/common/sdk
       - name: install dependency
         run: yarn install --frozen-lockfile
         working-directory: ./chain/test
