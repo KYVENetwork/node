@@ -17,6 +17,9 @@ const compilerOptions: TJS.CompilerOptions = {
 };
 
 export function createValidator(pathToTypes: string[]) {
+
+
+
   const program = TJS.getProgramFromFiles([...pathToTypes], compilerOptions);
   const typeQuerySchemas = TJS.buildGenerator(
     program,
