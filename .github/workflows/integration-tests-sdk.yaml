@@ -64,6 +64,9 @@ jobs:
       - name: monorepo setup
         run: yarn lerna bootstrap
         working-directory: ./monorepo
+      - name: monorepo build
+        run: yarn lerna run build
+        working-directory: ./monorepo
       - name: "link dependency"
         run: yarn link
         working-directory: ./monorepo/common/sdk
