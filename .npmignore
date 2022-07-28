@@ -296,5 +296,5 @@ $RECYCLE.BIN/
 
 **/*/*arweave*.json
 
-cosmos-sdk/
-chain/
+cosmos-sdk
+chain

@@ -1,3 +1,7 @@
 dist
 .nyc_output
 CHANGELOG.md
+db
+dist
+cosmos-sdk
+chain

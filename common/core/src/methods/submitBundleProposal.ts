@@ -11,7 +11,7 @@ export async function submitBundleProposal(
   toKey: string,
   toValue: string,
   bundleHash: string
-): Promise<boolean> {
+): Promise<void> {
   try {
     this.logger.debug(`Attempting to submit bundle proposal`);
 
@@ -35,14 +35,19 @@ export async function submitBundleProposal(
       this.logger.info(
         `Successfully submitted bundle proposal with Storage Id "${storageId}"\n`
       );
-      return true;
     } else {
-      this.logger.info(`Could not submit bundle proposal. Continuing ...\n`);
-      return false;
+      this.logger.info(
+        `Could not submit bundle proposal. Continuing in 10s ...\n`
+      );
+
+      await sleep(10 * 1000);
     }
   } catch (error) {
-    this.logger.warn(" Failed to submit bundle proposal. Continuing ...\n");
+    this.logger.warn(
+      " Failed to submit bundle proposal. Continuing in 10s ...\n"
+    );
     this.logger.debug(error);
-    return false;
+
+    await sleep(10 * 1000);
   }
 }

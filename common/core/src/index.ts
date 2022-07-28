@@ -39,7 +39,13 @@ import { kyve } from "@kyve/proto";
  * @constructor
  */
 export class Node {
-  // register class attributes
+  /**
+   * My property description.  Like other pieces of your comment blocks,
+   * this can span multiple lines.
+   *
+   * @property runtime
+   * @type {IRuntime}
+   */
   protected runtime!: IRuntime;
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
@@ -225,9 +231,6 @@ export class Node {
 
 // export types
 export * from "./types";
-
-// export utils
-export * from "./utils";
 
 // export storage providers
 export * from "./storage";

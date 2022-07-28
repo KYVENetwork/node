@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "workspaces": [
-    "common/*"
+    "common/*",
+    "integrations/*"
   ],
   "devDependencies": {
     "lerna": "^5.2.0",

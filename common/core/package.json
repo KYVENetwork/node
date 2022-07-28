@@ -21,9 +21,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && yarn format && tsc",
     "format": "prettier --write .",
-    "clean": "rimraf dist",
     "deploy": "yarn build && yarn npm publish"
   },
   "dependencies": {
@@ -54,14 +53,5 @@
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.3"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "outputs": [
-          "{projectRoot}/dist"
-        ]
-      }
-    }
   }
 }
