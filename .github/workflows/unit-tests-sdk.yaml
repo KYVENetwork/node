@@ -17,9 +17,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: "dependency install"
+      - name: "setup"
         run: yarn setup
-      - name: build
-        run: yarn lerna run build
       - name: "run tests"
         run: yarn test:unit
