@@ -1,0 +1,48 @@
+diff --git a/node_modules/@solana/web3.js/lib/index.cjs.js b/node_modules/@solana/web3.js/lib/index.cjs.js
+index 229d211..13ae768 100644
+--- a/node_modules/@solana/web3.js/lib/index.cjs.js
++++ b/node_modules/@solana/web3.js/lib/index.cjs.js
+@@ -5790,8 +5790,8 @@ const GetBlockRpcResult = jsonRpcResult(superstruct.nullable(superstruct.type({
+   previousBlockhash: superstruct.string(),
+   parentSlot: superstruct.number(),
+   transactions: superstruct.array(superstruct.type({
+-    transaction: ConfirmedTransactionResult,
+-    meta: superstruct.nullable(ConfirmedTransactionMetaResult)
++    transaction: ParsedConfirmedTransactionResult,
++    meta: superstruct.nullable(ParsedConfirmedTransactionMetaResult)
+   })),
+   rewards: superstruct.optional(superstruct.array(superstruct.type({
+     pubkey: superstruct.string(),
+@@ -7102,7 +7102,7 @@ class Connection {
+       config
+     } = extractCommitmentFromConfig(rawConfig);
+ 
+-    const args = this._buildArgsAtLeastConfirmed([slot], commitment, undefined
++    const args = this._buildArgsAtLeastConfirmed([slot], commitment, 'jsonParsed'
+     /* encoding */
+     , config);
+ 
+@@ -7113,22 +7113,7 @@ class Connection {
+       throw new SolanaJSONRPCError(res.error, 'failed to get confirmed block');
+     }
+ 
+-    const result = res.result;
+-    if (!result) return result;
+-    return { ...result,
+-      transactions: result.transactions.map(({
+-        transaction,
+-        meta
+-      }) => {
+-        const message = new Message(transaction.message);
+-        return {
+-          meta,
+-          transaction: { ...transaction,
+-            message
+-          }
+-        };
+-      })
+-    };
++    return res.result;
+   }
+   /*
+    * Returns the current block height of the node

@@ -1,0 +1,34 @@
+{
+  "name": "@kyve/substrate",
+  "version": "0.3.5",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "build:binaries": "yarn build && rimraf out && pkg --no-bytecode --public-packages '*' --output out/kyve package.json && node ./node_modules/@kyve/core/dist/src/scripts/checksum.js",
+    "start": "node ./dist/src/index.js",
+    "format": "prettier --write ."
+  },
+  "bin": "./dist/src/index.js",
+  "pkg": {
+    "scripts": "./dist/src/index.js",
+    "assets": "./node_modules/@kyve/sdk/dist/proto/*",
+    "targets": [
+      "latest-linux-x64",
+      "latest-macos-x64"
+    ],
+    "outputPath": "out"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "dependencies": {
+    "@kyve/core": "*",
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "pkg": "^5.7.0",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4"
+  }
+}
