@@ -12,7 +12,8 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "setup": "yarn --ignore-engines && yarn clean && yarn fmt && yarn build && lerna bootstrap",
+    "setup": "yarn --ignore-engines && lerna clean && lerna bootstrap && lerna run build",
+    "graph": "yarn nx graph",
     "build": "lerna run build",
     "pub": "lerna run build && lerna publish",
     "build:changed": "lerna run --since origin/master --include-dependents build",
