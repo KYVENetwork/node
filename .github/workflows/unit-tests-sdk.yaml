@@ -17,6 +17,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: install yarn
+        run: npm install --global yarn
+      - name: 'version of yarn'
+        run: yarn -v
       - name: "setup"
         run: yarn setup
       - name: "run tests"
