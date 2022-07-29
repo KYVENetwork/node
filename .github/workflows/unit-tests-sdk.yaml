@@ -19,8 +19,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: install yarn
         run: npm install --global yarn
-      - name: 'version of yarn'
-        run: yarn -v
+      - name: 'ls'
+        run: ls
       - name: "setup"
         run: yarn setup
       - name: "run tests"
