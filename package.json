@@ -12,7 +12,7 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "setup": "lerna --no-ci clean && lerna --no-ci bootstrap  && lerna run build",
+    "setup": "lerna clean && lerna  bootstrap -- --ignore-scripts  && lerna run build",
     "graph": "yarn nx graph",
     "build": "lerna run build",
     "pub": "lerna run build && lerna publish",
