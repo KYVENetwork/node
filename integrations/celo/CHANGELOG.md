@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.23](https://github.com/KYVENetwork/node/compare/@kyve/celo@0.4.22...@kyve/celo@0.4.23) (2022-08-08)
+
+**Note:** Version bump only for package @kyve/celo
+
+
+
+
+
 ## [0.4.22](https://github.com/KYVENetwork/node/compare/@kyve/celo@0.4.21...@kyve/celo@0.4.22) (2022-08-08)
 
 **Note:** Version bump only for package @kyve/celo
