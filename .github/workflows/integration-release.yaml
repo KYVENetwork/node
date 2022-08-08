@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: set integration
-        run: echo "INTEGRATION_NAME=$(echo ${{GITHUB_REF#refs/*/}} | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
+        run: echo "INTEGRATION_NAME=$(echo ${{ $GITHUB_REF#refs/*/ }} | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: Checkout the repository
         uses: actions/checkout@main
       - name: Build Binaries
