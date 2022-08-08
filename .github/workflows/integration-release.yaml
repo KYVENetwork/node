@@ -9,7 +9,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
       - name: set tag
-        run: echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+        run: git tag --points-at HEAD
       - name: tags
         run: echo {{env.HEAD_TAG}}
       - name: tag2
