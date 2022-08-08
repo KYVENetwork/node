@@ -1,15 +1,14 @@
 name: Create Release Binaries
 on:
   push:
-    # Pattern matched against refs/tags
-    tags:
-      #todo add pattern for integrations
-      - '**'           # Push events to every tag not containing /
+    branches: [main]       # Push events to every tag not containing /
 jobs:
   generate:
     name: Create release-artifacts
     runs-on: ubuntu-latest
     steps:
+      - name: tags
+        run: echo ${{ steps.vars.outputs.tag_name }}
       - name: Get the version
         id: get_version
         run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
