@@ -20,7 +20,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
       - name: Build Binaries
-        working-directory: 'integrations/${{INTEGRATION_NAME}}'
+        working-directory: 'integrations/${{env.INTEGRATION_NAME}}'
         run: |
           yarn setup 
           yarn build
