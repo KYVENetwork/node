@@ -1,10 +1,10 @@
+name: Create Release Binaries
 on:
   push:
     # Pattern matched against refs/tags
     tags:
       #todo add pattern for integrations
       - '**'           # Push events to every tag not containing /
-name: Create Release Binaries
 jobs:
   generate:
     name: Create release-artifacts
