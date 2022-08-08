@@ -8,5 +8,7 @@ jobs:
     steps:
       - name: set tags
         run: echo "TAGS=(`echo $(git tag --points-at HEAD) | tr '\n' ' '`)" >> $GITHUB_ENV
+      - name: tags
+        run: echo $(git tag --points-at HEAD)
       - name: check arr
         run: echo ${{ env.TAGS[1] }}
