@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@main
+        with:
+          fetch-depth: 0
       - name: set tag
         run: echo $(git tag --points-at)
       - name:  tag
