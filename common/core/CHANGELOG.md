@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/KYVENetwork/core/compare/@kyve/core@1.5.0...@kyve/core@1.6.0) (2022-08-08)
+
+
+### Features
+
+* added evm ([bbbee17](https://github.com/KYVENetwork/core/commit/bbbee17ec78a46507840e92910d069408468d805))
+
+
+
+
+
 # 1.5.0 (2022-07-28)
 
 ### Features
