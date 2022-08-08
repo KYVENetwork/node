@@ -8,6 +8,8 @@ export const getChecksum = (path: string): Promise<string> => {
 
     input.on("error", reject);
 
+
+
     input.on("data", (chunk: Buffer) => {
       hash.update(chunk);
     });
