@@ -28,4 +28,4 @@ jobs:
         tag: ${{needs.prepare.outputs.output}}
     steps:
       - name: test
-        run: echo ${{metrix.tag}}
+        run: echo ${{matrix.tag}}
