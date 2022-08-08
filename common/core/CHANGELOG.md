@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.2](https://github.com/KYVENetwork/core/compare/@kyve/core@1.7.1...@kyve/core@1.7.2) (2022-08-08)
+
+
+### Bug Fixes
+
+* workflow ([c4cbadc](https://github.com/KYVENetwork/core/commit/c4cbadcec351efaf2c612f6b1d08e6d34d4277f1))
+
+
+
+
+
 ## [1.7.1](https://github.com/KYVENetwork/core/compare/@kyve/core@1.7.0...@kyve/core@1.7.1) (2022-08-08)
 
 **Note:** Version bump only for package @kyve/core
