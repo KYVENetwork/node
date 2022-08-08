@@ -11,7 +11,8 @@ jobs:
         with:
           fetch-depth: 2
           ref: 'main'
-      - run: git checkout HEAD^
+      - name: featch tags
+        run: git fetch --tags
       - name: set tag
         run: echo $(git tag --points-at)
       - name:  tag
