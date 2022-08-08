@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.27](https://github.com/KYVENetwork/node/compare/@kyve/bitcoin@0.4.26...@kyve/bitcoin@0.4.27) (2022-08-08)
+
+**Note:** Version bump only for package @kyve/bitcoin
+
+
+
+
+
 ## [0.4.26](https://github.com/KYVENetwork/node/compare/@kyve/bitcoin@0.4.25...@kyve/bitcoin@0.4.26) (2022-08-08)
 
 **Note:** Version bump only for package @kyve/bitcoin
