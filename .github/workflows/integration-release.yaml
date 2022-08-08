@@ -9,7 +9,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
       - name: set tag
-        run: echo $(git tag --points-at HEAD)
+        run: echo $(git tag --points-at)
       - name:  tag
         run: echo $(git status)
       - name: tags
