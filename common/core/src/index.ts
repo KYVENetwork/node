@@ -171,6 +171,8 @@ export class Node {
     return this;
   }
 
+
+
   /**
    * Set the compression type for the protocol node.
    * Before saving bundles to the storage provider the node uses this compression
