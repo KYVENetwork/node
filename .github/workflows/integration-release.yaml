@@ -3,50 +3,10 @@ on:
   push:
     branches: [ main ]       # Push events to every tag not containing /
 jobs:
-  generate:
-    name: Create release-artifacts
+  prepare:
     runs-on: ubuntu-latest
     steps:
-      - name: tags
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Test
-        run: |
-          echo ${{ github.ref }}
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
-      - name: set integration
-        run: echo "INTEGRATION_NAME=$(echo ${{ env.TAG }}  | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
-      - name: Checkout the repository
-        uses: actions/checkout@main
-      - name: Build Binaries
-        working-directory: 'integrations/${{env.INTEGRATION_NAME}}'
-        run: |
-          yarn setup 
-          yarn build
-          yarn build:binaries
-          cd out
-          zip kyve-linux.zip kyve-linux
-          rm kyve-linux
-          zip kyve-macos.zip kyve-macos
-          rm kyve-macos
-          cd ..
-      - name: Generate Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3
-        with:
-          configuration: ".github/workflows/configuration.json"
-          commitMode: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      - name: Publish the Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: ${{steps.github_release.outputs.changelog}}
-          tag_name: ${{ steps.vars.outputs.tag_name }}
-          files: out/*
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - name: set tags
+        run: echo "TAGS=(`echo $(git tag --points-at HEAD) | tr '\n' ' '`)" >> $GITHUB_ENV
+      - name: check arr
+        run: echo ${{env.TAGS[1}]}
