@@ -3,7 +3,7 @@ on:
     # Pattern matched against refs/tags
     tags:
       #todo add pattern for integrations
-      - '*'           # Push events to every tag not containing /
+      - '**'           # Push events to every tag not containing /
 name: Create Release Binaries
 jobs:
   generate:
