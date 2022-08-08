@@ -6,6 +6,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@main
       - name: set tags
         run: echo "TAGS=(`echo $(git tag --points-at HEAD) | tr '\n' ' '`)" >> $GITHUB_ENV
       - name: tags
