@@ -8,9 +8,13 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@main
-      - name: set tags
-        run: echo "TAGS=(`echo $(git tag --points-at HEAD) | tr '\n' ' '`)" >> $GITHUB_ENV
+      - name: set tag
+        run: echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
       - name: tags
-        run: echo $(git tag --points-at HEAD)
+        run: echo {{env.HEAD_TAG}}
+      - name: tag2
+        run: echo ${{github.tag}}
+      - name: set tags
+        run: echo "TAGS=(`echo ${{ env.HEAD_TAG }} | tr '\n' ' '`)" >> $GITHUB_ENV
       - name: check arr
         run: echo ${{ env.TAGS[1] }}
