@@ -1,6 +1,6 @@
 {
   "name": "@kyve/near",
-  "version": "0.4.28",
+  "version": "0.4.29",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -22,7 +22,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.7.27",
+    "@kyve/core": "1.7.28",
     "near-api-js": "^0.44.2"
   },
   "devDependencies": {
