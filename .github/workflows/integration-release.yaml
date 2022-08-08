@@ -16,4 +16,4 @@ jobs:
       - name: set tag
         run:  echo "TAGS=(`echo $(git tag --points-at) | tr '\n' ' '`)" >> $GITHUB_ENV
       - name: 'test'
-        run: echo ${{ env.TAGS[1] }}
+        run: echo ${{ {env.TAGS[1]} }}
