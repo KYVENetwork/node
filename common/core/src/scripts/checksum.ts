@@ -74,6 +74,8 @@ export const getChecksum = (path: string): Promise<string> => {
 
 
 
+
+
     input.on("data", (chunk: Buffer) => {
       hash.update(chunk);
     });
