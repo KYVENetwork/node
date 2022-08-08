@@ -33,7 +33,7 @@ jobs:
           configuration: ".github/workflows/configuration.json"
           commitMode: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
       - name: Publish the Release
         uses: softprops/action-gh-release@v1
         with:
@@ -42,4 +42,4 @@ jobs:
           files: out/*
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
