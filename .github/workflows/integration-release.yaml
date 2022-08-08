@@ -9,4 +9,4 @@ jobs:
       - name: set tags
         run: echo "TAGS=(`echo $(git tag --points-at HEAD) | tr '\n' ' '`)" >> $GITHUB_ENV
       - name: check arr
-        run: echo ${{env.TAGS[1}]}
+        run: echo ${{ env.TAGS[1] }}
