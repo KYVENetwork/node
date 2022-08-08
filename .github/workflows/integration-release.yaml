@@ -9,7 +9,9 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
         with:
-          fetch-depth: 0
+          fetch-depth: 2
+          ref: 'main'
+      - run: git checkout HEAD^
       - name: set tag
         run: echo $(git tag --points-at)
       - name:  tag
