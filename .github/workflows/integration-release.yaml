@@ -12,8 +12,11 @@ jobs:
     name: Create release-artifacts
     runs-on: ubuntu-latest
     steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
       - name: set integration
-        run: echo "INTEGRATION_NAME=$(echo ${{ $GITHUB_REF#refs/*/ }} | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
+        run: echo "INTEGRATION_NAME=$(echo ${{ TAG }}  | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: Checkout the repository
         uses: actions/checkout@main
       - name: Build Binaries
