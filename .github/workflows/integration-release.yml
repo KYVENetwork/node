@@ -1,0 +1,45 @@
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      #todo add pattern for integrations
+      - '*'           # Push events to every tag not containing /
+name: Create Release Binaries
+jobs:
+  generate:
+    name: Create release-artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: set integration
+        run: echo "INTEGRATION_NAME=$(echo ${{GITHUB_REF#refs/*/}} | awk -F'[/@]' '{print $2}' | sed 's/ *$//g')" >> $GITHUB_ENV
+      - name: Checkout the repository
+        uses: actions/checkout@main
+      - name: Build Binaries
+        working-directory: 'integrations/${{INTEGRATION_NAME}}'
+        run: |
+          yarn lerna setup 
+          yarn build
+          yarn build:binaries
+          cd out
+          zip kyve-linux.zip kyve-linux
+          rm kyve-linux
+          zip kyve-macos.zip kyve-macos
+          rm kyve-macos
+          cd ..
+      - name: Generate Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3
+        with:
+          configuration: ".github/workflows/configuration.json"
+          commitMode: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish the Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          tag_name: ${{ steps.vars.outputs.tag_name }}
+          files: out/*
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
