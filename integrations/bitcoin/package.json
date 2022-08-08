@@ -1,6 +1,6 @@
 {
   "name": "@kyve/bitcoin",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -19,7 +19,7 @@
     "outputPath": "out"
   },
   "dependencies": {
-    "@kyve/core": "1.7.11",
+    "@kyve/core": "1.7.12",
     "axios": "^0.26.1",
     "nanoid": "^3.3.3"
   },
