@@ -17,6 +17,8 @@ jobs:
         run: git fetch --tags
       - name: set tag
         run: echo "TAGS=$(git tag --points-at | jq  --raw-input .  | jq --slurp . | jq tostring)" >> $GITHUB_ENV
+      - name: print var
+        run: echo ${{env.TAGS}}
       - name: set
         id: set_env
         run: echo "::set-output name=test::${{env.TAGS}}"
