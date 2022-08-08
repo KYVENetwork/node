@@ -10,6 +10,8 @@ jobs:
         uses: actions/checkout@main
       - name: set tag
         run: git tag --points-at HEAD
+      - name:  tag
+        run: echo $(git status)
       - name: tags
         run: echo {{env.HEAD_TAG}}
       - name: tag2
