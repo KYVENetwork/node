@@ -1,6 +1,6 @@
 {
   "name": "@kyve/cosmos",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -22,7 +22,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.7.3",
+    "@kyve/core": "1.7.4",
     "axios": "^0.27.2"
   },
   "devDependencies": {
