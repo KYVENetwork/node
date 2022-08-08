@@ -5,8 +5,6 @@ on:
     tags:
       #todo add pattern for integrations
       - '**'           # Push events to every tag not containing /
-    branches:
-      - main
 jobs:
   generate:
     name: Create release-artifacts
