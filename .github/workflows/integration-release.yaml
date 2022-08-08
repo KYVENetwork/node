@@ -23,6 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: prepare
+    strategy:
+      matrix:
+        tag: ${{needs.prepare.outputs.output}}
     steps:
       - name: test
-        run: echo ${{needs.prepare.outputs.output}}
+        run: echo ${{metrix.tag}}
