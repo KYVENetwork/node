@@ -1,6 +1,6 @@
 {
   "name": "@kyve/zilliqa",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
