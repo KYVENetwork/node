@@ -19,7 +19,7 @@ jobs:
         run: echo "TAGS=(`echo $(git tag --points-at) | tr '\n' ' '`)" >> $GITHUB_ENV
       - name: set
         id: set_env
-        run:echo "::set-output name=test::${{env.TAGS}}"
+        run: echo "::set-output name=test::${{env.TAGS}}"
   build:
     runs-on: ubuntu-latest
     needs: prepare
