@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/KYVENetwork/sdk/compare/@kyve/sdk@2.5.0...@kyve/sdk@2.5.1) (2022-08-08)
+
+**Note:** Version bump only for package @kyve/sdk
+
+
+
+
+
 # 2.5.0 (2022-07-28)
 
 
