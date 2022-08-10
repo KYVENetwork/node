@@ -9,6 +9,8 @@ export default class Substrate implements IRuntime {
   public async getDataItem(core: Node, key: string): Promise<DataItem> {
     let block;
 
+
+
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
