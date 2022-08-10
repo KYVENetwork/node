@@ -40,9 +40,12 @@ jobs:
         run: npm install --global yarn
       - name: setup lerna
         run: yarn setup
+      - name: print integration name
+        run: echo ${{ env.INTEGRATION_NAME }}
       - name: Build Binaries
         run: |
           cd integrations/${{ env.INTEGRATION_NAME }}
+          ls
           yarn build:binaries
           cd out
           zip kyve-linux.zip kyve-linux
