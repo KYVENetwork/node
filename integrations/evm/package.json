@@ -1,6 +1,6 @@
 {
   "name": "@kyve/evm",
-  "version": "1.4.40",
+  "version": "1.5.0",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
