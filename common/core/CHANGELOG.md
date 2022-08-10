@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/KYVENetwork/core/compare/@kyve/core@1.8.0...@kyve/core@1.9.0) (2022-08-10)
+
+
+### Features
+
+* test ([1eb8459](https://github.com/KYVENetwork/core/commit/1eb845938d90e6298763abad82de6896eab9df54))
+
+
+
+
+
 # [1.8.0](https://github.com/KYVENetwork/core/compare/@kyve/core@1.7.36...@kyve/core@1.8.0) (2022-08-10)
 
 
