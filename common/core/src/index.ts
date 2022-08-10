@@ -240,6 +240,9 @@ export class Node {
 
 
 
+
+
+
       process.exit(1);
     }
   }
