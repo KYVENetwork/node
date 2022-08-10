@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/KYVENetwork/node/compare/@kyve/cosmos@0.4.38...@kyve/cosmos@0.5.0) (2022-08-10)
+
+
+### Features
+
+* test ([d434747](https://github.com/KYVENetwork/node/commit/d43474780c88c4ddab68661014485cde527e366b))
+
+
+
+
+
 ## [0.4.38](https://github.com/KYVENetwork/node/compare/@kyve/cosmos@0.4.37...@kyve/cosmos@0.4.38) (2022-08-10)
 
 **Note:** Version bump only for package @kyve/cosmos
