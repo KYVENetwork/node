@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.6](https://github.com/KYVENetwork/node/compare/@kyve/near@0.5.5...@kyve/near@0.5.6) (2022-08-10)
+
+**Note:** Version bump only for package @kyve/near
+
+
+
+
+
 ## [0.5.5](https://github.com/KYVENetwork/node/compare/@kyve/near@0.5.4...@kyve/near@0.5.5) (2022-08-10)
 
 **Note:** Version bump only for package @kyve/near
