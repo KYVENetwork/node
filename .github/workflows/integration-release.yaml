@@ -53,19 +53,18 @@ jobs:
           zip kyve-macos.zip kyve-macos
           rm kyve-macos
           cd ..
-      - name: Generate Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3
-        with:
-          configuration: ".github/workflows/configuration.json"
-          commitMode: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Generate Changelog
+#        id: github_release
+#        uses: mikepenz/release-changelog-builder-action@v3
+#        with:
+#          configuration: ".github/workflows/configuration.json"
+#          commitMode: true
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish the Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{steps.github_release.outputs.changelog}}
-          tag_name: ${{ steps.vars.outputs.tag_name }}
+          body_path: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.txt
           files: integrations/${{env.INTEGRATION_NAME}}/out/*
           prerelease: false
         env:
