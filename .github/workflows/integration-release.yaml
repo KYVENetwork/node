@@ -61,10 +61,15 @@ jobs:
 #          commitMode: true
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract release notes
+        id: extract-release-notes
+        uses: ffurrer2/extract-release-notes@v1
+        with:
+          changelog_file: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.md
       - name: Publish the Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.md
+          body: ${{ steps.extract-release-notes.outputs.release_notes }}
           tag_name: ${{ matrix.tag }}
           files: integrations/${{env.INTEGRATION_NAME}}/out/*
           prerelease: false

@@ -12,6 +12,8 @@ export default class Bitcoin implements IRuntime {
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
+
+
     try {
       hash = await fetchBlockHash(
         "https://proxy.alpha.kyve.network/bitcoin",
