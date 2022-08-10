@@ -31,7 +31,8 @@ jobs:
             const integrations = JSON.parse(JSON.parse(INTEGRATIONS));
             const tags = JSON.parse(JSON.parse(TAGS));
             const selectedTags = tags.filter(it => integrations.includes(it.trim().split('/')[1]?.split('@')[0]))
-            return selectedTags
+            return JSON.stringify(JSON.stringify(selectedTags))
+          result-encoding: string
       - name: print var
         run: echo ${{steps.output-tags.outputs.result}}
       - name: set
