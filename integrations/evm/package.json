@@ -1,6 +1,6 @@
 {
   "name": "@kyve/evm",
-  "version": "1.4.33",
+  "version": "1.4.34",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -22,7 +22,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.7.32",
+    "@kyve/core": "1.7.33",
     "ethers": "^5.6.5"
   },
   "devDependencies": {
