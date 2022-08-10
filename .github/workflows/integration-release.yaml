@@ -29,6 +29,11 @@ jobs:
       matrix:
         tag: ${{fromJSON(needs.prepare.outputs.output)}}
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 2
+          ref: 'main'
       - name: set integration name
         run: echo "INTEGRATION_NAME=$(${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: install yarn
