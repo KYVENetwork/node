@@ -29,5 +29,32 @@ jobs:
       matrix:
         tag: ${{fromJSON(needs.prepare.outputs.output)}}
     steps:
-      - name: test
-        run: echo ${{matrix.tag}}
+      - name: set integration name
+        run: echo "INTEGRATION_NAME=$(${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
+      - name: Build Binaries
+        run: | 
+                 cd integrations/${{ env.INTEGRATION_NAME }}
+                 yarn build:binaries
+                 cd out
+                 zip kyve-linux.zip kyve-linux
+                 rm kyve-linux
+                 zip kyve-macos.zip kyve-macos
+                 rm kyve-macos
+                 cd ..
+                 - name: Generate Changelog
+                   id: github_release
+                   uses: mikepenz/release-changelog-builder-action@v3
+                   with:
+                     configuration: ".github/workflows/configuration.json"
+                     commitMode: true
+                   env:
+                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                 - name: Publish the Release
+                   uses: softprops/action-gh-release@v1
+                   with:
+                     body: ${{steps.github_release.outputs.changelog}}
+                     tag_name: ${{ steps.vars.outputs.tag_name }}
+                     files: integrations/${{env.INTEGRATION_NAME}}/out/*
+                     prerelease: false
+                   env:
+                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
