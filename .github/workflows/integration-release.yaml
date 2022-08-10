@@ -64,7 +64,7 @@ jobs:
       - name: Publish the Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.txt
+          body_path: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.md
           tag_name: ${{ matrix.tag }}
           files: integrations/${{env.INTEGRATION_NAME}}/out/*
           prerelease: false
