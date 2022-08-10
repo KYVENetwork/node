@@ -65,6 +65,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: ${{ github.workspace }}/integrations/${{env.INTEGRATION_NAME}}/CHANGELOG.txt
+          tag_name: ${{ matrix.tag }}
           files: integrations/${{env.INTEGRATION_NAME}}/out/*
           prerelease: false
         env:
