@@ -32,7 +32,6 @@ jobs:
             const tags = JSON.parse(TAGS);
             console.log('---->', tags);
             console.log('---->', typeof tags);
-            
             const selectedTags = tags.filter(it => integrations.includes(it.trim().split('/')[1]?.split('@')[0]))
             return JSON.stringify(selectedTags)
           result-encoding: string
