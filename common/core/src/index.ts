@@ -235,6 +235,9 @@ export class Node {
       this.logger.error(`Unexpected runtime error. Exiting ...`);
       this.logger.debug(error);
 
+
+
+
       process.exit(1);
     }
   }
