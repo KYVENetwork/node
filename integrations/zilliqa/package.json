@@ -1,6 +1,6 @@
 {
   "name": "@kyve/zilliqa",
-  "version": "0.4.46",
+  "version": "0.4.47",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -19,7 +19,7 @@
     "outputPath": "out"
   },
   "dependencies": {
-    "@kyve/core": "1.14.0",
+    "@kyve/core": "1.15.0",
     "axios": "^0.27.2",
     "nanoid": "^3.3.3"
   },
