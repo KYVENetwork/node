@@ -13,6 +13,8 @@ import { version } from "../package.json";
 process.env.KYVE_RUNTIME = "@kyve/injective";
 process.env.KYVE_VERSION = version;
 
+
+
 KYVE.metrics.register.setDefaultLabels({
   app: process.env.KYVE_RUNTIME,
 });
