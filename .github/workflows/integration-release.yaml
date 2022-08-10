@@ -25,11 +25,12 @@ jobs:
         uses: actions/github-script@master
         with:
           script: |
-            const { INTEGRATIONS, TAGS } = process.env
-            console.log(INTEGRATIONS)
-            console.log(TAGS)
-            const integrations = JSON.parse(INTEGRATIONS)
+            const { INTEGRATIONS, TAGS } = process.env;
+            console.log(INTEGRATIONS);
+            console.log(TAGS);
+            const integrations = JSON.parse(INTEGRATIONS);
             const tags = JSON.parse(TAGS);
+            console.log(tags)
             const selectedTags = tags.filter(it => integrations.includes(it.trim().split('/')[1]?.split('@')[0]))
             return JSON.stringify(selectedTags)
           result-encoding: string
