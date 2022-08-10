@@ -26,6 +26,8 @@ jobs:
         with:
           script: |
             const { INTEGRATIONS, TAGS } = process.env
+            console.log(INTEGRATIONS)
+            console.log(TAGS)
             const integrations = JSON.parse(INTEGRATIONS)
             const tags = JSON.parse(TAGS);
             const selectedTags = tags.filter(it => integrations.includes(it.trim().split('/')[1]?.split('@')[0]))
