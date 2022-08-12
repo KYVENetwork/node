@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.48](https://github.com/KYVENetwork/node/compare/@kyve/solana@0.4.47...@kyve/solana@0.4.48) (2022-08-12)
+
+**Note:** Version bump only for package @kyve/solana
+
+
+
+
+
 ## [0.4.47](https://github.com/KYVENetwork/node/compare/@kyve/solana@0.4.46...@kyve/solana@0.4.47) (2022-08-12)
 
 **Note:** Version bump only for package @kyve/solana
