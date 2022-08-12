@@ -13,7 +13,7 @@ import {
   MsgUpdateMetadata,
   MsgVoteProposal,
   MsgWithdrawPool,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/tx";
+} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/tx";
 import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../registry/tx.registry";

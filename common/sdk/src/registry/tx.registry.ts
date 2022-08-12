@@ -14,8 +14,8 @@ import {
   MsgUpdateCommission,
   MsgReactivateStaker,
   MsgRedelegatePool,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/tx";
-import { cosmos } from "@kyve/proto";
+} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/tx";
+import { cosmos } from "@kyvenetwork/proto";
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ["/kyve.registry.v1beta1.MsgFundPool", MsgFundPool],

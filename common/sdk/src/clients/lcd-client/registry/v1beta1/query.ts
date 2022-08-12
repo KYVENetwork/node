@@ -24,10 +24,10 @@ import {
   QueryStakersListRequest,
   QueryAccountStakingUnbondingsRequest,
   QueryAccountDelegationUnbondingsRequest,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/query";
-import { kyve } from "@kyve/proto";
+} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/query";
+import { kyve } from "@kyvenetwork/proto";
 import kyveQueryRes = kyve.registry.v1beta1.kyveQueryRes;
-import { PageRequest } from "@kyve/proto/dist/proto/cosmos/base/query/v1beta1/pagination";
+import { PageRequest } from "@kyvenetwork/proto/dist/proto/cosmos/base/query/v1beta1/pagination";
 import { AbstractKyveLCDClient } from "../../lcd-client.abstract";
 
 type NestedPartial<T> = {

@@ -17,11 +17,11 @@ import {
   MsgWithdrawPool,
   MsgReactivateStaker,
   MsgUpdateCommission,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/tx";
+} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/tx";
 import Mock = jest.Mock;
 import { DENOM, KYVE_DECIMALS } from "../../src/constants";
-import { TextProposal } from "@kyve/proto/dist/proto/cosmos/gov/v1beta1/gov";
-import { ParameterChangeProposal } from "@kyve/proto/dist/proto/cosmos/params/v1beta1/params";
+import { TextProposal } from "@kyvenetwork/proto/dist/proto/cosmos/gov/v1beta1/gov";
+import { ParameterChangeProposal } from "@kyvenetwork/proto/dist/proto/cosmos/params/v1beta1/params";
 import {
   CancelPoolUpgradeProposal,
   CreatePoolProposal,

@@ -1,4 +1,4 @@
-import { Node, Arweave, Gzip, JsonFileCache } from '@kyve/core';
+import { Node, Arweave, Gzip, JsonFileCache } from '@kyvenetwork/core';
 
 import Near from './runtime';
 

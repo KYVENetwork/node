@@ -1,5 +1,5 @@
 {
-  "name": "proto",
+  "name": "@kyvenetwork/proto",
   "version": "1.7.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

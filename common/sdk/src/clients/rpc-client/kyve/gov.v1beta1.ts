@@ -2,8 +2,8 @@ import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { DENOM } from "../../../constants";
-import { TextProposal } from "@kyve/proto/dist/proto/cosmos/gov/v1beta1/gov";
-import { ParameterChangeProposal } from "@kyve/proto/dist/proto/cosmos/params/v1beta1/params";
+import { TextProposal } from "@kyvenetwork/proto/dist/proto/cosmos/gov/v1beta1/gov";
+import { ParameterChangeProposal } from "@kyvenetwork/proto/dist/proto/cosmos/params/v1beta1/params";
 import {
   CancelPoolUpgradeProposal,
   CreatePoolProposal,
@@ -12,7 +12,7 @@ import {
   SchedulePoolUpgradeProposal,
   UnpausePoolProposal,
   UpdatePoolProposal,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/gov";
+} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/gov";
 import { signTx, TxPromise } from "../../../utils/helper";
 import { cosmos } from "@keplr-wallet/cosmos";
 

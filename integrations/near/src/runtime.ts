@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node } from '@kyve/core';
+import { DataItem, IRuntime, Node } from '@kyvenetwork/core';
 import { fetchBlock, fetchHeight, isBlockNotFound } from './utils';
 import { name, version } from '../package.json';
 
