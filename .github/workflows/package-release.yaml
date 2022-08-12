@@ -30,7 +30,7 @@ jobs:
             console.log(TAGS);
             const package = JSON.parse(JSON.parse(PACKAGE));
             const tags = JSON.parse(JSON.parse(TAGS));
-            const selectedTags = tags.filter(it => package.includes(it.trim().split('/')[1]?.split('@')[0]))
+            const selectedTags = tags.filter(it => package.includes(it.trim()?.split('@')[0]))
             return JSON.stringify(JSON.stringify(selectedTags))
           result-encoding: string
       - name: print var
@@ -53,7 +53,7 @@ jobs:
           ref: 'main'
           submodules: true
       - name: set integration name
-        run: echo "PACKAGE_NAME=$(echo ${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
+        run: echo "PACKAGE_NAME=$(echo ${{ matrix.tag }} | awk -F'[@]' '{print $1}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
