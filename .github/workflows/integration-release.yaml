@@ -51,6 +51,7 @@ jobs:
         with:
           fetch-depth: 2
           ref: 'main'
+          submodules: true
       - name: set integration name
         run: echo "INTEGRATION_NAME=$(echo ${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: install yarn
