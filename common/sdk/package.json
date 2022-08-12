@@ -1,6 +1,6 @@
 {
   "name": "@kyve/sdk",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
@@ -37,7 +37,7 @@
     "@cosmjs/tendermint-rpc": "0.28.0",
     "@cosmostation/extension-client": "^0.0.6",
     "@keplr-wallet/cosmos": "0.9.16",
-    "@kyve/proto": "1.4.0",
+    "@kyve/proto": "1.4.1",
     "axios": "0.25.0",
     "bech32": "2.0.0",
     "bignumber.js": "9.0.2",
