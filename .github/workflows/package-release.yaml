@@ -68,6 +68,6 @@ jobs:
         run: yarn build
       - name: Publish release
         run: yarn publish
-        working-directory: common/${{evn.PACKAGE_NAME}}
+        working-directory: common/${{env.PACKAGE_NAME}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
