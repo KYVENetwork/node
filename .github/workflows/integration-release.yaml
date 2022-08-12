@@ -1,4 +1,4 @@
-name: Create Release Binaries
+name: Create release binaries
 on:
   push:
     branches: [ main ]

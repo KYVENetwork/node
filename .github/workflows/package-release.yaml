@@ -17,7 +17,7 @@ jobs:
         run: git fetch --tags
       - name: collect integrations names
         run: |
-          cd integrations/ 
+          cd common/ 
           echo "PACKAGE=$(ls | jq  --raw-input . | jq --slurp . | jq tostring)" >> $GITHUB_ENV
       - name: set tag
         run: echo "TAGS=$(git tag --points-at | jq  --raw-input .  | jq --slurp . | jq tostring)" >> $GITHUB_ENV
