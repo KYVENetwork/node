@@ -60,6 +60,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@KYVENetwork'
+          always-auth: true
       - name: setup lerna
         run: yarn setup
       - name: print integration name
