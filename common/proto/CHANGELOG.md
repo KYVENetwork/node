@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.2](https://github.com/KYVENetwork/proto/compare/@kyve/proto@1.4.1...@kyve/proto@1.4.2) (2022-08-12)
+
+
+### Bug Fixes
+
+* version dependency ([76bb53f](https://github.com/KYVENetwork/proto/commit/76bb53f8c16c58054935efc4efe78fba6d9771d1))
+
+
+
+
+
 ## [1.4.1](https://github.com/KYVENetwork/proto/compare/@kyve/proto@1.4.0...@kyve/proto@1.4.1) (2022-08-12)
 
 
