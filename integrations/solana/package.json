@@ -1,6 +1,6 @@
 {
   "name": "@kyve/solana",
-  "version": "0.4.51",
+  "version": "0.4.52",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -23,7 +23,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.16.5",
+    "@kyve/core": "1.17.0",
     "@solana/web3.js": "^1.50.1"
   },
   "devDependencies": {
