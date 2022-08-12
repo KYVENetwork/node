@@ -12,6 +12,9 @@
   "scripts": {
     "build": "sh proto-gen.sh && rimraf dist && tsc"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "dependencies": {
     "@protobufs/cosmos": "^0.0.9",
     "@protobufs/gogoproto": "^0.0.9",
