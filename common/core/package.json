@@ -1,5 +1,5 @@
 {
-  "name": "@kyve/core",
+  "name": "core",
   "description": "🚀 The base KYVE node implementation.",
   "version": "1.18.0",
   "main": "./dist/src/index.js",

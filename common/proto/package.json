@@ -1,5 +1,5 @@
 {
-  "name": "@kyve/proto",
+  "name": "proto",
   "version": "1.6.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
