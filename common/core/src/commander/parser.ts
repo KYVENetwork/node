@@ -53,5 +53,3 @@ export const parseNetwork = (value: string): string => {
 
   return value;
 };
-
-

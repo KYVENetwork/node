@@ -10,7 +10,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "sh proto-gen.sh && rimraf dist"
+    "build": "sh proto-gen.sh && rimraf dist && tsc"
   },
   "dependencies": {
     "@protobufs/cosmos": "^0.0.9",

@@ -171,16 +171,6 @@ export class Node {
     return this;
   }
 
-
-
-
-
-
-
-
-
-
-
   /**
    * Set the compression type for the protocol node.
    * Before saving bundles to the storage provider the node uses this compression
@@ -214,25 +204,6 @@ export class Node {
     return this;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   /**
    * Main method of @kyve/core. By running this method the node will start and run.
    * For this method to run the Runtime, Storage Provider and the Cache have to be added first.
@@ -253,31 +224,10 @@ export class Node {
       this.logger.error(`Unexpected runtime error. Exiting ...`);
       this.logger.debug(error);
 
-
-
-
-
-
-
-
-
       process.exit(1);
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // export types
 export * from "./types";
@@ -290,5 +240,3 @@ export * from "./compression";
 
 // export caches
 export * from "./cache";
-
-

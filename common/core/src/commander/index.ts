@@ -53,5 +53,3 @@ export default program
     "How much bytes the node can occupy for caching [deprecated].",
     "1000000000"
   );
-
-
