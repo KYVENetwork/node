@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/KYVENetwork/node/compare/sdk@2.10.0...sdk@2.11.0) (2022-08-12)
+
+
+### Features
+
+* package release ([7dafa57](https://github.com/KYVENetwork/node/commit/7dafa57ddba84197b1660253ef62101f1fa85ab9))
+
+
+
+
+
 # 2.10.0 (2022-08-12)
 
 
