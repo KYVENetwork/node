@@ -39,6 +39,7 @@ jobs:
         id: set_env
         run: echo "::set-output name=test::${{steps.output-tags.outputs.result}}"
   build:
+    if: needs.prepare.outputs.output != "[]"
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
