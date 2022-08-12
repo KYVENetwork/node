@@ -3,12 +3,13 @@
   "version": "1.4.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "git@github.com:KYVENetwork/proto.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KYVENetwork/node.git"
+  },
   "author": "John Letey <john@kyve.network>, ruslan glaznyov <ruslan.glaznyov@gmail.com>",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+
   "scripts": {
     "build": "sh proto-gen.sh && rimraf dist && tsc"
   },

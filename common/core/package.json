@@ -7,7 +7,7 @@
   "homepage": "https://github.com/KYVENetwork/core#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KYVENetwork/core"
+    "url": "git+https://github.com/KYVENetwork/node.git"
   },
   "keywords": [
     "KYVE",
@@ -17,9 +17,6 @@
   ],
   "author": "John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "rimraf dist && yarn format && tsc",
     "format": "prettier --write .",

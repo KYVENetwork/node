@@ -5,7 +5,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KYVENetwork/sdk"
+    "url": "git+https://github.com/KYVENetwork/node.git"
   },
   "keywords": [
     "KYVE",
@@ -15,9 +15,7 @@
   ],
   "author": "Ruslan Hlaznov <ruslan@kyve.network>, John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>, Max Breithecker <max@kyve.network>",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+
   "scripts": {
     "build": "tsc",
     "format": "prettier --write .",
