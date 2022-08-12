@@ -1,7 +1,7 @@
 {
   "name": "@kyve/core",
   "description": "🚀 The base KYVE node implementation.",
-  "version": "1.17.2",
+  "version": "1.18.0",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "homepage": "https://github.com/KYVENetwork/core#readme",
@@ -28,8 +28,8 @@
   "dependencies": {
     "@cosmjs/proto-signing": "^0.27.1",
     "@cosmjs/stargate": "^0.27.1",
-    "@kyve/proto": "1.5.0",
-    "@kyve/sdk": "2.8.0",
+    "@kyve/proto": "1.6.0",
+    "@kyve/sdk": "2.9.0",
     "@types/cli-progress": "^3.9.2",
     "@types/jsonfile": "^6.0.1",
     "arweave": "^1.10.17",

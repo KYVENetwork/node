@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/KYVENetwork/node/compare/@kyve/proto@1.5.0...@kyve/proto@1.6.0) (2022-08-12)
+
+
+### Features
+
+* package release ([e2c68dd](https://github.com/KYVENetwork/node/commit/e2c68dd6880aec75cc087c41d2bfc1557ce98bb9))
+
+
+
+
+
 # [1.5.0](https://github.com/KYVENetwork/node/compare/@kyve/proto@1.4.3...@kyve/proto@1.5.0) (2022-08-12)
 
 
