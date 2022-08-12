@@ -33,6 +33,8 @@ export default class Near implements IRuntime {
     return value.hash;
   }
 
+
+
   private async generateCoinbaseCloudHeaders(core: Node): Promise<any> {
     // requestSignature for coinbase cloud
     const address = core.client.account.address;
