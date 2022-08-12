@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/KYVENetwork/node/compare/@kyve/near@0.6.9...@kyve/near@0.7.0) (2022-08-12)
+
+
+### Features
+
+* change package for test ([dc8bb58](https://github.com/KYVENetwork/node/commit/dc8bb5878e0bdf253f2a3bdf6a1b55ec5ec77eaa))
+
+
+
+
+
 ## [0.6.9](https://github.com/KYVENetwork/node/compare/@kyve/near@0.6.8...@kyve/near@0.6.9) (2022-08-12)
 
 **Note:** Version bump only for package @kyve/near

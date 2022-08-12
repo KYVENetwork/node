@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/KYVENetwork/node/compare/@kyve/celo@0.6.2...@kyve/celo@0.7.0) (2022-08-12)
+
+
+### Features
+
+* change package for test ([dc8bb58](https://github.com/KYVENetwork/node/commit/dc8bb5878e0bdf253f2a3bdf6a1b55ec5ec77eaa))
+* package release ([ecd0c4f](https://github.com/KYVENetwork/node/commit/ecd0c4f042fc1345bbfb1f2ec39230bebee932a3))
+* package release ([c4b681a](https://github.com/KYVENetwork/node/commit/c4b681a9815f0a18a4cf11a0f09bdb042662c6d2))
+
+
+
+
+
 ## [0.6.2](https://github.com/KYVENetwork/node/compare/@kyve/celo@0.6.1...@kyve/celo@0.6.2) (2022-08-12)
 
 **Note:** Version bump only for package @kyve/celo
