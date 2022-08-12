@@ -5,8 +5,8 @@ rm -rf /temp
 mkdir -p "./temp/proto/cosmos_proto"
 TENDERMINT_V=v0.34.19
 COSMOS_PROTO_V=v0.3.1
-cp -r ./node_modules/@protobufs/gogoproto ./temp/proto/gogoproto
-cp -r ./node_modules/@protobufs/google ./temp/proto/google
+cp -r ../../node_modules/@protobufs/gogoproto ./temp/proto/gogoproto
+cp -r ../../node_modules/@protobufs/google ./temp/proto/google
 cp -r ./cosmos-sdk/proto/cosmos ./temp/proto/cosmos
 git -C ./temp clone -b ${TENDERMINT_V} --single-branch https://github.com/tendermint/tendermint.git
 git -C ./temp clone -b ${COSMOS_PROTO_V} --single-branch https://github.com/regen-network/cosmos-proto.git
