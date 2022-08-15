@@ -34,11 +34,26 @@ export interface IRuntime {
    * Deterministic behavior is required
    *
    * @method getDataItem
+   * @param {Node} core the class of @kyve/core
    * @param {string} key which gets inserted by @kyve/core
-   * @param {any} config pool config which usually holds rpc endpoints for example
    * @return {Promise<DataItem>}
    */
   getDataItem(core: Node, key: string): Promise<DataItem>;
+
+  /**
+   * Validates a bundle proposal
+   *
+   * @method validate
+   * @param {Node} core the class of @kyve/core
+   * @param {DataItem[]} uploadedBundle is the bundle saved by the uploader on the storage provider
+   * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
+   * @return {Promise<boolean>} returns whether the bundle is valid or invalid
+   */
+  validate(
+    core: Node,
+    uploadedBundle: DataItem[],
+    validationBundle: DataItem[]
+  ): Promise<boolean>;
 
   /**
    * Gets the next key from the current key so that the data archived has an order.
@@ -193,6 +208,15 @@ export interface ICache {
    */
   drop(): Promise<void>;
 }
+
+/**
+ * Interface of Compression.
+ *
+ * The Compression is responsible for compressing data before its stored on the Storage Provider.
+ * It is also responsible for decompressing data after retrieved from the Storage Provider.
+ *
+ * @interface ICache
+ */
 export interface ICompression {
   /**
    * Name of the compression. This should be unique for every compression type.
@@ -219,4 +243,66 @@ export interface ICompression {
    * @return {Promise<DataItem[]>}
    */
   decompress(data: Buffer): Promise<DataItem[]>;
+}
+
+/**
+ * Interface of Backend.
+ *
+ * The Backend is responsible for managing secrets like the account mnemonics
+ *
+ * @interface IBackend
+ */
+export interface IBackend {
+  /**
+   * Name of the backend. This should be unique for every backend type.
+   *
+   * @property name
+   * @type {string}
+   */
+  name: string;
+
+  /**
+   * Add a new secret
+   *
+   * @method add
+   * @param {string} name
+   * @param {string} secret
+   * @return {Promise<void>}
+   */
+  add(name: string, secret: string): Promise<void>;
+
+  /**
+   * Remove an existing secret
+   *
+   * @method remove
+   * @param {string} name
+   * @return {Promise<void>}
+   */
+  remove(name: string): Promise<void>;
+
+  /**
+   * Show the value of a secret
+   *
+   * @method show
+   * @param {string} name
+   * @return {Promise<void>}
+   */
+  reveal(name: string): Promise<void>;
+
+  /**
+   * Get the value of a secret
+   *
+   * @method get
+   * @param {string} name
+   * @return {Promise<string | null>}
+   */
+  get(name: string): Promise<string | null>;
+
+  /**
+   * List all secrets
+   *
+   * @method list
+   * @return {Promise<void>}
+   */
+  list(): Promise<void>;
 }

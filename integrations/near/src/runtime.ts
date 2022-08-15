@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node } from '@kyvenetwork/core';
+import { DataItem, IRuntime, Node, sha256 } from '@kyvenetwork/core';
 import { fetchBlock, fetchHeight, isBlockNotFound } from './utils';
 import { name, version } from '../package.json';
 
@@ -25,6 +25,21 @@ export default class Near implements IRuntime {
     return { key, value: block };
   }
 
+  async validate(
+    core: Node,
+    uploadedBundle: DataItem[],
+    validationBundle: DataItem[]
+  ) {
+    const uploadedBundleHash = sha256(uploadedBundle);
+    const validationBundleHash = sha256(validationBundle);
+
+    core.logger.debug(`Validating bundle proposal by hash`);
+    core.logger.debug(`Uploaded:     ${uploadedBundleHash}`);
+    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
+
+    return uploadedBundleHash === validationBundleHash;
+  }
+
   public async getNextKey(key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
   }
@@ -32,8 +47,6 @@ export default class Near implements IRuntime {
   public async formatValue(value: any): Promise<string> {
     return value.hash;
   }
-
-
 
   private async generateCoinbaseCloudHeaders(core: Node): Promise<any> {
     // requestSignature for coinbase cloud
