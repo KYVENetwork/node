@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.6.0...@kyve/evm@1.7.0) (2022-08-15)
+
+
+### Features
+
+* some new feat ([bb9fdd1](https://github.com/KYVENetwork/node/commit/bb9fdd1fedd91ea3a8a7c73491174260221f60c9))
+
+
+
+
+
 # [1.6.0](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.5.18...@kyve/evm@1.6.0) (2022-08-12)
 
 
