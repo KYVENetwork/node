@@ -7,7 +7,7 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 
-export function setupName(this: Node): string {
+export function generateName(this: Node): string {
   const r = new Prando(`${this.poolId}-${this.client.account.address}`);
 
   return uniqueNamesGenerator({

@@ -21,8 +21,8 @@ export class FileBackend implements IBackend {
   private bufferEncryption: BufferEncoding = "utf-8";
 
   public async add(name: string, secret: string) {
-    if (!secret) {
-      console.log("Secret can not be empty");
+    if (!(secret.length === 12 || secret.length === 24)) {
+      console.log(`Mnemonic has an invalid format: ${secret}`);
       return;
     }
 

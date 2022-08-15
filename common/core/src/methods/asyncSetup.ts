@@ -1,6 +1,7 @@
 import { Node } from "..";
 
 export async function asyncSetup(this: Node): Promise<void> {
+  // check if basic runtime classes are defined
   if (!this.runtime) {
     this.logger.error(`Runtime is not defined. Exiting ...`);
     process.exit(1);
@@ -21,9 +22,13 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
+  // init storage provider with wallet
   this.storageProvider = this.storageProvider.init(this.keyfile);
+
+  // init cache with work dir
   this.cache = this.cache.init(`./cache/${this.name}`);
 
+  // retrieve mnemonic of account from file backend
   const mnemonic = await this.backend.get(this.account);
 
   if (!mnemonic) {
@@ -31,6 +36,7 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
+  // validate mnemonic
   const parsedValue = mnemonic.split(" ");
 
   if (!(parsedValue.length === 12 || parsedValue.length === 24)) {
@@ -48,8 +54,12 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
-  this.name = this.setupName();
+  // check if valaccount already joined pool
+  await this.canValidate();
 
+  this.name = this.generateName();
+
+  // log basic node info on startup
   this.logger.info("Starting node ...\n");
   this.logger.info(`Name \t\t = ${this.name}`);
   this.logger.info(`Account \t\t = ${this.account}`);

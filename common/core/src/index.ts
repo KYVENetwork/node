@@ -9,7 +9,8 @@ import { FileBackend } from "./backend";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  setupName,
+  canValidate,
+  generateName,
   syncPoolState,
   validateRuntime,
   validateVersion,
@@ -74,6 +75,7 @@ export class Node {
 
   // options
   protected poolId!: number;
+  protected staker!: string;
   protected account!: string;
   protected keyfile!: string;
   protected stake!: string;
@@ -83,7 +85,8 @@ export class Node {
   // register core methods
   protected asyncSetup = asyncSetup;
   protected setupLogger = setupLogger;
-  protected setupName = setupName;
+  protected canValidate = canValidate;
+  protected generateName = generateName;
   protected syncPoolState = syncPoolState;
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
