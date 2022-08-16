@@ -43,7 +43,7 @@ import {
   parseKeyfile,
   parseNetwork,
   parsePoolId,
-} from "./commander/parser";
+} from "./commander";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
