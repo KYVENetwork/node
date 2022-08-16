@@ -185,16 +185,14 @@ export class Node {
     const program = new Command();
 
     // define accounts
-    const keys = new Command("accounts").description(
-      "Manage accounts for protocol nodes"
+    const keys = new Command("valaccounts").description(
+      "Manage valaccounts in encrypted file backend"
     );
 
     keys
       .command("create")
-      .description(
-        "Create a new account which generates a new mnemonic for you"
-      )
-      .argument("<account_name>", "Name of the account")
+      .description("Create a new valaccount with a random mnemonic")
+      .argument("<account_name>", "Name of the valaccount")
       .action(async (key) => {
         // const mnemonic = await KyveSDK.generateMnemonic();
         const mnemonic = "todo";
@@ -202,29 +200,29 @@ export class Node {
       });
     keys
       .command("add")
-      .description("Add an existing account with the mnemonic")
-      .argument("<account_name>", "Name of the account")
-      .argument("<account_secret>", "Mnemonic of the account")
+      .description("Add an existing valaccount with the mnemonic")
+      .argument("<account_name>", "Name of the valaccount")
+      .argument("<account_secret>", "Mnemonic of the valaccount")
       .action(async (key, mnemonic) => {
         await this.backend.add(key, mnemonic);
       });
     keys
       .command("reveal")
-      .description("Reveal the mnemonic of an account")
-      .argument("<account_name>", "Name of the account")
+      .description("Reveal the mnemonic of a valaccount")
+      .argument("<account_name>", "Name of the valaccount")
       .action(async (key) => {
         await this.backend.reveal(key);
       });
     keys
       .command("list")
-      .description("List all accounts available")
-      .action(async (key) => {
+      .description("List all valaccounts available")
+      .action(async () => {
         await this.backend.list();
       });
     keys
       .command("remove")
-      .description("Remove an existing account")
-      .argument("<account_name>", "Name of the account")
+      .description("Remove an existing valaccount")
+      .argument("<account_name>", "Name of the valaccount")
       .action(async (key) => {
         await this.backend.remove(key);
       });

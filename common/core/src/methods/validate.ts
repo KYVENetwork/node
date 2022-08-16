@@ -31,7 +31,7 @@ export function validateVersion(this: Node): void {
 }
 
 export function validateActiveNode(this: Node): void {
-  if (!this.pool.stakers.includes(this.client.account.address)) {
+  if (!this.pool.stakers.includes(this.staker)) {
     this.logger.error(`Node is not in the active validator set! Exiting ...`);
     process.exit(1);
   }
