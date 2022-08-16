@@ -11,6 +11,7 @@ describe("src/methods/syncPoolState.ts", () => {
 
   let loggerInfo: jest.Mock;
   let loggerDebug: jest.Mock;
+  let loggerWarn: jest.Mock;
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
@@ -29,10 +30,12 @@ describe("src/methods/syncPoolState.ts", () => {
 
     loggerInfo = jest.fn();
     loggerDebug = jest.fn();
+    loggerWarn = jest.fn();
     loggerError = jest.fn();
 
     core.logger.info = loggerInfo;
     core.logger.debug = loggerDebug;
+    core.logger.warn = loggerWarn;
     core.logger.error = loggerError;
 
     core["poolId"] = 0;

@@ -5,11 +5,12 @@ import { TestRuntime } from "./mocks/integration";
 import { shouldIdle } from "../src/methods/shouldIdle";
 import BigNumber from "bignumber.js";
 
-describe("src/methods/validate.ts", () => {
+describe("src/methods/shouldIdle.ts", () => {
   let core: Node;
 
   let loggerInfo: jest.Mock;
   let loggerDebug: jest.Mock;
+  let loggerWarn: jest.Mock;
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
@@ -28,10 +29,12 @@ describe("src/methods/validate.ts", () => {
 
     loggerInfo = jest.fn();
     loggerDebug = jest.fn();
+    loggerWarn = jest.fn();
     loggerError = jest.fn();
 
     core.logger.info = loggerInfo;
     core.logger.debug = loggerDebug;
+    core.logger.warn = loggerWarn;
     core.logger.error = loggerError;
   });
 
