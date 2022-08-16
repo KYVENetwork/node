@@ -15,7 +15,7 @@ describe("src/methods/validate.ts", () => {
   let loggerDebug: jest.Mock;
   let loggerError: jest.Mock;
 
-  let processExit: jest.SpyInstance;
+  let processExit: jest.Mock<never, never>;
 
   beforeEach(() => {
     core = new Node();
@@ -23,11 +23,8 @@ describe("src/methods/validate.ts", () => {
     core.addRuntime(new TestRuntime());
 
     // mock process.exit
-    processExit = jest
-      .spyOn(process, "exit")
-      .mockImplementation((code?: number) => {
-        return code as never;
-      });
+    processExit = jest.fn<never, never>();
+    process.exit = processExit;
 
     // mock logger
     core.logger = new Logger();
@@ -39,10 +36,6 @@ describe("src/methods/validate.ts", () => {
     core.logger.info = loggerInfo;
     core.logger.debug = loggerDebug;
     core.logger.error = loggerError;
-  });
-
-  afterEach(() => {
-    processExit.mockReset();
   });
 
   test("validateRuntime: validate node runtime with valid one", () => {
