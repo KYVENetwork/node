@@ -196,6 +196,8 @@ export interface Protocol {
   binaries: string;
   /** last_upgrade ... */
   last_upgrade: string;
+  /** test */
+  test: string;
 }
 
 /** Upgrade ... */
@@ -688,7 +690,7 @@ export const BundleProposal = {
 };
 
 function createBaseProtocol(): Protocol {
-  return { version: "", binaries: "", last_upgrade: "0" };
+  return { version: "", binaries: "", last_upgrade: "0", test: "" };
 }
 
 export const Protocol = {
@@ -704,6 +706,9 @@ export const Protocol = {
     }
     if (message.last_upgrade !== "0") {
       writer.uint32(24).uint64(message.last_upgrade);
+    }
+    if (message.test !== "") {
+      writer.uint32(34).string(message.test);
     }
     return writer;
   },
@@ -724,6 +729,9 @@ export const Protocol = {
         case 3:
           message.last_upgrade = longToString(reader.uint64() as Long);
           break;
+        case 4:
+          message.test = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -739,6 +747,7 @@ export const Protocol = {
       last_upgrade: isSet(object.last_upgrade)
         ? String(object.last_upgrade)
         : "0",
+      test: isSet(object.test) ? String(object.test) : "",
     };
   },
 
@@ -748,6 +757,7 @@ export const Protocol = {
     message.binaries !== undefined && (obj.binaries = message.binaries);
     message.last_upgrade !== undefined &&
       (obj.last_upgrade = message.last_upgrade);
+    message.test !== undefined && (obj.test = message.test);
     return obj;
   },
 
@@ -756,6 +766,7 @@ export const Protocol = {
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
     message.last_upgrade = object.last_upgrade ?? "0";
+    message.test = object.test ?? "";
     return message;
   },
 };

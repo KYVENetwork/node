@@ -2,181 +2,217 @@ import KyveClient from "../../src/clients/rpc-client/client";
 import { createValidator } from "../helper";
 import * as fs from "fs";
 import { resolve } from "path";
-import {
-  MsgClaimUploaderRole,
-  MsgDefundPool,
-  MsgDelegatePool,
-  MsgRedelegatePool,
-  MsgFundPool,
-  MsgStakePool,
-  MsgSubmitBundleProposal,
-  MsgUndelegatePool,
-  MsgUnstakePool,
-  MsgUpdateMetadata,
-  MsgVoteProposal,
-  MsgWithdrawPool,
-  MsgReactivateStaker,
-  MsgUpdateCommission,
-} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/tx";
+import { kyve, cosmos as cosmosProto } from "@kyve/proto";
+
+import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
+import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
+import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+
+import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
+import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
+import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
+import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
+
+import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
+import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
+
+import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgStake;
+import MsgUnstake = kyve.registry.v1beta1.kyveStakers.MsgUnstake;
+import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
+import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
+import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
+import MsgLeavePool = kyve.registry.v1beta1.kyveStakers.MsgLeavePool;
+
+import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
+import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
+
+import CreatePoolProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
+import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
+import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
+import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.ResetPoolProposal;
+import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
+import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
+import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
+
 import Mock = jest.Mock;
 import { DENOM, KYVE_DECIMALS } from "../../src/constants";
-import { TextProposal } from "@kyvenetwork/proto/dist/proto/cosmos/gov/v1beta1/gov";
-import { ParameterChangeProposal } from "@kyvenetwork/proto/dist/proto/cosmos/params/v1beta1/params";
-import {
-  CancelPoolUpgradeProposal,
-  CreatePoolProposal,
-  PausePoolProposal,
-  ResetPoolProposal,
-  SchedulePoolUpgradeProposal,
-  UnpausePoolProposal,
-  UpdatePoolProposal,
-} from "@kyve/proto/dist/proto/kyve/registry/v1beta1/gov";
+
 import BigNumber from "bignumber.js";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
-const PATH_TO_TYPES =
-  "../proto/dist/proto/kyve/registry/v1beta1";
 
-const typesFiles = fs
-  .readdirSync(PATH_TO_TYPES)
-  .filter((files) => files.endsWith("d.ts"))
-  .map((dtsFiles) => resolve(PATH_TO_TYPES, dtsFiles));
+function extractTsFromPath(path: string) {
+  return fs
+    .readdirSync(path)
+    .filter((files) => files.endsWith("d.ts"))
+    .map((dtsFiles) => resolve(path, dtsFiles));
+}
 
 const mockAccountData = {
   address: "kyve19jc64sd773gtjljksjhls0n5mqay7xj83yeqvk",
   algo: "secp256k1" as const,
   pubkey: new Uint8Array(),
 };
+
 const TEST_MEMO = "test_memo";
 const TEST_FEE = 1;
 const TEST_AMOUNT = "1000000000";
 
-const validator = createValidator(typesFiles);
-const BaseMethods = [
-  {
-    methodName: "fundPool",
-    parameters: {
-      params: MsgFundPool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgFundPool"),
-    },
-  },
-  {
-    methodName: "defundPool",
-    parameters: {
-      params: MsgDefundPool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgDefundPool"),
-    },
-  },
-  {
-    methodName: "stakePool",
-    parameters: {
-      params: MsgStakePool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgStakePool"),
-    },
-  },
-  {
-    methodName: "unstakePool",
-    parameters: {
-      params: MsgUnstakePool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgUnstakePool"),
-    },
-  },
-  {
-    methodName: "delegatePool",
-    parameters: {
-      params: MsgDelegatePool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgDelegatePool"),
-    },
-  },
-  {
-    methodName: "redelegatePool",
-    parameters: {
-      params: MsgRedelegatePool.fromJSON({}),
-      schema:
-        validator.typeQuerySchemas.getSchemaForSymbol("MsgRedelegatePool"),
-    },
-  },
-  {
-    methodName: "withdrawPool",
-    parameters: {
-      params: MsgWithdrawPool.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgWithdrawPool"),
-    },
-  },
-  {
-    methodName: "undelegatePool",
-    parameters: {
-      params: MsgUndelegatePool.fromJSON({}),
-      schema:
-        validator.typeQuerySchemas.getSchemaForSymbol("MsgUndelegatePool"),
-    },
-  },
-  {
-    methodName: "submitBundleProposal",
-    parameters: {
-      params: MsgSubmitBundleProposal.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol(
-        "MsgSubmitBundleProposal"
+const methodsByGroup = [
+  [
+    {
+      name: "bundles",
+      pathToTypes: extractTsFromPath(
+        "./node_modules/@kyve/proto/dist/proto/kyve/bundles/v1beta1"
       ),
     },
-  },
-  {
-    methodName: "voteProposal",
-    parameters: {
-      params: MsgVoteProposal.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol("MsgVoteProposal"),
-    },
-  },
-  {
-    methodName: "claimUploaderRole",
-    parameters: {
-      params: MsgClaimUploaderRole.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol(
-        "MsgClaimUploaderRole"
+    [
+      {
+        methodName: "submitBundleProposal",
+        parameters: {
+          params: MsgSubmitBundleProposal.fromJSON({}),
+          schemaType: "MsgSubmitBundleProposal",
+        },
+      },
+      {
+        methodName: "voteBundleProposal",
+        parameters: {
+          params: MsgVoteBundleProposal.fromJSON({}),
+          schemaType: "MsgVoteBundleProposal",
+        },
+      },
+      {
+        methodName: "claimUploaderRole",
+        parameters: {
+          params: MsgClaimUploaderRole.fromJSON({}),
+          schemaType: "MsgClaimUploaderRole",
+        },
+      },
+    ],
+  ],
+  [
+    {
+      name: "delegation",
+      pathToTypes: extractTsFromPath(
+        "./node_modules/@kyve/proto/dist/proto/kyve/delegation/v1beta1"
       ),
     },
-  },
-  {
-    methodName: "updateMetadata",
-    parameters: {
-      params: MsgUpdateMetadata.fromJSON({}),
-      schema:
-        validator.typeQuerySchemas.getSchemaForSymbol("MsgUpdateMetadata"),
-    },
-  },
-  {
-    methodName: "updateMetadata",
-    parameters: {
-      params: MsgUpdateMetadata.fromJSON({}),
-      schema:
-        validator.typeQuerySchemas.getSchemaForSymbol("MsgUpdateMetadata"),
-    },
-  },
-  {
-    methodName: "updateCommission",
-    parameters: {
-      params: MsgUpdateCommission.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol(
-        "MsgUpdateCommission"
+    [
+      {
+        methodName: "delegate",
+        parameters: {
+          params: MsgDelegate.fromJSON({}),
+          schemaType: "MsgDelegate",
+        },
+      },
+      {
+        methodName: "withdrawRewards",
+        parameters: {
+          params: MsgWithdrawRewards.fromJSON({}),
+          schemaType: "MsgWithdrawRewards",
+        },
+      },
+      {
+        methodName: "undelegate",
+        parameters: {
+          params: MsgUndelegate.fromJSON({}),
+          schemaType: "MsgUndelegate",
+        },
+      },
+      {
+        methodName: "redelegate",
+        parameters: {
+          params: MsgRedelegate.fromJSON({}),
+          schemaType: "MsgRedelegate",
+        },
+      },
+    ],
+  ],
+  [
+    {
+      name: "pool",
+      pathToTypes: extractTsFromPath(
+        "./node_modules/@kyve/proto/dist/proto/kyve/pool/v1beta1"
       ),
     },
-  },
-  {
-    methodName: "reactivateStaker",
-    parameters: {
-      params: MsgReactivateStaker.fromJSON({}),
-      schema: validator.typeQuerySchemas.getSchemaForSymbol(
-        "MsgReactivateStaker"
+    [
+      {
+        methodName: "fundPool",
+        parameters: {
+          params: MsgFundPool.fromJSON({}),
+          schemaType: "MsgFundPool",
+        },
+      },
+      {
+        methodName: "defundPool",
+        parameters: {
+          params: MsgDefundPool.fromJSON({}),
+          schemaType: "MsgDefundPool",
+        },
+      },
+    ],
+  ],
+  [
+    {
+      name: "stakers",
+      pathToTypes: extractTsFromPath(
+        "./node_modules/@kyve/proto/dist/proto/kyve/stakers/v1beta1"
       ),
     },
-  },
+    [
+      {
+        methodName: "stake",
+        parameters: {
+          params: MsgStake.fromJSON({}),
+          schemaType: "MsgStake",
+        },
+      },
+      {
+        methodName: "unstake",
+        parameters: {
+          params: MsgUnstake.fromJSON({}),
+          schemaType: "MsgUnstake",
+        },
+      },
+      {
+        methodName: "updateMetadata",
+        parameters: {
+          params: MsgUpdateMetadata.fromJSON({}),
+          schemaType: "MsgUpdateMetadata",
+        },
+      },
+      {
+        methodName: "updateCommission",
+        parameters: {
+          params: MsgUpdateCommission.fromJSON({}),
+          schemaType: "MsgUpdateCommission",
+        },
+      },
+      {
+        methodName: "joinPool",
+        parameters: {
+          params: MsgJoinPool.fromJSON({}),
+          schemaType: "MsgJoinPool",
+        },
+      },
+      {
+        methodName: "leavePool",
+        parameters: {
+          params: MsgLeavePool.fromJSON({}),
+          schemaType: "MsgLeavePool",
+        },
+      },
+    ],
+  ],
 ] as const;
+
 let kyveClient: KyveClient;
 let mockSign: Mock;
 let mockSendTokens: Mock;
 let mockGetBalance: Mock;
+
 beforeEach(() => {
   mockSign = jest.fn(() => TxRaw.create());
   mockSendTokens = jest.fn();
@@ -197,37 +233,44 @@ beforeEach(() => {
     mockAminoSigner
   );
 });
+for (let [bundleConfig, methods] of methodsByGroup) {
+  describe(`Methods ${bundleConfig.name}`, () => {
+    const validator = createValidator(bundleConfig.pathToTypes);
+    methods.forEach((method) => {
+      it(`method ${method.methodName}`, async () => {
+        // @ts-ignore
+        await kyveClient.kyve.v1beta1[bundleConfig.name][method.methodName](
+          //@ts-ignore have no idea how to create it generic. btw ts-ignore is ok, because we check params from json schema
+          method.parameters.params,
+          { memo: TEST_MEMO, fee: TEST_FEE }
+        );
 
-describe("Base Methods", () => {
-  BaseMethods.forEach((method) => {
-    it(`method ${method.methodName}`, async () => {
-      await kyveClient.kyve.v1beta1.base[method.methodName](
-        //@ts-ignore have no idea how to create it generic. btw ts-ignore is ok, because we check params from json schema
-        method.parameters.params,
-        { memo: TEST_MEMO, fee: TEST_FEE }
-      );
+        expect(mockSign).toHaveBeenCalledTimes(1);
 
-      expect(mockSign).toHaveBeenCalledTimes(1);
+        const [[testAddress, [tx], fee, memo]] = mockSign.mock.calls;
+        expect(testAddress).toEqual(mockAccountData.address);
 
-      const [[testAddress, [tx], fee, memo]] = mockSign.mock.calls;
-      expect(testAddress).toEqual(mockAccountData.address);
-
-      expect(tx).toEqual(
-        expect.objectContaining({
-          typeUrl: expect.any(String),
-          value: expect.any(Object),
-        })
-      );
-      expect(memo).toEqual(TEST_MEMO);
-      const validationResult = validator.validate(
-        method.parameters.schema,
-        tx.value
-      );
-      expect(validationResult.valid).toBeTruthy();
-      expect(Object.keys(fee).sort()).toEqual(["amount", "gas"].sort());
+        expect(tx).toEqual(
+          expect.objectContaining({
+            typeUrl: expect.any(String),
+            value: expect.any(Object),
+          })
+        );
+        expect(memo).toEqual(TEST_MEMO);
+        const validationResult = validator.validate(
+          validator.typeQuerySchemas.getSchemaForSymbol(
+            method.parameters.schemaType
+          ),
+          tx.value
+        );
+        expect(validationResult.valid).toBeTruthy();
+        expect(Object.keys(fee).sort()).toEqual(["amount", "gas"].sort());
+      });
     });
   });
+}
 
+describe("Base methods", () => {
   it("transfer", async () => {
     const testRecipient = "kyveTestRecipient";
     const testAmount = "1";
@@ -257,7 +300,6 @@ describe("Base Methods", () => {
     expect(result).toEqual(0);
   });
 });
-
 const GovMethods = [
   {
     method: "submitTextProposal",
@@ -317,7 +359,7 @@ describe("Gov methods", () => {
           typeUrl: expect.any(String),
           value: {
             content: {
-              typeUrl: expect.any(String),
+              type_url: expect.any(String),
               value: expect.any(Uint8Array),
             },
             initial_deposit: [
@@ -336,6 +378,7 @@ describe("Gov methods", () => {
       expect(method.decoder.decode(tx.value.content.value)).toEqual(govParam);
     });
   });
+
   it("`govVote`", async () => {
     const testProposalNumber = "1";
     const testVoteOptions = "Yes";

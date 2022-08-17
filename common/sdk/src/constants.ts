@@ -65,7 +65,11 @@ export const KYVE_KEPLR_CONFIG: ChainInfo = {
     },
   ],
   coinType: 118,
-  gasPriceStep: { low: 0, average: 0, high: 0 },
+  gasPriceStep: {
+    low: 2,
+    average: 2.5,
+    high: 10,
+  },
   features: ["ibc-transfer", "ibc-go"],
 };
 
@@ -78,6 +82,11 @@ export const KYVE_COSMOSTATION_CONFIG: AddChainParams = {
   addressPrefix: PREFIX,
   coinType: "118",
   decimals: KYVE_DECIMALS,
+  gasRate: {
+    tiny: "1.6",
+    low: "2",
+    average: "0.8",
+  },
 };
 
 export type KYVE_NETWORK = "local" | "alpha" | "beta" | "korellia";

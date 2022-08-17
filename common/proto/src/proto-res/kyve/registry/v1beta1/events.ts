@@ -1,11 +1,5 @@
 /* eslint-disable */
 import {
-  VoteType,
-  voteTypeToNumber,
-  voteTypeFromJSON,
-  voteTypeToJSON,
-} from "./tx";
-import {
   StakerStatus,
   stakerStatusToNumber,
   stakerStatusFromJSON,
@@ -193,18 +187,6 @@ export interface EventBundleFinalised {
   abstain: string;
   /** total ... */
   total: string;
-}
-
-/** EventBundleVote is an event emitted when a protocol node votes on a bundle. */
-export interface EventBundleVote {
-  /** pool_id is the unique ID of the pool. */
-  pool_id: string;
-  /** address is the account address of the protocol node. */
-  address: string;
-  /** storage_id is the unique ID of the bundle. */
-  storage_id: string;
-  /** vote is the vote type of the protocol node. */
-  vote: VoteType;
 }
 
 /** EventDelegatePool is an event emitted when someone delegates to a protocol node. */
@@ -556,94 +538,6 @@ export const EventBundleFinalised = {
     message.bundle_hash = object.bundle_hash ?? "";
     message.abstain = object.abstain ?? "0";
     message.total = object.total ?? "0";
-    return message;
-  },
-};
-
-function createBaseEventBundleVote(): EventBundleVote {
-  return {
-    pool_id: "0",
-    address: "",
-    storage_id: "",
-    vote: VoteType.VOTE_TYPE_UNSPECIFIED,
-  };
-}
-
-export const EventBundleVote = {
-  encode(
-    message: EventBundleVote,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.pool_id !== "0") {
-      writer.uint32(8).uint64(message.pool_id);
-    }
-    if (message.address !== "") {
-      writer.uint32(18).string(message.address);
-    }
-    if (message.storage_id !== "") {
-      writer.uint32(26).string(message.storage_id);
-    }
-    if (message.vote !== VoteType.VOTE_TYPE_UNSPECIFIED) {
-      writer.uint32(32).int32(voteTypeToNumber(message.vote));
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventBundleVote {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventBundleVote();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pool_id = longToString(reader.uint64() as Long);
-          break;
-        case 2:
-          message.address = reader.string();
-          break;
-        case 3:
-          message.storage_id = reader.string();
-          break;
-        case 4:
-          message.vote = voteTypeFromJSON(reader.int32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): EventBundleVote {
-    return {
-      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      address: isSet(object.address) ? String(object.address) : "",
-      storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
-      vote: isSet(object.vote)
-        ? voteTypeFromJSON(object.vote)
-        : VoteType.VOTE_TYPE_UNSPECIFIED,
-    };
-  },
-
-  toJSON(message: EventBundleVote): unknown {
-    const obj: any = {};
-    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.address !== undefined && (obj.address = message.address);
-    message.storage_id !== undefined && (obj.storage_id = message.storage_id);
-    message.vote !== undefined && (obj.vote = voteTypeToJSON(message.vote));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<EventBundleVote>, I>>(
-    object: I
-  ): EventBundleVote {
-    const message = createBaseEventBundleVote();
-    message.pool_id = object.pool_id ?? "0";
-    message.address = object.address ?? "";
-    message.storage_id = object.storage_id ?? "";
-    message.vote = object.vote ?? VoteType.VOTE_TYPE_UNSPECIFIED;
     return message;
   },
 };

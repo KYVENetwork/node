@@ -1,14 +1,11 @@
 {
-  "name": "@kyvenetwork/sdk",
-  "version": "2.12.0",
+  "name": "@kyve/sdk",
+  "version": "3.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KYVENetwork/node.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "KYVE",
@@ -19,9 +16,8 @@
   "author": "Ruslan Hlaznov <ruslan@kyve.network>, John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>, Max Breithecker <max@kyve.network>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "format": "prettier --write .",
-    "clean": "rimraf dist",
     "doc": "typedoc",
     "test": "jest test",
     "test:unit": "jest test/unit",
@@ -31,13 +27,12 @@
     "@cosmjs/amino": "0.28.3",
     "@cosmjs/crypto": "0.27.1",
     "@cosmjs/encoding": "0.27.1",
-    "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "0.28.0",
     "@cosmjs/stargate": "0.28.0",
     "@cosmjs/tendermint-rpc": "0.28.0",
     "@cosmostation/extension-client": "^0.0.6",
     "@keplr-wallet/cosmos": "0.9.16",
-    "@kyvenetwork/proto": "1.8.0",
+    "@kyve/proto": "*",
     "axios": "0.25.0",
     "bech32": "2.0.0",
     "bignumber.js": "9.0.2",
@@ -59,14 +54,5 @@
     "typedoc": "^0.22.17",
     "typescript": "^4.5.5",
     "typescript-json-schema": "^0.53.1"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "outputs": [
-          "{projectRoot}/dist"
-        ]
-      }
-    }
   }
 }

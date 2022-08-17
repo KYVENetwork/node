@@ -8,16 +8,18 @@ import AJV from "ajv";
 const settings: TJS.PartialArgs = {
   required: true,
   noExtraProps: true,
+  esModuleInterop: true,
 };
 
 // optionally pass ts compiler options
 const compilerOptions: TJS.CompilerOptions = {
   strictNullChecks: false,
   additionalProperties: false,
+  esModuleInterop: true,
 };
 
 export function createValidator(pathToTypes: string[]) {
-  const program = TJS.getProgramFromFiles([...pathToTypes], compilerOptions);
+  const program = TJS.getProgramFromFiles(pathToTypes, compilerOptions);
   const typeQuerySchemas = TJS.buildGenerator(
     program,
     settings
