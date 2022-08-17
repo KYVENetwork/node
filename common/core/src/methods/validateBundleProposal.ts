@@ -42,8 +42,8 @@ export async function validateBundleProposal(
           this.pool.bundle_proposal!.storage_id
         );
       } catch (error) {
-        this.logger.warn(
-          ` Failed to retrieve bundle from ${this.storageProvider.name}. Retrying in 10s ...\n`
+        this.logger.debug(
+          `Failed to retrieve bundle from ${this.storageProvider.name}. Retrying in 10s ...\n`
         );
         if (!hasVotedAbstain) {
           await this.voteBundleProposal(

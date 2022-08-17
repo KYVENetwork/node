@@ -4,6 +4,8 @@ import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { shouldIdle } from "../src/methods/shouldIdle";
 import BigNumber from "bignumber.js";
+import { TestStorageProvider } from "./mocks/storageProvider";
+import { TestCompression } from "./mocks/compression";
 
 describe("src/methods/shouldIdle.ts", () => {
   let core: Node;
@@ -14,15 +16,32 @@ describe("src/methods/shouldIdle.ts", () => {
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
+  let setTimeoutMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
 
     core.addRuntime(new TestRuntime());
+    core.addStorageProvider(new TestStorageProvider());
+    core.addCompression(new TestCompression());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
     process.exit = processExit;
+
+    // mock setTimeout
+    setTimeoutMock = jest
+      .fn()
+      .mockImplementation(
+        (
+          callback: (args: void) => void,
+          ms?: number | undefined
+        ): NodeJS.Timeout => {
+          callback();
+          return null as any;
+        }
+      );
+    global.setTimeout = setTimeoutMock as any;
 
     // mock logger
     core.logger = new Logger();
@@ -36,6 +55,8 @@ describe("src/methods/shouldIdle.ts", () => {
     core.logger.debug = loggerDebug;
     core.logger.warn = loggerWarn;
     core.logger.error = loggerError;
+
+    core["poolId"] = 0;
   });
 
   test("shouldIdle: validate if pool is upgrading", () => {

@@ -8,8 +8,6 @@ import {
 } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
 
-jest.setTimeout(20000);
-
 describe("src/methods/validateBundleProposal.ts", () => {
   let core: Node;
 
@@ -19,6 +17,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
+  let setTimeoutMock: jest.Mock;
 
   let executeMock: jest.Mock;
   let voteProposalMock: jest.Mock;
@@ -33,6 +32,20 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // mock process.exit
     processExit = jest.fn<never, never>();
     process.exit = processExit;
+
+    // mock setTimeout
+    setTimeoutMock = jest
+      .fn()
+      .mockImplementation(
+        (
+          callback: (args: void) => void,
+          ms?: number | undefined
+        ): NodeJS.Timeout => {
+          callback();
+          return null as any;
+        }
+      );
+    global.setTimeout = setTimeoutMock as any;
 
     // mock logger
     core.logger = new Logger();
@@ -417,6 +430,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+    expect(setTimeoutMock).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      10 * 1000
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -470,6 +489,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+    expect(setTimeoutMock).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      10 * 1000
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",

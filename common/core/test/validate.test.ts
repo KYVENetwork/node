@@ -7,6 +7,8 @@ import {
   validateVersion,
   validateActiveNode,
 } from "../src/methods/validate";
+import { TestStorageProvider } from "./mocks/storageProvider";
+import { TestCompression } from "./mocks/compression";
 
 describe("src/methods/validate.ts", () => {
   let core: Node;
@@ -17,15 +19,32 @@ describe("src/methods/validate.ts", () => {
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
+  let setTimeoutMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
 
     core.addRuntime(new TestRuntime());
+    core.addStorageProvider(new TestStorageProvider());
+    core.addCompression(new TestCompression());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
     process.exit = processExit;
+
+    // mock setTimeout
+    setTimeoutMock = jest
+      .fn()
+      .mockImplementation(
+        (
+          callback: (args: void) => void,
+          ms?: number | undefined
+        ): NodeJS.Timeout => {
+          callback();
+          return null as any;
+        }
+      );
+    global.setTimeout = setTimeoutMock as any;
 
     // mock logger
     core.logger = new Logger();
@@ -39,6 +58,8 @@ describe("src/methods/validate.ts", () => {
     core.logger.debug = loggerDebug;
     core.logger.warn = loggerWarn;
     core.logger.error = loggerError;
+
+    core["poolId"] = 0;
   });
 
   test("validateRuntime: validate node runtime with valid one", () => {

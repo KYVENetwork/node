@@ -2,8 +2,8 @@ import { Logger } from "tslog";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { syncPoolState } from "../src/methods/syncPoolState";
-
-jest.setTimeout(20000);
+import { TestStorageProvider } from "./mocks/storageProvider";
+import { TestCompression } from "./mocks/compression";
 
 describe("src/methods/syncPoolState.ts", () => {
   let core: Node;
@@ -14,15 +14,32 @@ describe("src/methods/syncPoolState.ts", () => {
   let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
+  let setTimeoutMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
 
     core.addRuntime(new TestRuntime());
+    core.addStorageProvider(new TestStorageProvider());
+    core.addCompression(new TestCompression());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
     process.exit = processExit;
+
+    // mock setTimeout
+    setTimeoutMock = jest
+      .fn()
+      .mockImplementation(
+        (
+          callback: (args: void) => void,
+          ms?: number | undefined
+        ): NodeJS.Timeout => {
+          callback();
+          return null as any;
+        }
+      );
+    global.setTimeout = setTimeoutMock as any;
 
     // mock logger
     core.logger = new Logger();
@@ -130,10 +147,16 @@ describe("src/methods/syncPoolState.ts", () => {
       },
     } as any;
 
-    // // ACT
+    // ACT
     await syncPoolState.call(core);
 
-    // // ASSERT
+    // ASSERT
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeout).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      10 * 1000
+    );
+
     expect(loggerInfo).toHaveBeenCalledTimes(1);
     expect(loggerDebug).toHaveBeenCalledTimes(1);
     expect(loggerDebug).toHaveBeenNthCalledWith(
