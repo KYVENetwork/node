@@ -449,6 +449,87 @@ describe("src/methods/validateBundleProposal.ts", () => {
     });
   });
 
+  test("validateBundleProposal: local bundle could not be loaded multiple times", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "0",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "1",
+        byte_size: "41",
+        voters_abstain: [],
+        to_key: "test_key",
+        to_value: "test_value",
+        bundle_hash:
+          "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
+      },
+    } as any;
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        bundle: [],
+        toKey: "",
+        toValue: "",
+      })
+      .mockResolvedValueOnce({
+        bundle: [],
+        toKey: "",
+        toValue: "",
+      })
+      .mockResolvedValueOnce({
+        bundle: [],
+        toKey: "",
+        toValue: "",
+      })
+      .mockResolvedValue({
+        bundle: [{ key: "test_key", value: "test_value" }],
+        toKey: "test_key",
+        toValue: "test_value",
+      });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await validateBundleProposal.call(core, 101);
+
+    // ASSERT
+    expect(setTimeoutMock).toHaveBeenCalledTimes(3);
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      1,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      2,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      3,
+      expect.any(Function),
+      10 * 1000
+    );
+
+    expect(voteProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 3,
+    });
+    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 1,
+    });
+  });
+
   test("validateBundleProposal: bundle from storage provider could not be loaded the first time", async () => {
     // ARRANGE
     core.pool = {
@@ -491,6 +572,150 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // ASSERT
     expect(setTimeoutMock).toHaveBeenCalledTimes(1);
     expect(setTimeoutMock).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      10 * 1000
+    );
+
+    expect(voteProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 3,
+    });
+    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 1,
+    });
+  });
+
+  test("validateBundleProposal: bundle from storage provider could not be loaded multiple times", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "0",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "1",
+        byte_size: "41",
+        voters_abstain: [],
+        to_key: "test_key",
+        to_value: "test_value",
+        bundle_hash:
+          "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
+      },
+    } as any;
+
+    retrieveBundleMock
+      .mockRejectedValueOnce(new Error("Invalid Network Request"))
+      .mockRejectedValueOnce(new Error("Invalid Network Request"))
+      .mockRejectedValueOnce(new Error("Invalid Network Request"))
+      .mockResolvedValue(
+        Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+      );
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle: [{ key: "test_key", value: "test_value" }],
+      toKey: "test_key",
+      toValue: "test_value",
+    });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await validateBundleProposal.call(core, 101);
+
+    // ASSERT
+    expect(setTimeoutMock).toHaveBeenCalledTimes(3);
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      1,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      2,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      3,
+      expect.any(Function),
+      10 * 1000
+    );
+
+    expect(voteProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 3,
+    });
+    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 1,
+    });
+  });
+
+  test("validateBundleProposal: bundle from storage provider could not be loaded multiple times", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "0",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "1",
+        byte_size: "41",
+        voters_abstain: [],
+        to_key: "test_key",
+        to_value: "test_value",
+        bundle_hash:
+          "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
+      },
+    } as any;
+
+    retrieveBundleMock
+      .mockRejectedValueOnce(new Error("Invalid Network Request"))
+      .mockResolvedValue(
+        Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+      );
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        bundle: [],
+        toKey: "",
+        toValue: "",
+      })
+      .mockResolvedValue({
+        bundle: [{ key: "test_key", value: "test_value" }],
+        toKey: "test_key",
+        toValue: "test_value",
+      });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await validateBundleProposal.call(core, 101);
+
+    // ASSERT
+    expect(setTimeoutMock).toHaveBeenCalledTimes(2);
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      1,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeoutMock).toHaveBeenNthCalledWith(
+      2,
       expect.any(Function),
       10 * 1000
     );
