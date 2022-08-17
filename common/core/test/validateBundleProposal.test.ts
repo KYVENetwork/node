@@ -1,6 +1,6 @@
 import { Logger } from "tslog";
 import { Node } from "../src/index";
-import { TestRuntime } from "./mocks/integration";
+import { TestRuntime, validateMock } from "./mocks/integration";
 import { validateBundleProposal } from "../src/methods/validateBundleProposal";
 import {
   TestStorageProvider,
@@ -87,6 +87,11 @@ describe("src/methods/validateBundleProposal.ts", () => {
     } as any;
   });
 
+  afterEach(() => {
+    validateMock.mockClear();
+    retrieveBundleMock.mockClear();
+  });
+
   test("validateBundleProposal: new bundle was created in the meantime", async () => {
     // ARRANGE
     core.pool = {
@@ -109,6 +114,9 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     // ASSERT
     expect(syncPoolStateMock).toHaveBeenCalledTimes(1);
+
+    expect(validateMock).not.toHaveBeenCalled();
+    expect(retrieveBundleMock).not.toHaveBeenCalled();
   });
 
   test("validateBundleProposal: bundle was dropped", async () => {
@@ -136,6 +144,9 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // ASSERT
     expect(syncPoolStateMock).toHaveBeenCalledTimes(1);
     expect(shouldIdleMock).toHaveBeenCalledTimes(1);
+
+    expect(retrieveBundleMock).not.toHaveBeenCalled();
+    expect(validateMock).not.toHaveBeenCalled();
   });
 
   test("validateBundleProposal: bundle is valid", async () => {
@@ -172,6 +183,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -213,6 +235,11 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).not.toHaveBeenCalled();
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -255,6 +282,11 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).not.toHaveBeenCalled();
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -297,6 +329,11 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).not.toHaveBeenCalled();
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -339,6 +376,11 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).not.toHaveBeenCalled();
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -381,6 +423,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
     await validateBundleProposal.call(core, 101);
 
     // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "invalid_test_value" }]
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -434,6 +487,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(setTimeoutMock).toHaveBeenLastCalledWith(
       expect.any(Function),
       10 * 1000
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
     );
 
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
@@ -517,6 +581,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
       10 * 1000
     );
 
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -574,6 +649,18 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(setTimeoutMock).toHaveBeenLastCalledWith(
       expect.any(Function),
       10 * 1000
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(2);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(2, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
     );
 
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
@@ -648,6 +735,20 @@ describe("src/methods/validateBundleProposal.ts", () => {
       10 * 1000
     );
 
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(4);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(2, "test_storage_id");
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(3, "test_storage_id");
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(4, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
+    );
+
     expect(voteProposalMock).toHaveBeenCalledTimes(2);
     expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
       id: "0",
@@ -661,7 +762,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
     });
   });
 
-  test("validateBundleProposal: bundle from storage provider could not be loaded multiple times", async () => {
+  test("validateBundleProposal: local bundle and bundle from storage provider could not be loaded", async () => {
     // ARRANGE
     core.pool = {
       name: "Moontest",
@@ -718,6 +819,18 @@ describe("src/methods/validateBundleProposal.ts", () => {
       2,
       expect.any(Function),
       10 * 1000
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(2);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(2, "test_storage_id");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenNthCalledWith(
+      1,
+      core,
+      [{ key: "test_key", value: "test_value" }],
+      [{ key: "test_key", value: "test_value" }]
     );
 
     expect(voteProposalMock).toHaveBeenCalledTimes(2);

@@ -1,4 +1,4 @@
-import { Node } from "../../src";
+import { DataItem, Node, sha256 } from "../../src";
 
 export const getDataItemMock = jest
   .fn()
@@ -8,7 +8,16 @@ export const getDataItemMock = jest
       value: `${key}-value`,
     })
   );
-export const validateMock = jest.fn().mockResolvedValue(true);
+export const validateMock = jest
+  .fn()
+  .mockImplementation(
+    (core: Node, uploadedBundle: DataItem[], validationBundle: DataItem[]) => {
+      const uploadedBundleHash = sha256(uploadedBundle);
+      const validationBundleHash = sha256(validationBundle);
+
+      return uploadedBundleHash === validationBundleHash;
+    }
+  );
 export const getNextKeyMock = jest
   .fn()
   .mockImplementation((key: string) =>
