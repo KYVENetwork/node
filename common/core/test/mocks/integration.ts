@@ -1,29 +1,30 @@
-import { Node, DataItem, IRuntime } from "../../src";
+import { Node } from "../../src";
 
-export class TestRuntime implements IRuntime {
-  public name = "TestRuntime";
-  public version = "0.0.0";
-
-  public async getDataItem(core: Node, key: string): Promise<DataItem> {
-    return {
+export const getDataItemMock = jest
+  .fn()
+  .mockImplementation((core: Node, key: string) =>
+    Promise.resolve({
       key,
       value: `${key}-value`,
-    };
-  }
+    })
+  );
+export const validateMock = jest.fn().mockResolvedValue(true);
+export const getNextKeyMock = jest
+  .fn()
+  .mockImplementation((key: string) =>
+    Promise.resolve((parseInt(key) + 1).toString())
+  );
+export const formatValueMock = jest
+  .fn()
+  .mockImplementation((value: string) => Promise.resolve(value));
 
-  async validate(
-    core: Node,
-    uploadedBundle: DataItem[],
-    validationBundle: DataItem[]
-  ) {
-    return true;
-  }
-
-  public async getNextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1).toString();
-  }
-
-  public async formatValue(value: any): Promise<string> {
-    return value.hash;
-  }
-}
+export const TestRuntime = jest.fn().mockImplementation(() => {
+  return {
+    name: "TestRuntime",
+    version: "0.0.0",
+    getDataItem: getDataItemMock,
+    validate: validateMock,
+    getNextKey: getNextKeyMock,
+    formatValue: formatValueMock,
+  };
+});
