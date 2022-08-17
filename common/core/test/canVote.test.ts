@@ -84,6 +84,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
+        storage_id: "test_storage_id",
         uploader: "",
       },
     } as Pool;
@@ -94,13 +95,9 @@ describe("src/methods/canVote.ts", () => {
     // ASSERT
     expect(canVoteMock).not.toHaveBeenCalled();
 
-    expect(res).toBeFalsy();
+    expect(setTimeoutMock).not.toHaveBeenCalled();
 
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Skipping vote. Reason: Node can not vote on empty bundle\n`
-    );
+    expect(res).toBeFalsy();
   });
 
   test("canVote: node is uploader", async () => {
@@ -132,16 +129,90 @@ describe("src/methods/canVote.ts", () => {
     // ASSERT
     expect(canVoteMock).not.toHaveBeenCalled();
 
-    expect(res).toBeFalsy();
+    expect(setTimeoutMock).not.toHaveBeenCalled();
 
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Skipping vote. Reason: Node is uploader of this bundle\n`
-    );
+    expect(res).toBeFalsy();
   });
 
-  test("canVote: node is able to vote", async () => {
+  test("canVote: canVote returns false", async () => {
+    // ARRANGE
+    const canVoteMock = jest.fn().mockResolvedValue({
+      possible: false,
+      reason: "test_reaseon",
+    });
+
+    core.query = {
+      kyve: {
+        registry: {
+          v1beta1: {
+            canVote: canVoteMock,
+          },
+        },
+      },
+    } as any;
+
+    core.pool = {
+      bundle_proposal: {
+        uploader: "other_test_uploader",
+        storage_id: "test_storage_id",
+      },
+    } as Pool;
+
+    // ACT
+    const res = await canVote.call(core);
+
+    // ASSERT
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      pool_id: "0",
+      voter: "test_uploader",
+      storage_id: "test_storage_id",
+    });
+
+    expect(setTimeoutMock).not.toHaveBeenCalled();
+
+    expect(res).toBeFalsy();
+  });
+
+  test("canVote: canVote returns error", async () => {
+    // ARRANGE
+    const error = new Error("Failed Network Request");
+    const canVoteMock = jest.fn().mockRejectedValue(error);
+
+    core.query = {
+      kyve: {
+        registry: {
+          v1beta1: {
+            canVote: canVoteMock,
+          },
+        },
+      },
+    } as any;
+
+    core.pool = {
+      bundle_proposal: {
+        uploader: "other_test_uploader",
+        storage_id: "test_storage_id",
+      },
+    } as Pool;
+
+    // ACT
+    const res = await canVote.call(core);
+
+    // ASSERT
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      pool_id: "0",
+      voter: "test_uploader",
+      storage_id: "test_storage_id",
+    });
+
+    expect(setTimeoutMock).not.toHaveBeenCalled();
+
+    expect(res).toBeFalsy();
+
+    expect(loggerDebug).toHaveBeenLastCalledWith(error);
+  });
+
+  test("canVote: canVote returns true", async () => {
     // ARRANGE
     const canVoteMock = jest.fn().mockResolvedValue({
       possible: true,
@@ -169,112 +240,14 @@ describe("src/methods/canVote.ts", () => {
     const res = await canVote.call(core);
 
     // ASSERT
-    expect(canVoteMock).toHaveBeenCalledTimes(1);
-    expect(canVoteMock).toHaveBeenNthCalledWith(1, {
+    expect(canVoteMock).toHaveBeenLastCalledWith({
       pool_id: "0",
       voter: "test_uploader",
       storage_id: "test_storage_id",
     });
+
+    expect(setTimeoutMock).not.toHaveBeenCalled();
 
     expect(res).toBeTruthy();
-
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Node is able to vote on bundle proposal\n`
-    );
-  });
-
-  test("canVote: node is not able to vote", async () => {
-    // ARRANGE
-    const canVoteMock = jest.fn().mockResolvedValue({
-      possible: false,
-      reason: "test_reason",
-    });
-
-    core.query = {
-      kyve: {
-        registry: {
-          v1beta1: {
-            canVote: canVoteMock,
-          },
-        },
-      },
-    } as any;
-
-    core.pool = {
-      bundle_proposal: {
-        uploader: "other_test_uploader",
-        storage_id: "test_storage_id",
-      },
-    } as Pool;
-
-    // ACT
-    const res = await canVote.call(core);
-
-    // ASSERT
-    expect(canVoteMock).toHaveBeenCalledTimes(1);
-    expect(canVoteMock).toHaveBeenNthCalledWith(1, {
-      pool_id: "0",
-      voter: "test_uploader",
-      storage_id: "test_storage_id",
-    });
-
-    expect(res).toBeFalsy();
-
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Skipping vote. Reason: ${"test_reason"}\n`
-    );
-  });
-
-  test("canVote: node is not able to vote", async () => {
-    // ARRANGE
-    const canVoteMock = jest
-      .fn()
-      .mockRejectedValue(new Error("Failed Network Request"));
-
-    core.query = {
-      kyve: {
-        registry: {
-          v1beta1: {
-            canVote: canVoteMock,
-          },
-        },
-      },
-    } as any;
-
-    core.pool = {
-      bundle_proposal: {
-        uploader: "other_test_uploader",
-        storage_id: "test_storage_id",
-      },
-    } as Pool;
-
-    // ACT
-    const res = await canVote.call(core);
-
-    // ASSERT
-    expect(canVoteMock).toHaveBeenCalledTimes(1);
-    expect(canVoteMock).toHaveBeenNthCalledWith(1, {
-      pool_id: "0",
-      voter: "test_uploader",
-      storage_id: "test_storage_id",
-    });
-
-    expect(res).toBeFalsy();
-
-    expect(loggerWarn).toHaveBeenCalledTimes(1);
-    expect(loggerWarn).toHaveBeenNthCalledWith(
-      1,
-      ` Skipping vote. Reason: Failed to execute canVote query\n`
-    );
-
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      new Error("Failed Network Request")
-    );
   });
 });
