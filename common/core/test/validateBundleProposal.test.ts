@@ -6,7 +6,7 @@ import {
   TestStorageProvider,
   retrieveBundleMock,
 } from "./mocks/storageProvider";
-import { TestCompression } from "./mocks/compression";
+import { TestCompression, decompressMock } from "./mocks/compression";
 
 describe("src/methods/validateBundleProposal.ts", () => {
   let core: Node;
@@ -88,8 +88,9 @@ describe("src/methods/validateBundleProposal.ts", () => {
   });
 
   afterEach(() => {
-    validateMock.mockClear();
     retrieveBundleMock.mockClear();
+    decompressMock.mockClear();
+    validateMock.mockClear();
   });
 
   test("validateBundleProposal: new bundle was created in the meantime", async () => {
@@ -116,6 +117,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(syncPoolStateMock).toHaveBeenCalledTimes(1);
 
     expect(validateMock).not.toHaveBeenCalled();
+    expect(decompressMock).not.toHaveBeenCalled();
     expect(retrieveBundleMock).not.toHaveBeenCalled();
   });
 
@@ -146,6 +148,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(shouldIdleMock).toHaveBeenCalledTimes(1);
 
     expect(retrieveBundleMock).not.toHaveBeenCalled();
+    expect(decompressMock).not.toHaveBeenCalled();
     expect(validateMock).not.toHaveBeenCalled();
   });
 
@@ -186,6 +189,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
       1,
@@ -199,6 +208,67 @@ describe("src/methods/validateBundleProposal.ts", () => {
       id: "0",
       storage_id: "test_storage_id",
       vote: 1,
+    });
+  });
+
+  test("validateBundleProposal: proposed invalid bundle", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "0",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "1",
+        byte_size: "41",
+        voters_abstain: [],
+        to_key: "test_key",
+        to_value: "test_value",
+        bundle_hash:
+          "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
+      },
+    } as any;
+
+    retrieveBundleMock.mockResolvedValueOnce(
+      Buffer.from(
+        JSON.stringify([{ key: "test_key", value: "invalid_test_value" }])
+      )
+    );
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle: [{ key: "test_key", value: "test_value" }],
+      toKey: "test_key",
+      toValue: "test_value",
+    });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await validateBundleProposal.call(core, 101);
+
+    // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(
+        JSON.stringify([{ key: "test_key", value: "invalid_test_value" }])
+      )
+    );
+
+    expect(validateMock).not.toHaveBeenCalled();
+
+    expect(voteProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 2,
     });
   });
 
@@ -237,6 +307,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // ASSERT
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
 
     expect(validateMock).not.toHaveBeenCalled();
 
@@ -285,6 +361,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).not.toHaveBeenCalled();
 
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
@@ -331,6 +413,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // ASSERT
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
 
     expect(validateMock).not.toHaveBeenCalled();
 
@@ -379,6 +467,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).not.toHaveBeenCalled();
 
     expect(voteProposalMock).toHaveBeenCalledTimes(1);
@@ -425,6 +519,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     // ASSERT
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
 
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
@@ -491,6 +591,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
 
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
@@ -584,6 +690,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
       1,
@@ -654,6 +766,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenCalledTimes(2);
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(2, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
 
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
@@ -741,6 +859,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(3, "test_storage_id");
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(4, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
       1,
@@ -825,6 +949,12 @@ describe("src/methods/validateBundleProposal.ts", () => {
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
     expect(retrieveBundleMock).toHaveBeenNthCalledWith(2, "test_storage_id");
 
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenNthCalledWith(
       1,
@@ -843,6 +973,61 @@ describe("src/methods/validateBundleProposal.ts", () => {
       id: "0",
       storage_id: "test_storage_id",
       vote: 1,
+    });
+  });
+
+  test("validateBundleProposal: decompression of bundle fails", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "0",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "1",
+        byte_size: "41",
+        voters_abstain: [],
+        to_key: "test_key",
+        to_value: "test_value",
+        bundle_hash:
+          "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
+      },
+    } as any;
+
+    decompressMock.mockRejectedValueOnce(new Error("Failed to decompress"));
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle: [{ key: "test_key", value: "test_value" }],
+      toKey: "test_key",
+      toValue: "test_value",
+    });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await validateBundleProposal.call(core, 101);
+
+    // ASSERT
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(1, "test_storage_id");
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenNthCalledWith(
+      1,
+      Buffer.from(JSON.stringify([{ key: "test_key", value: "test_value" }]))
+    );
+
+    expect(validateMock).not.toHaveBeenCalled();
+
+    expect(voteProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
+      id: "0",
+      storage_id: "test_storage_id",
+      vote: 2,
     });
   });
 });
