@@ -73,17 +73,7 @@ describe("src/methods/validate.ts", () => {
     validateRuntime.call(core);
 
     // ASSERT
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Node running on runtime = ${core["runtime"].name}`
-    );
-
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      `Successfully validated pool runtime\n`
-    );
+    expect(processExit).not.toHaveBeenCalled();
   });
 
   test("validateRuntime: validate node runtime with invalid one", () => {
@@ -108,7 +98,7 @@ describe("src/methods/validate.ts", () => {
     );
 
     expect(processExit).toHaveBeenCalledTimes(1);
-    expect(processExit).toHaveBeenNthCalledWith(1, 1);
+    expect(processExit).toHaveBeenLastCalledWith(1);
   });
 
   test("validateVersion: validate node version with valid one", () => {
@@ -124,17 +114,7 @@ describe("src/methods/validate.ts", () => {
     validateVersion.call(core);
 
     // ASSERT
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Node running on runtime version = ${core["runtime"].version}`
-    );
-
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      `Successfully validated pool runtime version\n`
-    );
+    expect(processExit).not.toHaveBeenCalled();
   });
 
   test("validateVersion: validate node version with invalid one", () => {
@@ -163,7 +143,7 @@ describe("src/methods/validate.ts", () => {
     );
 
     expect(processExit).toHaveBeenCalledTimes(1);
-    expect(processExit).toHaveBeenNthCalledWith(1, 1);
+    expect(processExit).toHaveBeenLastCalledWith(1);
   });
 
   test("validateActiveNode: validate node stake with valid staker address", () => {
@@ -179,17 +159,7 @@ describe("src/methods/validate.ts", () => {
     validateActiveNode.call(core);
 
     // ASSERT
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
-      `Node running as validator on pool "${core.pool.name}"`
-    );
-
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      `Successfully validated node stake\n`
-    );
+    expect(processExit).not.toHaveBeenCalled();
   });
 
   test("validateActiveNode: validate node stake with invalid staker address", () => {
@@ -212,6 +182,6 @@ describe("src/methods/validate.ts", () => {
     );
 
     expect(processExit).toHaveBeenCalledTimes(1);
-    expect(processExit).toHaveBeenNthCalledWith(1, 1);
+    expect(processExit).toHaveBeenLastCalledWith(1);
   });
 });

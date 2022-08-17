@@ -59,11 +59,13 @@ describe("src/methods/syncPoolState.ts", () => {
 
   test("syncPoolState: validate sync pool state with valid return", async () => {
     // ARRANGE
+    const pool = {
+      name: "Moontest",
+      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+    };
+
     const poolMock = jest.fn().mockResolvedValue({
-      pool: {
-        name: "Moontest",
-        config: '{"rpc":"https://rpc.api.moonbeam.network"}',
-      },
+      pool,
     });
 
     core.query = {
@@ -80,22 +82,21 @@ describe("src/methods/syncPoolState.ts", () => {
     await syncPoolState.call(core);
 
     // ASSERT
-    expect(poolMock).toHaveBeenCalledTimes(1);
-    expect(poolMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(poolMock).toHaveBeenLastCalledWith({ id: "0" });
 
-    expect(core.pool.name).toEqual("Moontest");
-    expect(core.poolConfig).toEqual({
-      rpc: "https://rpc.api.moonbeam.network",
-    });
+    expect(core.pool).toEqual(pool);
+    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
   });
 
   test("syncPoolState: validate sync pool state with invalid config", async () => {
     // ARRANGE
+    const pool = {
+      name: "Moontest",
+      config: "invalid_config",
+    };
+
     const poolMock = jest.fn().mockResolvedValue({
-      pool: {
-        name: "Moontest",
-        config: "invalid_config",
-      },
+      pool,
     });
 
     core.query = {
@@ -112,30 +113,23 @@ describe("src/methods/syncPoolState.ts", () => {
     await syncPoolState.call(core);
 
     // ASSERT
-    expect(poolMock).toHaveBeenCalledTimes(1);
-    expect(poolMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(poolMock).toHaveBeenLastCalledWith({ id: "0" });
 
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      `Failed to parse the pool config: ${"invalid_config"}`
-    );
-
-    expect(core.pool.name).toEqual("Moontest");
+    expect(core.pool).toEqual(pool);
     expect(core.poolConfig).toEqual({});
   });
 
   test("syncPoolState: validate sync pool state with error return", async () => {
     // ARRANG
-    const poolMock = jest
-      .fn()
-      .mockRejectedValueOnce(new Error("Failed Network Request"))
-      .mockResolvedValue({
-        pool: {
-          name: "Moontest",
-          config: '{"rpc":"https://rpc.api.moonbeam.network"}',
-        },
-      });
+    const pool = {
+      name: "Moontest",
+      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+    };
+    const error = new Error("Failed Network Request");
+
+    const poolMock = jest.fn().mockRejectedValueOnce(error).mockResolvedValue({
+      pool,
+    });
 
     core.query = {
       kyve: {
@@ -157,20 +151,66 @@ describe("src/methods/syncPoolState.ts", () => {
       10 * 1000
     );
 
-    expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenCalledTimes(1);
-    expect(loggerDebug).toHaveBeenNthCalledWith(
-      1,
-      new Error("Failed Network Request")
-    );
+    expect(loggerDebug).toHaveBeenLastCalledWith(error);
 
     expect(poolMock).toHaveBeenCalledTimes(2);
     expect(poolMock).toHaveBeenNthCalledWith(1, { id: "0" });
     expect(poolMock).toHaveBeenNthCalledWith(2, { id: "0" });
 
-    expect(core.pool.name).toEqual("Moontest");
-    expect(core.poolConfig).toEqual({
-      rpc: "https://rpc.api.moonbeam.network",
-    });
+    expect(core.pool).toEqual(pool);
+    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
+  });
+
+  test("syncPoolState: validate sync pool state with error return", async () => {
+    // ARRANG
+    const pool = {
+      name: "Moontest",
+      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+    };
+    const error = new Error("Failed Network Request");
+
+    const poolMock = jest
+      .fn()
+      .mockRejectedValueOnce(error)
+      .mockRejectedValueOnce(error)
+      .mockResolvedValue({
+        pool,
+      });
+
+    core.query = {
+      kyve: {
+        registry: {
+          v1beta1: {
+            pool: poolMock,
+          } as any,
+        },
+      },
+    } as any;
+
+    // ACT
+    await syncPoolState.call(core);
+
+    // ASSERT
+    expect(setTimeout).toHaveBeenCalledTimes(2);
+    expect(setTimeout).toHaveBeenNthCalledWith(
+      1,
+      expect.any(Function),
+      10 * 1000
+    );
+    expect(setTimeout).toHaveBeenNthCalledWith(
+      2,
+      expect.any(Function),
+      2 * 10 * 1000
+    );
+
+    expect(loggerDebug).toHaveBeenLastCalledWith(error);
+
+    expect(poolMock).toHaveBeenCalledTimes(3);
+    expect(poolMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(poolMock).toHaveBeenNthCalledWith(2, { id: "0" });
+    expect(poolMock).toHaveBeenNthCalledWith(3, { id: "0" });
+
+    expect(core.pool).toEqual(pool);
+    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
   });
 });

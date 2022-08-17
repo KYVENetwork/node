@@ -77,8 +77,7 @@ describe("src/methods/shouldIdle.ts", () => {
     expect(res).toBeTruthy();
 
     expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
+    expect(loggerInfo).toHaveBeenLastCalledWith(
       "Pool is upgrading. Idling ..."
     );
   });
@@ -98,7 +97,7 @@ describe("src/methods/shouldIdle.ts", () => {
     expect(res).toBeTruthy();
 
     expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(1, "Pool is paused. Idling ...");
+    expect(loggerInfo).toHaveBeenLastCalledWith("Pool is paused. Idling ...");
   });
 
   test("shouldIdle: validate if pool has enough stake", () => {
@@ -118,8 +117,7 @@ describe("src/methods/shouldIdle.ts", () => {
     expect(res).toBeTruthy();
 
     expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
+    expect(loggerInfo).toHaveBeenLastCalledWith(
       "Not enough stake in pool. Waiting for additional stakes. Idling ..."
     );
   });
@@ -142,13 +140,12 @@ describe("src/methods/shouldIdle.ts", () => {
     expect(res).toBeTruthy();
 
     expect(loggerInfo).toHaveBeenCalledTimes(1);
-    expect(loggerInfo).toHaveBeenNthCalledWith(
-      1,
+    expect(loggerInfo).toHaveBeenLastCalledWith(
       "Pool is out of funds. Waiting for additional funds. Idling ..."
     );
   });
 
-  test("shouldIdle: validate if pool has enough funds", () => {
+  test("shouldIdle: validate if pool can run", () => {
     // ARRANGE
     core.pool = {
       name: "Moontest",
