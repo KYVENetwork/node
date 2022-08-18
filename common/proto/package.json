@@ -1,5 +1,5 @@
 {
-  "name": "@kyvenetwork/proto",
+  "name": "@kyve/proto",
   "version": "1.8.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,11 +10,10 @@
   "author": "John Letey <john@kyve.network>, ruslan glaznyov <ruslan.glaznyov@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "sh proto-gen.sh && rimraf dist && tsc"
+    "build": "sh proto-gen.sh && rimraf dist && tsc",
+    "generate": "sh proto-gen.sh && yarn build"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
+
   "dependencies": {
     "@protobufs/cosmos": "^0.0.9",
     "@protobufs/gogoproto": "^0.0.9",

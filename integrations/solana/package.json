@@ -23,7 +23,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyvenetwork/core": "1.20.0",
+    "@kyve/core": "1.20.0",
     "@solana/web3.js": "^1.50.1"
   },
   "devDependencies": {

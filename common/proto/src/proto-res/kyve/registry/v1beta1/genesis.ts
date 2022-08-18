@@ -1,21 +1,20 @@
 /* eslint-disable */
-import { Params } from "./params";
 import {
+  CommissionChangeQueueState,
   UnbondingStakingQueueState,
   UnbondingDelegationQueueState,
-  CommissionChangeQueueState,
   Pool,
   Funder,
   Staker,
+  CommissionChangeQueueEntry,
+  UnbondingStaker,
+  UnbondingStakingQueueEntry,
   Delegator,
   DelegationPoolData,
   DelegationEntries,
   Proposal,
-  UnbondingStakingQueueEntry,
-  UnbondingStaker,
   UnbondingDelegationQueueEntry,
   RedelegationCooldown,
-  CommissionChangeQueueEntry,
 } from "./registry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
@@ -24,8 +23,6 @@ export const protobufPackage = "kyve.registry.v1beta1";
 
 /** GenesisState defines the registry module's genesis state. */
 export interface GenesisState {
-  /** params defines all the parameters of the module. */
-  params?: Params;
   /** pool_list ... */
   pool_list: Pool[];
   /** pool_count ... */
@@ -34,6 +31,16 @@ export interface GenesisState {
   funder_list: Funder[];
   /** staker_list ... */
   staker_list: Staker[];
+  /** commission_change_queue_state ... */
+  commission_change_queue_state?: CommissionChangeQueueState;
+  /** commission_change_queue_entry ... */
+  commission_change_queue_entry: CommissionChangeQueueEntry[];
+  /** unbonding_staker_list ... */
+  unbonding_staker_list: UnbondingStaker[];
+  /** unbonding_staking_queue_state ... */
+  unbonding_staking_queue_state?: UnbondingStakingQueueState;
+  /** unbonding_staking_queue_entries ... */
+  unbonding_staking_queue_entries: UnbondingStakingQueueEntry[];
   /** delegator_list ... */
   delegator_list: Delegator[];
   /** delegation_pool_data_list ... */
@@ -42,43 +49,32 @@ export interface GenesisState {
   delegation_entries_list: DelegationEntries[];
   /** proposal_list ... */
   proposal_list: Proposal[];
-  /** unbonding_staking_queue_state ... */
-  unbonding_staking_queue_state?: UnbondingStakingQueueState;
-  /** unbonding_staking_queue_entries ... */
-  unbonding_staking_queue_entries: UnbondingStakingQueueEntry[];
-  /** unbonding_staker_list ... */
-  unbonding_staker_list: UnbondingStaker[];
   /** unbonding_delegation_queue_state ... */
   unbonding_delegation_queue_state?: UnbondingDelegationQueueState;
   /** unbonding_delegation_queue_entries ... */
   unbonding_delegation_queue_entries: UnbondingDelegationQueueEntry[];
   /** redelegation_cooldown_list ... */
   redelegation_cooldown_list: RedelegationCooldown[];
-  /** commission_change_queue_state ... */
-  commission_change_queue_state?: CommissionChangeQueueState;
-  /** commission_change_queue_entry ... */
-  commission_change_queue_entry: CommissionChangeQueueEntry[];
 }
 
 function createBaseGenesisState(): GenesisState {
   return {
-    params: undefined,
     pool_list: [],
     pool_count: "0",
     funder_list: [],
     staker_list: [],
+    commission_change_queue_state: undefined,
+    commission_change_queue_entry: [],
+    unbonding_staker_list: [],
+    unbonding_staking_queue_state: undefined,
+    unbonding_staking_queue_entries: [],
     delegator_list: [],
     delegation_pool_data_list: [],
     delegation_entries_list: [],
     proposal_list: [],
-    unbonding_staking_queue_state: undefined,
-    unbonding_staking_queue_entries: [],
-    unbonding_staker_list: [],
     unbonding_delegation_queue_state: undefined,
     unbonding_delegation_queue_entries: [],
     redelegation_cooldown_list: [],
-    commission_change_queue_state: undefined,
-    commission_change_queue_entry: [],
   };
 }
 
@@ -87,9 +83,6 @@ export const GenesisState = {
     message: GenesisState,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
-    }
     for (const v of message.pool_list) {
       Pool.encode(v!, writer.uint32(18).fork()).ldelim();
     }
@@ -102,6 +95,27 @@ export const GenesisState = {
     for (const v of message.staker_list) {
       Staker.encode(v!, writer.uint32(42).fork()).ldelim();
     }
+    if (message.commission_change_queue_state !== undefined) {
+      CommissionChangeQueueState.encode(
+        message.commission_change_queue_state,
+        writer.uint32(130).fork()
+      ).ldelim();
+    }
+    for (const v of message.commission_change_queue_entry) {
+      CommissionChangeQueueEntry.encode(v!, writer.uint32(138).fork()).ldelim();
+    }
+    for (const v of message.unbonding_staker_list) {
+      UnbondingStaker.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.unbonding_staking_queue_state !== undefined) {
+      UnbondingStakingQueueState.encode(
+        message.unbonding_staking_queue_state,
+        writer.uint32(82).fork()
+      ).ldelim();
+    }
+    for (const v of message.unbonding_staking_queue_entries) {
+      UnbondingStakingQueueEntry.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
     for (const v of message.delegator_list) {
       Delegator.encode(v!, writer.uint32(50).fork()).ldelim();
     }
@@ -113,18 +127,6 @@ export const GenesisState = {
     }
     for (const v of message.proposal_list) {
       Proposal.encode(v!, writer.uint32(74).fork()).ldelim();
-    }
-    if (message.unbonding_staking_queue_state !== undefined) {
-      UnbondingStakingQueueState.encode(
-        message.unbonding_staking_queue_state,
-        writer.uint32(82).fork()
-      ).ldelim();
-    }
-    for (const v of message.unbonding_staking_queue_entries) {
-      UnbondingStakingQueueEntry.encode(v!, writer.uint32(90).fork()).ldelim();
-    }
-    for (const v of message.unbonding_staker_list) {
-      UnbondingStaker.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     if (message.unbonding_delegation_queue_state !== undefined) {
       UnbondingDelegationQueueState.encode(
@@ -141,15 +143,6 @@ export const GenesisState = {
     for (const v of message.redelegation_cooldown_list) {
       RedelegationCooldown.encode(v!, writer.uint32(122).fork()).ldelim();
     }
-    if (message.commission_change_queue_state !== undefined) {
-      CommissionChangeQueueState.encode(
-        message.commission_change_queue_state,
-        writer.uint32(130).fork()
-      ).ldelim();
-    }
-    for (const v of message.commission_change_queue_entry) {
-      CommissionChangeQueueEntry.encode(v!, writer.uint32(138).fork()).ldelim();
-    }
     return writer;
   },
 
@@ -160,9 +153,6 @@ export const GenesisState = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.params = Params.decode(reader, reader.uint32());
-          break;
         case 2:
           message.pool_list.push(Pool.decode(reader, reader.uint32()));
           break;
@@ -174,6 +164,29 @@ export const GenesisState = {
           break;
         case 5:
           message.staker_list.push(Staker.decode(reader, reader.uint32()));
+          break;
+        case 16:
+          message.commission_change_queue_state =
+            CommissionChangeQueueState.decode(reader, reader.uint32());
+          break;
+        case 17:
+          message.commission_change_queue_entry.push(
+            CommissionChangeQueueEntry.decode(reader, reader.uint32())
+          );
+          break;
+        case 12:
+          message.unbonding_staker_list.push(
+            UnbondingStaker.decode(reader, reader.uint32())
+          );
+          break;
+        case 10:
+          message.unbonding_staking_queue_state =
+            UnbondingStakingQueueState.decode(reader, reader.uint32());
+          break;
+        case 11:
+          message.unbonding_staking_queue_entries.push(
+            UnbondingStakingQueueEntry.decode(reader, reader.uint32())
+          );
           break;
         case 6:
           message.delegator_list.push(
@@ -193,20 +206,6 @@ export const GenesisState = {
         case 9:
           message.proposal_list.push(Proposal.decode(reader, reader.uint32()));
           break;
-        case 10:
-          message.unbonding_staking_queue_state =
-            UnbondingStakingQueueState.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.unbonding_staking_queue_entries.push(
-            UnbondingStakingQueueEntry.decode(reader, reader.uint32())
-          );
-          break;
-        case 12:
-          message.unbonding_staker_list.push(
-            UnbondingStaker.decode(reader, reader.uint32())
-          );
-          break;
         case 13:
           message.unbonding_delegation_queue_state =
             UnbondingDelegationQueueState.decode(reader, reader.uint32());
@@ -221,15 +220,6 @@ export const GenesisState = {
             RedelegationCooldown.decode(reader, reader.uint32())
           );
           break;
-        case 16:
-          message.commission_change_queue_state =
-            CommissionChangeQueueState.decode(reader, reader.uint32());
-          break;
-        case 17:
-          message.commission_change_queue_entry.push(
-            CommissionChangeQueueEntry.decode(reader, reader.uint32())
-          );
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -240,7 +230,6 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       pool_list: Array.isArray(object?.pool_list)
         ? object.pool_list.map((e: any) => Pool.fromJSON(e))
         : [],
@@ -250,6 +239,35 @@ export const GenesisState = {
         : [],
       staker_list: Array.isArray(object?.staker_list)
         ? object.staker_list.map((e: any) => Staker.fromJSON(e))
+        : [],
+      commission_change_queue_state: isSet(object.commission_change_queue_state)
+        ? CommissionChangeQueueState.fromJSON(
+            object.commission_change_queue_state
+          )
+        : undefined,
+      commission_change_queue_entry: Array.isArray(
+        object?.commission_change_queue_entry
+      )
+        ? object.commission_change_queue_entry.map((e: any) =>
+            CommissionChangeQueueEntry.fromJSON(e)
+          )
+        : [],
+      unbonding_staker_list: Array.isArray(object?.unbonding_staker_list)
+        ? object.unbonding_staker_list.map((e: any) =>
+            UnbondingStaker.fromJSON(e)
+          )
+        : [],
+      unbonding_staking_queue_state: isSet(object.unbonding_staking_queue_state)
+        ? UnbondingStakingQueueState.fromJSON(
+            object.unbonding_staking_queue_state
+          )
+        : undefined,
+      unbonding_staking_queue_entries: Array.isArray(
+        object?.unbonding_staking_queue_entries
+      )
+        ? object.unbonding_staking_queue_entries.map((e: any) =>
+            UnbondingStakingQueueEntry.fromJSON(e)
+          )
         : [],
       delegator_list: Array.isArray(object?.delegator_list)
         ? object.delegator_list.map((e: any) => Delegator.fromJSON(e))
@@ -268,23 +286,6 @@ export const GenesisState = {
         : [],
       proposal_list: Array.isArray(object?.proposal_list)
         ? object.proposal_list.map((e: any) => Proposal.fromJSON(e))
-        : [],
-      unbonding_staking_queue_state: isSet(object.unbonding_staking_queue_state)
-        ? UnbondingStakingQueueState.fromJSON(
-            object.unbonding_staking_queue_state
-          )
-        : undefined,
-      unbonding_staking_queue_entries: Array.isArray(
-        object?.unbonding_staking_queue_entries
-      )
-        ? object.unbonding_staking_queue_entries.map((e: any) =>
-            UnbondingStakingQueueEntry.fromJSON(e)
-          )
-        : [],
-      unbonding_staker_list: Array.isArray(object?.unbonding_staker_list)
-        ? object.unbonding_staker_list.map((e: any) =>
-            UnbondingStaker.fromJSON(e)
-          )
         : [],
       unbonding_delegation_queue_state: isSet(
         object.unbonding_delegation_queue_state
@@ -307,25 +308,11 @@ export const GenesisState = {
             RedelegationCooldown.fromJSON(e)
           )
         : [],
-      commission_change_queue_state: isSet(object.commission_change_queue_state)
-        ? CommissionChangeQueueState.fromJSON(
-            object.commission_change_queue_state
-          )
-        : undefined,
-      commission_change_queue_entry: Array.isArray(
-        object?.commission_change_queue_entry
-      )
-        ? object.commission_change_queue_entry.map((e: any) =>
-            CommissionChangeQueueEntry.fromJSON(e)
-          )
-        : [],
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     if (message.pool_list) {
       obj.pool_list = message.pool_list.map((e) =>
         e ? Pool.toJSON(e) : undefined
@@ -347,6 +334,41 @@ export const GenesisState = {
       );
     } else {
       obj.staker_list = [];
+    }
+    message.commission_change_queue_state !== undefined &&
+      (obj.commission_change_queue_state = message.commission_change_queue_state
+        ? CommissionChangeQueueState.toJSON(
+            message.commission_change_queue_state
+          )
+        : undefined);
+    if (message.commission_change_queue_entry) {
+      obj.commission_change_queue_entry =
+        message.commission_change_queue_entry.map((e) =>
+          e ? CommissionChangeQueueEntry.toJSON(e) : undefined
+        );
+    } else {
+      obj.commission_change_queue_entry = [];
+    }
+    if (message.unbonding_staker_list) {
+      obj.unbonding_staker_list = message.unbonding_staker_list.map((e) =>
+        e ? UnbondingStaker.toJSON(e) : undefined
+      );
+    } else {
+      obj.unbonding_staker_list = [];
+    }
+    message.unbonding_staking_queue_state !== undefined &&
+      (obj.unbonding_staking_queue_state = message.unbonding_staking_queue_state
+        ? UnbondingStakingQueueState.toJSON(
+            message.unbonding_staking_queue_state
+          )
+        : undefined);
+    if (message.unbonding_staking_queue_entries) {
+      obj.unbonding_staking_queue_entries =
+        message.unbonding_staking_queue_entries.map((e) =>
+          e ? UnbondingStakingQueueEntry.toJSON(e) : undefined
+        );
+    } else {
+      obj.unbonding_staking_queue_entries = [];
     }
     if (message.delegator_list) {
       obj.delegator_list = message.delegator_list.map((e) =>
@@ -376,27 +398,6 @@ export const GenesisState = {
     } else {
       obj.proposal_list = [];
     }
-    message.unbonding_staking_queue_state !== undefined &&
-      (obj.unbonding_staking_queue_state = message.unbonding_staking_queue_state
-        ? UnbondingStakingQueueState.toJSON(
-            message.unbonding_staking_queue_state
-          )
-        : undefined);
-    if (message.unbonding_staking_queue_entries) {
-      obj.unbonding_staking_queue_entries =
-        message.unbonding_staking_queue_entries.map((e) =>
-          e ? UnbondingStakingQueueEntry.toJSON(e) : undefined
-        );
-    } else {
-      obj.unbonding_staking_queue_entries = [];
-    }
-    if (message.unbonding_staker_list) {
-      obj.unbonding_staker_list = message.unbonding_staker_list.map((e) =>
-        e ? UnbondingStaker.toJSON(e) : undefined
-      );
-    } else {
-      obj.unbonding_staker_list = [];
-    }
     message.unbonding_delegation_queue_state !== undefined &&
       (obj.unbonding_delegation_queue_state =
         message.unbonding_delegation_queue_state
@@ -419,20 +420,6 @@ export const GenesisState = {
     } else {
       obj.redelegation_cooldown_list = [];
     }
-    message.commission_change_queue_state !== undefined &&
-      (obj.commission_change_queue_state = message.commission_change_queue_state
-        ? CommissionChangeQueueState.toJSON(
-            message.commission_change_queue_state
-          )
-        : undefined);
-    if (message.commission_change_queue_entry) {
-      obj.commission_change_queue_entry =
-        message.commission_change_queue_entry.map((e) =>
-          e ? CommissionChangeQueueEntry.toJSON(e) : undefined
-        );
-    } else {
-      obj.commission_change_queue_entry = [];
-    }
     return obj;
   },
 
@@ -440,16 +427,38 @@ export const GenesisState = {
     object: I
   ): GenesisState {
     const message = createBaseGenesisState();
-    message.params =
-      object.params !== undefined && object.params !== null
-        ? Params.fromPartial(object.params)
-        : undefined;
     message.pool_list = object.pool_list?.map((e) => Pool.fromPartial(e)) || [];
     message.pool_count = object.pool_count ?? "0";
     message.funder_list =
       object.funder_list?.map((e) => Funder.fromPartial(e)) || [];
     message.staker_list =
       object.staker_list?.map((e) => Staker.fromPartial(e)) || [];
+    message.commission_change_queue_state =
+      object.commission_change_queue_state !== undefined &&
+      object.commission_change_queue_state !== null
+        ? CommissionChangeQueueState.fromPartial(
+            object.commission_change_queue_state
+          )
+        : undefined;
+    message.commission_change_queue_entry =
+      object.commission_change_queue_entry?.map((e) =>
+        CommissionChangeQueueEntry.fromPartial(e)
+      ) || [];
+    message.unbonding_staker_list =
+      object.unbonding_staker_list?.map((e) =>
+        UnbondingStaker.fromPartial(e)
+      ) || [];
+    message.unbonding_staking_queue_state =
+      object.unbonding_staking_queue_state !== undefined &&
+      object.unbonding_staking_queue_state !== null
+        ? UnbondingStakingQueueState.fromPartial(
+            object.unbonding_staking_queue_state
+          )
+        : undefined;
+    message.unbonding_staking_queue_entries =
+      object.unbonding_staking_queue_entries?.map((e) =>
+        UnbondingStakingQueueEntry.fromPartial(e)
+      ) || [];
     message.delegator_list =
       object.delegator_list?.map((e) => Delegator.fromPartial(e)) || [];
     message.delegation_pool_data_list =
@@ -462,21 +471,6 @@ export const GenesisState = {
       ) || [];
     message.proposal_list =
       object.proposal_list?.map((e) => Proposal.fromPartial(e)) || [];
-    message.unbonding_staking_queue_state =
-      object.unbonding_staking_queue_state !== undefined &&
-      object.unbonding_staking_queue_state !== null
-        ? UnbondingStakingQueueState.fromPartial(
-            object.unbonding_staking_queue_state
-          )
-        : undefined;
-    message.unbonding_staking_queue_entries =
-      object.unbonding_staking_queue_entries?.map((e) =>
-        UnbondingStakingQueueEntry.fromPartial(e)
-      ) || [];
-    message.unbonding_staker_list =
-      object.unbonding_staker_list?.map((e) =>
-        UnbondingStaker.fromPartial(e)
-      ) || [];
     message.unbonding_delegation_queue_state =
       object.unbonding_delegation_queue_state !== undefined &&
       object.unbonding_delegation_queue_state !== null
@@ -491,17 +485,6 @@ export const GenesisState = {
     message.redelegation_cooldown_list =
       object.redelegation_cooldown_list?.map((e) =>
         RedelegationCooldown.fromPartial(e)
-      ) || [];
-    message.commission_change_queue_state =
-      object.commission_change_queue_state !== undefined &&
-      object.commission_change_queue_state !== null
-        ? CommissionChangeQueueState.fromPartial(
-            object.commission_change_queue_state
-          )
-        : undefined;
-    message.commission_change_queue_entry =
-      object.commission_change_queue_entry?.map((e) =>
-        CommissionChangeQueueEntry.fromPartial(e)
       ) || [];
     return message;
   },

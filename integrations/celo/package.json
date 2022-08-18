@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@celo-tools/celo-ethers-wrapper": "^0.3.0",
-    "@kyvenetwork/core": "1.20.0"
+    "@kyve/core": "1.20.0"
   },
   "devDependencies": {
     "ethers": "^5.6.9",

@@ -1,41 +1,53 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import {
-  MsgFundPool,
-  MsgDefundPool,
-  MsgStakePool,
-  MsgUnstakePool,
-  MsgDelegatePool,
-  MsgWithdrawPool,
-  MsgUndelegatePool,
-  MsgSubmitBundleProposal,
-  MsgVoteProposal,
-  MsgClaimUploaderRole,
-  MsgUpdateMetadata,
-  MsgUpdateCommission,
-  MsgReactivateStaker,
-  MsgRedelegatePool,
-} from "@kyvenetwork/proto/dist/proto/kyve/registry/v1beta1/tx";
-import { cosmos } from "@kyvenetwork/proto";
+import { kyve, cosmos } from "@kyve/proto";
+/** pool **/
+import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
+import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
+
+/** stakers **/
+import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgStake;
+import MsgUnstake = kyve.registry.v1beta1.kyveStakers.MsgUnstake;
+import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
+import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
+import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
+import MsgLeavePool = kyve.registry.v1beta1.kyveStakers.MsgLeavePool;
+
+/** delegations **/
+import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
+import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
+import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
+import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
+
+/** bundles **/
+import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
+import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
+import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+
+/** cosmos **/
+import MsgSubmitProposal = cosmos.registry.v1beta1.cosmosGovTx.MsgSubmitProposal;
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
-  ["/kyve.registry.v1beta1.MsgFundPool", MsgFundPool],
-  ["/kyve.registry.v1beta1.MsgDefundPool", MsgDefundPool],
-  ["/kyve.registry.v1beta1.MsgStakePool", MsgStakePool],
-  ["/kyve.registry.v1beta1.MsgUnstakePool", MsgUnstakePool],
-  ["/kyve.registry.v1beta1.MsgDelegatePool", MsgDelegatePool],
-  ["/kyve.registry.v1beta1.MsgWithdrawPool", MsgWithdrawPool],
-  ["/kyve.registry.v1beta1.MsgRedelegatePool", MsgRedelegatePool],
-  ["/kyve.registry.v1beta1.MsgUndelegatePool", MsgUndelegatePool],
-  ["/kyve.registry.v1beta1.MsgSubmitBundleProposal", MsgSubmitBundleProposal],
-  ["/kyve.registry.v1beta1.MsgVoteProposal", MsgVoteProposal],
-  ["/kyve.registry.v1beta1.MsgClaimUploaderRole", MsgClaimUploaderRole],
-  ["/kyve.registry.v1beta1.MsgUpdateMetadata", MsgUpdateMetadata],
-  ["/kyve.registry.v1beta1.MsgUpdateCommission", MsgUpdateCommission],
-  ["/kyve.registry.v1beta1.MsgReactivateStaker", MsgReactivateStaker],
-  [
-    "/cosmos.gov.v1beta1.MsgSubmitProposal",
-    cosmos.registry.v1beta1.cosmosGovTx.MsgSubmitProposal,
-  ],
+  /**pool **/
+  ["/kyve.pool.v1beta1.MsgFundPool", MsgFundPool],
+  ["/kyve.pool.v1beta1.MsgDefundPool", MsgDefundPool],
+  /** stakers **/
+  ["/kyve.stakers.v1beta1.MsgStake", MsgStake],
+  ["/kyve.stakers.v1beta1.MsgUnstake", MsgUnstake],
+  ["/kyve.stakers.v1beta1.MsgUpdateMetadata", MsgUpdateMetadata],
+  ["/kyve.stakers.v1beta1.MsgUpdateCommission", MsgUpdateCommission],
+  ["/kyve.stakers.v1beta1.MsgJoinPool", MsgJoinPool],
+  ["/kyve.stakers.v1beta1.MsgLeavePool", MsgLeavePool],
+  /** delegations  **/
+  ["/kyve.delegation.v1beta1.MsgDelegate", MsgDelegate],
+  ["/kyve.delegation.v1beta1.MsgWithdrawRewards", MsgWithdrawRewards],
+  ["/kyve.delegation.v1beta1.MsgUndelegate", MsgUndelegate],
+  ["/kyve.delegation.v1beta1.MsgRedelegate", MsgRedelegate],
+  /** bundles **/
+  ["/kyve.bundles.v1beta1.MsgSubmitBundleProposal", MsgSubmitBundleProposal],
+  ["/kyve.bundles.v1beta1.MsgVoteBundleProposal", MsgVoteBundleProposal],
+  ["/kyve.bundles.v1beta1.MsgClaimUploaderRole", MsgClaimUploaderRole],
+  /** cosmos **/
+  ["/cosmos.gov.v1beta1.MsgSubmitProposal", MsgSubmitProposal],
 ];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
@@ -45,499 +57,201 @@ export const load = (protoRegistry: Registry) => {
 export const encodeTxMsg = {
   fundPool(value: MsgFundPool) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgFundPool",
+      type_url: "/kyve.pool.v1beta1.MsgFundPool",
       value: MsgFundPool.encode(value).finish(),
     };
   },
 
   defundPool(value: MsgDefundPool) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgDefundPool",
+      type_url: "/kyve.pool.v1beta1.MsgDefundPool",
       value: MsgDefundPool.encode(value).finish(),
     };
   },
 
-  stakePool(value: MsgStakePool) {
+  stake(value: MsgStake) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgStakePool",
-      value: MsgStakePool.encode(value).finish(),
+      type_url: "/kyve.stakers.v1beta1.MsgStake",
+      value: MsgStake.encode(value).finish(),
     };
   },
 
-  unstakePool(value: MsgUnstakePool) {
+  unstake(value: MsgUnstake) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgUnstakePool",
-      value: MsgUnstakePool.encode(value).finish(),
-    };
-  },
-
-  delegatePool(value: MsgDelegatePool) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgDelegatePool",
-      value: MsgDelegatePool.encode(value).finish(),
-    };
-  },
-
-  withdrawPool(value: MsgWithdrawPool) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgWithdrawPool",
-      value: MsgWithdrawPool.encode(value).finish(),
-    };
-  },
-
-  redelegatePool(value: MsgRedelegatePool) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgRedelegatePool",
-      value: MsgRedelegatePool.encode(value).finish(),
-    };
-  },
-
-  undelegatePool(value: MsgUndelegatePool) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgUndelegatePool",
-      value: MsgUndelegatePool.encode(value).finish(),
-    };
-  },
-
-  submitBundleProposal(value: MsgSubmitBundleProposal) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgSubmitBundleProposal",
-      value: MsgSubmitBundleProposal.encode(value).finish(),
-    };
-  },
-
-  voteProposal(value: MsgVoteProposal) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgVoteProposal",
-      value: MsgVoteProposal.encode(value).finish(),
-    };
-  },
-
-  claimUploaderRole(value: MsgClaimUploaderRole) {
-    return {
-      type_url: "/kyve.registry.v1beta1.MsgClaimUploaderRole",
-      value: MsgClaimUploaderRole.encode(value).finish(),
+      type_url: "/kyve.stakers.v1beta1.MsgUnstake",
+      value: MsgUnstake.encode(value).finish(),
     };
   },
 
   updateMetadata(value: MsgUpdateMetadata) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgUpdateMetadata",
+      type_url: "/kyve.stakers.v1beta1.MsgUpdateMetadata",
       value: MsgUpdateMetadata.encode(value).finish(),
     };
   },
 
   updateCommission(value: MsgUpdateCommission) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgUpdateCommission",
+      type_url: "/kyve.stakers.v1beta1.MsgUpdateCommission",
       value: MsgUpdateCommission.encode(value).finish(),
     };
   },
 
-  reactivateStaker(value: MsgReactivateStaker) {
+  joinPool(value: MsgJoinPool) {
     return {
-      type_url: "/kyve.registry.v1beta1.MsgReactivateStaker",
-      value: MsgReactivateStaker.encode(value).finish(),
+      type_url: "/kyve.stakers.v1beta1.MsgJoinPool",
+      value: MsgJoinPool.encode(value).finish(),
+    };
+  },
+
+  leavePool(value: MsgJoinPool) {
+    return {
+      type_url: "/kyve.stakers.v1beta1.MsgLeavePool",
+      value: MsgLeavePool.encode(value).finish(),
+    };
+  },
+
+  delegate(value: MsgDelegate) {
+    return {
+      type_url: "/kyve.delegation.v1beta1.MsgDelegate",
+      value: MsgDelegate.encode(value).finish(),
+    };
+  },
+
+  withdrawRewards(value: MsgWithdrawRewards) {
+    return {
+      type_url: "/kyve.delegation.v1beta1.MsgWithdrawRewards",
+      value: MsgWithdrawRewards.encode(value).finish(),
+    };
+  },
+  undelegate(value: MsgUndelegate) {
+    return {
+      type_url: "/kyve.delegation.v1beta1.MsgUndelegate",
+      value: MsgUndelegate.encode(value).finish(),
+    };
+  },
+
+  redelegate(value: MsgRedelegate) {
+    return {
+      type_url: "/kyve.delegation.v1beta1.MsgRedelegate",
+      value: MsgRedelegate.encode(value).finish(),
+    };
+  },
+
+  submitBundleProposal(value: MsgSubmitBundleProposal) {
+    return {
+      type_url: "/kyve.bundles.v1beta1.MsgSubmitBundleProposal",
+      value: MsgSubmitBundleProposal.encode(value).finish(),
+    };
+  },
+
+  voteBundleProposal(value: MsgVoteBundleProposal) {
+    return {
+      type_url: "/kyve.bundles.v1beta1.MsgVoteBundleProposal",
+      value: MsgVoteBundleProposal.encode(value).finish(),
+    };
+  },
+
+  claimUploaderRole(value: MsgClaimUploaderRole) {
+    return {
+      type_url: "/kyve.bundles.v1beta1.MsgClaimUploaderRole",
+      value: MsgClaimUploaderRole.encode(value).finish(),
     };
   },
 };
+
 export const withTypeUrl = {
   fundPool(value: MsgFundPool) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgFundPool",
+      typeUrl: "/kyve.pool.v1beta1.MsgFundPool",
       value,
     };
   },
 
   defundPool(value: MsgDefundPool) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgDefundPool",
+      typeUrl: "/kyve.pool.v1beta1.MsgDefundPool",
       value,
     };
   },
 
-  stakePool(value: MsgStakePool) {
+  stake(value: MsgStake) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgStakePool",
+      typeUrl: "/kyve.stakers.v1beta1.MsgStake",
       value,
     };
   },
 
-  unstakePool(value: MsgUnstakePool) {
+  unstake(value: MsgUnstake) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgUnstakePool",
+      typeUrl: "/kyve.stakers.v1beta1.MsgUnstake",
       value,
     };
   },
-
-  delegatePool(value: MsgDelegatePool) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgDelegatePool",
-      value,
-    };
-  },
-
-  withdrawPool(value: MsgWithdrawPool) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgWithdrawPool",
-      value,
-    };
-  },
-
-  redelegatePool(value: MsgRedelegatePool) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgRedelegatePool",
-      value,
-    };
-  },
-
-  undelegatePool(value: MsgUndelegatePool) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgUndelegatePool",
-      value,
-    };
-  },
-
-  submitBundleProposal(value: MsgSubmitBundleProposal) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgSubmitBundleProposal",
-      value,
-    };
-  },
-
-  voteProposal(value: MsgVoteProposal) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgVoteProposal",
-      value,
-    };
-  },
-
-  claimUploaderRole(value: MsgClaimUploaderRole) {
-    return {
-      typeUrl: "/kyve.registry.v1beta1.MsgClaimUploaderRole",
-      value,
-    };
-  },
-
   updateMetadata(value: MsgUpdateMetadata) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgUpdateMetadata",
+      typeUrl: "/kyve.stakers.v1beta1.MsgUpdateMetadata",
       value,
     };
   },
-
   updateCommission(value: MsgUpdateCommission) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgUpdateCommission",
+      typeUrl: "/kyve.stakers.v1beta1.MsgUpdateMetadata",
       value,
     };
   },
-
-  reactivateStaker(value: MsgReactivateStaker) {
+  joinPool(value: MsgJoinPool) {
     return {
-      typeUrl: "/kyve.registry.v1beta1.MsgReactivateStaker",
+      typeUrl: "/kyve.stakers.v1beta1.MsgJoinPool",
       value,
     };
   },
-};
-export const MessageComposer = {
-  encoded: encodeTxMsg,
-  withTypeUrl,
-  toJSON: {
-    fundPool(value: MsgFundPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgFundPool",
-        value: MsgFundPool.toJSON(value),
-      };
-    },
-
-    defundPool(value: MsgDefundPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDefundPool",
-        value: MsgDefundPool.toJSON(value),
-      };
-    },
-
-    stakePool(value: MsgStakePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgStakePool",
-        value: MsgStakePool.toJSON(value),
-      };
-    },
-
-    unstakePool(value: MsgUnstakePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUnstakePool",
-        value: MsgUnstakePool.toJSON(value),
-      };
-    },
-
-    delegatePool(value: MsgDelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDelegatePool",
-        value: MsgDelegatePool.toJSON(value),
-      };
-    },
-
-    withdrawPool(value: MsgWithdrawPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgWithdrawPool",
-        value: MsgWithdrawPool.toJSON(value),
-      };
-    },
-
-    redelegatePool(value: MsgRedelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgRedelegatePool",
-        value: MsgRedelegatePool.toJSON(value),
-      };
-    },
-
-    undelegatePool(value: MsgUndelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUndelegatePool",
-        value: MsgUndelegatePool.toJSON(value),
-      };
-    },
-
-    submitBundleProposal(value: MsgSubmitBundleProposal) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgSubmitBundleProposal",
-        value: MsgSubmitBundleProposal.toJSON(value),
-      };
-    },
-
-    voteProposal(value: MsgVoteProposal) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgVoteProposal",
-        value: MsgVoteProposal.toJSON(value),
-      };
-    },
-
-    claimUploaderRole(value: MsgClaimUploaderRole) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgClaimUploaderRole",
-        value: MsgClaimUploaderRole.toJSON(value),
-      };
-    },
-
-    updateMetadata(value: MsgUpdateMetadata) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateMetadata",
-        value: MsgUpdateMetadata.toJSON(value),
-      };
-    },
-
-    updateCommission(value: MsgUpdateCommission) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateCommission",
-        value: MsgUpdateCommission.toJSON(value),
-      };
-    },
-
-    reactivateStaker(value: MsgReactivateStaker) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgReactivateStaker",
-        value: MsgReactivateStaker.toJSON(value),
-      };
-    },
+  leavePool(value: MsgLeavePool) {
+    return {
+      typeUrl: "/kyve.stakers.v1beta1.MsgLeavePool",
+      value,
+    };
   },
-  fromJSON: {
-    fundPool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgFundPool",
-        value: MsgFundPool.fromJSON(value),
-      };
-    },
-
-    defundPool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDefundPool",
-        value: MsgDefundPool.fromJSON(value),
-      };
-    },
-
-    stakePool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgStakePool",
-        value: MsgStakePool.fromJSON(value),
-      };
-    },
-
-    unstakePool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUnstakePool",
-        value: MsgUnstakePool.fromJSON(value),
-      };
-    },
-
-    delegatePool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDelegatePool",
-        value: MsgDelegatePool.fromJSON(value),
-      };
-    },
-
-    withdrawPool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgWithdrawPool",
-        value: MsgWithdrawPool.fromJSON(value),
-      };
-    },
-
-    redelegatePool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgRedelegatePool",
-        value: MsgRedelegatePool.fromJSON(value),
-      };
-    },
-
-    undelegatePool(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUndelegatePool",
-        value: MsgUndelegatePool.fromJSON(value),
-      };
-    },
-
-    submitBundleProposal(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgSubmitBundleProposal",
-        value: MsgSubmitBundleProposal.fromJSON(value),
-      };
-    },
-
-    voteProposal(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgVoteProposal",
-        value: MsgVoteProposal.fromJSON(value),
-      };
-    },
-
-    claimUploaderRole(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgClaimUploaderRole",
-        value: MsgClaimUploaderRole.fromJSON(value),
-      };
-    },
-
-    updateMetadata(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateMetadata",
-        value: MsgUpdateMetadata.fromJSON(value),
-      };
-    },
-
-    updateCommission(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateCommission",
-        value: MsgUpdateCommission.fromJSON(value),
-      };
-    },
-
-    reactivateStaker(value: any) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgReactivateStaker",
-        value: MsgReactivateStaker.fromJSON(value),
-      };
-    },
+  delegate(value: MsgDelegate) {
+    return {
+      typeUrl: "/kyve.delegation.v1beta1.MsgDelegate",
+      value,
+    };
   },
-  fromPartial: {
-    fundPool(value: MsgFundPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgFundPool",
-        value: MsgFundPool.fromPartial(value),
-      };
-    },
-
-    defundPool(value: MsgDefundPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDefundPool",
-        value: MsgDefundPool.fromPartial(value),
-      };
-    },
-
-    stakePool(value: MsgStakePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgStakePool",
-        value: MsgStakePool.fromPartial(value),
-      };
-    },
-
-    unstakePool(value: MsgUnstakePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUnstakePool",
-        value: MsgUnstakePool.fromPartial(value),
-      };
-    },
-
-    delegatePool(value: MsgDelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgDelegatePool",
-        value: MsgDelegatePool.fromPartial(value),
-      };
-    },
-
-    withdrawPool(value: MsgWithdrawPool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgWithdrawPool",
-        value: MsgWithdrawPool.fromPartial(value),
-      };
-    },
-
-    redelegatePool(value: MsgRedelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgRedelegatePool",
-        value: MsgRedelegatePool.fromPartial(value),
-      };
-    },
-
-    undelegatePool(value: MsgUndelegatePool) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUndelegatePool",
-        value: MsgUndelegatePool.fromPartial(value),
-      };
-    },
-
-    submitBundleProposal(value: MsgSubmitBundleProposal) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgSubmitBundleProposal",
-        value: MsgSubmitBundleProposal.fromPartial(value),
-      };
-    },
-
-    voteProposal(value: MsgVoteProposal) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgVoteProposal",
-        value: MsgVoteProposal.fromPartial(value),
-      };
-    },
-
-    claimUploaderRole(value: MsgClaimUploaderRole) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgClaimUploaderRole",
-        value: MsgClaimUploaderRole.fromPartial(value),
-      };
-    },
-
-    updateMetadata(value: MsgUpdateMetadata) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateMetadata",
-        value: MsgUpdateMetadata.fromPartial(value),
-      };
-    },
-
-    updateCommission(value: MsgUpdateCommission) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgUpdateCommission",
-        value: MsgUpdateCommission.fromPartial(value),
-      };
-    },
-
-    reactivateStaker(value: MsgReactivateStaker) {
-      return {
-        typeUrl: "/kyve.registry.v1beta1.MsgReactivateStaker",
-        value: MsgReactivateStaker.fromPartial(value),
-      };
-    },
+  withdrawRewards(value: MsgWithdrawRewards) {
+    return {
+      typeUrl: "/kyve.delegation.v1beta1.MsgWithdrawRewards",
+      value,
+    };
+  },
+  undelegate(value: MsgUndelegate) {
+    return {
+      typeUrl: "/kyve.delegation.v1beta1.MsgUndelegate",
+      value,
+    };
+  },
+  redelegate(value: MsgRedelegate) {
+    return {
+      typeUrl: "/kyve.delegation.v1beta1.MsgRedelegate",
+      value,
+    };
+  },
+  submitBundleProposal(value: MsgSubmitBundleProposal) {
+    return {
+      typeUrl: "/kyve.bundles.v1beta1.MsgSubmitBundleProposal",
+      value,
+    };
+  },
+  voteBundleProposal(value: MsgVoteBundleProposal) {
+    return {
+      typeUrl: "/kyve.bundles.v1beta1.MsgVoteBundleProposal",
+      value,
+    };
+  },
+  claimUploaderRole(value: MsgClaimUploaderRole) {
+    return {
+      typeUrl: "/kyve.bundles.v1beta1.MsgClaimUploaderRole",
+      value,
+    };
   },
 };
