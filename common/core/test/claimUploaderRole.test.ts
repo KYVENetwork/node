@@ -1,10 +1,10 @@
 import { Logger } from "tslog";
-import { Pool } from "../../proto/dist/proto/kyve/registry/v1beta1/registry";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { claimUploaderRole } from "../src/methods/claimUploaderRole";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/claimUploaderRole.ts", () => {
   let core: Node;
@@ -83,7 +83,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "test_next_uploader",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await claimUploaderRole.call(core);
@@ -120,7 +120,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await claimUploaderRole.call(core);
@@ -175,7 +175,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await claimUploaderRole.call(core);
@@ -228,7 +228,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await claimUploaderRole.call(core);

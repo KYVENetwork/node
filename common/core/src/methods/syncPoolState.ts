@@ -10,10 +10,10 @@ export async function syncPoolState(this: Node): Promise<void> {
       this.pool = pool!;
 
       try {
-        this.poolConfig = JSON.parse(this.pool.config);
+        this.poolConfig = JSON.parse(this.pool.data!.config);
       } catch (error) {
         this.logger.debug(
-          `Failed to parse the pool config: ${this.pool?.config}`
+          `Failed to parse the pool config: ${this.pool.data?.config}`
         );
         this.poolConfig = {};
       }

@@ -54,10 +54,10 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
+  this.name = this.generateName();
+
   // check if valaccount already joined pool
   await this.canValidate();
-
-  this.name = this.generateName();
 
   // log basic node info on startup
   this.logger.info("Starting node ...\n");

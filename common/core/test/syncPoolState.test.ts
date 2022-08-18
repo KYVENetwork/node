@@ -68,12 +68,12 @@ describe("src/methods/syncPoolState.ts", () => {
       pool,
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
             pool: poolMock,
-          } as any,
+          },
         },
       },
     } as any;
@@ -99,12 +99,12 @@ describe("src/methods/syncPoolState.ts", () => {
       pool,
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
             pool: poolMock,
-          } as any,
+          },
         },
       },
     } as any;
@@ -131,12 +131,12 @@ describe("src/methods/syncPoolState.ts", () => {
       pool,
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
             pool: poolMock,
-          } as any,
+          },
         },
       },
     } as any;
@@ -177,12 +177,12 @@ describe("src/methods/syncPoolState.ts", () => {
         pool,
       });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
             pool: poolMock,
-          } as any,
+          },
         },
       },
     } as any;

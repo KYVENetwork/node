@@ -1,10 +1,10 @@
 import { Logger } from "tslog";
-import { Pool } from "../../proto/dist/proto/kyve/registry/v1beta1/registry";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { canVote } from "../src/methods/canVote";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/canVote.ts", () => {
   let core: Node;
@@ -72,7 +72,7 @@ describe("src/methods/canVote.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -87,7 +87,7 @@ describe("src/methods/canVote.ts", () => {
         storage_id: "test_storage_id",
         uploader: "",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canVote.call(core);
@@ -107,7 +107,7 @@ describe("src/methods/canVote.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -121,7 +121,7 @@ describe("src/methods/canVote.ts", () => {
       bundle_proposal: {
         uploader: "test_uploader",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canVote.call(core);
@@ -141,7 +141,7 @@ describe("src/methods/canVote.ts", () => {
       reason: "test_reaseon",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -156,7 +156,7 @@ describe("src/methods/canVote.ts", () => {
         uploader: "other_test_uploader",
         storage_id: "test_storage_id",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canVote.call(core);
@@ -178,7 +178,7 @@ describe("src/methods/canVote.ts", () => {
     const error = new Error("Failed Network Request");
     const canVoteMock = jest.fn().mockRejectedValue(error);
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -193,7 +193,7 @@ describe("src/methods/canVote.ts", () => {
         uploader: "other_test_uploader",
         storage_id: "test_storage_id",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canVote.call(core);
@@ -219,7 +219,7 @@ describe("src/methods/canVote.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -234,7 +234,7 @@ describe("src/methods/canVote.ts", () => {
         uploader: "other_test_uploader",
         storage_id: "test_storage_id",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canVote.call(core);

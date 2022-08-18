@@ -17,10 +17,10 @@ export async function runCache(this: Node): Promise<void> {
 
     // cache data items from current height to required height
     createdAt = +this.pool.bundle_proposal!.created_at;
-    currentHeight = +this.pool.current_height;
+    currentHeight = +this.pool.data!.current_height;
     toHeight =
-      +this.pool.bundle_proposal!.to_height || +this.pool.current_height;
-    maxHeight = +this.pool.max_bundle_size + toHeight;
+      +this.pool.bundle_proposal!.to_height || +this.pool.data!.current_height;
+    maxHeight = +this.pool.data!.max_bundle_size + toHeight;
 
     // clear finalized items
     let current = currentHeight;
@@ -44,7 +44,7 @@ export async function runCache(this: Node): Promise<void> {
       key = this.pool.bundle_proposal!.to_key;
     } else {
       startHeight = currentHeight;
-      key = this.pool.current_key;
+      key = this.pool.data!.current_key;
     }
 
     this.logger.debug(`Caching from height ${startHeight} to ${maxHeight} ...`);
@@ -58,7 +58,7 @@ export async function runCache(this: Node): Promise<void> {
         if (key) {
           nextKey = await this.runtime.getNextKey(key);
         } else {
-          nextKey = this.pool.start_key;
+          nextKey = this.pool.data!.start_key;
         }
 
         const item = await this.runtime.getDataItem(this, nextKey);

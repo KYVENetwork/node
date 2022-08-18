@@ -36,7 +36,7 @@ export async function canValidate(this: Node): Promise<void> {
     this.logger.info(`Valname:       ${this.name}\n`);
 
     this.logger.info(
-      `The node will not continue until the account is authorized\n`
+      `The node will not continue until the account is authorized`
     );
 
     await sleep(10 * 1000);

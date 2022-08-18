@@ -4,6 +4,7 @@ import { TestRuntime } from "./mocks/integration";
 import { proposeBundle } from "../src/methods/proposeBundle";
 import { TestStorageProvider, saveBundleMock } from "./mocks/storageProvider";
 import { TestCompression, compressMock } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/proposeBundle.ts", () => {
   let core: Node;
@@ -97,15 +98,17 @@ describe("src/methods/proposeBundle.ts", () => {
   test("proposeBundle: new bundle was created in the meantime", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
         to_height: "100",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
 
@@ -125,15 +128,17 @@ describe("src/methods/proposeBundle.ts", () => {
   test("proposeBundle: bundle was dropped", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
         to_height: "100",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(true);
@@ -156,10 +161,12 @@ describe("src/methods/proposeBundle.ts", () => {
   test("proposeBundle: bundle could not be loaded", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "200",
-      current_key: "200",
-      max_bundle_size: "10",
+      data: {
+        name: "Moontest",
+        current_height: "200",
+        current_key: "200",
+        max_bundle_size: "10",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -167,7 +174,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_key: "210",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -211,10 +218,12 @@ describe("src/methods/proposeBundle.ts", () => {
   test("proposeBundle: bundle could be loaded with two data items", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "200",
-      current_key: "200",
-      max_bundle_size: "10",
+      data: {
+        name: "Moontest",
+        current_height: "200",
+        current_key: "200",
+        max_bundle_size: "10",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -222,7 +231,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_key: "210",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const bundle = [
       {

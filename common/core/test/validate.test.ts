@@ -1,5 +1,4 @@
 import { Logger } from "tslog";
-import { Pool } from "../../proto/dist/proto/kyve/registry/v1beta1/registry";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import {
@@ -9,6 +8,7 @@ import {
 } from "../src/methods/validate";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/validate.ts", () => {
   let core: Node;
@@ -65,9 +65,11 @@ describe("src/methods/validate.ts", () => {
   test("validateRuntime: validate node runtime with valid one", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      runtime: "TestRuntime",
-    } as Pool;
+      data: {
+        name: "Moontest",
+        runtime: "TestRuntime",
+      },
+    } as PoolResponse;
 
     // ACT
     validateRuntime.call(core);
@@ -79,9 +81,11 @@ describe("src/methods/validate.ts", () => {
   test("validateRuntime: validate node runtime with invalid one", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      runtime: "TestRuntimeWrong",
-    } as Pool;
+      data: {
+        name: "Moontest",
+        runtime: "TestRuntimeWrong",
+      },
+    } as PoolResponse;
 
     // ACT
     validateRuntime.call(core);
@@ -94,7 +98,7 @@ describe("src/methods/validate.ts", () => {
     );
     expect(loggerError).toHaveBeenNthCalledWith(
       2,
-      `Found = ${core["runtime"].name} required = ${core.pool.runtime}`
+      `Found = ${core["runtime"].name} required = ${core.pool.data.runtime}`
     );
 
     expect(processExit).toHaveBeenCalledTimes(1);
@@ -104,11 +108,13 @@ describe("src/methods/validate.ts", () => {
   test("validateVersion: validate node version with valid one", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      protocol: {
-        version: "0.0.0",
+      data: {
+        name: "Moontest",
+        protocol: {
+          version: "0.0.0",
+        },
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     validateVersion.call(core);
@@ -120,11 +126,13 @@ describe("src/methods/validate.ts", () => {
   test("validateVersion: validate node version with invalid one", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      protocol: {
-        version: "0.0.1",
+      data: {
+        name: "Moontest",
+        protocol: {
+          version: "0.0.1",
+        },
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     validateVersion.call(core);
@@ -138,7 +146,7 @@ describe("src/methods/validate.ts", () => {
     expect(loggerError).toHaveBeenNthCalledWith(
       2,
       `Found Runtime version = ${core["runtime"].version} required = ${
-        core.pool.protocol!.version
+        core.pool.data.protocol!.version
       }`
     );
 
@@ -149,9 +157,11 @@ describe("src/methods/validate.ts", () => {
   test("validateActiveNode: validate node stake with valid staker address", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
+      data: {
+        name: "Moontest",
+      },
       stakers: ["kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd"],
-    } as Pool;
+    } as PoolResponse;
 
     core["staker"] = "kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd";
 
@@ -165,9 +175,11 @@ describe("src/methods/validate.ts", () => {
   test("validateActiveNode: validate node stake with invalid staker address", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
+      data: {
+        name: "Moontest",
+      },
       stakers: ["kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd"],
-    } as Pool;
+    } as PoolResponse;
 
     core["staker"] = "kyve1hvg7zsnrj6h29q9ss577mhrxa04rn94h7zjugq";
 

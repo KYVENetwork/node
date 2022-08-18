@@ -1,10 +1,10 @@
 import { Logger } from "tslog";
-import { Pool } from "../../proto/dist/proto/kyve/registry/v1beta1/registry";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { canPropose } from "../src/methods/canPropose";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/canPropose.ts", () => {
   let core: Node;
@@ -72,7 +72,7 @@ describe("src/methods/canPropose.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -83,12 +83,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "another_test_uploader",
         to_height: "200",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);
@@ -108,7 +110,7 @@ describe("src/methods/canPropose.ts", () => {
       reason: "test_reaseon",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -119,12 +121,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);
@@ -158,7 +162,7 @@ describe("src/methods/canPropose.ts", () => {
         reason: "",
       });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -169,12 +173,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);
@@ -207,7 +213,7 @@ describe("src/methods/canPropose.ts", () => {
 
     const canProposeMock = jest.fn().mockRejectedValue(error);
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -218,12 +224,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);
@@ -249,7 +257,7 @@ describe("src/methods/canPropose.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -260,12 +268,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);
@@ -289,7 +299,7 @@ describe("src/methods/canPropose.ts", () => {
       reason: "",
     });
 
-    core.query = {
+    core.lcd = {
       kyve: {
         registry: {
           v1beta1: {
@@ -300,12 +310,14 @@ describe("src/methods/canPropose.ts", () => {
     } as any;
 
     core.pool = {
-      current_height: "100",
+      data: {
+        current_height: "100",
+      },
       bundle_proposal: {
         next_uploader: "test_uploader",
         to_height: "",
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = await canPropose.call(core);

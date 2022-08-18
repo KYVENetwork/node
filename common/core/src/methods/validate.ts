@@ -1,12 +1,12 @@
 import { Node } from "..";
 
 export function validateRuntime(this: Node): void {
-  if (this.pool.runtime !== this.runtime.name) {
+  if (this.pool.data!.runtime !== this.runtime.name) {
     this.logger.error(
       `Specified pool does not match the integration runtime! Exiting ...`
     );
     this.logger.error(
-      `Found = ${this.runtime.name} required = ${this.pool.runtime}`
+      `Found = ${this.runtime.name} required = ${this.pool.data!.runtime}`
     );
     process.exit(1);
   }
@@ -16,11 +16,11 @@ export function validateRuntime(this: Node): void {
 }
 
 export function validateVersion(this: Node): void {
-  if (this.pool.protocol!.version !== this.runtime.version) {
+  if (this.pool.data!.protocol!.version !== this.runtime.version) {
     this.logger.error(`Running an invalid version. Exiting ...`);
     this.logger.error(
       `Found Runtime version = ${this.runtime.version} required = ${
-        this.pool.protocol!.version
+        this.pool.data!.protocol!.version
       }`
     );
     process.exit(1);
@@ -36,6 +36,8 @@ export function validateActiveNode(this: Node): void {
     process.exit(1);
   }
 
-  this.logger.info(`Node running as validator on pool "${this.pool.name}"`);
+  this.logger.info(
+    `Node running as validator on pool "${this.pool.data!.name}"`
+  );
   this.logger.debug(`Successfully validated node stake\n`);
 }

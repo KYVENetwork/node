@@ -33,9 +33,9 @@ import {
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
-import { kyve } from "@kyve/proto";
 import { Command, OptionValues } from "commander";
 import { parseKeyfile, parseNetwork, parsePoolId } from "./commander";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -58,7 +58,7 @@ export class Node {
 
   // register attributes
   public coreVersion!: string;
-  public pool!: any; // TODO: find pool type
+  public pool!: PoolResponse;
   public poolConfig!: any;
   public name!: string;
 
@@ -182,8 +182,7 @@ export class Node {
       .description("Create a new valaccount with a random mnemonic")
       .argument("<account_name>", "Name of the valaccount")
       .action(async (key) => {
-        // const mnemonic = await KyveSDK.generateMnemonic();
-        const mnemonic = "todo";
+        const mnemonic = await KyveSDK.generateMnemonic();
         await this.backend.add(key, mnemonic);
       });
     keys

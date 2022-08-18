@@ -7,6 +7,7 @@ import {
   retrieveBundleMock,
 } from "./mocks/storageProvider";
 import { TestCompression, decompressMock } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/validateBundleProposal.ts", () => {
   let core: Node;
@@ -96,15 +97,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: new bundle was created in the meantime", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
         to_height: "100",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
 
@@ -124,15 +127,17 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: bundle was dropped", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
         to_height: "100",
         voters_abstain: [],
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(true);
@@ -155,8 +160,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: bundle is valid", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -168,7 +175,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -214,8 +221,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: proposed invalid bundle", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -227,7 +236,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     retrieveBundleMock.mockResolvedValueOnce(
       Buffer.from(
@@ -275,8 +284,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: proposed invalid hash", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -287,7 +298,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         to_value: "test_value",
         bundle_hash: "invalid_hash",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -327,8 +338,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: proposed invalid byte size", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -340,7 +353,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -380,8 +393,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: proposed invalid to_key", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -393,7 +408,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -433,8 +448,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: proposed invalid to_value", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -446,7 +463,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -486,8 +503,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: local bundle is different", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -499,7 +518,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -545,8 +564,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: local bundle could not be loaded the first time", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -558,7 +579,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -622,8 +643,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: local bundle could not be loaded multiple times", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -635,7 +658,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -720,8 +743,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: bundle from storage provider could not be loaded the first time", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -733,7 +758,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -797,8 +822,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: bundle from storage provider could not be loaded multiple times", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -810,7 +837,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -889,8 +916,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: local bundle and bundle from storage provider could not be loaded", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -902,7 +931,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -979,8 +1008,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
   test("validateBundleProposal: decompression of bundle fails", async () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      current_height: "0",
+      data: {
+        name: "Moontest",
+        current_height: "0",
+      },
       bundle_proposal: {
         storage_id: "test_storage_id",
         created_at: "100",
@@ -992,7 +1023,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as any;
+    } as PoolResponse;
 
     decompressMock.mockRejectedValueOnce(new Error("Failed to decompress"));
 

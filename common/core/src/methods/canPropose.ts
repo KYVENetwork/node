@@ -19,7 +19,8 @@ export async function canPropose(this: Node): Promise<boolean> {
           staker: this.staker,
           proposer: this.client.account.address,
           from_height:
-            this.pool.bundle_proposal!.to_height || this.pool.current_height,
+            this.pool.bundle_proposal!.to_height ||
+            this.pool.data!.current_height,
         }
       );
 

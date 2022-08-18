@@ -1,11 +1,11 @@
 import { Logger } from "tslog";
-import { Pool } from "../../proto/dist/proto/kyve/registry/v1beta1/registry";
 import { Node } from "../src/index";
 import { TestRuntime } from "./mocks/integration";
 import { shouldIdle } from "../src/methods/shouldIdle";
 import BigNumber from "bignumber.js";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
+import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/shouldIdle.ts", () => {
   let core: Node;
@@ -62,13 +62,15 @@ describe("src/methods/shouldIdle.ts", () => {
   test("shouldIdle: validate if pool is upgrading", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      upgrade_plan: {
-        version: "1.0.0",
-        scheduled_at: Math.floor(Date.now() / 1000).toString(),
-        binaries: "{}",
+      data: {
+        name: "Moontest",
+        upgrade_plan: {
+          version: "1.0.0",
+          scheduled_at: Math.floor(Date.now() / 1000).toString(),
+          binaries: "{}",
+        },
       },
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -85,10 +87,12 @@ describe("src/methods/shouldIdle.ts", () => {
   test("shouldIdle: validate if pool is paused", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      upgrade_plan: {},
-      paused: true,
-    } as Pool;
+      data: {
+        name: "Moontest",
+        upgrade_plan: {},
+        paused: true,
+      },
+    } as PoolResponse;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -103,12 +107,14 @@ describe("src/methods/shouldIdle.ts", () => {
   test("shouldIdle: validate if pool has enough stake", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      upgrade_plan: {},
-      paused: false,
+      data: {
+        name: "Moontest",
+        upgrade_plan: {},
+        paused: false,
+        min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
+      },
       total_stake: new BigNumber(2000).multipliedBy(10 ** 9).toString(),
-      min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -125,13 +131,15 @@ describe("src/methods/shouldIdle.ts", () => {
   test("shouldIdle: validate if pool has enough funds", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      upgrade_plan: {},
-      paused: false,
+      data: {
+        name: "Moontest",
+        upgrade_plan: {},
+        paused: false,
+        min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
+        total_funds: "0",
+      },
       total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
-      min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
-      total_funds: "0",
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -148,13 +156,15 @@ describe("src/methods/shouldIdle.ts", () => {
   test("shouldIdle: validate if pool can run", () => {
     // ARRANGE
     core.pool = {
-      name: "Moontest",
-      upgrade_plan: {},
-      paused: false,
+      data: {
+        name: "Moontest",
+        upgrade_plan: {},
+        paused: false,
+        min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
+        total_funds: new BigNumber(1000).multipliedBy(10 ** 9).toString(),
+      },
       total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
-      min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
-      total_funds: new BigNumber(1000).multipliedBy(10 ** 9).toString(),
-    } as Pool;
+    } as PoolResponse;
 
     // ACT
     const res = shouldIdle.call(core);

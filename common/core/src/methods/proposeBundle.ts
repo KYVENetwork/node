@@ -7,9 +7,10 @@ export async function proposeBundle(
   createdAt: number
 ): Promise<void> {
   const fromHeight =
-    +this.pool.bundle_proposal!.to_height || +this.pool.current_height;
-  const toHeight = +this.pool.max_bundle_size + fromHeight;
-  const fromKey = this.pool.bundle_proposal!.to_key || this.pool.current_key;
+    +this.pool.bundle_proposal!.to_height || +this.pool.data!.max_bundle_size;
+  const toHeight = +this.pool.data!.max_bundle_size + fromHeight;
+  const fromKey =
+    this.pool.bundle_proposal!.to_key || this.pool.data!.current_key;
 
   let storageId: string;
   let bundleProposal: Bundle;
