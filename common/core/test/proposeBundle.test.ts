@@ -15,6 +15,7 @@ describe("src/methods/proposeBundle.ts", () => {
 
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
+  let dateNowMock: jest.Mock;
 
   let executeMock: jest.Mock;
   let submitBundleProposalMock: jest.Mock;
@@ -43,6 +44,10 @@ describe("src/methods/proposeBundle.ts", () => {
         }
       );
     global.setTimeout = setTimeoutMock as any;
+
+    // mock dateNow
+    dateNowMock = jest.fn().mockReturnValue(1660808497000);
+    Date.now = dateNowMock;
 
     // mock logger
     core.logger = new Logger();
@@ -146,5 +151,60 @@ describe("src/methods/proposeBundle.ts", () => {
     expect(compressMock).not.toHaveBeenCalled();
     expect(saveBundleMock).not.toHaveBeenCalled();
     expect(submitBundleProposalMock).not.toHaveBeenCalled();
+  });
+
+  test("proposeBundle: bundle could not be loaded", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "200",
+      current_key: "200",
+      max_bundle_size: "10",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "210",
+        to_key: "210",
+        voters_abstain: [],
+      },
+    } as any;
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle: [],
+      toKey: "",
+      toValue: "",
+    });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await proposeBundle.call(core, 101);
+
+    // ASSERT
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    expect(loadBundleMock).toHaveBeenLastCalledWith(210, 220);
+
+    expect(compressMock).not.toHaveBeenCalled();
+
+    expect(saveBundleMock).not.toHaveBeenCalled();
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(submitBundleProposalMock).toHaveBeenLastCalledWith({
+      id: "0",
+      storage_id: `KYVE_NO_DATA_BUNDLE_${core["poolId"]}_${Math.floor(
+        Date.now() / 1000
+      )}`,
+      byte_size: "0",
+      from_height: core.pool.bundle_proposal!.to_height,
+      to_height: core.pool.bundle_proposal!.to_height,
+      from_key: core.pool.bundle_proposal!.to_key,
+      to_key: "",
+      to_value: "",
+      bundle_hash: "",
+    });
   });
 });

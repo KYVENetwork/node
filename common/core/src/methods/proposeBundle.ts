@@ -78,49 +78,47 @@ export async function proposeBundle(
     }
   }
 
-  while (true) {
-    await this.syncPoolState();
+  await this.syncPoolState();
 
-    if (+this.pool.bundle_proposal!.created_at > createdAt) {
-      // check if new proposal is available in the meantime
-      return;
-    } else if (this.shouldIdle()) {
-      // check if pool got paused in the meantime
-      return;
-    }
+  if (+this.pool.bundle_proposal!.created_at > createdAt) {
+    // check if new proposal is available in the meantime
+    return;
+  } else if (this.shouldIdle()) {
+    // check if pool got paused in the meantime
+    return;
+  }
 
-    if (storageId!) {
-      const bundleHash = sha256(standardizeJSON(bundleProposal.bundle));
+  if (storageId!) {
+    const bundleHash = sha256(standardizeJSON(bundleProposal.bundle));
 
-      await this.submitBundleProposal(
-        storageId,
-        bundleCompressed!.byteLength,
-        fromHeight,
-        fromHeight + bundleProposal.bundle.length,
-        fromKey,
-        bundleProposal.toKey,
-        bundleProposal.toValue,
-        bundleHash
-      );
-    } else {
-      this.logger.info(
-        `Creating new bundle proposal of type ${KYVE_NO_DATA_BUNDLE}`
-      );
+    await this.submitBundleProposal(
+      storageId,
+      bundleCompressed!.byteLength,
+      fromHeight,
+      fromHeight + bundleProposal.bundle.length,
+      fromKey,
+      bundleProposal.toKey,
+      bundleProposal.toValue,
+      bundleHash
+    );
+  } else {
+    this.logger.info(
+      `Creating new bundle proposal of type ${KYVE_NO_DATA_BUNDLE}`
+    );
 
-      storageId = `KYVE_NO_DATA_BUNDLE_${this.poolId}_${Math.floor(
-        Date.now() / 1000
-      )}`;
+    storageId = `KYVE_NO_DATA_BUNDLE_${this.poolId}_${Math.floor(
+      Date.now() / 1000
+    )}`;
 
-      await this.submitBundleProposal(
-        storageId,
-        0,
-        fromHeight,
-        fromHeight,
-        fromKey,
-        "",
-        "",
-        ""
-      );
-    }
+    await this.submitBundleProposal(
+      storageId,
+      0,
+      fromHeight,
+      fromHeight,
+      fromKey,
+      "",
+      "",
+      ""
+    );
   }
 }
