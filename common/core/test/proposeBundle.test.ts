@@ -207,4 +207,89 @@ describe("src/methods/proposeBundle.ts", () => {
       bundle_hash: "",
     });
   });
+
+  test("proposeBundle: bundle could be loaded with two data items", async () => {
+    // ARRANGE
+    core.pool = {
+      name: "Moontest",
+      current_height: "200",
+      current_key: "200",
+      max_bundle_size: "10",
+      bundle_proposal: {
+        storage_id: "test_storage_id",
+        created_at: "100",
+        to_height: "210",
+        to_key: "210",
+        voters_abstain: [],
+      },
+    } as any;
+
+    const bundle = [
+      {
+        key: "test_key_1",
+        value: "test_value_1",
+      },
+      {
+        key: "test_key_2",
+        value: "test_value_2",
+      },
+    ];
+
+    const syncPoolStateMock = jest.fn();
+    const shouldIdleMock = jest.fn().mockReturnValue(false);
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle,
+      toKey: "test_key_2",
+      toValue: "test_value_2",
+    });
+
+    core["syncPoolState"] = syncPoolStateMock;
+    core["shouldIdle"] = shouldIdleMock;
+    core["loadBundle"] = loadBundleMock;
+
+    // ACT
+    await proposeBundle.call(core, 101);
+
+    // ASSERT
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    expect(loadBundleMock).toHaveBeenLastCalledWith(210, 220);
+
+    expect(compressMock).toHaveBeenCalledTimes(1);
+    expect(compressMock).toHaveBeenLastCalledWith(bundle);
+
+    const tags: [string, string][] = [
+      ["Application", "KYVE"],
+      ["Network", core["network"]],
+      ["Pool", core["poolId"].toString()],
+      ["@kyve/core", core["coreVersion"]],
+      [core["runtime"].name, core["runtime"].version],
+      ["Uploader", core["client"].account.address],
+      ["FromHeight", core.pool.bundle_proposal!.to_height],
+      ["ToHeight", "212"],
+      ["Size", "2"],
+      ["FromKey", core.pool.bundle_proposal!.to_key],
+      ["ToKey", "test_key_2"],
+      ["Value", "test_value_2"],
+    ];
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(1);
+    expect(saveBundleMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle)),
+      tags
+    );
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(submitBundleProposalMock).toHaveBeenLastCalledWith({
+      id: "0",
+      storage_id: "test_storage_id",
+      byte_size: "89",
+      from_height: core.pool.bundle_proposal!.to_height,
+      to_height: "212",
+      from_key: core.pool.bundle_proposal!.to_key,
+      to_key: "test_key_2",
+      to_value: "test_value_2",
+      bundle_hash:
+        "85a7592f8b7410bdc352b5d018be3bda819c97649448b0456f7092cdfa4c9f7a",
+    });
+  });
 });
