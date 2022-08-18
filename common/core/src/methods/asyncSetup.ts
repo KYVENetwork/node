@@ -84,7 +84,6 @@ export async function asyncSetup(this: Node): Promise<void> {
   this.validateRuntime();
   this.validateVersion();
 
-  await this.setupStake();
   await this.syncPoolState();
 
   this.validateActiveNode();

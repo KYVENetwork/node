@@ -15,9 +15,6 @@ import {
   validateRuntime,
   validateVersion,
   validateActiveNode,
-  stakePool,
-  unstakePool,
-  setupStake,
   runNode,
   runCache,
   asyncSetup,
@@ -38,12 +35,7 @@ import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { kyve } from "@kyve/proto";
 import { Command, OptionValues } from "commander";
-import {
-  parseDesiredStake,
-  parseKeyfile,
-  parseNetwork,
-  parsePoolId,
-} from "./commander";
+import { parseKeyfile, parseNetwork, parsePoolId } from "./commander";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -62,11 +54,11 @@ export class Node {
   // register sdk attributes
   public sdk!: KyveSDK;
   public client!: KyveClient;
-  public query!: KyveLCDClientType;
+  public lcd!: KyveLCDClientType;
 
   // register attributes
   public coreVersion!: string;
-  public pool!: kyve.registry.v1beta1.kyveRegistry.Pool;
+  public pool!: any; // TODO: find pool type
   public poolConfig!: any;
   public name!: string;
 
@@ -78,7 +70,6 @@ export class Node {
   protected staker!: string;
   protected account!: string;
   protected keyfile!: string;
-  protected stake!: string;
   protected network!: string;
   protected verbose!: boolean;
 
@@ -91,9 +82,6 @@ export class Node {
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
   protected validateActiveNode = validateActiveNode;
-  protected stakePool = stakePool;
-  protected unstakePool = unstakePool;
-  protected setupStake = setupStake;
   protected shouldIdle = shouldIdle;
   protected claimUploaderRole = claimUploaderRole;
   protected loadBundle = loadBundle;
@@ -248,12 +236,6 @@ export class Node {
         parseKeyfile
       )
       .option(
-        "-s, --stake <number>",
-        "Your desired stake the node should run with. [unit = $KYVE]",
-        parseDesiredStake,
-        "0"
-      )
-      .option(
         "-n, --network <string>",
         "The chain id of the network. [optional, default = korellia]",
         parseNetwork,
@@ -288,7 +270,6 @@ export class Node {
     this.poolId = options.pool;
     this.account = options.account;
     this.keyfile = options.keyfile;
-    this.stake = options.stake;
     this.network = options.network;
     this.verbose = options.verbose;
 
@@ -299,7 +280,7 @@ export class Node {
     try {
       // assign main attributes
       this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
-      this.query = this.sdk.createLCDClient();
+      this.lcd = this.sdk.createLCDClient();
     } catch (error) {
       this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
       this.logger.debug(error);

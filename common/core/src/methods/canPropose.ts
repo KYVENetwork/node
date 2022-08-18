@@ -14,8 +14,9 @@ export async function canPropose(this: Node): Promise<boolean> {
   while (true) {
     try {
       const { possible, reason } =
-        await this.query.kyve.registry.v1beta1.canPropose({
+        await this.lcd.kyve.registry.v1beta1.canPropose({
           pool_id: this.poolId.toString(),
+          staker: this.staker,
           proposer: this.client.account.address,
           from_height:
             this.pool.bundle_proposal!.to_height || this.pool.current_height,

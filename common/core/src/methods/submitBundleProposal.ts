@@ -15,8 +15,9 @@ export async function submitBundleProposal(
   try {
     this.logger.debug(`Attempting to submit bundle proposal`);
 
-    const tx = await this.client.kyve.v1beta1.base.submitBundleProposal({
-      id: this.poolId.toString(),
+    const tx = await this.client.kyve.v1beta1.bundles.submitBundleProposal({
+      staker: this.staker,
+      pool_id: this.poolId.toString(),
       storage_id: storageId,
       byte_size: byteSize.toString(),
       from_height: fromHeight.toString(),

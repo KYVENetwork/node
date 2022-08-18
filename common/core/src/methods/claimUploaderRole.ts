@@ -9,8 +9,9 @@ export async function claimUploaderRole(this: Node): Promise<boolean> {
   try {
     this.logger.debug(`Attempting to claim uploader role`);
 
-    const tx = await this.client.kyve.v1beta1.base.claimUploaderRole({
-      id: this.poolId.toString(),
+    const tx = await this.client.kyve.v1beta1.bundles.claimUploaderRole({
+      staker: this.staker,
+      pool_id: this.poolId.toString(),
     });
 
     this.logger.debug(`ClaimUploaderRole = ${tx.txHash}`);

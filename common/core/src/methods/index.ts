@@ -5,8 +5,6 @@ export * from "./canValidate";
 export * from "./generateName";
 export * from "./syncPoolState";
 export * from "./validate";
-export * from "./stake";
-export * from "./setupStake";
 export * from "./shouldIdle";
 export * from "./claimUploaderRole";
 export * from "./loadBundle";

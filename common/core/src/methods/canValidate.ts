@@ -4,11 +4,9 @@ import { callWithBackoffStrategy, sleep } from "../utils";
 export async function canValidate(this: Node): Promise<void> {
   const canValidate = await callWithBackoffStrategy(
     async () => {
-      // TODO: call canValidate once implemented
-      return await this.query.kyve.registry.v1beta1.canVote({
+      return await this.lcd.kyve.registry.v1beta1.canValidate({
         pool_id: this.poolId.toString(),
-        voter: "",
-        storage_id: "",
+        valaddress: this.client.account.address,
       });
     },
     { limitTimeout: "5m", increaseBy: "10s" },
@@ -47,11 +45,9 @@ export async function canValidate(this: Node): Promise<void> {
   while (true) {
     const canValidate = await callWithBackoffStrategy(
       async () => {
-        // TODO: call canValidate once implemented
-        return await this.query.kyve.registry.v1beta1.canVote({
+        return await this.lcd.kyve.registry.v1beta1.canValidate({
           pool_id: this.poolId.toString(),
-          voter: "",
-          storage_id: "",
+          valaddress: this.client.account.address,
         });
       },
       { limitTimeout: "5m", increaseBy: "10s" },

@@ -4,7 +4,7 @@ import { callWithBackoffStrategy } from "../utils";
 export async function syncPoolState(this: Node): Promise<void> {
   await callWithBackoffStrategy(
     async () => {
-      const { pool } = await this.query.kyve.registry.v1beta1.pool({
+      const { pool } = await this.lcd.kyve.registry.v1beta1.pool({
         id: this.poolId.toString(),
       });
       this.pool = pool!;

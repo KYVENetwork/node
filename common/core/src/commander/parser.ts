@@ -32,18 +32,6 @@ export const parseKeyfile = (value: string): string => {
   return value;
 };
 
-export const parseDesiredStake = (value: string): string => {
-  const parsedValue = new BigNumber(value);
-
-  if (parsedValue.toString() === "NaN") {
-    throw new commander.InvalidArgumentError(
-      "Desired stake must be of type number."
-    );
-  }
-
-  return value;
-};
-
 export const parseNetwork = (value: string): string => {
   if (!["local", "alpha", "beta", "korellia"].includes(value)) {
     throw new commander.InvalidArgumentError(
