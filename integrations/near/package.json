@@ -22,7 +22,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyvenetwork/core": "1.20.0",
+    "@kyve/core": "1.20.0",
     "near-api-js": "^0.44.2"
   },
   "devDependencies": {

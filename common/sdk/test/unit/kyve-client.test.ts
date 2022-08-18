@@ -65,7 +65,7 @@ const methodsByGroup = [
     {
       name: "bundles",
       pathToTypes: extractTsFromPath(
-        "./node_modules/@kyve/proto/dist/proto/kyve/bundles/v1beta1"
+        "../proto/dist/proto/kyve/bundles/v1beta1"
       ),
     },
     [
@@ -96,7 +96,7 @@ const methodsByGroup = [
     {
       name: "delegation",
       pathToTypes: extractTsFromPath(
-        "./node_modules/@kyve/proto/dist/proto/kyve/delegation/v1beta1"
+        "../proto/dist/proto/kyve/delegation/v1beta1"
       ),
     },
     [
@@ -134,7 +134,7 @@ const methodsByGroup = [
     {
       name: "pool",
       pathToTypes: extractTsFromPath(
-        "./node_modules/@kyve/proto/dist/proto/kyve/pool/v1beta1"
+        "../proto/dist/proto/kyve/pool/v1beta1"
       ),
     },
     [
@@ -158,7 +158,7 @@ const methodsByGroup = [
     {
       name: "stakers",
       pathToTypes: extractTsFromPath(
-        "./node_modules/@kyve/proto/dist/proto/kyve/stakers/v1beta1"
+        "../proto/dist/proto/kyve/stakers/v1beta1"
       ),
     },
     [

@@ -5,38 +5,32 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 1.20.0 (2022-08-12)
 
-
 ### Bug Fixes
 
-* version dependency ([76bb53f](https://github.com/KYVENetwork/node/commit/76bb53f8c16c58054935efc4efe78fba6d9771d1))
-* version dependency ([4f69ee3](https://github.com/KYVENetwork/node/commit/4f69ee37dfa874e366b0887e4e63123a68ead5c9))
-* workflow ([c4cbadc](https://github.com/KYVENetwork/node/commit/c4cbadcec351efaf2c612f6b1d08e6d34d4277f1))
-
+- version dependency ([76bb53f](https://github.com/KYVENetwork/node/commit/76bb53f8c16c58054935efc4efe78fba6d9771d1))
+- version dependency ([4f69ee3](https://github.com/KYVENetwork/node/commit/4f69ee37dfa874e366b0887e4e63123a68ead5c9))
+- workflow ([c4cbadc](https://github.com/KYVENetwork/node/commit/c4cbadcec351efaf2c612f6b1d08e6d34d4277f1))
 
 ### Features
 
-* added @kyve/proto to monorepo ([f39c9a6](https://github.com/KYVENetwork/node/commit/f39c9a64e4af4cfb8149bab44fcc7a3bb553b19b))
-* added evm ([bbbee17](https://github.com/KYVENetwork/node/commit/bbbee17ec78a46507840e92910d069408468d805))
-* added evm ([0b2b20c](https://github.com/KYVENetwork/node/commit/0b2b20c62e6110f56f7c931c5dac64f11d4cdac7))
-* change package for test ([dc8bb58](https://github.com/KYVENetwork/node/commit/dc8bb5878e0bdf253f2a3bdf6a1b55ec5ec77eaa))
-* ci/cd ([4e6d946](https://github.com/KYVENetwork/node/commit/4e6d946179fb005796e715be2a65575c3e020b98))
-* lerna powered by NX ([795216d](https://github.com/KYVENetwork/node/commit/795216d535d257f1dafafce6dbc11a68cb4e678c))
-* package release ([c4b681a](https://github.com/KYVENetwork/node/commit/c4b681a9815f0a18a4cf11a0f09bdb042662c6d2))
-* package release ([e2c68dd](https://github.com/KYVENetwork/node/commit/e2c68dd6880aec75cc087c41d2bfc1557ce98bb9))
-* package release ([29b707c](https://github.com/KYVENetwork/node/commit/29b707cbe383bf4253a617b0f9f9c00454546418))
-* test ([726c15d](https://github.com/KYVENetwork/node/commit/726c15dbe4ac6cfc3a3651fbcdb997f0bf04bad9))
-* test ([eafe1f9](https://github.com/KYVENetwork/node/commit/eafe1f9ecde9a9d04be18eb62387f9d60d93803d))
-* test ([6c28f73](https://github.com/KYVENetwork/node/commit/6c28f73cd792fbc1113c9e735a73df401d8f0051))
-* test ([e0d7dca](https://github.com/KYVENetwork/node/commit/e0d7dca64d0b40cbca5fce0af73df02453d8a7e7))
-* test ([ed8d13d](https://github.com/KYVENetwork/node/commit/ed8d13d246c77afe8f6c6c3cc95751d25cefb201))
-* test ([d30f2e9](https://github.com/KYVENetwork/node/commit/d30f2e9ed11cbe01f1168038b6de9e8ae93b42e4))
-* test ([444d2b1](https://github.com/KYVENetwork/node/commit/444d2b1f286891ce8448d76348fadba00d81d3f3))
-* test ([1eb8459](https://github.com/KYVENetwork/node/commit/1eb845938d90e6298763abad82de6896eab9df54))
-* test ([b44e69d](https://github.com/KYVENetwork/node/commit/b44e69d29850329104753bce4cea85920d860470))
-
-
-
-
+- added @kyve/proto to monorepo ([f39c9a6](https://github.com/KYVENetwork/node/commit/f39c9a64e4af4cfb8149bab44fcc7a3bb553b19b))
+- added evm ([bbbee17](https://github.com/KYVENetwork/node/commit/bbbee17ec78a46507840e92910d069408468d805))
+- added evm ([0b2b20c](https://github.com/KYVENetwork/node/commit/0b2b20c62e6110f56f7c931c5dac64f11d4cdac7))
+- change package for test ([dc8bb58](https://github.com/KYVENetwork/node/commit/dc8bb5878e0bdf253f2a3bdf6a1b55ec5ec77eaa))
+- ci/cd ([4e6d946](https://github.com/KYVENetwork/node/commit/4e6d946179fb005796e715be2a65575c3e020b98))
+- lerna powered by NX ([795216d](https://github.com/KYVENetwork/node/commit/795216d535d257f1dafafce6dbc11a68cb4e678c))
+- package release ([c4b681a](https://github.com/KYVENetwork/node/commit/c4b681a9815f0a18a4cf11a0f09bdb042662c6d2))
+- package release ([e2c68dd](https://github.com/KYVENetwork/node/commit/e2c68dd6880aec75cc087c41d2bfc1557ce98bb9))
+- package release ([29b707c](https://github.com/KYVENetwork/node/commit/29b707cbe383bf4253a617b0f9f9c00454546418))
+- test ([726c15d](https://github.com/KYVENetwork/node/commit/726c15dbe4ac6cfc3a3651fbcdb997f0bf04bad9))
+- test ([eafe1f9](https://github.com/KYVENetwork/node/commit/eafe1f9ecde9a9d04be18eb62387f9d60d93803d))
+- test ([6c28f73](https://github.com/KYVENetwork/node/commit/6c28f73cd792fbc1113c9e735a73df401d8f0051))
+- test ([e0d7dca](https://github.com/KYVENetwork/node/commit/e0d7dca64d0b40cbca5fce0af73df02453d8a7e7))
+- test ([ed8d13d](https://github.com/KYVENetwork/node/commit/ed8d13d246c77afe8f6c6c3cc95751d25cefb201))
+- test ([d30f2e9](https://github.com/KYVENetwork/node/commit/d30f2e9ed11cbe01f1168038b6de9e8ae93b42e4))
+- test ([444d2b1](https://github.com/KYVENetwork/node/commit/444d2b1f286891ce8448d76348fadba00d81d3f3))
+- test ([1eb8459](https://github.com/KYVENetwork/node/commit/1eb845938d90e6298763abad82de6896eab9df54))
+- test ([b44e69d](https://github.com/KYVENetwork/node/commit/b44e69d29850329104753bce4cea85920d860470))
 
 # 1.19.0 (2022-08-12)
 

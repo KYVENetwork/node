@@ -27,10 +27,10 @@ import {
   proposeBundle,
 } from "./methods";
 import program from "./commander";
-import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyvenetwork/sdk";
-import { KYVE_NETWORK } from "@kyvenetwork/sdk/dist/constants";
+import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
+import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
-import { kyve } from "@kyvenetwork/proto";
+import { kyve } from "@kyve/proto";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
