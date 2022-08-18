@@ -4,7 +4,6 @@ import { TestRuntime } from "./mocks/integration";
 import { canPropose } from "../src/methods/canPropose";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/canPropose.ts", () => {
   let core: Node;
@@ -56,6 +55,7 @@ describe("src/methods/canPropose.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
     core["client"] = {
       account: {
         address: "test_uploader",
@@ -74,7 +74,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -90,7 +90,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "another_test_uploader",
         to_height: "200",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -112,7 +112,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -128,7 +128,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -136,6 +136,7 @@ describe("src/methods/canPropose.ts", () => {
     // ASSERT
     expect(canProposeMock).toHaveBeenLastCalledWith({
       pool_id: "0",
+      staker: "test_staker",
       proposer: "test_uploader",
       from_height: "200",
     });
@@ -164,7 +165,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -180,7 +181,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -188,6 +189,7 @@ describe("src/methods/canPropose.ts", () => {
     // ASSERT
     expect(canProposeMock).toHaveBeenLastCalledWith({
       pool_id: "0",
+      staker: "test_staker",
       proposer: "test_uploader",
       from_height: "200",
     });
@@ -215,7 +217,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -231,7 +233,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -239,6 +241,7 @@ describe("src/methods/canPropose.ts", () => {
     // ASSERT
     expect(canProposeMock).toHaveBeenLastCalledWith({
       pool_id: "0",
+      staker: "test_staker",
       proposer: "test_uploader",
       from_height: "200",
     });
@@ -259,7 +262,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -275,7 +278,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "test_uploader",
         to_height: "200",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -283,6 +286,7 @@ describe("src/methods/canPropose.ts", () => {
     // ASSERT
     expect(canProposeMock).toHaveBeenLastCalledWith({
       pool_id: "0",
+      staker: "test_staker",
       proposer: "test_uploader",
       from_height: "200",
     });
@@ -301,7 +305,7 @@ describe("src/methods/canPropose.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canPropose: canProposeMock,
           },
@@ -317,7 +321,7 @@ describe("src/methods/canPropose.ts", () => {
         next_uploader: "test_uploader",
         to_height: "",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canPropose.call(core);
@@ -325,6 +329,7 @@ describe("src/methods/canPropose.ts", () => {
     // ASSERT
     expect(canProposeMock).toHaveBeenLastCalledWith({
       pool_id: "0",
+      staker: "test_staker",
       proposer: "test_uploader",
       from_height: "100",
     });

@@ -7,7 +7,6 @@ import {
   retrieveBundleMock,
 } from "./mocks/storageProvider";
 import { TestCompression, decompressMock } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/validateBundleProposal.ts", () => {
   let core: Node;
@@ -21,7 +20,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
   let setTimeoutMock: jest.Mock;
 
   let executeMock: jest.Mock;
-  let voteProposalMock: jest.Mock;
+  let voteBundleProposalMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
@@ -62,21 +61,22 @@ describe("src/methods/validateBundleProposal.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
 
     executeMock = jest.fn().mockResolvedValue({
       code: 0,
     });
 
-    voteProposalMock = jest.fn().mockResolvedValue({
+    voteBundleProposalMock = jest.fn().mockResolvedValue({
       txHash: "test_hash",
       execute: executeMock,
     });
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
-            voteProposal: voteProposalMock,
+        bundles: {
+          v1beta1: {
+            voteBundleProposal: voteBundleProposalMock,
           },
         },
       },
@@ -107,7 +107,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         to_height: "100",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
 
@@ -137,7 +137,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         to_height: "100",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(true);
@@ -175,7 +175,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -210,9 +210,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -236,7 +237,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     retrieveBundleMock.mockResolvedValueOnce(
       Buffer.from(
@@ -273,9 +274,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -298,7 +300,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         to_value: "test_value",
         bundle_hash: "invalid_hash",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -327,9 +329,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -353,7 +356,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -382,9 +385,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -408,7 +412,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -437,9 +441,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -463,7 +468,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -492,9 +497,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -518,7 +524,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -553,9 +559,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "invalid_test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });
@@ -579,7 +586,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -627,14 +634,16 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(2);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 3,
     });
-    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -658,7 +667,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -727,14 +736,16 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(2);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 3,
     });
-    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -758,7 +769,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -806,14 +817,16 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(2);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 3,
     });
-    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -837,7 +850,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -900,14 +913,16 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(2);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 3,
     });
-    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -931,7 +946,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     retrieveBundleMock
       .mockRejectedValueOnce(new Error("Invalid Network Request"))
@@ -992,14 +1007,16 @@ describe("src/methods/validateBundleProposal.ts", () => {
       [{ key: "test_key", value: "test_value" }]
     );
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(2);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 3,
     });
-    expect(voteProposalMock).toHaveBeenNthCalledWith(2, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 1,
     });
@@ -1023,7 +1040,7 @@ describe("src/methods/validateBundleProposal.ts", () => {
         bundle_hash:
           "9b41cc136f12b5456f073262e179d937f8f3e3702e6d57251380b50b232f3945",
       },
-    } as PoolResponse;
+    } as any;
 
     decompressMock.mockRejectedValueOnce(new Error("Failed to decompress"));
 
@@ -1054,9 +1071,10 @@ describe("src/methods/validateBundleProposal.ts", () => {
 
     expect(validateMock).not.toHaveBeenCalled();
 
-    expect(voteProposalMock).toHaveBeenCalledTimes(1);
-    expect(voteProposalMock).toHaveBeenNthCalledWith(1, {
-      id: "0",
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       vote: 2,
     });

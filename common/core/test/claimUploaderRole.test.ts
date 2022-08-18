@@ -4,7 +4,6 @@ import { TestRuntime } from "./mocks/integration";
 import { claimUploaderRole } from "../src/methods/claimUploaderRole";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/claimUploaderRole.ts", () => {
   let core: Node;
@@ -56,6 +55,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
   });
 
   test("claimUploaderRole: claim when next uploader is already set", async () => {
@@ -71,8 +71,8 @@ describe("src/methods/claimUploaderRole.ts", () => {
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
+        bundles: {
+          v1beta1: {
             claimUploaderRole: claimUploaderRoleMock,
           },
         },
@@ -83,7 +83,7 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "test_next_uploader",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await claimUploaderRole.call(core);
@@ -108,8 +108,8 @@ describe("src/methods/claimUploaderRole.ts", () => {
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
+        bundles: {
+          v1beta1: {
             claimUploaderRole: claimUploaderRoleMock,
           },
         },
@@ -120,14 +120,17 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await claimUploaderRole.call(core);
 
     // ASSERT
     expect(claimUploaderRoleMock).toHaveBeenCalledTimes(1);
-    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
+    });
 
     expect(executeMock).toHaveBeenCalledTimes(1);
 
@@ -163,8 +166,8 @@ describe("src/methods/claimUploaderRole.ts", () => {
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
+        bundles: {
+          v1beta1: {
             claimUploaderRole: claimUploaderRoleMock,
           },
         },
@@ -175,14 +178,17 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await claimUploaderRole.call(core);
 
     // ASSERT
     expect(claimUploaderRoleMock).toHaveBeenCalledTimes(1);
-    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
+    });
 
     expect(executeMock).toHaveBeenCalledTimes(1);
 
@@ -216,8 +222,8 @@ describe("src/methods/claimUploaderRole.ts", () => {
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
+        bundles: {
+          v1beta1: {
             claimUploaderRole: claimUploaderRoleMock,
           },
         },
@@ -228,14 +234,17 @@ describe("src/methods/claimUploaderRole.ts", () => {
       bundle_proposal: {
         next_uploader: "",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await claimUploaderRole.call(core);
 
     // ASSERT
     expect(claimUploaderRoleMock).toHaveBeenCalledTimes(1);
-    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, { id: "0" });
+    expect(claimUploaderRoleMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
+    });
 
     expect(executeMock).toHaveBeenCalledTimes(1);
 

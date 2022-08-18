@@ -5,7 +5,6 @@ import { shouldIdle } from "../src/methods/shouldIdle";
 import BigNumber from "bignumber.js";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/shouldIdle.ts", () => {
   let core: Node;
@@ -57,6 +56,7 @@ describe("src/methods/shouldIdle.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
   });
 
   test("shouldIdle: validate if pool is upgrading", () => {
@@ -70,7 +70,7 @@ describe("src/methods/shouldIdle.ts", () => {
           binaries: "{}",
         },
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -92,7 +92,7 @@ describe("src/methods/shouldIdle.ts", () => {
         upgrade_plan: {},
         paused: true,
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -114,7 +114,7 @@ describe("src/methods/shouldIdle.ts", () => {
         min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
       },
       total_stake: new BigNumber(2000).multipliedBy(10 ** 9).toString(),
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -139,7 +139,7 @@ describe("src/methods/shouldIdle.ts", () => {
         total_funds: "0",
       },
       total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = shouldIdle.call(core);
@@ -164,7 +164,7 @@ describe("src/methods/shouldIdle.ts", () => {
         total_funds: new BigNumber(1000).multipliedBy(10 ** 9).toString(),
       },
       total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = shouldIdle.call(core);

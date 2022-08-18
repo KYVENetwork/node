@@ -4,7 +4,6 @@ import { TestRuntime } from "./mocks/integration";
 import { canVote } from "../src/methods/canVote";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/canVote.ts", () => {
   let core: Node;
@@ -56,9 +55,10 @@ describe("src/methods/canVote.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
     core["client"] = {
       account: {
-        address: "test_uploader",
+        address: "test_voter",
         algo: "ed25519",
         pubkey: new Uint8Array(),
       },
@@ -74,7 +74,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canVote: canVoteMock,
           },
@@ -87,7 +87,7 @@ describe("src/methods/canVote.ts", () => {
         storage_id: "test_storage_id",
         uploader: "",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canVote.call(core);
@@ -109,7 +109,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canVote: canVoteMock,
           },
@@ -119,9 +119,9 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
-        uploader: "test_uploader",
+        uploader: "test_voter",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canVote.call(core);
@@ -143,7 +143,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canVote: canVoteMock,
           },
@@ -153,10 +153,10 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
-        uploader: "other_test_uploader",
+        uploader: "other_test_voter",
         storage_id: "test_storage_id",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canVote.call(core);
@@ -164,7 +164,8 @@ describe("src/methods/canVote.ts", () => {
     // ASSERT
     expect(canVoteMock).toHaveBeenLastCalledWith({
       pool_id: "0",
-      voter: "test_uploader",
+      staker: "test_staker",
+      voter: "test_voter",
       storage_id: "test_storage_id",
     });
 
@@ -180,7 +181,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canVote: canVoteMock,
           },
@@ -190,10 +191,10 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
-        uploader: "other_test_uploader",
+        uploader: "other_test_voter",
         storage_id: "test_storage_id",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canVote.call(core);
@@ -201,7 +202,8 @@ describe("src/methods/canVote.ts", () => {
     // ASSERT
     expect(canVoteMock).toHaveBeenLastCalledWith({
       pool_id: "0",
-      voter: "test_uploader",
+      staker: "test_staker",
+      voter: "test_voter",
       storage_id: "test_storage_id",
     });
 
@@ -221,7 +223,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             canVote: canVoteMock,
           },
@@ -231,10 +233,10 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
-        uploader: "other_test_uploader",
+        uploader: "other_test_voter",
         storage_id: "test_storage_id",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     const res = await canVote.call(core);
@@ -242,7 +244,8 @@ describe("src/methods/canVote.ts", () => {
     // ASSERT
     expect(canVoteMock).toHaveBeenLastCalledWith({
       pool_id: "0",
-      voter: "test_uploader",
+      staker: "test_staker",
+      voter: "test_voter",
       storage_id: "test_storage_id",
     });
 

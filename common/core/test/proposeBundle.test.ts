@@ -64,6 +64,7 @@ describe("src/methods/proposeBundle.ts", () => {
     core.logger.error = loggerError;
 
     core["poolId"] = 0;
+    core["staker"] = "test_staker";
 
     executeMock = jest.fn().mockResolvedValue({
       code: 0,
@@ -76,8 +77,8 @@ describe("src/methods/proposeBundle.ts", () => {
 
     core.client = {
       kyve: {
-        v1beta1: {
-          base: {
+        bundles: {
+          v1beta1: {
             submitBundleProposal: submitBundleProposalMock,
           },
         },
@@ -108,7 +109,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_height: "100",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
 
@@ -138,7 +139,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_height: "100",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(true);
@@ -174,7 +175,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_key: "210",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const syncPoolStateMock = jest.fn();
     const shouldIdleMock = jest.fn().mockReturnValue(false);
@@ -201,7 +202,8 @@ describe("src/methods/proposeBundle.ts", () => {
 
     expect(submitBundleProposalMock).toHaveBeenCalledTimes(1);
     expect(submitBundleProposalMock).toHaveBeenLastCalledWith({
-      id: "0",
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: `KYVE_NO_DATA_BUNDLE_${core["poolId"]}_${Math.floor(
         Date.now() / 1000
       )}`,
@@ -231,7 +233,7 @@ describe("src/methods/proposeBundle.ts", () => {
         to_key: "210",
         voters_abstain: [],
       },
-    } as PoolResponse;
+    } as any;
 
     const bundle = [
       {
@@ -289,7 +291,8 @@ describe("src/methods/proposeBundle.ts", () => {
 
     expect(submitBundleProposalMock).toHaveBeenCalledTimes(1);
     expect(submitBundleProposalMock).toHaveBeenLastCalledWith({
-      id: "0",
+      staker: "test_staker",
+      pool_id: "0",
       storage_id: "test_storage_id",
       byte_size: "89",
       from_height: core.pool.bundle_proposal!.to_height,

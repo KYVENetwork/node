@@ -60,8 +60,10 @@ describe("src/methods/syncPoolState.ts", () => {
   test("syncPoolState: validate sync pool state with valid return", async () => {
     // ARRANGE
     const pool = {
-      name: "Moontest",
-      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      data: {
+        name: "Moontest",
+        config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      },
     };
 
     const poolMock = jest.fn().mockResolvedValue({
@@ -70,7 +72,7 @@ describe("src/methods/syncPoolState.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             pool: poolMock,
           },
@@ -85,14 +87,16 @@ describe("src/methods/syncPoolState.ts", () => {
     expect(poolMock).toHaveBeenLastCalledWith({ id: "0" });
 
     expect(core.pool).toEqual(pool);
-    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
+    expect(core.poolConfig).toEqual(JSON.parse(pool.data.config));
   });
 
   test("syncPoolState: validate sync pool state with invalid config", async () => {
     // ARRANGE
     const pool = {
-      name: "Moontest",
-      config: "invalid_config",
+      data: {
+        name: "Moontest",
+        config: "invalid_config",
+      },
     };
 
     const poolMock = jest.fn().mockResolvedValue({
@@ -101,7 +105,7 @@ describe("src/methods/syncPoolState.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             pool: poolMock,
           },
@@ -122,8 +126,10 @@ describe("src/methods/syncPoolState.ts", () => {
   test("syncPoolState: validate sync pool state with error return", async () => {
     // ARRANG
     const pool = {
-      name: "Moontest",
-      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      data: {
+        name: "Moontest",
+        config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      },
     };
     const error = new Error("Failed Network Request");
 
@@ -133,7 +139,7 @@ describe("src/methods/syncPoolState.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             pool: poolMock,
           },
@@ -158,14 +164,16 @@ describe("src/methods/syncPoolState.ts", () => {
     expect(poolMock).toHaveBeenNthCalledWith(2, { id: "0" });
 
     expect(core.pool).toEqual(pool);
-    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
+    expect(core.poolConfig).toEqual(JSON.parse(pool.data.config));
   });
 
   test("syncPoolState: validate sync pool state with error return", async () => {
     // ARRANG
     const pool = {
-      name: "Moontest",
-      config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      data: {
+        name: "Moontest",
+        config: '{"rpc":"https://rpc.api.moonbeam.network"}',
+      },
     };
     const error = new Error("Failed Network Request");
 
@@ -179,7 +187,7 @@ describe("src/methods/syncPoolState.ts", () => {
 
     core.lcd = {
       kyve: {
-        registry: {
+        query: {
           v1beta1: {
             pool: poolMock,
           },
@@ -211,6 +219,6 @@ describe("src/methods/syncPoolState.ts", () => {
     expect(poolMock).toHaveBeenNthCalledWith(3, { id: "0" });
 
     expect(core.pool).toEqual(pool);
-    expect(core.poolConfig).toEqual(JSON.parse(pool.config));
+    expect(core.poolConfig).toEqual(JSON.parse(pool.data.config));
   });
 });

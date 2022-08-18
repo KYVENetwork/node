@@ -8,7 +8,6 @@ import {
 } from "../src/methods/validate";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/validate.ts", () => {
   let core: Node;
@@ -69,7 +68,7 @@ describe("src/methods/validate.ts", () => {
         name: "Moontest",
         runtime: "TestRuntime",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     validateRuntime.call(core);
@@ -85,7 +84,7 @@ describe("src/methods/validate.ts", () => {
         name: "Moontest",
         runtime: "TestRuntimeWrong",
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     validateRuntime.call(core);
@@ -98,7 +97,7 @@ describe("src/methods/validate.ts", () => {
     );
     expect(loggerError).toHaveBeenNthCalledWith(
       2,
-      `Found = ${core["runtime"].name} required = ${core.pool.data.runtime}`
+      `Found = ${core["runtime"].name} required = ${core.pool.data!.runtime}`
     );
 
     expect(processExit).toHaveBeenCalledTimes(1);
@@ -114,7 +113,7 @@ describe("src/methods/validate.ts", () => {
           version: "0.0.0",
         },
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     validateVersion.call(core);
@@ -132,7 +131,7 @@ describe("src/methods/validate.ts", () => {
           version: "0.0.1",
         },
       },
-    } as PoolResponse;
+    } as any;
 
     // ACT
     validateVersion.call(core);
@@ -146,7 +145,7 @@ describe("src/methods/validate.ts", () => {
     expect(loggerError).toHaveBeenNthCalledWith(
       2,
       `Found Runtime version = ${core["runtime"].version} required = ${
-        core.pool.data.protocol!.version
+        core.pool.data!.protocol!.version
       }`
     );
 
@@ -161,7 +160,7 @@ describe("src/methods/validate.ts", () => {
         name: "Moontest",
       },
       stakers: ["kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd"],
-    } as PoolResponse;
+    } as any;
 
     core["staker"] = "kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd";
 
@@ -179,7 +178,7 @@ describe("src/methods/validate.ts", () => {
         name: "Moontest",
       },
       stakers: ["kyve1jq304cthpx0lwhpqzrdjrcza559ukyy3zsl2vd"],
-    } as PoolResponse;
+    } as any;
 
     core["staker"] = "kyve1hvg7zsnrj6h29q9ss577mhrxa04rn94h7zjugq";
 
