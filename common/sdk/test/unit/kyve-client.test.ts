@@ -133,9 +133,7 @@ const methodsByGroup = [
   [
     {
       name: "pool",
-      pathToTypes: extractTsFromPath(
-        "../proto/dist/proto/kyve/pool/v1beta1"
-      ),
+      pathToTypes: extractTsFromPath("../proto/dist/proto/kyve/pool/v1beta1"),
     },
     [
       {
@@ -239,7 +237,7 @@ for (let [bundleConfig, methods] of methodsByGroup) {
     methods.forEach((method) => {
       it(`method ${method.methodName}`, async () => {
         // @ts-ignore
-        await kyveClient.kyve.v1beta1[bundleConfig.name][method.methodName](
+        await kyveClient.kyve[bundleConfig.name].v1beta1[method.methodName](
           //@ts-ignore have no idea how to create it generic. btw ts-ignore is ok, because we check params from json schema
           method.parameters.params,
           { memo: TEST_MEMO, fee: TEST_FEE }
@@ -274,7 +272,7 @@ describe("Base methods", () => {
   it("transfer", async () => {
     const testRecipient = "kyveTestRecipient";
     const testAmount = "1";
-    await kyveClient.kyve.v1beta1.base.transfer(testRecipient, testAmount, {
+    await kyveClient.kyve.base.v1beta1.transfer(testRecipient, testAmount, {
       memo: TEST_MEMO,
       fee: TEST_FEE,
     });
@@ -292,7 +290,7 @@ describe("Base methods", () => {
   });
 
   it("getKyveBalance", async () => {
-    const result = await kyveClient.kyve.v1beta1.base.getKyveBalance();
+    const result = await kyveClient.kyve.base.v1beta1.getKyveBalance();
     expect(mockGetBalance).toHaveBeenCalledTimes(1);
     const [[ownerAddress, denom]] = mockGetBalance.mock.calls;
     expect(ownerAddress).toEqual(mockAccountData.address);
@@ -348,7 +346,7 @@ describe("Gov methods", () => {
     it(`${method.method}`, async () => {
       const govParam = method.decoder.fromJSON({});
       //@ts-ignore
-      await kyveClient.kyve.v1beta1.gov[method.method](TEST_AMOUNT, govParam, {
+      await kyveClient.kyve.gov.v1beta1[method.method](TEST_AMOUNT, govParam, {
         isExpedited: true,
       });
       expect(mockSign).toHaveBeenCalledTimes(1);
@@ -382,7 +380,7 @@ describe("Gov methods", () => {
   it("`govVote`", async () => {
     const testProposalNumber = "1";
     const testVoteOptions = "Yes";
-    await kyveClient.kyve.v1beta1.gov.govVote(
+    await kyveClient.kyve.gov.v1beta1.govVote(
       testProposalNumber,
       testVoteOptions
     );

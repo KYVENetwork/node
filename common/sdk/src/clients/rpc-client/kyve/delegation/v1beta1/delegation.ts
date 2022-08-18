@@ -1,13 +1,14 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
-import { withTypeUrl } from "../../../registry/tx.registry";
-import { signTx, TxPromise } from "../../../utils/helper";
+import { withTypeUrl } from "../../../../../registry/tx.registry";
+import { signTx, TxPromise } from "../../../../../utils/helper";
 import { kyve } from "@kyve/proto";
 
-import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
-import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
-import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
+import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
+import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
+import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
 
 export default class {
   private nativeClient: SigningStargateClient;
@@ -18,14 +19,30 @@ export default class {
     this.nativeClient = client;
   }
 
-  public async submitBundleProposal(
-    value: Omit<MsgSubmitBundleProposal, "creator">,
+  public async delegate(
+    value: Omit<MsgDelegate, "creator">,
     options?: {
       fee?: StdFee | "auto" | number;
       memo?: string;
     }
   ) {
-    const tx = withTypeUrl.submitBundleProposal({
+    const tx = withTypeUrl.delegate({
+      ...value,
+      creator: this.account.address,
+    });
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+  public async withdrawRewards(
+    value: Omit<MsgWithdrawRewards, "creator">,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = withTypeUrl.withdrawRewards({
       ...value,
       creator: this.account.address,
     });
@@ -35,14 +52,14 @@ export default class {
     );
   }
 
-  public async voteBundleProposal(
-    value: Omit<MsgVoteBundleProposal, "creator">,
+  public async undelegate(
+    value: Omit<MsgUndelegate, "creator">,
     options?: {
       fee?: StdFee | "auto" | number;
       memo?: string;
     }
   ) {
-    const tx = withTypeUrl.voteBundleProposal({
+    const tx = withTypeUrl.undelegate({
       ...value,
       creator: this.account.address,
     });
@@ -52,14 +69,14 @@ export default class {
     );
   }
 
-  public async claimUploaderRole(
-    value: Omit<MsgClaimUploaderRole, "creator">,
+  public async redelegate(
+    value: Omit<MsgRedelegate, "creator">,
     options?: {
       fee?: StdFee | "auto" | number;
       memo?: string;
     }
   ) {
-    const tx = withTypeUrl.claimUploaderRole({
+    const tx = withTypeUrl.redelegate({
       ...value,
       creator: this.account.address,
     });

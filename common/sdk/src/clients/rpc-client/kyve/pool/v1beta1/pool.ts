@@ -1,8 +1,8 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
-import { withTypeUrl } from "../../../registry/tx.registry";
-import { signTx, TxPromise } from "../../../utils/helper";
+import { withTypeUrl } from "../../../../../registry/tx.registry";
+import { signTx, TxPromise } from "../../../../../utils/helper";
 import { kyve } from "@kyve/proto";
 
 import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;

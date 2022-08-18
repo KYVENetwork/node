@@ -1,8 +1,8 @@
-import { KyveRegistryLCDClient } from "./registry/v1beta1/query";
+import { KyveRegistryLCDClient } from "./query/v1beta1/query";
 class KyveLCDClient {
-  public registry: { v1beta1: KyveRegistryLCDClient };
+  public query: { v1beta1: KyveRegistryLCDClient };
   constructor(restEndpoint: string) {
-    this.registry = {
+    this.query = {
       v1beta1: new KyveRegistryLCDClient(restEndpoint),
     };
   }
