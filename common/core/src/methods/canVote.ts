@@ -16,7 +16,7 @@ export async function canVote(this: Node): Promise<boolean> {
   }
 
   try {
-    const { possible, reason } = await this.lcd.kyve.registry.v1beta1.canVote({
+    const { possible, reason } = await this.lcd.kyve.query.v1beta1.canVote({
       pool_id: this.poolId.toString(),
       staker: this.staker,
       voter: this.client.account.address,

@@ -4,7 +4,7 @@ import { callWithBackoffStrategy, sleep } from "../utils";
 export async function canValidate(this: Node): Promise<void> {
   const canValidate = await callWithBackoffStrategy(
     async () => {
-      return await this.lcd.kyve.registry.v1beta1.canValidate({
+      return await this.lcd.kyve.query.v1beta1.canValidate({
         pool_id: this.poolId.toString(),
         valaddress: this.client.account.address,
       });
@@ -45,7 +45,7 @@ export async function canValidate(this: Node): Promise<void> {
   while (true) {
     const canValidate = await callWithBackoffStrategy(
       async () => {
-        return await this.lcd.kyve.registry.v1beta1.canValidate({
+        return await this.lcd.kyve.query.v1beta1.canValidate({
           pool_id: this.poolId.toString(),
           valaddress: this.client.account.address,
         });

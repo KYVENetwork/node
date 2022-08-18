@@ -13,14 +13,15 @@ export async function canPropose(this: Node): Promise<boolean> {
 
   while (true) {
     try {
-      const { possible, reason } =
-        await this.lcd.kyve.registry.v1beta1.canPropose({
+      const { possible, reason } = await this.lcd.kyve.query.v1beta1.canPropose(
+        {
           pool_id: this.poolId.toString(),
           staker: this.staker,
           proposer: this.client.account.address,
           from_height:
             this.pool.bundle_proposal!.to_height || this.pool.current_height,
-        });
+        }
+      );
 
       if (possible) {
         this.logger.info(`Node is able to propose a new bundle\n`);

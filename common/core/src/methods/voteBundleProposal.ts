@@ -20,7 +20,7 @@ export async function voteBundleProposal(
 
     this.logger.debug(`Attempting to vote ${voteMessage} on bundle proposal`);
 
-    const tx = await this.client.kyve.v1beta1.bundles.voteBundleProposal({
+    const tx = await this.client.kyve.bundles.v1beta1.voteBundleProposal({
       staker: this.staker,
       pool_id: this.poolId.toString(),
       storage_id: storageId,
