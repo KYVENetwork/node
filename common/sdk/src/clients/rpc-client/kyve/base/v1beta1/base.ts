@@ -2,8 +2,8 @@ import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { BigNumber } from "bignumber.js";
-import { KYVE_DECIMALS } from "../../../constants";
-import { DENOM } from "../../../constants";
+import { KYVE_DECIMALS } from "../../../../../constants";
+import { DENOM } from "../../../../../constants";
 
 export default class KyveBaseMsg {
   private nativeClient: SigningStargateClient;

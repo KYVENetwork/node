@@ -2,24 +2,34 @@ import { AccountData, OfflineAminoSigner } from "@cosmjs/amino/build/signer";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { makeADR36AminoSignDoc } from "@keplr-wallet/cosmos";
 import { StdSignature } from "@cosmjs/amino";
-import KyveBaseMethods from "./kyve/base.v1beta1";
-import KyveBundlesMethods from "./kyve/bundles.v1beta1";
-import KyveDelegationMethods from "./kyve/delegation.v1beta1";
-import KyveGovMethods from "./kyve/gov.v1beta1";
-import KyvePoolMethods from "./kyve/pool.v1beta1";
-import KyveStakersMethods from "./kyve/stakers.v1beta1";
+import KyveBaseMethods from "./kyve/base/v1beta1/base";
+import KyveBundlesMethods from "./kyve/bundles/v1beta1/bundles";
+import KyveDelegationMethods from "./kyve/delegation/v1beta1/delegation";
+import KyveGovMethods from "./kyve/gov/v1beta1/gov";
+import KyvePoolMethods from "./kyve/pool/v1beta1/pool";
+import KyveStakersMethods from "./kyve/stakers /v1beta1/stakers";
 
 export default class KyveClient {
   public nativeClient: SigningStargateClient;
   public readonly account: AccountData;
   public kyve: {
-    v1beta1: {
-      base: KyveBaseMethods;
-      gov: KyveGovMethods;
-      bundles: KyveBundlesMethods;
-      delegation: KyveDelegationMethods;
-      pool: KyvePoolMethods;
-      stakers: KyveStakersMethods;
+    base: {
+      v1beta1: KyveBaseMethods;
+    };
+    gov: {
+      v1beta1: KyveGovMethods;
+    };
+    bundles: {
+      v1beta1: KyveBundlesMethods;
+    };
+    delegation: {
+      v1beta1: KyveDelegationMethods;
+    };
+    pool: {
+      v1beta1: KyvePoolMethods;
+    };
+    stakers: {
+      v1beta1: KyveStakersMethods;
     };
   };
   private aminoSigner: OfflineAminoSigner | null;
@@ -33,13 +43,23 @@ export default class KyveClient {
     this.nativeClient = client;
     this.aminoSigner = aminoSigner;
     this.kyve = {
-      v1beta1: {
-        base: new KyveBaseMethods(this.nativeClient, this.account),
-        bundles: new KyveBundlesMethods(this.nativeClient, this.account),
-        delegation: new KyveDelegationMethods(this.nativeClient, this.account),
-        gov: new KyveGovMethods(this.nativeClient, this.account),
-        pool: new KyvePoolMethods(this.nativeClient, this.account),
-        stakers: new KyveStakersMethods(this.nativeClient, this.account),
+      base: {
+        v1beta1: new KyveBaseMethods(this.nativeClient, this.account),
+      },
+      bundles: {
+        v1beta1: new KyveBundlesMethods(this.nativeClient, this.account),
+      },
+      delegation: {
+        v1beta1: new KyveDelegationMethods(this.nativeClient, this.account),
+      },
+      gov: {
+        v1beta1: new KyveGovMethods(this.nativeClient, this.account),
+      },
+      pool: {
+        v1beta1: new KyvePoolMethods(this.nativeClient, this.account),
+      },
+      stakers: {
+        v1beta1: new KyveStakersMethods(this.nativeClient, this.account),
       },
     };
   }

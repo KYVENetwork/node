@@ -1,9 +1,9 @@
 import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
-import { DENOM } from "../../../constants";
+import { DENOM } from "../../../../../constants";
 import { cosmos as cosmosProto } from "@kyve/proto";
-import { signTx, TxPromise } from "../../../utils/helper";
+import { signTx, TxPromise } from "../../../../../utils/helper";
 import { cosmos } from "@keplr-wallet/cosmos";
 
 import { kyve } from "@kyve/proto";
