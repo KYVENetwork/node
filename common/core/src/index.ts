@@ -1,9 +1,16 @@
-import { IRuntime, IStorageProvider, ICache, ICompression } from "./types";
+import {
+  IRuntime,
+  IStorageProvider,
+  ICache,
+  ICompression,
+  IBackend,
+} from "./types";
+import { FileBackend } from "./backend";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  setupName,
-  logNodeInfo,
+  canValidate,
+  generateName,
   syncPoolState,
   validateRuntime,
   validateVersion,
@@ -26,11 +33,17 @@ import {
   submitBundleProposal,
   proposeBundle,
 } from "./methods";
-import program from "./commander";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { kyve } from "@kyve/proto";
+import { Command, OptionValues } from "commander";
+import {
+  parseDesiredStake,
+  parseKeyfile,
+  parseNetwork,
+  parsePoolId,
+} from "./commander";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -39,45 +52,41 @@ import { kyve } from "@kyve/proto";
  * @constructor
  */
 export class Node {
-  /**
-   * My property description.  Like other pieces of your comment blocks,
-   * this can span multiple lines.
-   *
-   * @property runtime
-   * @type {IRuntime}
-   */
+  // register class attributes
   protected runtime!: IRuntime;
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
   protected cache!: ICache;
+  protected backend: IBackend = new FileBackend();
 
   // register sdk attributes
-  public sdk: KyveSDK;
+  public sdk!: KyveSDK;
   public client!: KyveClient;
-  public query: KyveLCDClientType;
+  public query!: KyveLCDClientType;
 
   // register attributes
-  public coreVersion: string;
+  public coreVersion!: string;
   public pool!: kyve.registry.v1beta1.kyveRegistry.Pool;
   public poolConfig!: any;
-  public name: string;
+  public name!: string;
 
   // logger attributes
-  public logger: Logger;
+  public logger!: Logger;
 
   // options
-  protected poolId: number;
-  protected mnemonic: string;
-  protected keyfile: string;
-  protected stake: string;
-  protected network: string;
-  protected verbose: boolean;
+  protected poolId!: number;
+  protected staker!: string;
+  protected account!: string;
+  protected keyfile!: string;
+  protected stake!: string;
+  protected network!: string;
+  protected verbose!: boolean;
 
   // register core methods
   protected asyncSetup = asyncSetup;
   protected setupLogger = setupLogger;
-  protected setupName = setupName;
-  protected logNodeInfo = logNodeInfo;
+  protected canValidate = canValidate;
+  protected generateName = generateName;
   protected syncPoolState = syncPoolState;
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
@@ -98,46 +107,6 @@ export class Node {
   protected proposeBundle = proposeBundle;
   protected runNode = runNode;
   protected runCache = runCache;
-
-  /**
-   * Defines node options for CLI and initializes those inputs
-   * Node name is generated here depending on inputs
-   *
-   * @method constructor
-   */
-  constructor() {
-    // define program
-    const options = program
-      .name("@kyve/core")
-      .description(`KYVE Protocol Node`)
-      .version(coreVersion)
-      .parse()
-      .opts();
-
-    // assign program options
-    this.poolId = options.poolId;
-    this.mnemonic = options.mnemonic;
-    this.keyfile = options.keyfile;
-    this.stake = options.initialStake; // TODO: change after IT
-    this.network = options.network;
-    this.verbose = options.verbose;
-
-    this.coreVersion = coreVersion;
-
-    this.name = this.setupName();
-    this.logger = this.setupLogger();
-
-    try {
-      // assign main attributes
-      this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
-      this.query = this.sdk.createLCDClient();
-    } catch (error) {
-      this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
-      this.logger.debug(error);
-
-      process.exit(1);
-    }
-  }
 
   /**
    * Set the runtime for the protocol node.
@@ -167,7 +136,7 @@ export class Node {
    * @chainable
    */
   public addStorageProvider(storageProvider: IStorageProvider): this {
-    this.storageProvider = storageProvider.init(this.keyfile);
+    this.storageProvider = storageProvider;
     return this;
   }
 
@@ -200,8 +169,107 @@ export class Node {
    * @chainable
    */
   public addCache(cache: ICache): this {
-    this.cache = cache.init(`./cache/${this.name}`);
+    this.cache = cache;
     return this;
+  }
+
+  /**
+   * Bootstrap method for protocol node. It initializes all commands including
+   * the main program which can be called with "start"
+   *
+   * @method bootstrap
+   * @return {void}
+   */
+  public bootstrap(): void {
+    // define main program
+    const program = new Command();
+
+    // define accounts
+    const keys = new Command("valaccounts").description(
+      "Manage valaccounts in encrypted file backend"
+    );
+
+    keys
+      .command("create")
+      .description("Create a new valaccount with a random mnemonic")
+      .argument("<account_name>", "Name of the valaccount")
+      .action(async (key) => {
+        // const mnemonic = await KyveSDK.generateMnemonic();
+        const mnemonic = "todo";
+        await this.backend.add(key, mnemonic);
+      });
+    keys
+      .command("add")
+      .description("Add an existing valaccount with the mnemonic")
+      .argument("<account_name>", "Name of the valaccount")
+      .argument("<account_secret>", "Mnemonic of the valaccount")
+      .action(async (key, mnemonic) => {
+        await this.backend.add(key, mnemonic);
+      });
+    keys
+      .command("reveal")
+      .description("Reveal the mnemonic of a valaccount")
+      .argument("<account_name>", "Name of the valaccount")
+      .action(async (key) => {
+        await this.backend.reveal(key);
+      });
+    keys
+      .command("list")
+      .description("List all valaccounts available")
+      .action(async () => {
+        await this.backend.list();
+      });
+    keys
+      .command("remove")
+      .description("Remove an existing valaccount")
+      .argument("<account_name>", "Name of the valaccount")
+      .action(async (key) => {
+        await this.backend.remove(key);
+      });
+
+    program.addCommand(keys);
+
+    // define start command
+    program
+      .command("start")
+      .description("Run the protocol node")
+      .requiredOption(
+        "-p, --pool <number>",
+        "The id of the pool the node should join",
+        parsePoolId
+      )
+      .requiredOption(
+        "-a, --account <string>",
+        "The account the node should run with"
+      )
+      .requiredOption(
+        "-k, --keyfile <string>",
+        "The path to your Arweave keyfile",
+        parseKeyfile
+      )
+      .option(
+        "-s, --stake <number>",
+        "Your desired stake the node should run with. [unit = $KYVE]",
+        parseDesiredStake,
+        "0"
+      )
+      .option(
+        "-n, --network <string>",
+        "The chain id of the network. [optional, default = korellia]",
+        parseNetwork,
+        "korellia"
+      )
+      .option(
+        "-v, --verbose",
+        "Run node in verbose mode. [optional, default = false]",
+        false
+      )
+      .action((options) => {
+        this.start(options);
+      });
+
+    // bootstrap program
+    program.parse();
   }
 
   /**
@@ -212,9 +280,33 @@ export class Node {
    * an incorrect runtime or version.
    *
    * @method start
+   * @param {OptionValues} options which contains all relevant node options
    * @return {Promise<void>}
    */
-  public async start(): Promise<void> {
+  private async start(options: OptionValues): Promise<void> {
+    // assign program options
+    this.poolId = options.pool;
+    this.account = options.account;
+    this.keyfile = options.keyfile;
+    this.stake = options.stake;
+    this.network = options.network;
+    this.verbose = options.verbose;
+
+    this.coreVersion = coreVersion;
+
+    this.logger = this.setupLogger();
+
+    try {
+      // assign main attributes
+      this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
+      this.query = this.sdk.createLCDClient();
+    } catch (error) {
+      this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
+      this.logger.debug(error);
+
+      process.exit(1);
+    }
+
     try {
       await this.asyncSetup();
 
@@ -229,8 +321,14 @@ export class Node {
   }
 }
 
+// export commander
+export * from "./commander";
+
 // export types
 export * from "./types";
+
+// export utils
+export * from "./utils";
 
 // export storage providers
 export * from "./storage";

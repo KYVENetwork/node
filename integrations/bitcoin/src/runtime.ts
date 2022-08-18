@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node } from "@kyve/core";
+import { DataItem, IRuntime, Node, sha256 } from "@kyve/core";
 import { name, version } from "../package.json";
 import { fetchBlock, fetchBlockHash } from "./utils";
 
@@ -11,8 +11,6 @@ export default class Bitcoin implements IRuntime {
     let block: any;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
-
-
 
     try {
       hash = await fetchBlockHash(
@@ -38,6 +36,21 @@ export default class Bitcoin implements IRuntime {
     }
 
     return { key, value: block };
+  }
+
+  async validate(
+    core: Node,
+    uploadedBundle: DataItem[],
+    validationBundle: DataItem[]
+  ) {
+    const uploadedBundleHash = sha256(uploadedBundle);
+    const validationBundleHash = sha256(validationBundle);
+
+    core.logger.debug(`Validating bundle proposal by hash`);
+    core.logger.debug(`Uploaded:     ${uploadedBundleHash}`);
+    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
+
+    return uploadedBundleHash === validationBundleHash;
   }
 
   public async getNextKey(key: string): Promise<string> {

@@ -7,8 +7,8 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 
-export function setupName(this: Node): string {
-  const r = new Prando(`${this.poolId}-${this.mnemonic}-${this.coreVersion}`);
+export function generateName(this: Node): string {
+  const r = new Prando(`${this.poolId}-${this.client.account.address}`);
 
   return uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],

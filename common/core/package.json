@@ -22,6 +22,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && yarn format && tsc",
+    "test": "jest",
     "format": "prettier --write .",
     "deploy": "yarn build && yarn npm publish"
   },
@@ -35,23 +36,30 @@
     "arweave": "^1.10.17",
     "axios": "^0.24.0",
     "base64url": "^3.0.1",
+    "bcryptjs": "^2.4.3",
     "bignumber.js": "^9.0.1",
     "commander": "^8.3.0",
     "fs-extra": "^10.0.1",
     "jsonfile": "^6.1.0",
     "prando": "^6.0.1",
     "prom-client": "^14.0.1",
+    "prompts": "^2.4.2",
     "protobufjs": "^6.11.2",
     "tslog": "^3.2.2",
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^28.1.7",
     "@types/node": "^16.10.3",
     "@types/object-hash": "^2.2.1",
+    "@types/prompts": "^2.0.14",
     "@types/semver": "^7.3.9",
+    "jest": "^28.1.3",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.8",
     "typescript": "^4.4.3"
   }
 }

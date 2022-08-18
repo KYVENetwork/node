@@ -1,8 +1,8 @@
 export * from "./asyncSetup";
 
 export * from "./setupLogger";
-export * from "./setupName";
-export * from "./logNodeInfo";
+export * from "./canValidate";
+export * from "./generateName";
 export * from "./syncPoolState";
 export * from "./validate";
 export * from "./stake";
