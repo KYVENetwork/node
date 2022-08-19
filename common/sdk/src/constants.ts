@@ -11,8 +11,8 @@ type Networks = Record<KYVE_NETWORK, Network>;
 
 export const KYVE_ENDPOINTS: Networks = {
   local: {
-    rpc: "http://localhost:26657",
-    rest: "http://localhost:1317",
+    rpc: "http://0.0.0.0:26657",
+    rest: "http://0.0.0.0:1317",
     chainId: "kyve-local",
     chainName: "KYVE - Local",
   },
