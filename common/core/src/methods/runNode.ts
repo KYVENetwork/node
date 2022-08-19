@@ -20,9 +20,7 @@ export async function runNode(this: Node): Promise<void> {
       await this.syncPoolState();
     }
 
-    if (
-      this.pool.bundle_proposal!.next_uploader === this.client.account.address
-    ) {
+    if (this.pool.bundle_proposal!.next_uploader === this.staker) {
       this.logger.info(
         `Starting bundle proposal round ${
           this.pool.data!.total_bundles

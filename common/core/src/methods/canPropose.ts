@@ -2,9 +2,7 @@ import { Node } from "..";
 import { sleep } from "../utils";
 
 export async function canPropose(this: Node): Promise<boolean> {
-  if (
-    this.pool.bundle_proposal!.next_uploader !== this.client.account.address
-  ) {
+  if (this.pool.bundle_proposal!.next_uploader !== this.staker) {
     this.logger.info(
       `Skipping upload. Reason: Node is not the next uploader\n`
     );
@@ -27,7 +25,7 @@ export async function canPropose(this: Node): Promise<boolean> {
       if (possible) {
         this.logger.info(`Node is able to propose a new bundle\n`);
         return true;
-      } else if (reason === "Upload interval not surpassed") {
+      } else if (reason === "upload interval not surpassed") {
         await sleep(1000);
         continue;
       } else {

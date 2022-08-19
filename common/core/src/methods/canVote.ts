@@ -8,7 +8,7 @@ export async function canVote(this: Node): Promise<boolean> {
     return false;
   }
 
-  if (this.pool.bundle_proposal!.uploader === this.client.account.address) {
+  if (this.pool.bundle_proposal!.uploader === this.staker) {
     this.logger.info(
       `Skipping vote. Reason: Node is uploader of this bundle\n`
     );

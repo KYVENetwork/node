@@ -119,7 +119,7 @@ describe("src/methods/canVote.ts", () => {
 
     core.pool = {
       bundle_proposal: {
-        uploader: "test_voter",
+        uploader: "test_staker",
       },
     } as any;
 

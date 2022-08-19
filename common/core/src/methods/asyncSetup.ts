@@ -22,12 +22,6 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
-  // init storage provider with wallet
-  this.storageProvider = this.storageProvider.init(this.keyfile);
-
-  // init cache with work dir
-  this.cache = this.cache.init(`./cache/${this.name}`);
-
   // retrieve mnemonic of account from file backend
   const mnemonic = await this.backend.get(this.account);
 
@@ -58,6 +52,12 @@ export async function asyncSetup(this: Node): Promise<void> {
 
   // check if valaccount already joined pool
   await this.canValidate();
+
+  // init storage provider with wallet
+  this.storageProvider = this.storageProvider.init(this.keyfile);
+
+  // init cache with work dir
+  this.cache = this.cache.init(`./cache/${this.name}`);
 
   // log basic node info on startup
   this.logger.info("Starting node ...\n");

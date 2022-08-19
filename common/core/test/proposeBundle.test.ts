@@ -4,7 +4,6 @@ import { TestRuntime } from "./mocks/integration";
 import { proposeBundle } from "../src/methods/proposeBundle";
 import { TestStorageProvider, saveBundleMock } from "./mocks/storageProvider";
 import { TestCompression, compressMock } from "./mocks/compression";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
 
 describe("src/methods/proposeBundle.ts", () => {
   let core: Node;

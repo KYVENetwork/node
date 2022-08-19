@@ -87,7 +87,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "another_test_uploader",
+        next_uploader: "another_test_staker",
         to_height: "200",
       },
     } as any;
@@ -125,7 +125,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "test_uploader",
+        next_uploader: "test_staker",
         to_height: "200",
       },
     } as any;
@@ -178,7 +178,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "test_uploader",
+        next_uploader: "test_staker",
         to_height: "200",
       },
     } as any;
@@ -230,7 +230,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "test_uploader",
+        next_uploader: "test_staker",
         to_height: "200",
       },
     } as any;
@@ -275,7 +275,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "test_uploader",
+        next_uploader: "test_staker",
         to_height: "200",
       },
     } as any;
@@ -318,7 +318,7 @@ describe("src/methods/canPropose.ts", () => {
         current_height: "100",
       },
       bundle_proposal: {
-        next_uploader: "test_uploader",
+        next_uploader: "test_staker",
         to_height: "",
       },
     } as any;

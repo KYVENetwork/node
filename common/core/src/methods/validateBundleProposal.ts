@@ -12,7 +12,7 @@ export async function validateBundleProposal(
   );
 
   let hasVotedAbstain = this.pool.bundle_proposal?.voters_abstain.includes(
-    this.client.account.address
+    this.staker
   );
 
   let uploadedBundle: DataItem[] = [];
