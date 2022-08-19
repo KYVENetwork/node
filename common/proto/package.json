@@ -10,7 +10,7 @@
   "author": "John Letey <john@kyve.network>, ruslan glaznyov <ruslan.glaznyov@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "sh proto-gen.sh && rimraf dist && tsc",
+    "build": "rimraf dist && tsc",
     "generate": "sh proto-gen.sh && yarn build"
   },
 

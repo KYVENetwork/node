@@ -4,12 +4,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.pool.v1beta1";
 
-/** CreatePoolProposal defines a SDK message for creating a pool. */
-export interface CreatePoolProposal {
+/** GovMsgCreatePool defines a SDK message for creating a pool. */
+export interface GovMsgCreatePool {
   /** title ... */
-  title: string;
-  /** description ... */
-  description: string;
+  creator: string;
   /** name ... */
   name: string;
   /** runtime ... */
@@ -34,10 +32,23 @@ export interface CreatePoolProposal {
   binaries: string;
 }
 
-function createBaseCreatePoolProposal(): CreatePoolProposal {
+export interface GovMsgCreatePoolResponse {}
+
+/** GovMsgUpdatePool is a gov Content type for updating a pool. */
+export interface GovMsgUpdatePool {
+  /** creator ... */
+  creator: string;
+  /** id ... */
+  id: string;
+  /** payload */
+  payload: string;
+}
+
+export interface GovMsgUpdatePoolResponse {}
+
+function createBaseGovMsgCreatePool(): GovMsgCreatePool {
   return {
-    title: "",
-    description: "",
+    creator: "",
     name: "",
     runtime: "",
     logo: "",
@@ -52,16 +63,13 @@ function createBaseCreatePoolProposal(): CreatePoolProposal {
   };
 }
 
-export const CreatePoolProposal = {
+export const GovMsgCreatePool = {
   encode(
-    message: CreatePoolProposal,
+    message: GovMsgCreatePool,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.title !== "") {
-      writer.uint32(10).string(message.title);
-    }
-    if (message.description !== "") {
-      writer.uint32(18).string(message.description);
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
     }
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
@@ -99,18 +107,15 @@ export const CreatePoolProposal = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CreatePoolProposal {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GovMsgCreatePool {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCreatePoolProposal();
+    const message = createBaseGovMsgCreatePool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string();
-          break;
-        case 2:
-          message.description = reader.string();
+          message.creator = reader.string();
           break;
         case 3:
           message.name = reader.string();
@@ -153,10 +158,9 @@ export const CreatePoolProposal = {
     return message;
   },
 
-  fromJSON(object: any): CreatePoolProposal {
+  fromJSON(object: any): GovMsgCreatePool {
     return {
-      title: isSet(object.title) ? String(object.title) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      creator: isSet(object.creator) ? String(object.creator) : "",
       name: isSet(object.name) ? String(object.name) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       logo: isSet(object.logo) ? String(object.logo) : "",
@@ -177,11 +181,9 @@ export const CreatePoolProposal = {
     };
   },
 
-  toJSON(message: CreatePoolProposal): unknown {
+  toJSON(message: GovMsgCreatePool): unknown {
     const obj: any = {};
-    message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined &&
-      (obj.description = message.description);
+    message.creator !== undefined && (obj.creator = message.creator);
     message.name !== undefined && (obj.name = message.name);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.logo !== undefined && (obj.logo = message.logo);
@@ -199,12 +201,11 @@ export const CreatePoolProposal = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CreatePoolProposal>, I>>(
+  fromPartial<I extends Exact<DeepPartial<GovMsgCreatePool>, I>>(
     object: I
-  ): CreatePoolProposal {
-    const message = createBaseCreatePoolProposal();
-    message.title = object.title ?? "";
-    message.description = object.description ?? "";
+  ): GovMsgCreatePool {
+    const message = createBaseGovMsgCreatePool();
+    message.creator = object.creator ?? "";
     message.name = object.name ?? "";
     message.runtime = object.runtime ?? "";
     message.logo = object.logo ?? "";
@@ -216,6 +217,172 @@ export const CreatePoolProposal = {
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
+    return message;
+  },
+};
+
+function createBaseGovMsgCreatePoolResponse(): GovMsgCreatePoolResponse {
+  return {};
+}
+
+export const GovMsgCreatePoolResponse = {
+  encode(
+    _: GovMsgCreatePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GovMsgCreatePoolResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGovMsgCreatePoolResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GovMsgCreatePoolResponse {
+    return {};
+  },
+
+  toJSON(_: GovMsgCreatePoolResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<GovMsgCreatePoolResponse>, I>>(
+    _: I
+  ): GovMsgCreatePoolResponse {
+    const message = createBaseGovMsgCreatePoolResponse();
+    return message;
+  },
+};
+
+function createBaseGovMsgUpdatePool(): GovMsgUpdatePool {
+  return { creator: "", id: "0", payload: "" };
+}
+
+export const GovMsgUpdatePool = {
+  encode(
+    message: GovMsgUpdatePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== "0") {
+      writer.uint32(16).uint64(message.id);
+    }
+    if (message.payload !== "") {
+      writer.uint32(26).string(message.payload);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GovMsgUpdatePool {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGovMsgUpdatePool();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = longToString(reader.uint64() as Long);
+          break;
+        case 3:
+          message.payload = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GovMsgUpdatePool {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      id: isSet(object.id) ? String(object.id) : "0",
+      payload: isSet(object.payload) ? String(object.payload) : "",
+    };
+  },
+
+  toJSON(message: GovMsgUpdatePool): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    message.payload !== undefined && (obj.payload = message.payload);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<GovMsgUpdatePool>, I>>(
+    object: I
+  ): GovMsgUpdatePool {
+    const message = createBaseGovMsgUpdatePool();
+    message.creator = object.creator ?? "";
+    message.id = object.id ?? "0";
+    message.payload = object.payload ?? "";
+    return message;
+  },
+};
+
+function createBaseGovMsgUpdatePoolResponse(): GovMsgUpdatePoolResponse {
+  return {};
+}
+
+export const GovMsgUpdatePoolResponse = {
+  encode(
+    _: GovMsgUpdatePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GovMsgUpdatePoolResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGovMsgUpdatePoolResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GovMsgUpdatePoolResponse {
+    return {};
+  },
+
+  toJSON(_: GovMsgUpdatePoolResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<GovMsgUpdatePoolResponse>, I>>(
+    _: I
+  ): GovMsgUpdatePoolResponse {
+    const message = createBaseGovMsgUpdatePoolResponse();
     return message;
   },
 };

@@ -58,8 +58,10 @@ export interface MsgJoinPool {
   creator: string;
   /** pool_id ... */
   pool_id: string;
-  /** valaddress */
+  /** valaddress ... */
   valaddress: string;
+  /** amount ... */
+  amount: string;
 }
 
 /** MsgJoinPoolResponse ... */
@@ -527,7 +529,7 @@ export const MsgUpdateCommissionResponse = {
 };
 
 function createBaseMsgJoinPool(): MsgJoinPool {
-  return { creator: "", pool_id: "0", valaddress: "" };
+  return { creator: "", pool_id: "0", valaddress: "", amount: "0" };
 }
 
 export const MsgJoinPool = {
@@ -543,6 +545,9 @@ export const MsgJoinPool = {
     }
     if (message.valaddress !== "") {
       writer.uint32(26).string(message.valaddress);
+    }
+    if (message.amount !== "0") {
+      writer.uint32(32).uint64(message.amount);
     }
     return writer;
   },
@@ -563,6 +568,9 @@ export const MsgJoinPool = {
         case 3:
           message.valaddress = reader.string();
           break;
+        case 4:
+          message.amount = longToString(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -576,6 +584,7 @@ export const MsgJoinPool = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       valaddress: isSet(object.valaddress) ? String(object.valaddress) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
 
@@ -584,6 +593,7 @@ export const MsgJoinPool = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.valaddress !== undefined && (obj.valaddress = message.valaddress);
+    message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
@@ -594,6 +604,7 @@ export const MsgJoinPool = {
     message.creator = object.creator ?? "";
     message.pool_id = object.pool_id ?? "0";
     message.valaddress = object.valaddress ?? "";
+    message.amount = object.amount ?? "0";
     return message;
   },
 };

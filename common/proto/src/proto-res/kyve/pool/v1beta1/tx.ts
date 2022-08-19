@@ -1,5 +1,11 @@
 /* eslint-disable */
 import Long from "long";
+import {
+  GovMsgCreatePoolResponse,
+  GovMsgUpdatePoolResponse,
+  GovMsgCreatePool,
+  GovMsgUpdatePool,
+} from "./gov";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.pool.v1beta1";
@@ -271,6 +277,10 @@ export interface Msg {
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse>;
   /** DefundPool ... */
   DefundPool(request: MsgDefundPool): Promise<MsgDefundPoolResponse>;
+  /** CreatePool ... */
+  CreatePool(request: GovMsgCreatePool): Promise<GovMsgCreatePoolResponse>;
+  /** UpdatePool ... */
+  UpdatePool(request: GovMsgUpdatePool): Promise<GovMsgUpdatePoolResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -279,6 +289,8 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.FundPool = this.FundPool.bind(this);
     this.DefundPool = this.DefundPool.bind(this);
+    this.CreatePool = this.CreatePool.bind(this);
+    this.UpdatePool = this.UpdatePool.bind(this);
   }
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse> {
     const data = MsgFundPool.encode(request).finish();
@@ -297,6 +309,30 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgDefundPoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  CreatePool(request: GovMsgCreatePool): Promise<GovMsgCreatePoolResponse> {
+    const data = GovMsgCreatePool.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "CreatePool",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgCreatePoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  UpdatePool(request: GovMsgUpdatePool): Promise<GovMsgUpdatePoolResponse> {
+    const data = GovMsgUpdatePool.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "UpdatePool",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgUpdatePoolResponse.decode(new _m0.Reader(data))
     );
   }
 }

@@ -61,6 +61,8 @@ export interface EventJoinPool {
   staker: string;
   /** valaddress ... */
   valaddress: string;
+  /** amount ... */
+  amount: string;
 }
 
 /** EventLeavePool ... */
@@ -429,7 +431,7 @@ export const EventUpdateCommission = {
 };
 
 function createBaseEventJoinPool(): EventJoinPool {
-  return { pool_id: "0", staker: "", valaddress: "" };
+  return { pool_id: "0", staker: "", valaddress: "", amount: "0" };
 }
 
 export const EventJoinPool = {
@@ -445,6 +447,9 @@ export const EventJoinPool = {
     }
     if (message.valaddress !== "") {
       writer.uint32(26).string(message.valaddress);
+    }
+    if (message.amount !== "0") {
+      writer.uint32(32).uint64(message.amount);
     }
     return writer;
   },
@@ -465,6 +470,9 @@ export const EventJoinPool = {
         case 3:
           message.valaddress = reader.string();
           break;
+        case 4:
+          message.amount = longToString(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -478,6 +486,7 @@ export const EventJoinPool = {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       valaddress: isSet(object.valaddress) ? String(object.valaddress) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
 
@@ -486,6 +495,7 @@ export const EventJoinPool = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.staker !== undefined && (obj.staker = message.staker);
     message.valaddress !== undefined && (obj.valaddress = message.valaddress);
+    message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
@@ -496,6 +506,7 @@ export const EventJoinPool = {
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
     message.valaddress = object.valaddress ?? "";
+    message.amount = object.amount ?? "0";
     return message;
   },
 };
