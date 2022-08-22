@@ -152,11 +152,11 @@ describe("src/methods/canPropose.ts", () => {
       .fn()
       .mockResolvedValueOnce({
         possible: false,
-        reason: "Upload interval not surpassed",
+        reason: "upload interval not surpassed",
       })
       .mockResolvedValueOnce({
         possible: false,
-        reason: "Upload interval not surpassed",
+        reason: "upload interval not surpassed",
       })
       .mockResolvedValue({
         possible: true,
