@@ -196,7 +196,7 @@ export const withTypeUrl = {
   },
   updateCommission(value: MsgUpdateCommission) {
     return {
-      typeUrl: "/kyve.stakers.v1beta1.MsgUpdateMetadata",
+      typeUrl: "/kyve.stakers.v1beta1.MsgUpdateCommission",
       value,
     };
   },

@@ -25,7 +25,7 @@ export async function canPropose(this: Node): Promise<boolean> {
       if (possible) {
         this.logger.info(`Node is able to propose a new bundle\n`);
         return true;
-      } else if (reason === "upload interval not surpassed") {
+      } else if (reason.endsWith("upload interval not surpassed")) {
         await sleep(1000);
         continue;
       } else {
