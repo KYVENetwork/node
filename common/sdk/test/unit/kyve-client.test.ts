@@ -26,13 +26,13 @@ import MsgLeavePool = kyve.registry.v1beta1.kyveStakers.MsgLeavePool;
 import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
 import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
 
-import CreatePoolProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
-import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
-import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.ResetPoolProposal;
-import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
-import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
-import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
+import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.GovMsgCreatePool;
+import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.GovMsgCancelPoolUpgrade;
+import PausePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgPausePool;
+import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgResetPool;
+import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.GovMsgPoolUpgrade;
+import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgUnpausePool;
+import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgUpdatePool;
 
 import Mock = jest.Mock;
 import { DENOM, KYVE_DECIMALS } from "../../src/constants";
@@ -327,10 +327,11 @@ const GovMethods = [
     method: "schedulePoolUpgradeProposal",
     decoder: SchedulePoolUpgradeProposal,
   },
-  {
-    method: "cancelPoolUpgradeProposal",
-    decoder: CancelPoolUpgradeProposal,
-  },
+
+  // {
+  //   method: "cancelPoolUpgradeProposal",
+  //   decoder: CancelPoolUpgradeProposal,
+  // },
   {
     method: "resetPoolProposal",
     decoder: ResetPoolProposal,
