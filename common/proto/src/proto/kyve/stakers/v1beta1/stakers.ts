@@ -83,7 +83,7 @@ export interface Valaccount {
   /** points ... */
   points: string;
   /** isLeaving ... */
-  isLeaving: boolean;
+  is_leaving: boolean;
 }
 
 /** CommissionChangeEntry ... */
@@ -110,14 +110,14 @@ export interface UnbondingStakeEntry {
   creation_date: string;
 }
 
-/** LeavePool ... */
+/** LeavePoolEntry ... */
 export interface LeavePoolEntry {
   /** index ... */
   index: string;
   /** staker ... */
   staker: string;
-  /** poolId ... */
-  poolId: string;
+  /** pool_id ... */
+  pool_id: string;
   /** creation_date ... */
   creation_date: string;
 }
@@ -253,7 +253,7 @@ function createBaseValaccount(): Valaccount {
     staker: "",
     valaddress: "",
     points: "0",
-    isLeaving: false,
+    is_leaving: false,
   };
 }
 
@@ -274,8 +274,8 @@ export const Valaccount = {
     if (message.points !== "0") {
       writer.uint32(32).uint64(message.points);
     }
-    if (message.isLeaving === true) {
-      writer.uint32(40).bool(message.isLeaving);
+    if (message.is_leaving === true) {
+      writer.uint32(40).bool(message.is_leaving);
     }
     return writer;
   },
@@ -300,7 +300,7 @@ export const Valaccount = {
           message.points = longToString(reader.uint64() as Long);
           break;
         case 5:
-          message.isLeaving = reader.bool();
+          message.is_leaving = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -316,7 +316,7 @@ export const Valaccount = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       valaddress: isSet(object.valaddress) ? String(object.valaddress) : "",
       points: isSet(object.points) ? String(object.points) : "0",
-      isLeaving: isSet(object.isLeaving) ? Boolean(object.isLeaving) : false,
+      is_leaving: isSet(object.is_leaving) ? Boolean(object.is_leaving) : false,
     };
   },
 
@@ -326,7 +326,7 @@ export const Valaccount = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.valaddress !== undefined && (obj.valaddress = message.valaddress);
     message.points !== undefined && (obj.points = message.points);
-    message.isLeaving !== undefined && (obj.isLeaving = message.isLeaving);
+    message.is_leaving !== undefined && (obj.is_leaving = message.is_leaving);
     return obj;
   },
 
@@ -338,7 +338,7 @@ export const Valaccount = {
     message.staker = object.staker ?? "";
     message.valaddress = object.valaddress ?? "";
     message.points = object.points ?? "0";
-    message.isLeaving = object.isLeaving ?? false;
+    message.is_leaving = object.is_leaving ?? false;
     return message;
   },
 };
@@ -515,7 +515,7 @@ export const UnbondingStakeEntry = {
 };
 
 function createBaseLeavePoolEntry(): LeavePoolEntry {
-  return { index: "0", staker: "", poolId: "0", creation_date: "0" };
+  return { index: "0", staker: "", pool_id: "0", creation_date: "0" };
 }
 
 export const LeavePoolEntry = {
@@ -529,8 +529,8 @@ export const LeavePoolEntry = {
     if (message.staker !== "") {
       writer.uint32(18).string(message.staker);
     }
-    if (message.poolId !== "0") {
-      writer.uint32(24).uint64(message.poolId);
+    if (message.pool_id !== "0") {
+      writer.uint32(24).uint64(message.pool_id);
     }
     if (message.creation_date !== "0") {
       writer.uint32(32).int64(message.creation_date);
@@ -552,7 +552,7 @@ export const LeavePoolEntry = {
           message.staker = reader.string();
           break;
         case 3:
-          message.poolId = longToString(reader.uint64() as Long);
+          message.pool_id = longToString(reader.uint64() as Long);
           break;
         case 4:
           message.creation_date = longToString(reader.int64() as Long);
@@ -569,7 +569,7 @@ export const LeavePoolEntry = {
     return {
       index: isSet(object.index) ? String(object.index) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
-      poolId: isSet(object.poolId) ? String(object.poolId) : "0",
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       creation_date: isSet(object.creation_date)
         ? String(object.creation_date)
         : "0",
@@ -580,7 +580,7 @@ export const LeavePoolEntry = {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
     message.staker !== undefined && (obj.staker = message.staker);
-    message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.creation_date !== undefined &&
       (obj.creation_date = message.creation_date);
     return obj;
@@ -592,7 +592,7 @@ export const LeavePoolEntry = {
     const message = createBaseLeavePoolEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
-    message.poolId = object.poolId ?? "0";
+    message.pool_id = object.pool_id ?? "0";
     message.creation_date = object.creation_date ?? "0";
     return message;
   },

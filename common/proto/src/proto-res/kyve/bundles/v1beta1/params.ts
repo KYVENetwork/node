@@ -12,10 +12,17 @@ export interface Params {
   storage_cost: string;
   /** network_fee ... */
   network_fee: string;
+  /** max_points ... */
+  max_points: string;
 }
 
 function createBaseParams(): Params {
-  return { upload_timeout: "0", storage_cost: "0", network_fee: "" };
+  return {
+    upload_timeout: "0",
+    storage_cost: "0",
+    network_fee: "",
+    max_points: "0",
+  };
 }
 
 export const Params = {
@@ -31,6 +38,9 @@ export const Params = {
     }
     if (message.network_fee !== "") {
       writer.uint32(26).string(message.network_fee);
+    }
+    if (message.max_points !== "0") {
+      writer.uint32(32).uint64(message.max_points);
     }
     return writer;
   },
@@ -51,6 +61,9 @@ export const Params = {
         case 3:
           message.network_fee = reader.string();
           break;
+        case 4:
+          message.max_points = longToString(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -68,6 +81,7 @@ export const Params = {
         ? String(object.storage_cost)
         : "0",
       network_fee: isSet(object.network_fee) ? String(object.network_fee) : "",
+      max_points: isSet(object.max_points) ? String(object.max_points) : "0",
     };
   },
 
@@ -79,6 +93,7 @@ export const Params = {
       (obj.storage_cost = message.storage_cost);
     message.network_fee !== undefined &&
       (obj.network_fee = message.network_fee);
+    message.max_points !== undefined && (obj.max_points = message.max_points);
     return obj;
   },
 
@@ -87,6 +102,7 @@ export const Params = {
     message.upload_timeout = object.upload_timeout ?? "0";
     message.storage_cost = object.storage_cost ?? "0";
     message.network_fee = object.network_fee ?? "";
+    message.max_points = object.max_points ?? "0";
     return message;
   },
 };

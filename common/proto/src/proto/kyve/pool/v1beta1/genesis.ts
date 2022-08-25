@@ -8,6 +8,7 @@ export const protobufPackage = "kyve.pool.v1beta1";
 
 /** GenesisState defines the pool module's genesis state. */
 export interface GenesisState {
+  /** params ... */
   params?: Params;
   /** pool_list ... */
   pool_list: Pool[];

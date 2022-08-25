@@ -22,6 +22,7 @@ export interface EventBundleVote {
   vote: VoteType;
 }
 
+/** EventBundleProposed ... */
 export interface EventBundleProposed {
   /** pool_id ... */
   pool_id: string;
@@ -66,13 +67,13 @@ export interface EventBundleFinalized {
   /** status ... */
   status: BundleStatus;
   /** rewardTreasury ... */
-  rewardTreasury: string;
+  reward_treasury: string;
   /** rewardUploader ... */
-  rewardUploader: string;
+  reward_uploader: string;
   /** rewardDelegation ... */
-  rewardDelegation: string;
+  reward_delegation: string;
   /** rewardTotal ... */
-  rewardTotal: string;
+  reward_total: string;
 }
 
 function createBaseEventBundleVote(): EventBundleVote {
@@ -333,10 +334,10 @@ function createBaseEventBundleFinalized(): EventBundleFinalized {
     abstain: "0",
     total: "0",
     status: 0,
-    rewardTreasury: "0",
-    rewardUploader: "0",
-    rewardDelegation: "0",
-    rewardTotal: "0",
+    reward_treasury: "0",
+    reward_uploader: "0",
+    reward_delegation: "0",
+    reward_total: "0",
   };
 }
 
@@ -366,17 +367,17 @@ export const EventBundleFinalized = {
     if (message.status !== 0) {
       writer.uint32(56).int32(message.status);
     }
-    if (message.rewardTreasury !== "0") {
-      writer.uint32(64).uint64(message.rewardTreasury);
+    if (message.reward_treasury !== "0") {
+      writer.uint32(64).uint64(message.reward_treasury);
     }
-    if (message.rewardUploader !== "0") {
-      writer.uint32(72).uint64(message.rewardUploader);
+    if (message.reward_uploader !== "0") {
+      writer.uint32(72).uint64(message.reward_uploader);
     }
-    if (message.rewardDelegation !== "0") {
-      writer.uint32(80).uint64(message.rewardDelegation);
+    if (message.reward_delegation !== "0") {
+      writer.uint32(80).uint64(message.reward_delegation);
     }
-    if (message.rewardTotal !== "0") {
-      writer.uint32(88).uint64(message.rewardTotal);
+    if (message.reward_total !== "0") {
+      writer.uint32(88).uint64(message.reward_total);
     }
     return writer;
   },
@@ -413,16 +414,16 @@ export const EventBundleFinalized = {
           message.status = reader.int32() as any;
           break;
         case 8:
-          message.rewardTreasury = longToString(reader.uint64() as Long);
+          message.reward_treasury = longToString(reader.uint64() as Long);
           break;
         case 9:
-          message.rewardUploader = longToString(reader.uint64() as Long);
+          message.reward_uploader = longToString(reader.uint64() as Long);
           break;
         case 10:
-          message.rewardDelegation = longToString(reader.uint64() as Long);
+          message.reward_delegation = longToString(reader.uint64() as Long);
           break;
         case 11:
-          message.rewardTotal = longToString(reader.uint64() as Long);
+          message.reward_total = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -441,16 +442,18 @@ export const EventBundleFinalized = {
       abstain: isSet(object.abstain) ? String(object.abstain) : "0",
       total: isSet(object.total) ? String(object.total) : "0",
       status: isSet(object.status) ? bundleStatusFromJSON(object.status) : 0,
-      rewardTreasury: isSet(object.rewardTreasury)
-        ? String(object.rewardTreasury)
+      reward_treasury: isSet(object.reward_treasury)
+        ? String(object.reward_treasury)
         : "0",
-      rewardUploader: isSet(object.rewardUploader)
-        ? String(object.rewardUploader)
+      reward_uploader: isSet(object.reward_uploader)
+        ? String(object.reward_uploader)
         : "0",
-      rewardDelegation: isSet(object.rewardDelegation)
-        ? String(object.rewardDelegation)
+      reward_delegation: isSet(object.reward_delegation)
+        ? String(object.reward_delegation)
         : "0",
-      rewardTotal: isSet(object.rewardTotal) ? String(object.rewardTotal) : "0",
+      reward_total: isSet(object.reward_total)
+        ? String(object.reward_total)
+        : "0",
     };
   },
 
@@ -464,14 +467,14 @@ export const EventBundleFinalized = {
     message.total !== undefined && (obj.total = message.total);
     message.status !== undefined &&
       (obj.status = bundleStatusToJSON(message.status));
-    message.rewardTreasury !== undefined &&
-      (obj.rewardTreasury = message.rewardTreasury);
-    message.rewardUploader !== undefined &&
-      (obj.rewardUploader = message.rewardUploader);
-    message.rewardDelegation !== undefined &&
-      (obj.rewardDelegation = message.rewardDelegation);
-    message.rewardTotal !== undefined &&
-      (obj.rewardTotal = message.rewardTotal);
+    message.reward_treasury !== undefined &&
+      (obj.reward_treasury = message.reward_treasury);
+    message.reward_uploader !== undefined &&
+      (obj.reward_uploader = message.reward_uploader);
+    message.reward_delegation !== undefined &&
+      (obj.reward_delegation = message.reward_delegation);
+    message.reward_total !== undefined &&
+      (obj.reward_total = message.reward_total);
     return obj;
   },
 
@@ -486,10 +489,10 @@ export const EventBundleFinalized = {
     message.abstain = object.abstain ?? "0";
     message.total = object.total ?? "0";
     message.status = object.status ?? 0;
-    message.rewardTreasury = object.rewardTreasury ?? "0";
-    message.rewardUploader = object.rewardUploader ?? "0";
-    message.rewardDelegation = object.rewardDelegation ?? "0";
-    message.rewardTotal = object.rewardTotal ?? "0";
+    message.reward_treasury = object.reward_treasury ?? "0";
+    message.reward_uploader = object.reward_uploader ?? "0";
+    message.reward_delegation = object.reward_delegation ?? "0";
+    message.reward_total = object.reward_total ?? "0";
     return message;
   },
 };

@@ -3,11 +3,11 @@ import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { DelegationForStakerResponse } from "./delegation";
+import { FullStaker, BasicPool } from "./query";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "KYVENetwork.chain.query";
+export const protobufPackage = "kyve.query.v1beta1";
 
 /** QueryAccountAssetsRequest is the request type for the Query/AccountAssets RPC method. */
 export interface QueryAccountAssetsRequest {
@@ -45,6 +45,8 @@ export interface QueryAccountStakingUnbondingsRequest {
 export interface QueryAccountStakingUnbondingsResponse {
   /** balance ... */
   unbondings: StakingUnbonding[];
+  /** staker */
+  staker?: FullStaker;
   /** pagination defines the pagination in the response. */
   pagination?: PageResponse;
 }
@@ -55,8 +57,6 @@ export interface StakingUnbonding {
   amount: string;
   /** creation_time */
   creation_time: string;
-  /** pool ... TODO find suitable pool object for these kind of queries */
-  pool: string;
 }
 
 /** QueryAccountFundedListRequest ... */
@@ -81,16 +81,12 @@ export interface DelegationUnbonding {
   amount: string;
   /** creation_time */
   creation_time: string;
-  /** creation_time */
-  staker?: DelegationForStakerResponse;
-  /** pool ... TODO find suitable pool object for these kind of queries */
-  pool: string;
+  /** staker */
+  staker?: FullStaker;
 }
 
 /** QueryAccountFundedListRequest is the request type for the account queries with pagination */
 export interface QueryAccountFundedListRequest {
-  /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
   /** address ... */
   address: string;
 }
@@ -99,18 +95,14 @@ export interface QueryAccountFundedListRequest {
 export interface QueryAccountFundedListResponse {
   /** funded ... */
   funded: Funded[];
-  /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
 }
 
 /** Funded ... */
 export interface Funded {
-  /** account ... // TODO remove account ? */
-  account: string;
   /** amount ... */
   amount: string;
-  /** pool ... TODO find suitable pool object for these kind of queries */
-  pool: string;
+  /** pool ... */
+  pool?: BasicPool;
 }
 
 /** QueryAccountDelegationListRequest ... */
@@ -401,7 +393,7 @@ export const QueryAccountStakingUnbondingsRequest = {
 };
 
 function createBaseQueryAccountStakingUnbondingsResponse(): QueryAccountStakingUnbondingsResponse {
-  return { unbondings: [], pagination: undefined };
+  return { unbondings: [], staker: undefined, pagination: undefined };
 }
 
 export const QueryAccountStakingUnbondingsResponse = {
@@ -411,6 +403,9 @@ export const QueryAccountStakingUnbondingsResponse = {
   ): _m0.Writer {
     for (const v of message.unbondings) {
       StakingUnbonding.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.staker !== undefined) {
+      FullStaker.encode(message.staker, writer.uint32(26).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(
@@ -436,6 +431,9 @@ export const QueryAccountStakingUnbondingsResponse = {
             StakingUnbonding.decode(reader, reader.uint32())
           );
           break;
+        case 3:
+          message.staker = FullStaker.decode(reader, reader.uint32());
+          break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
           break;
@@ -452,6 +450,9 @@ export const QueryAccountStakingUnbondingsResponse = {
       unbondings: Array.isArray(object?.unbondings)
         ? object.unbondings.map((e: any) => StakingUnbonding.fromJSON(e))
         : [],
+      staker: isSet(object.staker)
+        ? FullStaker.fromJSON(object.staker)
+        : undefined,
       pagination: isSet(object.pagination)
         ? PageResponse.fromJSON(object.pagination)
         : undefined,
@@ -467,6 +468,10 @@ export const QueryAccountStakingUnbondingsResponse = {
     } else {
       obj.unbondings = [];
     }
+    message.staker !== undefined &&
+      (obj.staker = message.staker
+        ? FullStaker.toJSON(message.staker)
+        : undefined);
     message.pagination !== undefined &&
       (obj.pagination = message.pagination
         ? PageResponse.toJSON(message.pagination)
@@ -480,6 +485,10 @@ export const QueryAccountStakingUnbondingsResponse = {
     const message = createBaseQueryAccountStakingUnbondingsResponse();
     message.unbondings =
       object.unbondings?.map((e) => StakingUnbonding.fromPartial(e)) || [];
+    message.staker =
+      object.staker !== undefined && object.staker !== null
+        ? FullStaker.fromPartial(object.staker)
+        : undefined;
     message.pagination =
       object.pagination !== undefined && object.pagination !== null
         ? PageResponse.fromPartial(object.pagination)
@@ -489,7 +498,7 @@ export const QueryAccountStakingUnbondingsResponse = {
 };
 
 function createBaseStakingUnbonding(): StakingUnbonding {
-  return { amount: "0", creation_time: "0", pool: "" };
+  return { amount: "0", creation_time: "0" };
 }
 
 export const StakingUnbonding = {
@@ -501,10 +510,7 @@ export const StakingUnbonding = {
       writer.uint32(8).uint64(message.amount);
     }
     if (message.creation_time !== "0") {
-      writer.uint32(16).uint64(message.creation_time);
-    }
-    if (message.pool !== "") {
-      writer.uint32(26).string(message.pool);
+      writer.uint32(16).int64(message.creation_time);
     }
     return writer;
   },
@@ -520,10 +526,7 @@ export const StakingUnbonding = {
           message.amount = longToString(reader.uint64() as Long);
           break;
         case 2:
-          message.creation_time = longToString(reader.uint64() as Long);
-          break;
-        case 3:
-          message.pool = reader.string();
+          message.creation_time = longToString(reader.int64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -539,7 +542,6 @@ export const StakingUnbonding = {
       creation_time: isSet(object.creation_time)
         ? String(object.creation_time)
         : "0",
-      pool: isSet(object.pool) ? String(object.pool) : "",
     };
   },
 
@@ -548,7 +550,6 @@ export const StakingUnbonding = {
     message.amount !== undefined && (obj.amount = message.amount);
     message.creation_time !== undefined &&
       (obj.creation_time = message.creation_time);
-    message.pool !== undefined && (obj.pool = message.pool);
     return obj;
   },
 
@@ -558,7 +559,6 @@ export const StakingUnbonding = {
     const message = createBaseStakingUnbonding();
     message.amount = object.amount ?? "0";
     message.creation_time = object.creation_time ?? "0";
-    message.pool = object.pool ?? "";
     return message;
   },
 };
@@ -726,7 +726,7 @@ export const QueryAccountDelegationUnbondingsResponse = {
 };
 
 function createBaseDelegationUnbonding(): DelegationUnbonding {
-  return { amount: "0", creation_time: "0", staker: undefined, pool: "" };
+  return { amount: "0", creation_time: "0", staker: undefined };
 }
 
 export const DelegationUnbonding = {
@@ -741,13 +741,7 @@ export const DelegationUnbonding = {
       writer.uint32(16).uint64(message.creation_time);
     }
     if (message.staker !== undefined) {
-      DelegationForStakerResponse.encode(
-        message.staker,
-        writer.uint32(26).fork()
-      ).ldelim();
-    }
-    if (message.pool !== "") {
-      writer.uint32(34).string(message.pool);
+      FullStaker.encode(message.staker, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -766,13 +760,7 @@ export const DelegationUnbonding = {
           message.creation_time = longToString(reader.uint64() as Long);
           break;
         case 3:
-          message.staker = DelegationForStakerResponse.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-        case 4:
-          message.pool = reader.string();
+          message.staker = FullStaker.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -789,9 +777,8 @@ export const DelegationUnbonding = {
         ? String(object.creation_time)
         : "0",
       staker: isSet(object.staker)
-        ? DelegationForStakerResponse.fromJSON(object.staker)
+        ? FullStaker.fromJSON(object.staker)
         : undefined,
-      pool: isSet(object.pool) ? String(object.pool) : "",
     };
   },
 
@@ -802,9 +789,8 @@ export const DelegationUnbonding = {
       (obj.creation_time = message.creation_time);
     message.staker !== undefined &&
       (obj.staker = message.staker
-        ? DelegationForStakerResponse.toJSON(message.staker)
+        ? FullStaker.toJSON(message.staker)
         : undefined);
-    message.pool !== undefined && (obj.pool = message.pool);
     return obj;
   },
 
@@ -816,15 +802,14 @@ export const DelegationUnbonding = {
     message.creation_time = object.creation_time ?? "0";
     message.staker =
       object.staker !== undefined && object.staker !== null
-        ? DelegationForStakerResponse.fromPartial(object.staker)
+        ? FullStaker.fromPartial(object.staker)
         : undefined;
-    message.pool = object.pool ?? "";
     return message;
   },
 };
 
 function createBaseQueryAccountFundedListRequest(): QueryAccountFundedListRequest {
-  return { pagination: undefined, address: "" };
+  return { address: "" };
 }
 
 export const QueryAccountFundedListRequest = {
@@ -832,11 +817,8 @@ export const QueryAccountFundedListRequest = {
     message: QueryAccountFundedListRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
-    }
     if (message.address !== "") {
-      writer.uint32(18).string(message.address);
+      writer.uint32(10).string(message.address);
     }
     return writer;
   },
@@ -852,9 +834,6 @@ export const QueryAccountFundedListRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        case 2:
           message.address = reader.string();
           break;
         default:
@@ -867,19 +846,12 @@ export const QueryAccountFundedListRequest = {
 
   fromJSON(object: any): QueryAccountFundedListRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
       address: isSet(object.address) ? String(object.address) : "",
     };
   },
 
   toJSON(message: QueryAccountFundedListRequest): unknown {
     const obj: any = {};
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
@@ -888,17 +860,13 @@ export const QueryAccountFundedListRequest = {
     object: I
   ): QueryAccountFundedListRequest {
     const message = createBaseQueryAccountFundedListRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
     message.address = object.address ?? "";
     return message;
   },
 };
 
 function createBaseQueryAccountFundedListResponse(): QueryAccountFundedListResponse {
-  return { funded: [], pagination: undefined };
+  return { funded: [] };
 }
 
 export const QueryAccountFundedListResponse = {
@@ -908,12 +876,6 @@ export const QueryAccountFundedListResponse = {
   ): _m0.Writer {
     for (const v of message.funded) {
       Funded.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
     }
     return writer;
   },
@@ -931,9 +893,6 @@ export const QueryAccountFundedListResponse = {
         case 1:
           message.funded.push(Funded.decode(reader, reader.uint32()));
           break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -947,9 +906,6 @@ export const QueryAccountFundedListResponse = {
       funded: Array.isArray(object?.funded)
         ? object.funded.map((e: any) => Funded.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
     };
   },
 
@@ -962,10 +918,6 @@ export const QueryAccountFundedListResponse = {
     } else {
       obj.funded = [];
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
     return obj;
   },
 
@@ -974,16 +926,12 @@ export const QueryAccountFundedListResponse = {
   ): QueryAccountFundedListResponse {
     const message = createBaseQueryAccountFundedListResponse();
     message.funded = object.funded?.map((e) => Funded.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
     return message;
   },
 };
 
 function createBaseFunded(): Funded {
-  return { account: "", amount: "0", pool: "" };
+  return { amount: "0", pool: undefined };
 }
 
 export const Funded = {
@@ -991,14 +939,11 @@ export const Funded = {
     message: Funded,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.account !== "") {
-      writer.uint32(10).string(message.account);
-    }
     if (message.amount !== "0") {
-      writer.uint32(16).uint64(message.amount);
+      writer.uint32(8).uint64(message.amount);
     }
-    if (message.pool !== "") {
-      writer.uint32(34).string(message.pool);
+    if (message.pool !== undefined) {
+      BasicPool.encode(message.pool, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1011,13 +956,10 @@ export const Funded = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.account = reader.string();
-          break;
-        case 2:
           message.amount = longToString(reader.uint64() as Long);
           break;
-        case 4:
-          message.pool = reader.string();
+        case 2:
+          message.pool = BasicPool.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1029,25 +971,26 @@ export const Funded = {
 
   fromJSON(object: any): Funded {
     return {
-      account: isSet(object.account) ? String(object.account) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      pool: isSet(object.pool) ? String(object.pool) : "",
+      pool: isSet(object.pool) ? BasicPool.fromJSON(object.pool) : undefined,
     };
   },
 
   toJSON(message: Funded): unknown {
     const obj: any = {};
-    message.account !== undefined && (obj.account = message.account);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.pool !== undefined && (obj.pool = message.pool);
+    message.pool !== undefined &&
+      (obj.pool = message.pool ? BasicPool.toJSON(message.pool) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Funded>, I>>(object: I): Funded {
     const message = createBaseFunded();
-    message.account = object.account ?? "";
     message.amount = object.amount ?? "0";
-    message.pool = object.pool ?? "";
+    message.pool =
+      object.pool !== undefined && object.pool !== null
+        ? BasicPool.fromPartial(object.pool)
+        : undefined;
     return message;
   },
 };
@@ -1229,7 +1172,7 @@ export class QueryAccountClientImpl implements QueryAccount {
   ): Promise<QueryAccountAssetsResponse> {
     const data = QueryAccountAssetsRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryAccount",
+      "kyve.query.v1beta1.QueryAccount",
       "AccountAssets",
       data
     );
@@ -1243,7 +1186,7 @@ export class QueryAccountClientImpl implements QueryAccount {
   ): Promise<QueryAccountStakingUnbondingsResponse> {
     const data = QueryAccountStakingUnbondingsRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryAccount",
+      "kyve.query.v1beta1.QueryAccount",
       "AccountStakingUnbondings",
       data
     );
@@ -1258,7 +1201,7 @@ export class QueryAccountClientImpl implements QueryAccount {
     const data =
       QueryAccountDelegationUnbondingsRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryAccount",
+      "kyve.query.v1beta1.QueryAccount",
       "AccountDelegationUnbondings",
       data
     );
@@ -1272,7 +1215,7 @@ export class QueryAccountClientImpl implements QueryAccount {
   ): Promise<QueryAccountFundedListResponse> {
     const data = QueryAccountFundedListRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryAccount",
+      "kyve.query.v1beta1.QueryAccount",
       "AccountFundedList",
       data
     );
@@ -1286,7 +1229,7 @@ export class QueryAccountClientImpl implements QueryAccount {
   ): Promise<QueryAccountRedelegationResponse> {
     const data = QueryAccountRedelegationRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryAccount",
+      "kyve.query.v1beta1.QueryAccount",
       "AccountRedelegation",
       data
     );

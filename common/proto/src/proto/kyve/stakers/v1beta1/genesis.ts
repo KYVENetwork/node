@@ -6,6 +6,7 @@ import {
   CommissionChangeEntry,
   UnbondingStakeEntry,
   LeavePoolEntry,
+  Valaccount,
 } from "./stakers";
 import _m0 from "protobufjs/minimal";
 
@@ -13,14 +14,24 @@ export const protobufPackage = "kyve.stakers.v1beta1";
 
 /** GenesisState defines the stakers module's genesis state. */
 export interface GenesisState {
+  /** params ... */
   params?: Params;
+  /** staker_list ... */
   staker_list: Staker[];
+  /** commission_change_entries ... */
   commission_change_entries: CommissionChangeEntry[];
+  /** unbonding_stake_entries ... */
   unbonding_stake_entries: UnbondingStakeEntry[];
+  /** leave_pool_entries ... */
   leave_pool_entries: LeavePoolEntry[];
+  /** queue_state_unstaking ... */
   queue_state_unstaking?: QueueState;
+  /** queue_state_commission ... */
   queue_state_commission?: QueueState;
+  /** queue_state_leave ... */
   queue_state_leave?: QueueState;
+  /** valaccount_list ... */
+  valaccount_list: Valaccount[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -33,6 +44,7 @@ function createBaseGenesisState(): GenesisState {
     queue_state_unstaking: undefined,
     queue_state_commission: undefined,
     queue_state_leave: undefined,
+    valaccount_list: [],
   };
 }
 
@@ -73,6 +85,9 @@ export const GenesisState = {
         message.queue_state_leave,
         writer.uint32(66).fork()
       ).ldelim();
+    }
+    for (const v of message.valaccount_list) {
+      Valaccount.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -123,6 +138,11 @@ export const GenesisState = {
             reader.uint32()
           );
           break;
+        case 9:
+          message.valaccount_list.push(
+            Valaccount.decode(reader, reader.uint32())
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -161,6 +181,9 @@ export const GenesisState = {
       queue_state_leave: isSet(object.queue_state_leave)
         ? QueueState.fromJSON(object.queue_state_leave)
         : undefined,
+      valaccount_list: Array.isArray(object?.valaccount_list)
+        ? object.valaccount_list.map((e: any) => Valaccount.fromJSON(e))
+        : [],
     };
   },
 
@@ -208,6 +231,13 @@ export const GenesisState = {
       (obj.queue_state_leave = message.queue_state_leave
         ? QueueState.toJSON(message.queue_state_leave)
         : undefined);
+    if (message.valaccount_list) {
+      obj.valaccount_list = message.valaccount_list.map((e) =>
+        e ? Valaccount.toJSON(e) : undefined
+      );
+    } else {
+      obj.valaccount_list = [];
+    }
     return obj;
   },
 
@@ -247,6 +277,8 @@ export const GenesisState = {
       object.queue_state_leave !== null
         ? QueueState.fromPartial(object.queue_state_leave)
         : undefined;
+    message.valaccount_list =
+      object.valaccount_list?.map((e) => Valaccount.fromPartial(e)) || [];
     return message;
   },
 };

@@ -3,10 +3,11 @@ import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
+import { FullStaker } from "./query";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "KYVENetwork.chain.query";
+export const protobufPackage = "kyve.query.v1beta1";
 
 /** QueryDelegatorRequest is the request type for the Query/Delegator RPC method. */
 export interface QueryDelegatorRequest {
@@ -46,7 +47,7 @@ export interface QueryDelegatorsByStakerRequest {
 export interface QueryDelegatorsByStakerResponse {
   /** delegators ... */
   delegators: StakerDelegatorResponse[];
-  /** total_delegation ... */
+  /** total_delegation ... (consider metadata object) */
   total_delegation: string;
   /** total_delegation ... */
   total_delegator_count: string;
@@ -75,15 +76,11 @@ export interface QueryStakersByDelegatorResponse {
 /** DelegationForStakerResponse ... */
 export interface DelegationForStakerResponse {
   /** staker ... */
-  staker: string;
+  staker?: FullStaker;
   /** current_reward ... */
   current_reward: string;
   /** delegation_amount ... */
   delegation_amount: string;
-  /** total_delegation_amount ... */
-  total_delegation_amount: string;
-  /** delegator_count ... */
-  delegator_count: string;
 }
 
 function createBaseQueryDelegatorRequest(): QueryDelegatorRequest {
@@ -685,13 +682,7 @@ export const QueryStakersByDelegatorResponse = {
 };
 
 function createBaseDelegationForStakerResponse(): DelegationForStakerResponse {
-  return {
-    staker: "",
-    current_reward: "0",
-    delegation_amount: "0",
-    total_delegation_amount: "0",
-    delegator_count: "0",
-  };
+  return { staker: undefined, current_reward: "0", delegation_amount: "0" };
 }
 
 export const DelegationForStakerResponse = {
@@ -699,20 +690,14 @@ export const DelegationForStakerResponse = {
     message: DelegationForStakerResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.staker !== "") {
-      writer.uint32(10).string(message.staker);
+    if (message.staker !== undefined) {
+      FullStaker.encode(message.staker, writer.uint32(10).fork()).ldelim();
     }
     if (message.current_reward !== "0") {
       writer.uint32(16).uint64(message.current_reward);
     }
     if (message.delegation_amount !== "0") {
       writer.uint32(24).uint64(message.delegation_amount);
-    }
-    if (message.total_delegation_amount !== "0") {
-      writer.uint32(32).uint64(message.total_delegation_amount);
-    }
-    if (message.delegator_count !== "0") {
-      writer.uint32(40).uint64(message.delegator_count);
     }
     return writer;
   },
@@ -728,21 +713,13 @@ export const DelegationForStakerResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.staker = reader.string();
+          message.staker = FullStaker.decode(reader, reader.uint32());
           break;
         case 2:
           message.current_reward = longToString(reader.uint64() as Long);
           break;
         case 3:
           message.delegation_amount = longToString(reader.uint64() as Long);
-          break;
-        case 4:
-          message.total_delegation_amount = longToString(
-            reader.uint64() as Long
-          );
-          break;
-        case 5:
-          message.delegator_count = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -754,33 +731,28 @@ export const DelegationForStakerResponse = {
 
   fromJSON(object: any): DelegationForStakerResponse {
     return {
-      staker: isSet(object.staker) ? String(object.staker) : "",
+      staker: isSet(object.staker)
+        ? FullStaker.fromJSON(object.staker)
+        : undefined,
       current_reward: isSet(object.current_reward)
         ? String(object.current_reward)
         : "0",
       delegation_amount: isSet(object.delegation_amount)
         ? String(object.delegation_amount)
         : "0",
-      total_delegation_amount: isSet(object.total_delegation_amount)
-        ? String(object.total_delegation_amount)
-        : "0",
-      delegator_count: isSet(object.delegator_count)
-        ? String(object.delegator_count)
-        : "0",
     };
   },
 
   toJSON(message: DelegationForStakerResponse): unknown {
     const obj: any = {};
-    message.staker !== undefined && (obj.staker = message.staker);
+    message.staker !== undefined &&
+      (obj.staker = message.staker
+        ? FullStaker.toJSON(message.staker)
+        : undefined);
     message.current_reward !== undefined &&
       (obj.current_reward = message.current_reward);
     message.delegation_amount !== undefined &&
       (obj.delegation_amount = message.delegation_amount);
-    message.total_delegation_amount !== undefined &&
-      (obj.total_delegation_amount = message.total_delegation_amount);
-    message.delegator_count !== undefined &&
-      (obj.delegator_count = message.delegator_count);
     return obj;
   },
 
@@ -788,11 +760,12 @@ export const DelegationForStakerResponse = {
     object: I
   ): DelegationForStakerResponse {
     const message = createBaseDelegationForStakerResponse();
-    message.staker = object.staker ?? "";
+    message.staker =
+      object.staker !== undefined && object.staker !== null
+        ? FullStaker.fromPartial(object.staker)
+        : undefined;
     message.current_reward = object.current_reward ?? "0";
     message.delegation_amount = object.delegation_amount ?? "0";
-    message.total_delegation_amount = object.total_delegation_amount ?? "0";
-    message.delegator_count = object.delegator_count ?? "0";
     return message;
   },
 };
@@ -822,7 +795,7 @@ export class QueryDelegationClientImpl implements QueryDelegation {
   Delegator(request: QueryDelegatorRequest): Promise<QueryDelegatorResponse> {
     const data = QueryDelegatorRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryDelegation",
+      "kyve.query.v1beta1.QueryDelegation",
       "Delegator",
       data
     );
@@ -836,7 +809,7 @@ export class QueryDelegationClientImpl implements QueryDelegation {
   ): Promise<QueryDelegatorsByStakerResponse> {
     const data = QueryDelegatorsByStakerRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryDelegation",
+      "kyve.query.v1beta1.QueryDelegation",
       "DelegatorsByStaker",
       data
     );
@@ -850,7 +823,7 @@ export class QueryDelegationClientImpl implements QueryDelegation {
   ): Promise<QueryStakersByDelegatorResponse> {
     const data = QueryStakersByDelegatorRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KYVENetwork.chain.query.QueryDelegation",
+      "kyve.query.v1beta1.QueryDelegation",
       "StakersByDelegator",
       data
     );

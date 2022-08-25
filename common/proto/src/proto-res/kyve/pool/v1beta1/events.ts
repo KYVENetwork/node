@@ -4,6 +4,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.pool.v1beta1";
 
+/** EventCreatePool ... */
 export interface EventCreatePool {
   /** id ... */
   id: string;
@@ -49,6 +50,12 @@ export interface EventDefundPool {
   address: string;
   /** amount ... */
   amount: string;
+}
+
+/** EventPoolOutOfFunds is an event emitted when a pool has run out of funds */
+export interface EventPoolOutOfFunds {
+  /** pool_id is the unique ID of the pool. */
+  pool_id: string;
 }
 
 function createBaseEventCreatePool(): EventCreatePool {
@@ -366,6 +373,60 @@ export const EventDefundPool = {
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
     message.amount = object.amount ?? "0";
+    return message;
+  },
+};
+
+function createBaseEventPoolOutOfFunds(): EventPoolOutOfFunds {
+  return { pool_id: "0" };
+}
+
+export const EventPoolOutOfFunds = {
+  encode(
+    message: EventPoolOutOfFunds,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventPoolOutOfFunds {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventPoolOutOfFunds();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventPoolOutOfFunds {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+    };
+  },
+
+  toJSON(message: EventPoolOutOfFunds): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventPoolOutOfFunds>, I>>(
+    object: I
+  ): EventPoolOutOfFunds {
+    const message = createBaseEventPoolOutOfFunds();
+    message.pool_id = object.pool_id ?? "0";
     return message;
   },
 };

@@ -3,8 +3,16 @@ import Long from "long";
 import {
   GovMsgCreatePoolResponse,
   GovMsgUpdatePoolResponse,
+  GovMsgPausePoolResponse,
+  GovMsgUnpausePoolResponse,
+  GovMsgPoolUpgradeResponse,
+  GovMsgCancelPoolUpgradeResponse,
   GovMsgCreatePool,
   GovMsgUpdatePool,
+  GovMsgPausePool,
+  GovMsgUnpausePool,
+  GovMsgPoolUpgrade,
+  GovMsgCancelPoolUpgrade,
 } from "./gov";
 import _m0 from "protobufjs/minimal";
 
@@ -281,6 +289,16 @@ export interface Msg {
   CreatePool(request: GovMsgCreatePool): Promise<GovMsgCreatePoolResponse>;
   /** UpdatePool ... */
   UpdatePool(request: GovMsgUpdatePool): Promise<GovMsgUpdatePoolResponse>;
+  /** PausePool ... */
+  PausePool(request: GovMsgPausePool): Promise<GovMsgPausePoolResponse>;
+  /** UpdatePool ... */
+  UnpausePool(request: GovMsgUnpausePool): Promise<GovMsgUnpausePoolResponse>;
+  /** UpdatePool ... */
+  PoolUpgrade(request: GovMsgPoolUpgrade): Promise<GovMsgPoolUpgradeResponse>;
+  /** UpdatePool ... */
+  CancelPoolUpgrade(
+    request: GovMsgCancelPoolUpgrade
+  ): Promise<GovMsgCancelPoolUpgradeResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -291,6 +309,10 @@ export class MsgClientImpl implements Msg {
     this.DefundPool = this.DefundPool.bind(this);
     this.CreatePool = this.CreatePool.bind(this);
     this.UpdatePool = this.UpdatePool.bind(this);
+    this.PausePool = this.PausePool.bind(this);
+    this.UnpausePool = this.UnpausePool.bind(this);
+    this.PoolUpgrade = this.PoolUpgrade.bind(this);
+    this.CancelPoolUpgrade = this.CancelPoolUpgrade.bind(this);
   }
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse> {
     const data = MsgFundPool.encode(request).finish();
@@ -333,6 +355,56 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       GovMsgUpdatePoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  PausePool(request: GovMsgPausePool): Promise<GovMsgPausePoolResponse> {
+    const data = GovMsgPausePool.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "PausePool",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgPausePoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  UnpausePool(request: GovMsgUnpausePool): Promise<GovMsgUnpausePoolResponse> {
+    const data = GovMsgUnpausePool.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "UnpausePool",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgUnpausePoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  PoolUpgrade(request: GovMsgPoolUpgrade): Promise<GovMsgPoolUpgradeResponse> {
+    const data = GovMsgPoolUpgrade.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "PoolUpgrade",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgPoolUpgradeResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  CancelPoolUpgrade(
+    request: GovMsgCancelPoolUpgrade
+  ): Promise<GovMsgCancelPoolUpgradeResponse> {
+    const data = GovMsgCancelPoolUpgrade.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "CancelPoolUpgrade",
+      data
+    );
+    return promise.then((data) =>
+      GovMsgCancelPoolUpgradeResponse.decode(new _m0.Reader(data))
     );
   }
 }
