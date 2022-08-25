@@ -35,7 +35,8 @@ import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
 import { parseKeyfile, parseNetwork, parsePoolId } from "./commander";
-import { PoolResponse } from "@kyve/proto/dist/proto/kyve/query/v1beta1/responses";
+import { kyve } from "@kyve/proto";
+import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 
 /**
  * Main class of KYVE protocol nodes representing a node.

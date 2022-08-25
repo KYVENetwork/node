@@ -11,13 +11,13 @@ import { kyve } from "@kyve/proto";
 import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
 import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
 
-import CreatePoolProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
-import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CreatePoolProposal;
-import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.ResetPoolProposal;
-import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
-import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
-import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
+import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.GovMsgCreatePool;
+import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.GovMsgPoolUpgrade;
+import PausePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgPausePool;
+import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgResetPool;
+import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.GovMsgUpdatePoolResponse;
+import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgUnpausePool;
+import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.GovMsgUnpausePool;
 
 export default class KyveGovMsg {
   private nativeClient: SigningStargateClient;

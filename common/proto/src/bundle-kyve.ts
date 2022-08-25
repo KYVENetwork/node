@@ -15,6 +15,7 @@ import * as _kyveQueryPools from "./proto/kyve/query/v1beta1/pools";
 import * as _kyveQueryPoolsRes from "./proto-res/kyve/query/v1beta1/pools";
 import * as _kyveQueryStakers from "./proto/kyve/query/v1beta1/stakers";
 import * as _kyveQueryStakersRes from "./proto-res/kyve/query/v1beta1/stakers";
+import * as _kyveGovPool from "./proto/kyve/pool/v1beta1/gov";
 
 export namespace kyve {
     //todo split by modules
@@ -25,6 +26,7 @@ export namespace kyve {
             export import kyvePool = _kyvePool;
             export import kyveStakers = _kyveStakers;
             export import kyveGov = _kyveGov;
+            export import kyveGovPool = _kyveGovPool;
         }
     }
     export namespace query {
