@@ -83,7 +83,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
       parameters.paused = params.paused;
     }
 
-    const endpoint = `kyve/query/v1beta1/pools`;
+    const endpoint = `/kyve/query/v1beta1/pools`;
     return await this.request(endpoint, parameters);
   }
   /** end Pools **/
@@ -98,21 +98,21 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
     if (typeof params?.pagination !== "undefined") {
       parameters.pagination = params.pagination;
     }
-    const endpoint = `kyve/query/v1beta1/stakers`;
+    const endpoint = `/kyve/query/v1beta1/stakers`;
     return await this.request(endpoint, params);
   }
 
   async staker(
     params: kyveQueryStakers.QueryStakerRequest
   ): Promise<kyveQueryStakersRes.QueryStakerResponse> {
-    const endpoint = `kyve/query/v1beta1/staker/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/staker/${params.address}`;
     return await this.request(endpoint);
   }
 
   async stakersByPool(
     params: kyveQueryStakers.QueryStakersByPoolRequest
   ): Promise<kyveQueryStakersRes.QueryStakersByPoolResponse> {
-    const endpoint = `kyve/query/v1beta1/stakers_by_pool/${params.pool_id}`;
+    const endpoint = `/kyve/query/v1beta1/stakers_by_pool/${params.pool_id}`;
     return await this.request(endpoint);
   }
   /** end stakers **/
@@ -134,7 +134,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async finalizedBundle(
     params: kyveQueryBundles.QueryFinalizedBundleRequest
   ): Promise<kyveQueryBundles.QueryFinalizedBundleResponse> {
-    const endpoint = `kyve/query/v1beta1/finalized_bundle/${params.pool_id}/${params.id}`;
+    const endpoint = `/kyve/query/v1beta1/finalized_bundle/${params.pool_id}/${params.id}`;
     return await this.request(endpoint);
   }
 
@@ -160,19 +160,19 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async canValidate(
     params: kyveQueryBundles.QueryCanValidateRequest
   ): Promise<kyveQueryBundles.QueryCanValidateResponse> {
-    const endpoint = `kyve/query/v1beta1/can_validate/${params.pool_id}/${params.valaddress}`;
+    const endpoint = `/kyve/query/v1beta1/can_validate/${params.pool_id}/${params.valaddress}`;
     return await this.request(endpoint);
   }
   async canPropose(
     params: kyveQueryBundles.QueryCanProposeRequest
   ): Promise<kyveQueryBundles.QueryCanProposeResponse> {
-    const endpoint = `kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_height}`;
+    const endpoint = `/kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_height}`;
     return await this.request(endpoint);
   }
   async canVote(
     params: kyveQueryBundles.QueryCanVoteRequest
   ): Promise<kyveQueryBundles.QueryCanVoteResponse> {
-    const endpoint = `kyve/query/v1beta1/can_vote/${params.pool_id}/${params.staker}/${params.voter}/${params.storage_id}`;
+    const endpoint = `/kyve/query/v1beta1/can_vote/${params.pool_id}/${params.staker}/${params.voter}/${params.storage_id}`;
     return await this.request(endpoint);
   }
   /** end Bundles **/
@@ -180,13 +180,13 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async delegator(
     params: kyveQueryDelegation.QueryDelegatorRequest
   ): Promise<kyveQueryDelegationRes.QueryDelegatorResponse> {
-    const endpoint = `/kyve/delegation/v1beta1/delegator/${params.staker}/${params.delegator}`;
+    const endpoint = `/kyve/query/v1beta1/delegator/${params.staker}/${params.delegator}`;
     return await this.request(endpoint);
   }
   async delegatorByStaker(
     params: kyveQueryDelegation.QueryDelegatorsByStakerRequest
   ): Promise<kyveQueryDelegationRes.QueryDelegatorsByStakerRequest> {
-    const endpoint = `/kyve/delegation/v1beta1/delegators_by_staker/${params.staker}`;
+    const endpoint = `/kyve/query/v1beta1/delegators_by_staker/${params.staker}`;
     return await this.request(endpoint);
   }
   async stakersByDelegator(
@@ -197,7 +197,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
     if (typeof params?.pagination !== "undefined") {
       parameters.pagination = params.pagination;
     }
-    const endpoint = `/kyve/delegation/v1beta1/stakers_by_delegator/${params.delegator}`;
+    const endpoint = `/kyve/query/v1beta1/stakers_by_delegator/${params.delegator}`;
     return await this.request(endpoint, parameters);
   }
   /** end Delegations **/
@@ -206,25 +206,25 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async accountAssets(
     params: kyveQueryAccount.QueryAccountAssetsRequest
   ): Promise<kyveQueryAccountRes.QueryAccountAssetsResponse> {
-    const endpoint = `/kyve/registry/v1beta1/account_assets/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/account_assets/${params.address}`;
     return await this.request(endpoint);
   }
   async accountDelegationUnbondings(
     params: PaginationPartialRequestUtilType<kyveQueryAccount.QueryAccountDelegationUnbondingsRequest>
   ): Promise<PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountDelegationUnbondingsResponse>> {
-    const endpoint = `/kyve/registry/v1beta1/account_assets/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/account_assets/${params.address}`;
     return await this.request(endpoint);
   }
   async accountFundedList(
     params: kyveQueryAccount.QueryAccountFundedListRequest
   ): Promise<kyveQueryAccountRes.QueryAccountFundedListResponse> {
-    const endpoint = `/kyve/registry/v1beta1/account_funded_list/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/account_funded_list/${params.address}`;
     return await this.request(endpoint);
   }
   async accountRedelegation(
     params: kyveQueryAccount.QueryAccountRedelegationRequest
   ): Promise<kyveQueryAccountRes.QueryAccountRedelegationResponse> {
-    const endpoint = `/kyve/registry/v1beta1/account_redelegation/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/account_redelegation/${params.address}`;
     return await this.request(endpoint);
   }
   /** End Account **/
