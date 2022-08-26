@@ -3,10 +3,10 @@ import { Params } from "./params";
 import {
   QueueState,
   Staker,
+  Valaccount,
   CommissionChangeEntry,
   UnbondingStakeEntry,
   LeavePoolEntry,
-  Valaccount,
 } from "./stakers";
 import _m0 from "protobufjs/minimal";
 
@@ -18,33 +18,33 @@ export interface GenesisState {
   params?: Params;
   /** staker_list ... */
   staker_list: Staker[];
-  /** commission_change_entries ... */
-  commission_change_entries: CommissionChangeEntry[];
-  /** unbonding_stake_entries ... */
-  unbonding_stake_entries: UnbondingStakeEntry[];
-  /** leave_pool_entries ... */
-  leave_pool_entries: LeavePoolEntry[];
-  /** queue_state_unstaking ... */
-  queue_state_unstaking?: QueueState;
-  /** queue_state_commission ... */
-  queue_state_commission?: QueueState;
-  /** queue_state_leave ... */
-  queue_state_leave?: QueueState;
   /** valaccount_list ... */
   valaccount_list: Valaccount[];
+  /** commission_change_entries ... */
+  commission_change_entries: CommissionChangeEntry[];
+  /** queue_state_commission ... */
+  queue_state_commission?: QueueState;
+  /** unbonding_stake_entries ... */
+  unbonding_stake_entries: UnbondingStakeEntry[];
+  /** queue_state_unstaking ... */
+  queue_state_unstaking?: QueueState;
+  /** leave_pool_entries ... */
+  leave_pool_entries: LeavePoolEntry[];
+  /** queue_state_leave ... */
+  queue_state_leave?: QueueState;
 }
 
 function createBaseGenesisState(): GenesisState {
   return {
     params: undefined,
     staker_list: [],
-    commission_change_entries: [],
-    unbonding_stake_entries: [],
-    leave_pool_entries: [],
-    queue_state_unstaking: undefined,
-    queue_state_commission: undefined,
-    queue_state_leave: undefined,
     valaccount_list: [],
+    commission_change_entries: [],
+    queue_state_commission: undefined,
+    unbonding_stake_entries: [],
+    queue_state_unstaking: undefined,
+    leave_pool_entries: [],
+    queue_state_leave: undefined,
   };
 }
 
@@ -59,35 +59,35 @@ export const GenesisState = {
     for (const v of message.staker_list) {
       Staker.encode(v!, writer.uint32(18).fork()).ldelim();
     }
+    for (const v of message.valaccount_list) {
+      Valaccount.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
     for (const v of message.commission_change_entries) {
-      CommissionChangeEntry.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.unbonding_stake_entries) {
-      UnbondingStakeEntry.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    for (const v of message.leave_pool_entries) {
-      LeavePoolEntry.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.queue_state_unstaking !== undefined) {
-      QueueState.encode(
-        message.queue_state_unstaking,
-        writer.uint32(50).fork()
-      ).ldelim();
+      CommissionChangeEntry.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.queue_state_commission !== undefined) {
       QueueState.encode(
         message.queue_state_commission,
+        writer.uint32(66).fork()
+      ).ldelim();
+    }
+    for (const v of message.unbonding_stake_entries) {
+      UnbondingStakeEntry.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.queue_state_unstaking !== undefined) {
+      QueueState.encode(
+        message.queue_state_unstaking,
         writer.uint32(58).fork()
       ).ldelim();
+    }
+    for (const v of message.leave_pool_entries) {
+      LeavePoolEntry.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.queue_state_leave !== undefined) {
       QueueState.encode(
         message.queue_state_leave,
-        writer.uint32(66).fork()
+        writer.uint32(74).fork()
       ).ldelim();
-    }
-    for (const v of message.valaccount_list) {
-      Valaccount.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -106,41 +106,41 @@ export const GenesisState = {
           message.staker_list.push(Staker.decode(reader, reader.uint32()));
           break;
         case 3:
+          message.valaccount_list.push(
+            Valaccount.decode(reader, reader.uint32())
+          );
+          break;
+        case 4:
           message.commission_change_entries.push(
             CommissionChangeEntry.decode(reader, reader.uint32())
           );
           break;
-        case 4:
-          message.unbonding_stake_entries.push(
-            UnbondingStakeEntry.decode(reader, reader.uint32())
-          );
-          break;
-        case 5:
-          message.leave_pool_entries.push(
-            LeavePoolEntry.decode(reader, reader.uint32())
-          );
-          break;
-        case 6:
-          message.queue_state_unstaking = QueueState.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-        case 7:
+        case 8:
           message.queue_state_commission = QueueState.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 8:
-          message.queue_state_leave = QueueState.decode(
+        case 5:
+          message.unbonding_stake_entries.push(
+            UnbondingStakeEntry.decode(reader, reader.uint32())
+          );
+          break;
+        case 7:
+          message.queue_state_unstaking = QueueState.decode(
             reader,
             reader.uint32()
           );
           break;
+        case 6:
+          message.leave_pool_entries.push(
+            LeavePoolEntry.decode(reader, reader.uint32())
+          );
+          break;
         case 9:
-          message.valaccount_list.push(
-            Valaccount.decode(reader, reader.uint32())
+          message.queue_state_leave = QueueState.decode(
+            reader,
+            reader.uint32()
           );
           break;
         default:
@@ -157,6 +157,9 @@ export const GenesisState = {
       staker_list: Array.isArray(object?.staker_list)
         ? object.staker_list.map((e: any) => Staker.fromJSON(e))
         : [],
+      valaccount_list: Array.isArray(object?.valaccount_list)
+        ? object.valaccount_list.map((e: any) => Valaccount.fromJSON(e))
+        : [],
       commission_change_entries: Array.isArray(
         object?.commission_change_entries
       )
@@ -164,26 +167,23 @@ export const GenesisState = {
             CommissionChangeEntry.fromJSON(e)
           )
         : [],
+      queue_state_commission: isSet(object.queue_state_commission)
+        ? QueueState.fromJSON(object.queue_state_commission)
+        : undefined,
       unbonding_stake_entries: Array.isArray(object?.unbonding_stake_entries)
         ? object.unbonding_stake_entries.map((e: any) =>
             UnbondingStakeEntry.fromJSON(e)
           )
         : [],
-      leave_pool_entries: Array.isArray(object?.leave_pool_entries)
-        ? object.leave_pool_entries.map((e: any) => LeavePoolEntry.fromJSON(e))
-        : [],
       queue_state_unstaking: isSet(object.queue_state_unstaking)
         ? QueueState.fromJSON(object.queue_state_unstaking)
         : undefined,
-      queue_state_commission: isSet(object.queue_state_commission)
-        ? QueueState.fromJSON(object.queue_state_commission)
-        : undefined,
+      leave_pool_entries: Array.isArray(object?.leave_pool_entries)
+        ? object.leave_pool_entries.map((e: any) => LeavePoolEntry.fromJSON(e))
+        : [],
       queue_state_leave: isSet(object.queue_state_leave)
         ? QueueState.fromJSON(object.queue_state_leave)
         : undefined,
-      valaccount_list: Array.isArray(object?.valaccount_list)
-        ? object.valaccount_list.map((e: any) => Valaccount.fromJSON(e))
-        : [],
     };
   },
 
@@ -198,39 +198,6 @@ export const GenesisState = {
     } else {
       obj.staker_list = [];
     }
-    if (message.commission_change_entries) {
-      obj.commission_change_entries = message.commission_change_entries.map(
-        (e) => (e ? CommissionChangeEntry.toJSON(e) : undefined)
-      );
-    } else {
-      obj.commission_change_entries = [];
-    }
-    if (message.unbonding_stake_entries) {
-      obj.unbonding_stake_entries = message.unbonding_stake_entries.map((e) =>
-        e ? UnbondingStakeEntry.toJSON(e) : undefined
-      );
-    } else {
-      obj.unbonding_stake_entries = [];
-    }
-    if (message.leave_pool_entries) {
-      obj.leave_pool_entries = message.leave_pool_entries.map((e) =>
-        e ? LeavePoolEntry.toJSON(e) : undefined
-      );
-    } else {
-      obj.leave_pool_entries = [];
-    }
-    message.queue_state_unstaking !== undefined &&
-      (obj.queue_state_unstaking = message.queue_state_unstaking
-        ? QueueState.toJSON(message.queue_state_unstaking)
-        : undefined);
-    message.queue_state_commission !== undefined &&
-      (obj.queue_state_commission = message.queue_state_commission
-        ? QueueState.toJSON(message.queue_state_commission)
-        : undefined);
-    message.queue_state_leave !== undefined &&
-      (obj.queue_state_leave = message.queue_state_leave
-        ? QueueState.toJSON(message.queue_state_leave)
-        : undefined);
     if (message.valaccount_list) {
       obj.valaccount_list = message.valaccount_list.map((e) =>
         e ? Valaccount.toJSON(e) : undefined
@@ -238,6 +205,39 @@ export const GenesisState = {
     } else {
       obj.valaccount_list = [];
     }
+    if (message.commission_change_entries) {
+      obj.commission_change_entries = message.commission_change_entries.map(
+        (e) => (e ? CommissionChangeEntry.toJSON(e) : undefined)
+      );
+    } else {
+      obj.commission_change_entries = [];
+    }
+    message.queue_state_commission !== undefined &&
+      (obj.queue_state_commission = message.queue_state_commission
+        ? QueueState.toJSON(message.queue_state_commission)
+        : undefined);
+    if (message.unbonding_stake_entries) {
+      obj.unbonding_stake_entries = message.unbonding_stake_entries.map((e) =>
+        e ? UnbondingStakeEntry.toJSON(e) : undefined
+      );
+    } else {
+      obj.unbonding_stake_entries = [];
+    }
+    message.queue_state_unstaking !== undefined &&
+      (obj.queue_state_unstaking = message.queue_state_unstaking
+        ? QueueState.toJSON(message.queue_state_unstaking)
+        : undefined);
+    if (message.leave_pool_entries) {
+      obj.leave_pool_entries = message.leave_pool_entries.map((e) =>
+        e ? LeavePoolEntry.toJSON(e) : undefined
+      );
+    } else {
+      obj.leave_pool_entries = [];
+    }
+    message.queue_state_leave !== undefined &&
+      (obj.queue_state_leave = message.queue_state_leave
+        ? QueueState.toJSON(message.queue_state_leave)
+        : undefined);
     return obj;
   },
 
@@ -251,34 +251,34 @@ export const GenesisState = {
         : undefined;
     message.staker_list =
       object.staker_list?.map((e) => Staker.fromPartial(e)) || [];
+    message.valaccount_list =
+      object.valaccount_list?.map((e) => Valaccount.fromPartial(e)) || [];
     message.commission_change_entries =
       object.commission_change_entries?.map((e) =>
         CommissionChangeEntry.fromPartial(e)
       ) || [];
-    message.unbonding_stake_entries =
-      object.unbonding_stake_entries?.map((e) =>
-        UnbondingStakeEntry.fromPartial(e)
-      ) || [];
-    message.leave_pool_entries =
-      object.leave_pool_entries?.map((e) => LeavePoolEntry.fromPartial(e)) ||
-      [];
-    message.queue_state_unstaking =
-      object.queue_state_unstaking !== undefined &&
-      object.queue_state_unstaking !== null
-        ? QueueState.fromPartial(object.queue_state_unstaking)
-        : undefined;
     message.queue_state_commission =
       object.queue_state_commission !== undefined &&
       object.queue_state_commission !== null
         ? QueueState.fromPartial(object.queue_state_commission)
         : undefined;
+    message.unbonding_stake_entries =
+      object.unbonding_stake_entries?.map((e) =>
+        UnbondingStakeEntry.fromPartial(e)
+      ) || [];
+    message.queue_state_unstaking =
+      object.queue_state_unstaking !== undefined &&
+      object.queue_state_unstaking !== null
+        ? QueueState.fromPartial(object.queue_state_unstaking)
+        : undefined;
+    message.leave_pool_entries =
+      object.leave_pool_entries?.map((e) => LeavePoolEntry.fromPartial(e)) ||
+      [];
     message.queue_state_leave =
       object.queue_state_leave !== undefined &&
       object.queue_state_leave !== null
         ? QueueState.fromPartial(object.queue_state_leave)
         : undefined;
-    message.valaccount_list =
-      object.valaccount_list?.map((e) => Valaccount.fromPartial(e)) || [];
     return message;
   },
 };

@@ -5,6 +5,7 @@ import {
   Delegator,
   DelegationEntry,
   DelegationData,
+  DelegationSlash,
   UndelegationQueueEntry,
   RedelegationCooldown,
 } from "./delegation";
@@ -22,6 +23,8 @@ export interface GenesisState {
   delegation_entry_list: DelegationEntry[];
   /** delegation_data_list ... */
   delegation_data_list: DelegationData[];
+  /** delegation_slash_list ... */
+  delegation_slash_list: DelegationSlash[];
   /** undelegation_queue_entry_list ... */
   undelegation_queue_entry_list: UndelegationQueueEntry[];
   /** queue_state_undelegation ... */
@@ -36,6 +39,7 @@ function createBaseGenesisState(): GenesisState {
     delegator_list: [],
     delegation_entry_list: [],
     delegation_data_list: [],
+    delegation_slash_list: [],
     undelegation_queue_entry_list: [],
     queue_state_undelegation: undefined,
     redelegation_cooldown_list: [],
@@ -59,17 +63,20 @@ export const GenesisState = {
     for (const v of message.delegation_data_list) {
       DelegationData.encode(v!, writer.uint32(34).fork()).ldelim();
     }
+    for (const v of message.delegation_slash_list) {
+      DelegationSlash.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
     for (const v of message.undelegation_queue_entry_list) {
-      UndelegationQueueEntry.encode(v!, writer.uint32(42).fork()).ldelim();
+      UndelegationQueueEntry.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.queue_state_undelegation !== undefined) {
       QueueState.encode(
         message.queue_state_undelegation,
-        writer.uint32(50).fork()
+        writer.uint32(58).fork()
       ).ldelim();
     }
     for (const v of message.redelegation_cooldown_list) {
-      RedelegationCooldown.encode(v!, writer.uint32(58).fork()).ldelim();
+      RedelegationCooldown.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -100,17 +107,22 @@ export const GenesisState = {
           );
           break;
         case 5:
+          message.delegation_slash_list.push(
+            DelegationSlash.decode(reader, reader.uint32())
+          );
+          break;
+        case 6:
           message.undelegation_queue_entry_list.push(
             UndelegationQueueEntry.decode(reader, reader.uint32())
           );
           break;
-        case 6:
+        case 7:
           message.queue_state_undelegation = QueueState.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 7:
+        case 8:
           message.redelegation_cooldown_list.push(
             RedelegationCooldown.decode(reader, reader.uint32())
           );
@@ -137,6 +149,11 @@ export const GenesisState = {
       delegation_data_list: Array.isArray(object?.delegation_data_list)
         ? object.delegation_data_list.map((e: any) =>
             DelegationData.fromJSON(e)
+          )
+        : [],
+      delegation_slash_list: Array.isArray(object?.delegation_slash_list)
+        ? object.delegation_slash_list.map((e: any) =>
+            DelegationSlash.fromJSON(e)
           )
         : [],
       undelegation_queue_entry_list: Array.isArray(
@@ -184,6 +201,13 @@ export const GenesisState = {
     } else {
       obj.delegation_data_list = [];
     }
+    if (message.delegation_slash_list) {
+      obj.delegation_slash_list = message.delegation_slash_list.map((e) =>
+        e ? DelegationSlash.toJSON(e) : undefined
+      );
+    } else {
+      obj.delegation_slash_list = [];
+    }
     if (message.undelegation_queue_entry_list) {
       obj.undelegation_queue_entry_list =
         message.undelegation_queue_entry_list.map((e) =>
@@ -223,6 +247,10 @@ export const GenesisState = {
     message.delegation_data_list =
       object.delegation_data_list?.map((e) => DelegationData.fromPartial(e)) ||
       [];
+    message.delegation_slash_list =
+      object.delegation_slash_list?.map((e) =>
+        DelegationSlash.fromPartial(e)
+      ) || [];
     message.undelegation_queue_entry_list =
       object.undelegation_queue_entry_list?.map((e) =>
         UndelegationQueueEntry.fromPartial(e)

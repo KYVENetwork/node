@@ -72,20 +72,20 @@ export interface UndelegationQueueEntry {
   creation_time: string;
 }
 
-/** RedelegationCooldown ... */
-export interface RedelegationCooldown {
-  /** low_index ... */
-  address: string;
-  /** high_index ... */
-  creation_date: string;
-}
-
 /** QueueState ... */
 export interface QueueState {
   /** low_index ... */
   low_index: string;
   /** high_index ... */
   high_index: string;
+}
+
+/** RedelegationCooldown ... */
+export interface RedelegationCooldown {
+  /** low_index ... */
+  address: string;
+  /** high_index ... */
+  creation_date: string;
 }
 
 function createBaseDelegator(): Delegator {
@@ -541,6 +541,69 @@ export const UndelegationQueueEntry = {
   },
 };
 
+function createBaseQueueState(): QueueState {
+  return { low_index: "0", high_index: "0" };
+}
+
+export const QueueState = {
+  encode(
+    message: QueueState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.low_index !== "0") {
+      writer.uint32(8).uint64(message.low_index);
+    }
+    if (message.high_index !== "0") {
+      writer.uint32(16).uint64(message.high_index);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueueState {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueueState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.low_index = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.high_index = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueueState {
+    return {
+      low_index: isSet(object.low_index) ? String(object.low_index) : "0",
+      high_index: isSet(object.high_index) ? String(object.high_index) : "0",
+    };
+  },
+
+  toJSON(message: QueueState): unknown {
+    const obj: any = {};
+    message.low_index !== undefined && (obj.low_index = message.low_index);
+    message.high_index !== undefined && (obj.high_index = message.high_index);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(
+    object: I
+  ): QueueState {
+    const message = createBaseQueueState();
+    message.low_index = object.low_index ?? "0";
+    message.high_index = object.high_index ?? "0";
+    return message;
+  },
+};
+
 function createBaseRedelegationCooldown(): RedelegationCooldown {
   return { address: "", creation_date: "0" };
 }
@@ -606,69 +669,6 @@ export const RedelegationCooldown = {
     const message = createBaseRedelegationCooldown();
     message.address = object.address ?? "";
     message.creation_date = object.creation_date ?? "0";
-    return message;
-  },
-};
-
-function createBaseQueueState(): QueueState {
-  return { low_index: "0", high_index: "0" };
-}
-
-export const QueueState = {
-  encode(
-    message: QueueState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.low_index !== "0") {
-      writer.uint32(8).uint64(message.low_index);
-    }
-    if (message.high_index !== "0") {
-      writer.uint32(16).uint64(message.high_index);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueueState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueueState();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.low_index = longToString(reader.uint64() as Long);
-          break;
-        case 2:
-          message.high_index = longToString(reader.uint64() as Long);
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueueState {
-    return {
-      low_index: isSet(object.low_index) ? String(object.low_index) : "0",
-      high_index: isSet(object.high_index) ? String(object.high_index) : "0",
-    };
-  },
-
-  toJSON(message: QueueState): unknown {
-    const obj: any = {};
-    message.low_index !== undefined && (obj.low_index = message.low_index);
-    message.high_index !== undefined && (obj.high_index = message.high_index);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(
-    object: I
-  ): QueueState {
-    const message = createBaseQueueState();
-    message.low_index = object.low_index ?? "0";
-    message.high_index = object.high_index ?? "0";
     return message;
   },
 };

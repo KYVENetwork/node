@@ -47,6 +47,8 @@ export interface PoolResponse {
   stakers: string[];
   /** total_stake ... */
   total_stake: string;
+  /** total_delegation ... */
+  total_delegation: string;
   /** status ... */
   status: PoolStatus;
 }
@@ -241,6 +243,7 @@ function createBasePoolResponse(): PoolResponse {
     bundle_proposal: undefined,
     stakers: [],
     total_stake: "0",
+    total_delegation: "0",
     status: 0,
   };
 }
@@ -268,8 +271,11 @@ export const PoolResponse = {
     if (message.total_stake !== "0") {
       writer.uint32(40).uint64(message.total_stake);
     }
+    if (message.total_delegation !== "0") {
+      writer.uint32(48).uint64(message.total_delegation);
+    }
     if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+      writer.uint32(56).int32(message.status);
     }
     return writer;
   },
@@ -300,6 +306,9 @@ export const PoolResponse = {
           message.total_stake = longToString(reader.uint64() as Long);
           break;
         case 6:
+          message.total_delegation = longToString(reader.uint64() as Long);
+          break;
+        case 7:
           message.status = reader.int32() as any;
           break;
         default:
@@ -321,6 +330,9 @@ export const PoolResponse = {
         ? object.stakers.map((e: any) => String(e))
         : [],
       total_stake: isSet(object.total_stake) ? String(object.total_stake) : "0",
+      total_delegation: isSet(object.total_delegation)
+        ? String(object.total_delegation)
+        : "0",
       status: isSet(object.status) ? poolStatusFromJSON(object.status) : 0,
     };
   },
@@ -341,6 +353,8 @@ export const PoolResponse = {
     }
     message.total_stake !== undefined &&
       (obj.total_stake = message.total_stake);
+    message.total_delegation !== undefined &&
+      (obj.total_delegation = message.total_delegation);
     message.status !== undefined &&
       (obj.status = poolStatusToJSON(message.status));
     return obj;
@@ -361,6 +375,7 @@ export const PoolResponse = {
         : undefined;
     message.stakers = object.stakers?.map((e) => e) || [];
     message.total_stake = object.total_stake ?? "0";
+    message.total_delegation = object.total_delegation ?? "0";
     message.status = object.status ?? 0;
     return message;
   },

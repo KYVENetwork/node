@@ -772,13 +772,19 @@ export const DelegationForStakerResponse = {
 
 /** QueryDelegation contains all rpc requests related to direct delegation data */
 export interface QueryDelegation {
-  /** Pools queries for all pools. */
+  /** Delegator returns delegation information for a specific delegator of a specific staker. */
   Delegator(request: QueryDelegatorRequest): Promise<QueryDelegatorResponse>;
-  /** DelegatorsByStaker ... */
+  /**
+   * DelegatorsByStaker returns all delegators that have delegated to the given staker
+   * This query is paginated.
+   */
   DelegatorsByStaker(
     request: QueryDelegatorsByStakerRequest
   ): Promise<QueryDelegatorsByStakerResponse>;
-  /** StakersByPoolAndDelegator ... */
+  /**
+   * StakersByPoolAndDelegator returns all stakers the given delegator has delegated to.
+   * This query is paginated.
+   */
   StakersByDelegator(
     request: QueryStakersByDelegatorRequest
   ): Promise<QueryStakersByDelegatorResponse>;

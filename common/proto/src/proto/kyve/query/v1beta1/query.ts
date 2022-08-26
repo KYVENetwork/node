@@ -1,4 +1,9 @@
 /* eslint-disable */
+import {
+  PoolStatus,
+  poolStatusFromJSON,
+  poolStatusToJSON,
+} from "../../pool/v1beta1/pool";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -9,65 +14,147 @@ export const protobufPackage = "kyve.query.v1beta1";
  * to be displayed in the UI
  */
 export interface BasicPool {
-  /** id ... */
+  /** id is the ID of the pool */
   id: string;
-  /** name ... */
+  /** name of the pool */
   name: string;
-  /** runtime ... */
+  /**
+   * runtime for the protocol nodes
+   * like evm, bitcoin, etc.
+   */
   runtime: string;
-  /** logo ... */
+  /** logo of the pool */
   logo: string;
-  /** total_funds ... */
+  /**
+   * total_funds of the pool. If the pool runs
+   * out of funds no more bundles will be produced
+   */
   total_funds: string;
-}
-
-export interface FullStaker {
-  address: string;
-  metadata?: StakerMetadata;
-  /** amount ... */
-  amount: string;
-  /** unbonding_amount ... */
-  unbonding_amount: string;
-  /** total_delegation ... */
-  total_delegation: string;
-  /** delegator_count ... */
-  delegator_count: string;
-  pools: PoolMembership[];
+  /**
+   * status of the pool if pool is able
+   * to produce bundles, etc.
+   */
+  status: PoolStatus;
 }
 
 /**
- * BasicStaker contains the necessary properties need for a staker
- * to be displayed in the UI
+ * FullStaker aggregates information from the staker and its delegators
+ * as well as pending queue entries into one object.
+ * It contains almost all needed information for a convenient usage
  */
+export interface FullStaker {
+  /** address of the staker */
+  address: string;
+  /** metadata as logo, moniker, etc. */
+  metadata?: StakerMetadata;
+  /** amount the staker has staked */
+  amount: string;
+  /**
+   * unbonding_amount is the amount the staker is currently unbonding
+   * This amount can be larger than `amount` when the staker
+   * got slashed during unbonding. However, at the end of
+   * the unbonding period this amount is double checked with the
+   * remaining amount.
+   */
+  unbonding_amount: string;
+  /**
+   * total_delegation returns the sum of all $KYVE users
+   * have delegated to this staker
+   */
+  total_delegation: string;
+  /**
+   * delegator_count is the total number of individual
+   * delegator addresses for that user.
+   */
+  delegator_count: string;
+  /**
+   * pools is a list of all pools the staker is currently
+   * participating, i.e. allowed to vote and upload data.
+   */
+  pools: PoolMembership[];
+}
+
+/** StakerMetadata contains static information for a staker */
 export interface StakerMetadata {
-  /** commission ... */
+  /**
+   * commission is the percentage of the rewards that will
+   * get transferred to the staker before the remaining
+   * rewards are split across all delegators
+   */
   commission: string;
-  /** moniker ... */
+  /**
+   * moniker is a human-readable name for displaying
+   * the staker in the UI
+   */
   moniker: string;
-  /** website ... */
+  /** website is a https-link to the website of the staker */
   website: string;
-  /** logo ... */
+  /** logo is a link to an image file (like jpg or png) */
   logo: string;
-  /** pending_commission_change ... */
+  /**
+   * pending_commission_change shows if the staker plans
+   * to change its commission. Delegators will see a warning in
+   * the UI. A Commission change takes some time until
+   * the commission is applied. Users have time to redelegate
+   * if they not agree with the new commission.
+   */
   pending_commission_change?: CommissionChangeEntry;
 }
 
+/**
+ * CommissionChangeEntry shows when the old commission
+ * of a staker will change to the new commission
+ */
 export interface CommissionChangeEntry {
-  /** commission ... */
+  /**
+   * commission is the new commission that will
+   * become active once the change-time is over
+   */
   commission: string;
-  /** creation_date ... */
+  /**
+   * creation_date is the UNIX-timestamp (in seconds)
+   * of when the entry was created.
+   */
   creation_date: string;
 }
 
+/**
+ * PoolMembership shows in which pool the staker
+ * is participating
+ */
 export interface PoolMembership {
+  /** pool contains useful information about the pool */
   pool?: BasicPool;
+  /**
+   * points indicates if the staker is inactive
+   * If the staker misses a vote, a point is added.
+   * After 5 points the staker is removed from
+   * the stakers set.
+   */
   points: string;
-  isLeaving: boolean;
-  valaccount: string;
+  /**
+   * is_leaving indicates if a user has scheduled a
+   * a PoolLeave entry. After the leave-time is over
+   * the staker will no longer participate in that pool
+   */
+  is_leaving: boolean;
+  /**
+   * Valaddress is the address which is authorized to vote
+   * and submit bundles. If the server gets compromised
+   * the staker can just change the valaddress.
+   */
+  valaddress: string;
 }
 
 function createBaseBasicPool(): BasicPool {
-  return { id: "0", name: "", runtime: "", logo: "", total_funds: "0" };
+  return {
+    id: "0",
+    name: "",
+    runtime: "",
+    logo: "",
+    total_funds: "0",
+    status: 0,
+  };
 }
 
 export const BasicPool = {
@@ -89,6 +176,9 @@ export const BasicPool = {
     }
     if (message.total_funds !== "0") {
       writer.uint32(40).uint64(message.total_funds);
+    }
+    if (message.status !== 0) {
+      writer.uint32(48).int32(message.status);
     }
     return writer;
   },
@@ -115,6 +205,9 @@ export const BasicPool = {
         case 5:
           message.total_funds = longToString(reader.uint64() as Long);
           break;
+        case 6:
+          message.status = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -130,6 +223,7 @@ export const BasicPool = {
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       logo: isSet(object.logo) ? String(object.logo) : "",
       total_funds: isSet(object.total_funds) ? String(object.total_funds) : "0",
+      status: isSet(object.status) ? poolStatusFromJSON(object.status) : 0,
     };
   },
 
@@ -141,6 +235,8 @@ export const BasicPool = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.total_funds !== undefined &&
       (obj.total_funds = message.total_funds);
+    message.status !== undefined &&
+      (obj.status = poolStatusToJSON(message.status));
     return obj;
   },
 
@@ -153,6 +249,7 @@ export const BasicPool = {
     message.runtime = object.runtime ?? "";
     message.logo = object.logo ?? "";
     message.total_funds = object.total_funds ?? "0";
+    message.status = object.status ?? 0;
     return message;
   },
 };
@@ -318,10 +415,10 @@ export const StakerMetadata = {
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.commission !== "") {
-      writer.uint32(34).string(message.commission);
+      writer.uint32(10).string(message.commission);
     }
     if (message.moniker !== "") {
-      writer.uint32(42).string(message.moniker);
+      writer.uint32(18).string(message.moniker);
     }
     if (message.website !== "") {
       writer.uint32(50).string(message.website);
@@ -345,10 +442,10 @@ export const StakerMetadata = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 4:
+        case 1:
           message.commission = reader.string();
           break;
-        case 5:
+        case 2:
           message.moniker = reader.string();
           break;
         case 6:
@@ -483,7 +580,7 @@ export const CommissionChangeEntry = {
 };
 
 function createBasePoolMembership(): PoolMembership {
-  return { pool: undefined, points: "0", isLeaving: false, valaccount: "" };
+  return { pool: undefined, points: "0", is_leaving: false, valaddress: "" };
 }
 
 export const PoolMembership = {
@@ -497,11 +594,11 @@ export const PoolMembership = {
     if (message.points !== "0") {
       writer.uint32(16).uint64(message.points);
     }
-    if (message.isLeaving === true) {
-      writer.uint32(24).bool(message.isLeaving);
+    if (message.is_leaving === true) {
+      writer.uint32(24).bool(message.is_leaving);
     }
-    if (message.valaccount !== "") {
-      writer.uint32(34).string(message.valaccount);
+    if (message.valaddress !== "") {
+      writer.uint32(34).string(message.valaddress);
     }
     return writer;
   },
@@ -520,10 +617,10 @@ export const PoolMembership = {
           message.points = longToString(reader.uint64() as Long);
           break;
         case 3:
-          message.isLeaving = reader.bool();
+          message.is_leaving = reader.bool();
           break;
         case 4:
-          message.valaccount = reader.string();
+          message.valaddress = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -537,8 +634,8 @@ export const PoolMembership = {
     return {
       pool: isSet(object.pool) ? BasicPool.fromJSON(object.pool) : undefined,
       points: isSet(object.points) ? String(object.points) : "0",
-      isLeaving: isSet(object.isLeaving) ? Boolean(object.isLeaving) : false,
-      valaccount: isSet(object.valaccount) ? String(object.valaccount) : "",
+      is_leaving: isSet(object.is_leaving) ? Boolean(object.is_leaving) : false,
+      valaddress: isSet(object.valaddress) ? String(object.valaddress) : "",
     };
   },
 
@@ -547,8 +644,8 @@ export const PoolMembership = {
     message.pool !== undefined &&
       (obj.pool = message.pool ? BasicPool.toJSON(message.pool) : undefined);
     message.points !== undefined && (obj.points = message.points);
-    message.isLeaving !== undefined && (obj.isLeaving = message.isLeaving);
-    message.valaccount !== undefined && (obj.valaccount = message.valaccount);
+    message.is_leaving !== undefined && (obj.is_leaving = message.is_leaving);
+    message.valaddress !== undefined && (obj.valaddress = message.valaddress);
     return obj;
   },
 
@@ -561,8 +658,8 @@ export const PoolMembership = {
         ? BasicPool.fromPartial(object.pool)
         : undefined;
     message.points = object.points ?? "0";
-    message.isLeaving = object.isLeaving ?? false;
-    message.valaccount = object.valaccount ?? "";
+    message.is_leaving = object.is_leaving ?? false;
+    message.valaddress = object.valaddress ?? "";
     return message;
   },
 };
