@@ -232,5 +232,11 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
     const endpoint = `/kyve/query/v1beta1/account_redelegation/${params.address}`;
     return await this.request(endpoint);
   }
+  async accountStakingUnbondings(
+      params: PaginationPartialRequestUtilType<kyveQueryAccount.QueryAccountStakingUnbondingsRequest>
+  ): Promise<PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountStakingUnbondingsResponse>> {
+    const endpoint = `/kyve/query/v1beta1/account_staking_unbondings/${params.address}`;
+    return await this.request(endpoint);
+  }
   /** End Account **/
 }
