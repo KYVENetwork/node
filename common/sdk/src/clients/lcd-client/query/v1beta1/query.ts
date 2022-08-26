@@ -183,11 +183,16 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
     const endpoint = `/kyve/query/v1beta1/delegator/${params.staker}/${params.delegator}`;
     return await this.request(endpoint);
   }
-  async delegatorByStaker(
-    params: kyveQueryDelegation.QueryDelegatorsByStakerRequest
-  ): Promise<kyveQueryDelegationRes.QueryDelegatorsByStakerRequest> {
+  async delegatorsByStaker(
+    params: PaginationPartialRequestUtilType<kyveQueryDelegation.QueryDelegatorsByStakerRequest>
+  ): Promise<PaginationResponseTypeUtil<kyveQueryDelegationRes.QueryDelegatorsByStakerResponse>> {
+    const parameters: Record<string, any> = {};
+
+    if (typeof params?.pagination !== "undefined") {
+      parameters.pagination = params.pagination;
+    }
     const endpoint = `/kyve/query/v1beta1/delegators_by_staker/${params.staker}`;
-    return await this.request(endpoint);
+    return await this.request(endpoint, parameters);
   }
   async stakersByDelegator(
     params: PaginationPartialRequestUtilType<kyveQueryDelegation.QueryStakersByDelegatorRequest>
