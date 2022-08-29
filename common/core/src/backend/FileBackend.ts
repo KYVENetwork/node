@@ -21,13 +21,6 @@ export class FileBackend implements IBackend {
   private bufferEncryption: BufferEncoding = "utf-8";
 
   public async add(name: string, secret: string) {
-    const parsedValue = secret.split(" ");
-
-    if (!(parsedValue.length === 12 || parsedValue.length === 24)) {
-      console.log(`Mnemonic has an invalid format: ${secret}`);
-      return;
-    }
-
     let password;
 
     if (!fs.existsSync(this.filePath)) {
@@ -159,7 +152,7 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async list() {
+  public async getMultiple(names: string[]): Promise<string[] | null> {
     let password;
 
     if (!fs.existsSync(this.filePath)) {
@@ -172,14 +165,50 @@ export class FileBackend implements IBackend {
 
       let content = JSON.parse(file.content);
 
-      const keys = Object.keys(content);
+      for (let name of names) {
+        if (!content[name]) {
+          console.log(`Account with name ${name} not found`);
+          null;
+        }
+      }
 
-      if (keys.length) {
-        for (let key of Object.keys(content)) {
+      if (!password) {
+        password = await this.validatePassword();
+      }
+
+      let secrets: any[] = [];
+
+      for (let name of names) {
+        secrets.push(
+          JSON.parse(
+            this.aesDecrypt(content[name], password, file.salt, file.iv)
+          )
+        );
+      }
+
+      return secrets;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  public async list(type: string) {
+    let password;
+
+    if (!fs.existsSync(this.filePath)) {
+      password = await this.choosePassword();
+      await this.createFileBackend(password);
+    }
+
+    try {
+      const file = this.readFile();
+
+      let content = JSON.parse(file.content);
+
+      for (let key of Object.keys(content)) {
+        if (key.startsWith(type)) {
           console.log(key);
         }
-      } else {
-        console.log(`Found ${Object.keys(content).length} accounts`);
       }
     } catch (err) {
       console.log(`Could not list accounts: ${err}`);

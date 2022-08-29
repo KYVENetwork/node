@@ -299,10 +299,20 @@ export interface IBackend {
   get(name: string): Promise<string | null>;
 
   /**
+   * Get multiple secrets at once
+   *
+   * @method getMultiple
+   * @param {string[]} names
+   * @return {Promise<string[] | null>}
+   */
+  getMultiple(names: string[]): Promise<string[] | null>;
+
+  /**
    * List all secrets
    *
    * @method list
+   * * @param {string} type
    * @return {Promise<void>}
    */
-  list(): Promise<void>;
+  list(type: string): Promise<void>;
 }

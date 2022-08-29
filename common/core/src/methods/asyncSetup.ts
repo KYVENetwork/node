@@ -23,7 +23,7 @@ export async function asyncSetup(this: Node): Promise<void> {
   }
 
   // retrieve mnemonic of account from file backend
-  const mnemonic = await this.backend.get(this.account);
+  const mnemonic = await this.backend.get(`account.${this.account}`);
 
   if (!mnemonic) {
     this.logger.error(`Account ${this.account} not found. Exiting ...`);
