@@ -11,14 +11,16 @@ export async function canPropose(this: Node): Promise<boolean> {
 
   while (true) {
     try {
+      const fromHeight =
+        +this.pool.bundle_proposal!.to_height ||
+        +this.pool.data!.current_height;
+
       const { possible, reason } = await this.lcd.kyve.query.v1beta1.canPropose(
         {
           pool_id: this.poolId.toString(),
           staker: this.staker,
           proposer: this.client.account.address,
-          from_height:
-            this.pool.bundle_proposal!.to_height ||
-            this.pool.data!.current_height,
+          from_height: fromHeight.toString(),
         }
       );
 
