@@ -34,7 +34,7 @@ export class FileBackend implements IBackend {
       let content = JSON.parse(file.content);
 
       if (content[name]) {
-        console.log(`Account with name ${name} already found`);
+        console.log(`${name} already found`);
         return;
       }
 
@@ -52,9 +52,9 @@ export class FileBackend implements IBackend {
       file.content = JSON.stringify(content);
       this.writeFile(file);
 
-      console.log(`Added account: ${name}`);
+      console.log(`Added: ${name}`);
     } catch (err) {
-      console.log(`Could not add account: ${err}`);
+      console.log(`Could not add: ${err}`);
     }
   }
 
@@ -72,7 +72,7 @@ export class FileBackend implements IBackend {
       let content = JSON.parse(file.content);
 
       if (!content[name]) {
-        console.log(`Account with name ${name} not found`);
+        console.log(`"${name}" not found`);
         return;
       }
 
@@ -81,9 +81,9 @@ export class FileBackend implements IBackend {
       file.content = JSON.stringify(content);
       this.writeFile(file);
 
-      console.log(`Removed account: ${name}`);
+      console.log(`Removed: ${name}`);
     } catch (err) {
-      console.log(`Could not remove account: ${err}`);
+      console.log(`Could not remove: ${err}`);
     }
   }
 
@@ -101,7 +101,7 @@ export class FileBackend implements IBackend {
       let content = JSON.parse(file.content);
 
       if (!content[name]) {
-        console.log(`Account with name ${name} not found`);
+        console.log(`"${name}" not found`);
         return;
       }
 
@@ -118,7 +118,7 @@ export class FileBackend implements IBackend {
 
       console.log(JSON.parse(secret));
     } catch (err) {
-      console.log(`Could not reveal account: ${err}`);
+      console.log(`Could not reveal: ${err}`);
     }
   }
 
@@ -136,7 +136,7 @@ export class FileBackend implements IBackend {
       let content = JSON.parse(file.content);
 
       if (!content[name]) {
-        console.log(`Account with name ${name} not found`);
+        console.log(`"${name}" not found`);
         return null;
       }
 
@@ -167,7 +167,7 @@ export class FileBackend implements IBackend {
 
       for (let name of names) {
         if (!content[name]) {
-          console.log(`Account with name ${name} not found`);
+          console.log(`"${name}" not found`);
           null;
         }
       }
@@ -192,7 +192,7 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async list(type: string) {
+  public async list() {
     let password;
 
     if (!fs.existsSync(this.filePath)) {
@@ -206,12 +206,10 @@ export class FileBackend implements IBackend {
       let content = JSON.parse(file.content);
 
       for (let key of Object.keys(content)) {
-        if (key.startsWith(type)) {
-          console.log(key);
-        }
+        console.log(key);
       }
     } catch (err) {
-      console.log(`Could not list accounts: ${err}`);
+      console.log(`Could not list: ${err}`);
     }
   }
 

@@ -14,7 +14,7 @@ export class Arweave implements IStorageProvider {
   });
 
   init(wallet: string) {
-    this.wallet = JSON.parse(readFileSync(wallet, "utf-8"));
+    this.wallet = JSON.parse(wallet);
 
     return this;
   }

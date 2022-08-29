@@ -70,7 +70,7 @@ export class Node {
   protected poolId!: number;
   protected staker!: string;
   protected account!: string;
-  protected keyfile!: string;
+  protected wallet!: string;
   protected network!: string;
   protected verbose!: boolean;
 
@@ -212,7 +212,7 @@ export class Node {
       .command("list")
       .description("List all valaccounts available")
       .action(async () => {
-        await this.backend.list("valaccount");
+        await this.backend.list();
       });
     valaccounts
       .command("remove")
@@ -248,7 +248,7 @@ export class Node {
       .command("list")
       .description("List all wallets available")
       .action(async () => {
-        await this.backend.list("wallet");
+        await this.backend.list();
       });
     wallets
       .command("remove")
@@ -311,7 +311,7 @@ export class Node {
     // assign program options
     this.poolId = options.pool;
     this.account = options.account;
-    this.keyfile = options.keyfile;
+    this.wallet = options.wallet;
     this.network = options.network;
     this.verbose = options.verbose;
 

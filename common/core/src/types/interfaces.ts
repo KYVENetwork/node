@@ -311,8 +311,7 @@ export interface IBackend {
    * List all secrets
    *
    * @method list
-   * * @param {string} type
    * @return {Promise<void>}
    */
-  list(type: string): Promise<void>;
+  list(): Promise<void>;
 }

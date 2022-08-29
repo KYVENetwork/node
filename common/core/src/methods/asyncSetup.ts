@@ -53,8 +53,16 @@ export async function asyncSetup(this: Node): Promise<void> {
   // check if valaccount already joined pool
   await this.canValidate();
 
+  // retrieve secret of wallet from file backend
+  const wallet = await this.backend.get(`wallet.${this.wallet}`);
+
+  if (!wallet) {
+    this.logger.error(`Wallet ${this.wallet} not found. Exiting ...`);
+    process.exit(1);
+  }
+
   // init storage provider with wallet
-  this.storageProvider = this.storageProvider.init(this.keyfile);
+  this.storageProvider = this.storageProvider.init(wallet);
 
   // init cache with work dir
   this.cache = this.cache.init(`./cache/${this.name}`);
