@@ -152,7 +152,7 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async getMultiple(names: string[]): Promise<string[] | null> {
+  public async getMultiple(names: string[]): Promise<string[]> {
     let password;
 
     if (!fs.existsSync(this.filePath)) {
@@ -188,7 +188,7 @@ export class FileBackend implements IBackend {
 
       return secrets;
     } catch (err) {
-      return null;
+      return [];
     }
   }
 

@@ -14,6 +14,7 @@ export class Arweave implements IStorageProvider {
   });
 
   init(wallet: string) {
+    // TODO: built in wallet format validation?
     this.wallet = JSON.parse(wallet);
 
     return this;

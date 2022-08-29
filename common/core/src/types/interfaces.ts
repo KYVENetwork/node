@@ -305,7 +305,7 @@ export interface IBackend {
    * @param {string[]} names
    * @return {Promise<string[] | null>}
    */
-  getMultiple(names: string[]): Promise<string[] | null>;
+  getMultiple(names: string[]): Promise<string[]>;
 
   /**
    * List all secrets

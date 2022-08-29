@@ -23,10 +23,18 @@ export async function asyncSetup(this: Node): Promise<void> {
   }
 
   // retrieve mnemonic of account from file backend
-  const mnemonic = await this.backend.get(`account.${this.account}`);
+  const [mnemonic, wallet] = await this.backend.getMultiple([
+    `valaccount.${this.account}`,
+    `wallet.${this.wallet}`,
+  ]);
 
   if (!mnemonic) {
-    this.logger.error(`Account ${this.account} not found. Exiting ...`);
+    this.logger.error(`Valaccount ${this.account} not found. Exiting ...`);
+    process.exit(1);
+  }
+
+  if (!wallet) {
+    this.logger.error(`Wallet ${this.wallet} not found. Exiting ...`);
     process.exit(1);
   }
 
@@ -50,22 +58,14 @@ export async function asyncSetup(this: Node): Promise<void> {
 
   this.name = this.generateName();
 
-  // check if valaccount already joined pool
-  await this.canValidate();
-
-  // retrieve secret of wallet from file backend
-  const wallet = await this.backend.get(`wallet.${this.wallet}`);
-
-  if (!wallet) {
-    this.logger.error(`Wallet ${this.wallet} not found. Exiting ...`);
-    process.exit(1);
-  }
-
   // init storage provider with wallet
   this.storageProvider = this.storageProvider.init(wallet);
 
   // init cache with work dir
   this.cache = this.cache.init(`./cache/${this.name}`);
+
+  // check if valaccount already joined pool
+  await this.canValidate();
 
   // log basic node info on startup
   this.logger.info("Starting node ...\n");
