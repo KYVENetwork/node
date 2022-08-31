@@ -7,7 +7,7 @@ import KyveBundlesMethods from "./kyve/bundles/v1beta1/bundles";
 import KyveDelegationMethods from "./kyve/delegation/v1beta1/delegation";
 import KyveGovMethods from "./kyve/gov/v1beta1/gov";
 import KyvePoolMethods from "./kyve/pool/v1beta1/pool";
-import KyveStakersMethods from "./kyve/stakers /v1beta1/stakers";
+import KyveStakersMethods from "./kyve/stakers/v1beta1/stakers";
 
 export default class KyveClient {
   public nativeClient: SigningStargateClient;
