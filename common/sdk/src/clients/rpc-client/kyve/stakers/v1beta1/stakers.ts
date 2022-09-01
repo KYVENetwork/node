@@ -5,8 +5,7 @@ import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 import { kyve } from "@kyve/proto";
 
-import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgStake;
-import MsgUnstake = kyve.registry.v1beta1.kyveStakers.MsgUnstake;
+import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgCreateStaker;
 import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
 import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
 import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
@@ -21,14 +20,14 @@ export default class {
     this.nativeClient = client;
   }
 
-  public async stake(
+  public async createStaker(
     value: Omit<MsgStake, "creator">,
     options?: {
       fee?: StdFee | "auto" | number;
       memo?: string;
     }
   ) {
-    const tx = withTypeUrl.stake({
+    const tx = withTypeUrl.createStaker({
       ...value,
       creator: this.account.address,
     });
@@ -38,22 +37,6 @@ export default class {
     );
   }
 
-  public async unstake(
-    value: Omit<MsgUnstake, "creator">,
-    options?: {
-      fee?: StdFee | "auto" | number;
-      memo?: string;
-    }
-  ) {
-    const tx = withTypeUrl.unstake({
-      ...value,
-      creator: this.account.address,
-    });
-    return new TxPromise(
-      this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
-    );
-  }
   public async updateMetadata(
     value: Omit<MsgUpdateMetadata, "creator">,
     options?: {

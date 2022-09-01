@@ -5,8 +5,7 @@ import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
 import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
 
 /** stakers **/
-import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgStake;
-import MsgUnstake = kyve.registry.v1beta1.kyveStakers.MsgUnstake;
+import MsgCreateStaker = kyve.registry.v1beta1.kyveStakers.MsgCreateStaker;
 import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
 import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
 import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
@@ -31,8 +30,7 @@ export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ["/kyve.pool.v1beta1.MsgFundPool", MsgFundPool],
   ["/kyve.pool.v1beta1.MsgDefundPool", MsgDefundPool],
   /** stakers **/
-  ["/kyve.stakers.v1beta1.MsgStake", MsgStake],
-  ["/kyve.stakers.v1beta1.MsgUnstake", MsgUnstake],
+  ["/kyve.stakers.v1beta1.MsgCreateStaker", MsgCreateStaker],
   ["/kyve.stakers.v1beta1.MsgUpdateMetadata", MsgUpdateMetadata],
   ["/kyve.stakers.v1beta1.MsgUpdateCommission", MsgUpdateCommission],
   ["/kyve.stakers.v1beta1.MsgJoinPool", MsgJoinPool],
@@ -69,19 +67,13 @@ export const encodeTxMsg = {
     };
   },
 
-  stake(value: MsgStake) {
+  createStaker(value: MsgCreateStaker) {
     return {
-      type_url: "/kyve.stakers.v1beta1.MsgStake",
-      value: MsgStake.encode(value).finish(),
+      type_url: "/kyve.stakers.v1beta1.MsgCreateStaker",
+      value: MsgCreateStaker.encode(value).finish(),
     };
   },
 
-  unstake(value: MsgUnstake) {
-    return {
-      type_url: "/kyve.stakers.v1beta1.MsgUnstake",
-      value: MsgUnstake.encode(value).finish(),
-    };
-  },
 
   updateMetadata(value: MsgUpdateMetadata) {
     return {
@@ -175,19 +167,13 @@ export const withTypeUrl = {
     };
   },
 
-  stake(value: MsgStake) {
+  createStaker(value: MsgCreateStaker) {
     return {
-      typeUrl: "/kyve.stakers.v1beta1.MsgStake",
+      typeUrl: "/kyve.stakers.v1beta1.MsgCreateStaker",
       value,
     };
   },
 
-  unstake(value: MsgUnstake) {
-    return {
-      typeUrl: "/kyve.stakers.v1beta1.MsgUnstake",
-      value,
-    };
-  },
   updateMetadata(value: MsgUpdateMetadata) {
     return {
       typeUrl: "/kyve.stakers.v1beta1.MsgUpdateMetadata",

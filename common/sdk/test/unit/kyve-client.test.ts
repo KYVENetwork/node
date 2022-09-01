@@ -16,8 +16,7 @@ import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
 import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
 import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
 
-import MsgStake = kyve.registry.v1beta1.kyveStakers.MsgStake;
-import MsgUnstake = kyve.registry.v1beta1.kyveStakers.MsgUnstake;
+import MsgCreateStaker = kyve.registry.v1beta1.kyveStakers.MsgCreateStaker;
 import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
 import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
 import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
@@ -161,17 +160,10 @@ const methodsByGroup = [
     },
     [
       {
-        methodName: "stake",
+        methodName: "createStaker",
         parameters: {
-          params: MsgStake.fromJSON({}),
-          schemaType: "MsgStake",
-        },
-      },
-      {
-        methodName: "unstake",
-        parameters: {
-          params: MsgUnstake.fromJSON({}),
-          schemaType: "MsgUnstake",
+          params: MsgCreateStaker.fromJSON({}),
+          schemaType: "MsgCreateStaker",
         },
       },
       {
