@@ -237,7 +237,7 @@ export const withTypeUrl = {
   },
   skipUploaderRole(value: MsgSkipUploaderRole) {
     return {
-      typeUrl: "/kyve.bundles.v1beta1.MsgVoteBundleProposal",
+      typeUrl: "/kyve.bundles.v1beta1.MsgSkipUploaderRole",
       value,
     };
   },
