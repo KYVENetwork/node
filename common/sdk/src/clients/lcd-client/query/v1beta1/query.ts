@@ -140,7 +140,9 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
 
   async finalizedBundles(
     params: PaginationPartialRequestUtilType<kyveQueryBundles.QueryFinalizedBundlesRequest>
-  ): Promise<PaginationResponseTypeUtil<kyveQueryBundlesRes.QueryFinalizedBundlesResponse>> {
+  ): Promise<
+    PaginationResponseTypeUtil<kyveQueryBundlesRes.QueryFinalizedBundlesResponse>
+  > {
     const parameters: Record<string, any> = {};
 
     if (typeof params?.pagination !== "undefined") {
@@ -185,7 +187,9 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   }
   async delegatorsByStaker(
     params: PaginationPartialRequestUtilType<kyveQueryDelegation.QueryDelegatorsByStakerRequest>
-  ): Promise<PaginationResponseTypeUtil<kyveQueryDelegationRes.QueryDelegatorsByStakerResponse>> {
+  ): Promise<
+    PaginationResponseTypeUtil<kyveQueryDelegationRes.QueryDelegatorsByStakerResponse>
+  > {
     const parameters: Record<string, any> = {};
 
     if (typeof params?.pagination !== "undefined") {
@@ -196,7 +200,9 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   }
   async stakersByDelegator(
     params: PaginationPartialRequestUtilType<kyveQueryDelegation.QueryStakersByDelegatorRequest>
-  ): Promise<PaginationResponseTypeUtil<kyveQueryDelegationRes.QueryStakersByDelegatorResponse>> {
+  ): Promise<
+    PaginationResponseTypeUtil<kyveQueryDelegationRes.QueryStakersByDelegatorResponse>
+  > {
     const parameters: Record<string, any> = {};
 
     if (typeof params?.pagination !== "undefined") {
@@ -216,15 +222,19 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   }
 
   async accountStakingUnbondings(
-      params: PaginationPartialRequestUtilType<kyveQueryAccount.QueryAccountStakingUnbondingsRequest>
-  ): Promise<PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountStakingUnbondingsResponse>> {
+    params: PaginationPartialRequestUtilType<kyveQueryAccount.QueryAccountStakingUnbondingsRequest>
+  ): Promise<
+    PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountStakingUnbondingsResponse>
+  > {
     const endpoint = `/kyve/query/v1beta1/account_staking_unbondings/${params.address}`;
     return await this.request(endpoint);
   }
 
   async accountDelegationUnbondings(
     params: PaginationPartialRequestUtilType<kyveQueryAccount.QueryAccountDelegationUnbondingsRequest>
-  ): Promise<PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountDelegationUnbondingsResponse>> {
+  ): Promise<
+    PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountDelegationUnbondingsResponse>
+  > {
     const endpoint = `/kyve/query/v1beta1/account_assets/${params.address}`;
     return await this.request(endpoint);
   }

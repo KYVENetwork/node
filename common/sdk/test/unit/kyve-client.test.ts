@@ -41,6 +41,7 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
+import { MsgSkipUploaderRole } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
 
 function extractTsFromPath(path: string) {
   return fs
@@ -87,6 +88,13 @@ const methodsByGroup = [
         parameters: {
           params: MsgClaimUploaderRole.fromJSON({}),
           schemaType: "MsgClaimUploaderRole",
+        },
+      },
+      {
+        methodName: "skipUploaderRole",
+        parameters: {
+          params: MsgSkipUploaderRole.fromJSON({}),
+          schemaType: "MsgSkipUploaderRole",
         },
       },
     ],
