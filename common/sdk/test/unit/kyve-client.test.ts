@@ -7,6 +7,7 @@ import { kyve, cosmos as cosmosProto } from "@kyve/proto";
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
 import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+import MsgSkipUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgSkipUploaderRole;
 
 import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
 import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
@@ -41,7 +42,6 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
-import { MsgSkipUploaderRole } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
 
 function extractTsFromPath(path: string) {
   return fs
