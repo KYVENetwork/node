@@ -28,6 +28,7 @@ import {
   waitForNextBundleProposal,
   canPropose,
   submitBundleProposal,
+  skipUploaderRole,
   proposeBundle,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
@@ -93,6 +94,7 @@ export class Node {
   protected waitForNextBundleProposal = waitForNextBundleProposal;
   protected canPropose = canPropose;
   protected submitBundleProposal = submitBundleProposal;
+  protected skipUploaderRole = skipUploaderRole;
   protected proposeBundle = proposeBundle;
   protected runNode = runNode;
   protected runCache = runCache;

@@ -103,23 +103,8 @@ export async function proposeBundle(
       bundleHash
     );
   } else {
-    this.logger.info(
-      `Creating new bundle proposal of type ${KYVE_NO_DATA_BUNDLE}`
-    );
+    this.logger.info(`Skipping uploader role because no data was found`);
 
-    storageId = `KYVE_NO_DATA_BUNDLE_${this.poolId}_${Math.floor(
-      Date.now() / 1000
-    )}`;
-
-    await this.submitBundleProposal(
-      storageId,
-      0,
-      fromHeight,
-      fromHeight,
-      fromKey,
-      "",
-      "",
-      ""
-    );
+    await this.skipUploaderRole(fromHeight);
   }
 }
