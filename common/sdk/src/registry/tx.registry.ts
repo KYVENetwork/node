@@ -21,6 +21,7 @@ import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
 import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+import MsgSkipUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgSkipUploaderRole;
 
 /** cosmos **/
 import MsgSubmitProposal = cosmos.registry.v1beta1.cosmosGovTx.MsgSubmitProposal;
@@ -44,6 +45,7 @@ export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ["/kyve.bundles.v1beta1.MsgSubmitBundleProposal", MsgSubmitBundleProposal],
   ["/kyve.bundles.v1beta1.MsgVoteBundleProposal", MsgVoteBundleProposal],
   ["/kyve.bundles.v1beta1.MsgClaimUploaderRole", MsgClaimUploaderRole],
+  ["/kyve.bundles.v1beta1.MsgSkipUploaderRole", MsgSkipUploaderRole],
   /** cosmos **/
   ["/cosmos.gov.v1beta1.MsgSubmitProposal", MsgSubmitProposal],
 ];
@@ -73,7 +75,6 @@ export const encodeTxMsg = {
       value: MsgCreateStaker.encode(value).finish(),
     };
   },
-
 
   updateMetadata(value: MsgUpdateMetadata) {
     return {
@@ -229,6 +230,12 @@ export const withTypeUrl = {
     };
   },
   voteBundleProposal(value: MsgVoteBundleProposal) {
+    return {
+      typeUrl: "/kyve.bundles.v1beta1.MsgVoteBundleProposal",
+      value,
+    };
+  },
+  skipUploaderRole(value: MsgSkipUploaderRole) {
     return {
       typeUrl: "/kyve.bundles.v1beta1.MsgVoteBundleProposal",
       value,

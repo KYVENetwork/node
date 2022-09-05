@@ -25,6 +25,46 @@ export interface QueryFinalizedBundlesResponse {
   pagination?: PageResponse;
 }
 
+/** QueryFinalizedBundleRequest is the request type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundleRequest {
+  /** pool_id ... */
+  pool_id: string;
+  /** id ... */
+  id: string;
+}
+
+/** QueryFinalizedBundleResponse is the response type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundleResponse {
+  /** finalized_bundle ... */
+  finalized_bundle?: FinalizedBundle;
+}
+
+/** QueryFinalizedBundleRequest is the request type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundleByStorageIdRequest {
+  /** pool_id ... */
+  storage_id: string;
+}
+
+/** QueryFinalizedBundleResponse is the response type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundleByStorageIdResponse {
+  /** finalized_bundle ... */
+  finalized_bundle?: FinalizedBundle;
+}
+
+/** QueryFinalizedBundleRequest is the request type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundlesByHeightRequest {
+  /** pool_id ... */
+  pool_id: string;
+  /** id ... */
+  height: string;
+}
+
+/** QueryFinalizedBundleResponse is the response type for the Query/Staker RPC method. */
+export interface QueryFinalizedBundlesByHeightResponse {
+  /** finalized_bundle ... */
+  finalized_bundle?: FinalizedBundle;
+}
+
 /** QueryCurrentVoteStatusRequest is the request type for the Query/Staker RPC method. */
 export interface QueryCurrentVoteStatusRequest {
   /** pool_id ... */
@@ -41,20 +81,6 @@ export interface QueryCurrentVoteStatusResponse {
   abstain: string;
   /** total ... */
   total: string;
-}
-
-/** QueryFinalizedBundleRequest is the request type for the Query/Staker RPC method. */
-export interface QueryFinalizedBundleRequest {
-  /** pool_id ... */
-  pool_id: string;
-  /** id ... */
-  id: string;
-}
-
-/** QueryFinalizedBundleResponse is the response type for the Query/Staker RPC method. */
-export interface QueryFinalizedBundleResponse {
-  /** finalized_bundle ... */
-  finalized_bundle?: FinalizedBundle;
 }
 
 /** QueryCanProposeRequest is the request type for the Query/CanPropose RPC method. */
@@ -276,6 +302,408 @@ export const QueryFinalizedBundlesResponse = {
   },
 };
 
+function createBaseQueryFinalizedBundleRequest(): QueryFinalizedBundleRequest {
+  return { pool_id: "0", id: "0" };
+}
+
+export const QueryFinalizedBundleRequest = {
+  encode(
+    message: QueryFinalizedBundleRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.id !== "0") {
+      writer.uint32(16).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundleRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundleRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.id = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundleRequest {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      id: isSet(object.id) ? String(object.id) : "0",
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundleRequest): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleRequest>, I>>(
+    object: I
+  ): QueryFinalizedBundleRequest {
+    const message = createBaseQueryFinalizedBundleRequest();
+    message.pool_id = object.pool_id ?? "0";
+    message.id = object.id ?? "0";
+    return message;
+  },
+};
+
+function createBaseQueryFinalizedBundleResponse(): QueryFinalizedBundleResponse {
+  return { finalized_bundle: undefined };
+}
+
+export const QueryFinalizedBundleResponse = {
+  encode(
+    message: QueryFinalizedBundleResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.finalized_bundle !== undefined) {
+      FinalizedBundle.encode(
+        message.finalized_bundle,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundleResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundleResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.finalized_bundle = FinalizedBundle.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundleResponse {
+    return {
+      finalized_bundle: isSet(object.finalized_bundle)
+        ? FinalizedBundle.fromJSON(object.finalized_bundle)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundleResponse): unknown {
+    const obj: any = {};
+    message.finalized_bundle !== undefined &&
+      (obj.finalized_bundle = message.finalized_bundle
+        ? FinalizedBundle.toJSON(message.finalized_bundle)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleResponse>, I>>(
+    object: I
+  ): QueryFinalizedBundleResponse {
+    const message = createBaseQueryFinalizedBundleResponse();
+    message.finalized_bundle =
+      object.finalized_bundle !== undefined && object.finalized_bundle !== null
+        ? FinalizedBundle.fromPartial(object.finalized_bundle)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryFinalizedBundleByStorageIdRequest(): QueryFinalizedBundleByStorageIdRequest {
+  return { storage_id: "" };
+}
+
+export const QueryFinalizedBundleByStorageIdRequest = {
+  encode(
+    message: QueryFinalizedBundleByStorageIdRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.storage_id !== "") {
+      writer.uint32(10).string(message.storage_id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundleByStorageIdRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundleByStorageIdRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.storage_id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundleByStorageIdRequest {
+    return {
+      storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundleByStorageIdRequest): unknown {
+    const obj: any = {};
+    message.storage_id !== undefined && (obj.storage_id = message.storage_id);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdRequest>, I>
+  >(object: I): QueryFinalizedBundleByStorageIdRequest {
+    const message = createBaseQueryFinalizedBundleByStorageIdRequest();
+    message.storage_id = object.storage_id ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryFinalizedBundleByStorageIdResponse(): QueryFinalizedBundleByStorageIdResponse {
+  return { finalized_bundle: undefined };
+}
+
+export const QueryFinalizedBundleByStorageIdResponse = {
+  encode(
+    message: QueryFinalizedBundleByStorageIdResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.finalized_bundle !== undefined) {
+      FinalizedBundle.encode(
+        message.finalized_bundle,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundleByStorageIdResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundleByStorageIdResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.finalized_bundle = FinalizedBundle.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundleByStorageIdResponse {
+    return {
+      finalized_bundle: isSet(object.finalized_bundle)
+        ? FinalizedBundle.fromJSON(object.finalized_bundle)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundleByStorageIdResponse): unknown {
+    const obj: any = {};
+    message.finalized_bundle !== undefined &&
+      (obj.finalized_bundle = message.finalized_bundle
+        ? FinalizedBundle.toJSON(message.finalized_bundle)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdResponse>, I>
+  >(object: I): QueryFinalizedBundleByStorageIdResponse {
+    const message = createBaseQueryFinalizedBundleByStorageIdResponse();
+    message.finalized_bundle =
+      object.finalized_bundle !== undefined && object.finalized_bundle !== null
+        ? FinalizedBundle.fromPartial(object.finalized_bundle)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryFinalizedBundlesByHeightRequest(): QueryFinalizedBundlesByHeightRequest {
+  return { pool_id: "0", height: "0" };
+}
+
+export const QueryFinalizedBundlesByHeightRequest = {
+  encode(
+    message: QueryFinalizedBundlesByHeightRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.height !== "0") {
+      writer.uint32(16).uint64(message.height);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundlesByHeightRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundlesByHeightRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.height = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundlesByHeightRequest {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      height: isSet(object.height) ? String(object.height) : "0",
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundlesByHeightRequest): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.height !== undefined && (obj.height = message.height);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightRequest>, I>
+  >(object: I): QueryFinalizedBundlesByHeightRequest {
+    const message = createBaseQueryFinalizedBundlesByHeightRequest();
+    message.pool_id = object.pool_id ?? "0";
+    message.height = object.height ?? "0";
+    return message;
+  },
+};
+
+function createBaseQueryFinalizedBundlesByHeightResponse(): QueryFinalizedBundlesByHeightResponse {
+  return { finalized_bundle: undefined };
+}
+
+export const QueryFinalizedBundlesByHeightResponse = {
+  encode(
+    message: QueryFinalizedBundlesByHeightResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.finalized_bundle !== undefined) {
+      FinalizedBundle.encode(
+        message.finalized_bundle,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryFinalizedBundlesByHeightResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFinalizedBundlesByHeightResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.finalized_bundle = FinalizedBundle.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFinalizedBundlesByHeightResponse {
+    return {
+      finalized_bundle: isSet(object.finalized_bundle)
+        ? FinalizedBundle.fromJSON(object.finalized_bundle)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryFinalizedBundlesByHeightResponse): unknown {
+    const obj: any = {};
+    message.finalized_bundle !== undefined &&
+      (obj.finalized_bundle = message.finalized_bundle
+        ? FinalizedBundle.toJSON(message.finalized_bundle)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightResponse>, I>
+  >(object: I): QueryFinalizedBundlesByHeightResponse {
+    const message = createBaseQueryFinalizedBundlesByHeightResponse();
+    message.finalized_bundle =
+      object.finalized_bundle !== undefined && object.finalized_bundle !== null
+        ? FinalizedBundle.fromPartial(object.finalized_bundle)
+        : undefined;
+    return message;
+  },
+};
+
 function createBaseQueryCurrentVoteStatusRequest(): QueryCurrentVoteStatusRequest {
   return { pool_id: "0" };
 }
@@ -413,143 +841,6 @@ export const QueryCurrentVoteStatusResponse = {
     message.invalid = object.invalid ?? "0";
     message.abstain = object.abstain ?? "0";
     message.total = object.total ?? "0";
-    return message;
-  },
-};
-
-function createBaseQueryFinalizedBundleRequest(): QueryFinalizedBundleRequest {
-  return { pool_id: "0", id: "0" };
-}
-
-export const QueryFinalizedBundleRequest = {
-  encode(
-    message: QueryFinalizedBundleRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.pool_id !== "0") {
-      writer.uint32(8).uint64(message.pool_id);
-    }
-    if (message.id !== "0") {
-      writer.uint32(16).uint64(message.id);
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryFinalizedBundleRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pool_id = longToString(reader.uint64() as Long);
-          break;
-        case 2:
-          message.id = longToString(reader.uint64() as Long);
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryFinalizedBundleRequest {
-    return {
-      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      id: isSet(object.id) ? String(object.id) : "0",
-    };
-  },
-
-  toJSON(message: QueryFinalizedBundleRequest): unknown {
-    const obj: any = {};
-    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.id !== undefined && (obj.id = message.id);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleRequest>, I>>(
-    object: I
-  ): QueryFinalizedBundleRequest {
-    const message = createBaseQueryFinalizedBundleRequest();
-    message.pool_id = object.pool_id ?? "0";
-    message.id = object.id ?? "0";
-    return message;
-  },
-};
-
-function createBaseQueryFinalizedBundleResponse(): QueryFinalizedBundleResponse {
-  return { finalized_bundle: undefined };
-}
-
-export const QueryFinalizedBundleResponse = {
-  encode(
-    message: QueryFinalizedBundleResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.finalized_bundle !== undefined) {
-      FinalizedBundle.encode(
-        message.finalized_bundle,
-        writer.uint32(10).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryFinalizedBundleResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.finalized_bundle = FinalizedBundle.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryFinalizedBundleResponse {
-    return {
-      finalized_bundle: isSet(object.finalized_bundle)
-        ? FinalizedBundle.fromJSON(object.finalized_bundle)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryFinalizedBundleResponse): unknown {
-    const obj: any = {};
-    message.finalized_bundle !== undefined &&
-      (obj.finalized_bundle = message.finalized_bundle
-        ? FinalizedBundle.toJSON(message.finalized_bundle)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleResponse>, I>>(
-    object: I
-  ): QueryFinalizedBundleResponse {
-    const message = createBaseQueryFinalizedBundleResponse();
-    message.finalized_bundle =
-      object.finalized_bundle !== undefined && object.finalized_bundle !== null
-        ? FinalizedBundle.fromPartial(object.finalized_bundle)
-        : undefined;
     return message;
   },
 };
@@ -994,6 +1285,14 @@ export interface QueryBundles {
   FinalizedBundle(
     request: QueryFinalizedBundleRequest
   ): Promise<QueryFinalizedBundleResponse>;
+  /** StorageID -> single */
+  FinalizedBundleByStorageId(
+    request: QueryFinalizedBundleByStorageIdRequest
+  ): Promise<QueryFinalizedBundleByStorageIdResponse>;
+  /** Queries the bundle which contains the data given height */
+  FinalizedBundlesByHeight(
+    request: QueryFinalizedBundlesByHeightRequest
+  ): Promise<QueryFinalizedBundlesByHeightResponse>;
   /** CurrentVoteStatus ... */
   CurrentVoteStatus(
     request: QueryCurrentVoteStatusRequest
@@ -1014,6 +1313,9 @@ export class QueryBundlesClientImpl implements QueryBundles {
     this.rpc = rpc;
     this.FinalizedBundles = this.FinalizedBundles.bind(this);
     this.FinalizedBundle = this.FinalizedBundle.bind(this);
+    this.FinalizedBundleByStorageId =
+      this.FinalizedBundleByStorageId.bind(this);
+    this.FinalizedBundlesByHeight = this.FinalizedBundlesByHeight.bind(this);
     this.CurrentVoteStatus = this.CurrentVoteStatus.bind(this);
     this.CanValidate = this.CanValidate.bind(this);
     this.CanPropose = this.CanPropose.bind(this);
@@ -1044,6 +1346,35 @@ export class QueryBundlesClientImpl implements QueryBundles {
     );
     return promise.then((data) =>
       QueryFinalizedBundleResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  FinalizedBundleByStorageId(
+    request: QueryFinalizedBundleByStorageIdRequest
+  ): Promise<QueryFinalizedBundleByStorageIdResponse> {
+    const data =
+      QueryFinalizedBundleByStorageIdRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.query.v1beta1.QueryBundles",
+      "FinalizedBundleByStorageId",
+      data
+    );
+    return promise.then((data) =>
+      QueryFinalizedBundleByStorageIdResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  FinalizedBundlesByHeight(
+    request: QueryFinalizedBundlesByHeightRequest
+  ): Promise<QueryFinalizedBundlesByHeightResponse> {
+    const data = QueryFinalizedBundlesByHeightRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.query.v1beta1.QueryBundles",
+      "FinalizedBundlesByHeight",
+      data
+    );
+    return promise.then((data) =>
+      QueryFinalizedBundlesByHeightResponse.decode(new _m0.Reader(data))
     );
   }
 

@@ -7,6 +7,7 @@ import { kyve, cosmos as cosmosProto } from "@kyve/proto";
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
 import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
+import MsgSkipUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgSkipUploaderRole;
 
 import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
 import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
@@ -87,6 +88,13 @@ const methodsByGroup = [
         parameters: {
           params: MsgClaimUploaderRole.fromJSON({}),
           schemaType: "MsgClaimUploaderRole",
+        },
+      },
+      {
+        methodName: "skipUploaderRole",
+        parameters: {
+          params: MsgSkipUploaderRole.fromJSON({}),
+          schemaType: "MsgSkipUploaderRole",
         },
       },
     ],

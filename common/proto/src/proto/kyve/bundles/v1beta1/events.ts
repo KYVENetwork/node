@@ -76,6 +76,18 @@ export interface EventBundleFinalized {
   reward_total: string;
 }
 
+/** EventSkippedUploaderRole is an event emitted when an uploader skips the upload */
+export interface EventSkippedUploaderRole {
+  /** pool_id ... */
+  pool_id: string;
+  /** id ... */
+  id: string;
+  /** previous_uploader ... */
+  previous_uploader: string;
+  /** new_uploader ... */
+  new_uploader: string;
+}
+
 function createBaseEventBundleVote(): EventBundleVote {
   return { pool_id: "0", staker: "", storage_id: "", vote: 0 };
 }
@@ -493,6 +505,96 @@ export const EventBundleFinalized = {
     message.reward_uploader = object.reward_uploader ?? "0";
     message.reward_delegation = object.reward_delegation ?? "0";
     message.reward_total = object.reward_total ?? "0";
+    return message;
+  },
+};
+
+function createBaseEventSkippedUploaderRole(): EventSkippedUploaderRole {
+  return { pool_id: "0", id: "0", previous_uploader: "", new_uploader: "" };
+}
+
+export const EventSkippedUploaderRole = {
+  encode(
+    message: EventSkippedUploaderRole,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.id !== "0") {
+      writer.uint32(16).uint64(message.id);
+    }
+    if (message.previous_uploader !== "") {
+      writer.uint32(26).string(message.previous_uploader);
+    }
+    if (message.new_uploader !== "") {
+      writer.uint32(34).string(message.new_uploader);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): EventSkippedUploaderRole {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventSkippedUploaderRole();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.id = longToString(reader.uint64() as Long);
+          break;
+        case 3:
+          message.previous_uploader = reader.string();
+          break;
+        case 4:
+          message.new_uploader = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventSkippedUploaderRole {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      id: isSet(object.id) ? String(object.id) : "0",
+      previous_uploader: isSet(object.previous_uploader)
+        ? String(object.previous_uploader)
+        : "",
+      new_uploader: isSet(object.new_uploader)
+        ? String(object.new_uploader)
+        : "",
+    };
+  },
+
+  toJSON(message: EventSkippedUploaderRole): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.id !== undefined && (obj.id = message.id);
+    message.previous_uploader !== undefined &&
+      (obj.previous_uploader = message.previous_uploader);
+    message.new_uploader !== undefined &&
+      (obj.new_uploader = message.new_uploader);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventSkippedUploaderRole>, I>>(
+    object: I
+  ): EventSkippedUploaderRole {
+    const message = createBaseEventSkippedUploaderRole();
+    message.pool_id = object.pool_id ?? "0";
+    message.id = object.id ?? "0";
+    message.previous_uploader = object.previous_uploader ?? "";
+    message.new_uploader = object.new_uploader ?? "";
     return message;
   },
 };

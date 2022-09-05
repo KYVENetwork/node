@@ -114,7 +114,17 @@ export interface QueryAccountRedelegationRequest {
 /** QueryAccountDelegationListRequest is the response type for the Query/AccountDelegationList RPC method. */
 export interface QueryAccountRedelegationResponse {
   /** redelegation_cooldown_entries ... */
-  redelegation_cooldown_entries: string[];
+  redelegation_cooldown_entries: RedelegationEntry[];
+  /** availableSlots ... */
+  availableSlots: string;
+}
+
+/** RedelegationEntry ... */
+export interface RedelegationEntry {
+  /** creation_date ... */
+  creation_date: string;
+  /** finish_date ... */
+  finish_date: string;
 }
 
 function createBaseQueryAccountAssetsRequest(): QueryAccountAssetsRequest {
@@ -1053,7 +1063,7 @@ export const QueryAccountRedelegationRequest = {
 };
 
 function createBaseQueryAccountRedelegationResponse(): QueryAccountRedelegationResponse {
-  return { redelegation_cooldown_entries: [] };
+  return { redelegation_cooldown_entries: [], availableSlots: "0" };
 }
 
 export const QueryAccountRedelegationResponse = {
@@ -1061,11 +1071,12 @@ export const QueryAccountRedelegationResponse = {
     message: QueryAccountRedelegationResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    writer.uint32(10).fork();
     for (const v of message.redelegation_cooldown_entries) {
-      writer.uint64(v);
+      RedelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.ldelim();
+    if (message.availableSlots !== "0") {
+      writer.uint32(16).uint64(message.availableSlots);
+    }
     return writer;
   },
 
@@ -1080,18 +1091,12 @@ export const QueryAccountRedelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if ((tag & 7) === 2) {
-            const end2 = reader.uint32() + reader.pos;
-            while (reader.pos < end2) {
-              message.redelegation_cooldown_entries.push(
-                longToString(reader.uint64() as Long)
-              );
-            }
-          } else {
-            message.redelegation_cooldown_entries.push(
-              longToString(reader.uint64() as Long)
-            );
-          }
+          message.redelegation_cooldown_entries.push(
+            RedelegationEntry.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.availableSlots = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -1106,8 +1111,13 @@ export const QueryAccountRedelegationResponse = {
       redelegation_cooldown_entries: Array.isArray(
         object?.redelegation_cooldown_entries
       )
-        ? object.redelegation_cooldown_entries.map((e: any) => String(e))
+        ? object.redelegation_cooldown_entries.map((e: any) =>
+            RedelegationEntry.fromJSON(e)
+          )
         : [],
+      availableSlots: isSet(object.availableSlots)
+        ? String(object.availableSlots)
+        : "0",
     };
   },
 
@@ -1115,10 +1125,14 @@ export const QueryAccountRedelegationResponse = {
     const obj: any = {};
     if (message.redelegation_cooldown_entries) {
       obj.redelegation_cooldown_entries =
-        message.redelegation_cooldown_entries.map((e) => e);
+        message.redelegation_cooldown_entries.map((e) =>
+          e ? RedelegationEntry.toJSON(e) : undefined
+        );
     } else {
       obj.redelegation_cooldown_entries = [];
     }
+    message.availableSlots !== undefined &&
+      (obj.availableSlots = message.availableSlots);
     return obj;
   },
 
@@ -1127,7 +1141,77 @@ export const QueryAccountRedelegationResponse = {
   >(object: I): QueryAccountRedelegationResponse {
     const message = createBaseQueryAccountRedelegationResponse();
     message.redelegation_cooldown_entries =
-      object.redelegation_cooldown_entries?.map((e) => e) || [];
+      object.redelegation_cooldown_entries?.map((e) =>
+        RedelegationEntry.fromPartial(e)
+      ) || [];
+    message.availableSlots = object.availableSlots ?? "0";
+    return message;
+  },
+};
+
+function createBaseRedelegationEntry(): RedelegationEntry {
+  return { creation_date: "0", finish_date: "0" };
+}
+
+export const RedelegationEntry = {
+  encode(
+    message: RedelegationEntry,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.creation_date !== "0") {
+      writer.uint32(8).uint64(message.creation_date);
+    }
+    if (message.finish_date !== "0") {
+      writer.uint32(16).uint64(message.finish_date);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RedelegationEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRedelegationEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creation_date = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.finish_date = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RedelegationEntry {
+    return {
+      creation_date: isSet(object.creation_date)
+        ? String(object.creation_date)
+        : "0",
+      finish_date: isSet(object.finish_date) ? String(object.finish_date) : "0",
+    };
+  },
+
+  toJSON(message: RedelegationEntry): unknown {
+    const obj: any = {};
+    message.creation_date !== undefined &&
+      (obj.creation_date = message.creation_date);
+    message.finish_date !== undefined &&
+      (obj.finish_date = message.finish_date);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RedelegationEntry>, I>>(
+    object: I
+  ): RedelegationEntry {
+    const message = createBaseRedelegationEntry();
+    message.creation_date = object.creation_date ?? "0";
+    message.finish_date = object.finish_date ?? "0";
     return message;
   },
 };

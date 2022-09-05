@@ -129,6 +129,21 @@ export interface MsgClaimUploaderRole {
 /** MsgClaimUploaderRoleResponse defines the Msg/ClaimUploaderRole response type. */
 export interface MsgClaimUploaderRoleResponse {}
 
+/** MsgSubmitBundleProposal defines a SDK message for submitting a bundle proposal. */
+export interface MsgSkipUploaderRole {
+  /** creator ... */
+  creator: string;
+  /** staker ... */
+  staker: string;
+  /** pool_id ... */
+  pool_id: string;
+  /** from_height ... */
+  from_height: string;
+}
+
+/** MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type. */
+export interface MsgSkipUploaderRoleResponse {}
+
 function createBaseMsgSubmitBundleProposal(): MsgSubmitBundleProposal {
   return {
     creator: "",
@@ -607,6 +622,135 @@ export const MsgClaimUploaderRoleResponse = {
   },
 };
 
+function createBaseMsgSkipUploaderRole(): MsgSkipUploaderRole {
+  return { creator: "", staker: "", pool_id: "0", from_height: "0" };
+}
+
+export const MsgSkipUploaderRole = {
+  encode(
+    message: MsgSkipUploaderRole,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.staker !== "") {
+      writer.uint32(18).string(message.staker);
+    }
+    if (message.pool_id !== "0") {
+      writer.uint32(24).uint64(message.pool_id);
+    }
+    if (message.from_height !== "0") {
+      writer.uint32(32).uint64(message.from_height);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSkipUploaderRole {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSkipUploaderRole();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.staker = reader.string();
+          break;
+        case 3:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 4:
+          message.from_height = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSkipUploaderRole {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
+    };
+  },
+
+  toJSON(message: MsgSkipUploaderRole): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.staker !== undefined && (obj.staker = message.staker);
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.from_height !== undefined &&
+      (obj.from_height = message.from_height);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRole>, I>>(
+    object: I
+  ): MsgSkipUploaderRole {
+    const message = createBaseMsgSkipUploaderRole();
+    message.creator = object.creator ?? "";
+    message.staker = object.staker ?? "";
+    message.pool_id = object.pool_id ?? "0";
+    message.from_height = object.from_height ?? "0";
+    return message;
+  },
+};
+
+function createBaseMsgSkipUploaderRoleResponse(): MsgSkipUploaderRoleResponse {
+  return {};
+}
+
+export const MsgSkipUploaderRoleResponse = {
+  encode(
+    _: MsgSkipUploaderRoleResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgSkipUploaderRoleResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSkipUploaderRoleResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSkipUploaderRoleResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSkipUploaderRoleResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRoleResponse>, I>>(
+    _: I
+  ): MsgSkipUploaderRoleResponse {
+    const message = createBaseMsgSkipUploaderRoleResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /**
@@ -624,6 +768,10 @@ export interface Msg {
   ClaimUploaderRole(
     request: MsgClaimUploaderRole
   ): Promise<MsgClaimUploaderRoleResponse>;
+  /** SkipUploaderRole ... */
+  SkipUploaderRole(
+    request: MsgSkipUploaderRole
+  ): Promise<MsgSkipUploaderRoleResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -633,6 +781,7 @@ export class MsgClientImpl implements Msg {
     this.SubmitBundleProposal = this.SubmitBundleProposal.bind(this);
     this.VoteBundleProposal = this.VoteBundleProposal.bind(this);
     this.ClaimUploaderRole = this.ClaimUploaderRole.bind(this);
+    this.SkipUploaderRole = this.SkipUploaderRole.bind(this);
   }
   SubmitBundleProposal(
     request: MsgSubmitBundleProposal
@@ -673,6 +822,20 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgClaimUploaderRoleResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  SkipUploaderRole(
+    request: MsgSkipUploaderRole
+  ): Promise<MsgSkipUploaderRoleResponse> {
+    const data = MsgSkipUploaderRole.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.bundles.v1beta1.Msg",
+      "SkipUploaderRole",
+      data
+    );
+    return promise.then((data) =>
+      MsgSkipUploaderRoleResponse.decode(new _m0.Reader(data))
     );
   }
 }
