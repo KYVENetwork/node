@@ -72,6 +72,7 @@ export class Node {
   protected staker!: string;
   protected account!: string;
   protected wallet!: string;
+  protected config!: string;
   protected network!: string;
   protected verbose!: boolean;
 
@@ -184,16 +185,24 @@ export class Node {
       .command("create")
       .description("Create a new valaccount with a random mnemonic")
       .argument("<account_name>", "Name of the valaccount")
-      .action(async (key) => {
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, options) => {
         const mnemonic = await KyveSDK.generateMnemonic();
-        await this.backend.add(`valaccount.${key}`, mnemonic);
+        await this.backend.add(`valaccount.${key}`, mnemonic, options.config);
       });
     valaccounts
       .command("add")
       .description("Add an existing valaccount with the mnemonic")
       .argument("<account_name>", "Name of the valaccount")
       .argument("<account_secret>", "Mnemonic of the valaccount")
-      .action(async (key, mnemonic) => {
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, mnemonic, options) => {
         const parsedMnemonic = mnemonic.split(" ");
 
         if (!(parsedMnemonic.length === 12 || parsedMnemonic.length === 24)) {
@@ -201,27 +210,39 @@ export class Node {
           return;
         }
 
-        await this.backend.add(`valaccount.${key}`, mnemonic);
+        await this.backend.add(`valaccount.${key}`, mnemonic, options.config);
       });
     valaccounts
       .command("reveal")
       .description("Reveal the mnemonic of a valaccount")
       .argument("<account_name>", "Name of the valaccount")
-      .action(async (key) => {
-        await this.backend.reveal(`valaccount.${key}`);
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, options) => {
+        await this.backend.reveal(`valaccount.${key}`, options.config);
       });
     valaccounts
       .command("list")
       .description("List all valaccounts available")
-      .action(async () => {
-        await this.backend.list();
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (options) => {
+        await this.backend.list(options.config);
       });
     valaccounts
       .command("remove")
       .description("Remove an existing valaccount")
       .argument("<account_name>", "Name of the valaccount")
-      .action(async (key) => {
-        await this.backend.remove(`valaccount.${key}`);
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, options) => {
+        await this.backend.remove(`valaccount.${key}`, options.config);
       });
 
     program.addCommand(valaccounts);
@@ -236,28 +257,44 @@ export class Node {
       .description("Add an existing wallet with the secret")
       .argument("<wallet_name>", "Name of the wallet")
       .argument("<wallet_secret>", "Secret of the wallet")
-      .action(async (key, secret) => {
-        await this.backend.add(`wallet.${key}`, secret);
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, secret, options) => {
+        await this.backend.add(`wallet.${key}`, secret, options.config);
       });
     wallets
       .command("reveal")
       .description("Reveal the secret of a wallet")
       .argument("<wallet_name>", "Name of the wallet")
-      .action(async (key) => {
-        await this.backend.reveal(`wallet.${key}`);
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, options) => {
+        await this.backend.reveal(`wallet.${key}`, options.config);
       });
     wallets
       .command("list")
       .description("List all wallets available")
-      .action(async () => {
-        await this.backend.list();
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (options) => {
+        await this.backend.list(options.config);
       });
     wallets
       .command("remove")
       .description("Remove an existing wallet")
       .argument("<wallet_name>", "Name of the wallet")
-      .action(async (key) => {
-        await this.backend.remove(`wallet.${key}`);
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
+      )
+      .action(async (key, options) => {
+        await this.backend.remove(`wallet.${key}`, options.config);
       });
 
     program.addCommand(wallets);
@@ -278,6 +315,10 @@ export class Node {
       .requiredOption(
         "-w, --wallet <string>",
         "The name of the wallet which should be used for the storage provider"
+      )
+      .option(
+        "-c, --config <string>",
+        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
       )
       .option(
         "-n, --network <string>",
@@ -314,6 +355,7 @@ export class Node {
     this.poolId = options.pool;
     this.account = options.account;
     this.wallet = options.wallet;
+    this.config = options.config;
     this.network = options.network;
     this.verbose = options.verbose;
 

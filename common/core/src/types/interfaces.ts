@@ -267,51 +267,64 @@ export interface IBackend {
    * @method add
    * @param {string} name
    * @param {string} secret
+   * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  add(name: string, secret: string): Promise<void>;
+  add(
+    name: string,
+    secret: string,
+    customPath: string | undefined
+  ): Promise<void>;
 
   /**
    * Remove an existing secret
    *
    * @method remove
    * @param {string} name
+   * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  remove(name: string): Promise<void>;
+  remove(name: string, customPath: string | undefined): Promise<void>;
 
   /**
    * Show the value of a secret
    *
    * @method show
    * @param {string} name
+   * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  reveal(name: string): Promise<void>;
+  reveal(name: string, customPath: string | undefined): Promise<void>;
 
   /**
    * Get the value of a secret
    *
    * @method get
    * @param {string} name
+   * @param {string | undefined} customPath
    * @return {Promise<string | null>}
    */
-  get(name: string): Promise<string | null>;
+  get(name: string, customPath: string | undefined): Promise<string | null>;
 
   /**
    * Get multiple secrets at once
    *
    * @method getMultiple
    * @param {string[]} names
+   * @param {string | undefined} customPath
    * @return {Promise<string[] | null>}
    */
-  getMultiple(names: string[]): Promise<string[]>;
+  getMultiple(
+    names: string[],
+    customPath: string | undefined
+  ): Promise<string[]>;
 
   /**
    * List all secrets
    *
    * @method list
+   * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  list(): Promise<void>;
+  list(customPath: string | undefined): Promise<void>;
 }

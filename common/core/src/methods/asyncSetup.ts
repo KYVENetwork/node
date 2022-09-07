@@ -23,13 +23,15 @@ export async function asyncSetup(this: Node): Promise<void> {
   }
 
   // retrieve mnemonic of account from file backend
-  const [mnemonic, wallet] = await this.backend.getMultiple([
-    `valaccount.${this.account}`,
-    `wallet.${this.wallet}`,
-  ]);
+  const [mnemonic, wallet] = await this.backend.getMultiple(
+    [`valaccount.${this.account}`, `wallet.${this.wallet}`],
+    this.config
+  );
 
   if (!mnemonic) {
-    this.logger.error(`Valaccount ${this.account} not found. Exiting ...`);
+    this.logger.error(
+      `Valaccount ${this.account} or wallet ${this.wallet} not found. Exiting ...`
+    );
     process.exit(1);
   }
 

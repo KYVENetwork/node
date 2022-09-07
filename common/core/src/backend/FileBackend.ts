@@ -4,6 +4,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import prompts from "prompts";
 import fs from "fs";
+import path from "path/posix";
 
 interface IFile {
   passhash: string;
@@ -15,21 +16,28 @@ interface IFile {
 export class FileBackend implements IBackend {
   public name = "FileBackend";
 
-  private filePath: string = "./accounts.info";
+  private defaultPath: string = path.join(process.env.HOME!, ".kyve-node");
+  private fileName: string = "accounts.info";
+
   private encryptionAlgo: string = "aes-256-cbc";
   private encryptionEncoding: BufferEncoding = "base64";
   private bufferEncryption: BufferEncoding = "utf-8";
 
-  public async add(name: string, secret: string) {
+  public async add(
+    name: string,
+    secret: string,
+    customPath: string | undefined
+  ) {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -39,7 +47,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword();
+        password = await this.validatePassword(dirPath);
       }
 
       content[name] = this.aesEncrypt(
@@ -50,7 +58,7 @@ export class FileBackend implements IBackend {
       );
 
       file.content = JSON.stringify(content);
-      this.writeFile(file);
+      this.writeFile(file, dirPath);
 
       console.log(`Added: ${name}`);
     } catch (err) {
@@ -58,16 +66,17 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async remove(name: string) {
+  public async remove(name: string, customPath: string | undefined) {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -79,7 +88,7 @@ export class FileBackend implements IBackend {
       delete content[name];
 
       file.content = JSON.stringify(content);
-      this.writeFile(file);
+      this.writeFile(file, dirPath);
 
       console.log(`Removed: ${name}`);
     } catch (err) {
@@ -87,16 +96,17 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async reveal(name: string) {
+  public async reveal(name: string, customPath: string | undefined) {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -106,7 +116,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword();
+        password = await this.validatePassword(dirPath);
       }
 
       const secret = this.aesDecrypt(
@@ -122,16 +132,20 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async get(name: string): Promise<string | null> {
+  public async get(
+    name: string,
+    customPath: string | undefined
+  ): Promise<string | null> {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -141,7 +155,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword();
+        password = await this.validatePassword(dirPath);
       }
 
       return JSON.parse(
@@ -152,16 +166,20 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async getMultiple(names: string[]): Promise<string[]> {
+  public async getMultiple(
+    names: string[],
+    customPath: string | undefined
+  ): Promise<string[]> {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -173,7 +191,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword();
+        password = await this.validatePassword(dirPath);
       }
 
       let secrets: any[] = [];
@@ -192,16 +210,17 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async list() {
+  public async list(customPath: string | undefined) {
+    const dirPath = customPath || this.defaultPath;
     let password;
 
-    if (!fs.existsSync(this.filePath)) {
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
       password = await this.choosePassword();
-      await this.createFileBackend(password);
+      await this.createFileBackend(password, dirPath);
     }
 
     try {
-      const file = this.readFile();
+      const file = this.readFile(dirPath);
 
       let content = JSON.parse(file.content);
 
@@ -213,16 +232,24 @@ export class FileBackend implements IBackend {
     }
   }
 
-  private writeFile(file: IFile): void {
+  private writeFile(file: IFile, dirPath: string): void {
     const content = Buffer.from(JSON.stringify(file)).toString(
       this.encryptionEncoding
     );
 
-    fs.writeFileSync(this.filePath, content);
+    fs.mkdirSync(dirPath, {
+      recursive: true,
+    });
+
+    fs.writeFileSync(path.join(dirPath, this.fileName), content);
   }
 
-  private readFile(): IFile {
-    const content = fs.readFileSync(this.filePath, this.bufferEncryption);
+  private readFile(dirPath: string): IFile {
+    const content = fs.readFileSync(
+      path.join(dirPath, this.fileName),
+      this.bufferEncryption
+    );
+
     return JSON.parse(
       Buffer.from(content, this.encryptionEncoding).toString(
         this.bufferEncryption
@@ -230,26 +257,32 @@ export class FileBackend implements IBackend {
     );
   }
 
-  private async createFileBackend(password: string): Promise<void> {
+  private async createFileBackend(
+    password: string,
+    dirPath: string
+  ): Promise<void> {
     try {
       const passhash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
       const salt = crypto.randomBytes(16).toString(this.encryptionEncoding);
       const iv = crypto.randomBytes(16).toString(this.encryptionEncoding);
       const content = JSON.stringify({});
 
-      this.writeFile({
-        passhash,
-        salt,
-        iv,
-        content,
-      });
+      this.writeFile(
+        {
+          passhash,
+          salt,
+          iv,
+          content,
+        },
+        dirPath
+      );
     } catch (err) {
       console.log(`Could not create file backend: ${err}`);
     }
   }
 
-  private async validatePassword(): Promise<string> {
-    const file = this.readFile();
+  private async validatePassword(dirPath: string): Promise<string> {
+    const file = this.readFile(dirPath);
 
     const { password } = await prompts(
       {
