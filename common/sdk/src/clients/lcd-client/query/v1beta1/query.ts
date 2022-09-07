@@ -226,7 +226,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   ): Promise<
     PaginationResponseTypeUtil<kyveQueryAccountRes.QueryAccountDelegationUnbondingsResponse>
   > {
-    const endpoint = `/kyve/query/v1beta1/account_assets/${params.address}`;
+    const endpoint = `/kyve/query/v1beta1/account_delegation_unbondings/${params.address}`;
     return await this.request(endpoint);
   }
   async accountFundedList(
