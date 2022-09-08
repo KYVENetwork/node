@@ -267,12 +267,14 @@ export interface IBackend {
    * @method add
    * @param {string} name
    * @param {string} secret
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
   add(
     name: string,
     secret: string,
+    usePassword: boolean,
     customPath: string | undefined
   ): Promise<void>;
 
@@ -281,41 +283,58 @@ export interface IBackend {
    *
    * @method remove
    * @param {string} name
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  remove(name: string, customPath: string | undefined): Promise<void>;
+  remove(
+    name: string,
+    usePassword: boolean,
+    customPath: string | undefined
+  ): Promise<void>;
 
   /**
    * Show the value of a secret
    *
    * @method show
    * @param {string} name
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  reveal(name: string, customPath: string | undefined): Promise<void>;
+  reveal(
+    name: string,
+    usePassword: boolean,
+    customPath: string | undefined
+  ): Promise<void>;
 
   /**
    * Get the value of a secret
    *
    * @method get
    * @param {string} name
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<string | null>}
    */
-  get(name: string, customPath: string | undefined): Promise<string | null>;
+  get(
+    name: string,
+    usePassword: boolean,
+    customPath: string | undefined
+  ): Promise<string | null>;
 
   /**
    * Get multiple secrets at once
    *
    * @method getMultiple
    * @param {string[]} names
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<string[] | null>}
    */
   getMultiple(
     names: string[],
+    usePassword: boolean,
     customPath: string | undefined
   ): Promise<string[]>;
 
@@ -323,8 +342,18 @@ export interface IBackend {
    * List all secrets
    *
    * @method list
+   * @param {boolean} usePassword
    * @param {string | undefined} customPath
    * @return {Promise<void>}
    */
-  list(customPath: string | undefined): Promise<void>;
+  list(usePassword: boolean, customPath: string | undefined): Promise<void>;
+
+  /**
+   * Reset file backend
+   *
+   * @method reset
+   * @param {string | undefined} customPath
+   * @return {Promise<void>}
+   */
+  reset(customPath: string | undefined): Promise<void>;
 }

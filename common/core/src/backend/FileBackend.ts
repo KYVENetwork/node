@@ -16,6 +16,11 @@ interface IFile {
 export class FileBackend implements IBackend {
   public name = "FileBackend";
 
+  // When the option "--use-password" is false we store the secrets openly.
+  // To make the code more clear we still use the encrypted file backend but use
+  // a public default password which is the same as storing the secrets unencrypted.
+  private defaultPassword: string = "kyve";
+
   private defaultPath: string = path.join(process.env.HOME!, ".kyve-node");
   private fileName: string = "accounts.info";
 
@@ -26,13 +31,14 @@ export class FileBackend implements IBackend {
   public async add(
     name: string,
     secret: string,
+    usePassword: boolean,
     customPath: string | undefined
   ) {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -47,7 +53,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword(dirPath);
+        password = await this.validatePassword(usePassword, dirPath);
       }
 
       content[name] = this.aesEncrypt(
@@ -66,12 +72,16 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async remove(name: string, customPath: string | undefined) {
+  public async remove(
+    name: string,
+    usePassword: boolean,
+    customPath: string | undefined
+  ) {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -96,12 +106,16 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async reveal(name: string, customPath: string | undefined) {
+  public async reveal(
+    name: string,
+    usePassword: boolean,
+    customPath: string | undefined
+  ) {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -116,7 +130,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword(dirPath);
+        password = await this.validatePassword(usePassword, dirPath);
       }
 
       const secret = this.aesDecrypt(
@@ -134,13 +148,14 @@ export class FileBackend implements IBackend {
 
   public async get(
     name: string,
+    usePassword: boolean,
     customPath: string | undefined
   ): Promise<string | null> {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -155,7 +170,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword(dirPath);
+        password = await this.validatePassword(usePassword, dirPath);
       }
 
       return JSON.parse(
@@ -168,13 +183,14 @@ export class FileBackend implements IBackend {
 
   public async getMultiple(
     names: string[],
+    usePassword: boolean,
     customPath: string | undefined
   ): Promise<string[]> {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -191,7 +207,7 @@ export class FileBackend implements IBackend {
       }
 
       if (!password) {
-        password = await this.validatePassword(dirPath);
+        password = await this.validatePassword(usePassword, dirPath);
       }
 
       let secrets: any[] = [];
@@ -210,12 +226,15 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async list(customPath: string | undefined) {
+  public async list(
+    usePassword: boolean,
+    customPath: string | undefined
+  ): Promise<void> {
     const dirPath = customPath || this.defaultPath;
     let password;
 
     if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword();
+      password = await this.choosePassword(usePassword);
       await this.createFileBackend(password, dirPath);
     }
 
@@ -229,6 +248,22 @@ export class FileBackend implements IBackend {
       }
     } catch (err) {
       console.log(`Could not list: ${err}`);
+    }
+  }
+
+  public async reset(customPath: string | undefined): Promise<void> {
+    const dirPath = customPath || this.defaultPath;
+
+    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
+      console.log(`File backend not found`);
+    }
+
+    try {
+      fs.unlinkSync(path.join(dirPath, this.fileName));
+
+      console.log(`Resetted file backend`);
+    } catch (err) {
+      console.log(`Could not reset file backend: ${err}`);
     }
   }
 
@@ -281,64 +316,79 @@ export class FileBackend implements IBackend {
     }
   }
 
-  private async validatePassword(dirPath: string): Promise<string> {
+  private async validatePassword(
+    usePassword: boolean,
+    dirPath: string
+  ): Promise<string> {
     const file = this.readFile(dirPath);
 
-    const { password } = await prompts(
-      {
-        type: "password",
-        name: "password",
-        message: "Enter your password",
-        validate: (value) =>
-          bcrypt.compareSync(value, file.passhash)
-            ? true
-            : `Password is incorrect`,
-      },
-      {
-        onCancel: () => {
-          throw Error("Aborted password input");
+    if (usePassword) {
+      const { password } = await prompts(
+        {
+          type: "password",
+          name: "password",
+          message: "Enter your password",
+          validate: (value) =>
+            bcrypt.compareSync(value, file.passhash)
+              ? true
+              : `Password is incorrect`,
         },
-      }
-    );
+        {
+          onCancel: () => {
+            throw Error("Aborted password input");
+          },
+        }
+      );
 
-    return password;
+      return password;
+    }
+
+    if (!bcrypt.compareSync(this.defaultPassword, file.passhash)) {
+      throw Error("Password is incorrect");
+    }
+
+    return this.defaultPassword;
   }
 
-  private async choosePassword(): Promise<string> {
-    const { password1 } = await prompts(
-      {
-        type: "password",
-        name: "password1",
-        message: "Choose your password",
-        validate: (value) =>
-          value.length < 8
-            ? `Password needs to be at least 8 characters`
-            : true,
-      },
-      {
-        onCancel: () => {
-          throw Error("Aborted password input");
+  private async choosePassword(usePassword: boolean): Promise<string> {
+    if (usePassword) {
+      const { password1 } = await prompts(
+        {
+          type: "password",
+          name: "password1",
+          message: "Choose your password",
+          validate: (value) =>
+            value.length < 8
+              ? `Password needs to be at least 8 characters`
+              : true,
         },
-      }
-    );
+        {
+          onCancel: () => {
+            throw Error("Aborted password input");
+          },
+        }
+      );
 
-    await prompts(
-      {
-        type: "password",
-        name: "password2",
-        message: "Repeat your password",
-        validate: (pass2) => {
-          return password1 === pass2 ? true : `Passwords need to be the same`;
+      await prompts(
+        {
+          type: "password",
+          name: "password2",
+          message: "Repeat your password",
+          validate: (pass2) => {
+            return password1 === pass2 ? true : `Passwords need to be the same`;
+          },
         },
-      },
-      {
-        onCancel: () => {
-          throw Error("Aborted password input");
-        },
-      }
-    );
+        {
+          onCancel: () => {
+            throw Error("Aborted password input");
+          },
+        }
+      );
 
-    return password1;
+      return password1;
+    }
+
+    return this.defaultPassword;
   }
 
   private aesEncrypt(

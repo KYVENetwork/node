@@ -25,6 +25,7 @@ export async function asyncSetup(this: Node): Promise<void> {
   // retrieve mnemonic of account from file backend
   const [mnemonic, wallet] = await this.backend.getMultiple(
     [`valaccount.${this.account}`, `wallet.${this.wallet}`],
+    this.usePassword,
     this.config
   );
 
