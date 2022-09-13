@@ -94,7 +94,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.UpdatePoolProposal",
+      type_url: "/kyve.pool.v1beta1.UpdatePoolProposal",
       value: UpdatePoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -114,7 +114,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.PausePoolProposal",
+      type_url: "/kyve.pool.v1beta1.PausePoolProposal",
       value: PausePoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -134,7 +134,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.UnpausePoolProposal",
+      type_url: "/kyve.pool.v1beta1.UnpausePoolProposal",
       value: UnpausePoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -154,7 +154,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.SchedulePoolUpgradeProposal",
+      type_url: "/kyve.pool.v1beta1.SchedulePoolUpgradeProposal",
       value: SchedulePoolUpgradeProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -174,7 +174,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.CancelPoolUpgradeProposal",
+      type_url: "/kyve.pool.v1beta1.CancelPoolUpgradeProposal",
       value: CancelPoolUpgradeProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -194,7 +194,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.ResetPoolProposal",
+      type_url: "/kyve.pool.v1beta1.ResetPoolProposal",
       value: ResetPoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
@@ -214,7 +214,7 @@ export default class KyveGovMsg {
     }
   ) {
     const content = {
-      type_url: "/kyve.registry.v1beta1.CreatePoolProposal",
+      type_url: "/kyve.pool.v1beta1.CreatePoolProposal",
       value: CreatePoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
