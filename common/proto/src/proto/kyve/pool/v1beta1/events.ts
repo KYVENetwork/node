@@ -52,6 +52,16 @@ export interface EventDefundPool {
   amount: string;
 }
 
+/** EventDefundPool is an event emitted when a pool is defunded. */
+export interface EventPoolFundsSlashed {
+  /** pool_id is the unique ID of the pool. */
+  pool_id: string;
+  /** address is the account address of the pool funder. */
+  address: string;
+  /** amount ... */
+  amount: string;
+}
+
 /** EventPoolOutOfFunds is an event emitted when a pool has run out of funds */
 export interface EventPoolOutOfFunds {
   /** pool_id is the unique ID of the pool. */
@@ -370,6 +380,81 @@ export const EventDefundPool = {
     object: I
   ): EventDefundPool {
     const message = createBaseEventDefundPool();
+    message.pool_id = object.pool_id ?? "0";
+    message.address = object.address ?? "";
+    message.amount = object.amount ?? "0";
+    return message;
+  },
+};
+
+function createBaseEventPoolFundsSlashed(): EventPoolFundsSlashed {
+  return { pool_id: "0", address: "", amount: "0" };
+}
+
+export const EventPoolFundsSlashed = {
+  encode(
+    message: EventPoolFundsSlashed,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.address !== "") {
+      writer.uint32(18).string(message.address);
+    }
+    if (message.amount !== "0") {
+      writer.uint32(24).uint64(message.amount);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): EventPoolFundsSlashed {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventPoolFundsSlashed();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.address = reader.string();
+          break;
+        case 3:
+          message.amount = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventPoolFundsSlashed {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      address: isSet(object.address) ? String(object.address) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "0",
+    };
+  },
+
+  toJSON(message: EventPoolFundsSlashed): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.address !== undefined && (obj.address = message.address);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventPoolFundsSlashed>, I>>(
+    object: I
+  ): EventPoolFundsSlashed {
+    const message = createBaseEventPoolFundsSlashed();
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
     message.amount = object.amount ?? "0";

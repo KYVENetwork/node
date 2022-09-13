@@ -26,11 +26,17 @@ export interface BasicPool {
   runtime: string;
   /** logo of the pool */
   logo: string;
+  /** operating_cost is the base payout for each bundle reward */
+  operating_cost: string;
+  /** upload_interval is the interval bundles get created */
+  upload_interval: string;
   /**
    * total_funds of the pool. If the pool runs
    * out of funds no more bundles will be produced
    */
   total_funds: string;
+  /** total_delegation of the pool */
+  total_delegation: string;
   /**
    * status of the pool if pool is able
    * to produce bundles, etc.
@@ -58,7 +64,7 @@ export interface FullStaker {
    * the unbonding period this amount is double checked with the
    * remaining amount.
    */
-  unbonding_amount: string;
+  self_delegation_unbonding: string;
   /**
    * total_delegation returns the sum of all $KYVE users
    * have delegated to this staker
@@ -146,6 +152,12 @@ export interface PoolMembership {
    * the staker can just change the valaddress.
    */
   valaddress: string;
+  /**
+   * balance is the valaddress account balance and indicates
+   * whether or not the valaccount needs additional funds to
+   * pay for gas fees
+   */
+  balance: string;
 }
 
 function createBaseBasicPool(): BasicPool {
@@ -154,7 +166,10 @@ function createBaseBasicPool(): BasicPool {
     name: "",
     runtime: "",
     logo: "",
+    operating_cost: "0",
+    upload_interval: "0",
     total_funds: "0",
+    total_delegation: "0",
     status: PoolStatus.POOL_STATUS_UNSPECIFIED,
   };
 }
@@ -176,11 +191,20 @@ export const BasicPool = {
     if (message.logo !== "") {
       writer.uint32(34).string(message.logo);
     }
+    if (message.operating_cost !== "0") {
+      writer.uint32(40).uint64(message.operating_cost);
+    }
+    if (message.upload_interval !== "0") {
+      writer.uint32(48).uint64(message.upload_interval);
+    }
     if (message.total_funds !== "0") {
-      writer.uint32(40).uint64(message.total_funds);
+      writer.uint32(56).uint64(message.total_funds);
+    }
+    if (message.total_delegation !== "0") {
+      writer.uint32(64).uint64(message.total_delegation);
     }
     if (message.status !== PoolStatus.POOL_STATUS_UNSPECIFIED) {
-      writer.uint32(48).int32(poolStatusToNumber(message.status));
+      writer.uint32(72).int32(poolStatusToNumber(message.status));
     }
     return writer;
   },
@@ -205,9 +229,18 @@ export const BasicPool = {
           message.logo = reader.string();
           break;
         case 5:
-          message.total_funds = longToString(reader.uint64() as Long);
+          message.operating_cost = longToString(reader.uint64() as Long);
           break;
         case 6:
+          message.upload_interval = longToString(reader.uint64() as Long);
+          break;
+        case 7:
+          message.total_funds = longToString(reader.uint64() as Long);
+          break;
+        case 8:
+          message.total_delegation = longToString(reader.uint64() as Long);
+          break;
+        case 9:
           message.status = poolStatusFromJSON(reader.int32());
           break;
         default:
@@ -224,7 +257,16 @@ export const BasicPool = {
       name: isSet(object.name) ? String(object.name) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       logo: isSet(object.logo) ? String(object.logo) : "",
+      operating_cost: isSet(object.operating_cost)
+        ? String(object.operating_cost)
+        : "0",
+      upload_interval: isSet(object.upload_interval)
+        ? String(object.upload_interval)
+        : "0",
       total_funds: isSet(object.total_funds) ? String(object.total_funds) : "0",
+      total_delegation: isSet(object.total_delegation)
+        ? String(object.total_delegation)
+        : "0",
       status: isSet(object.status)
         ? poolStatusFromJSON(object.status)
         : PoolStatus.POOL_STATUS_UNSPECIFIED,
@@ -237,8 +279,14 @@ export const BasicPool = {
     message.name !== undefined && (obj.name = message.name);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.logo !== undefined && (obj.logo = message.logo);
+    message.operating_cost !== undefined &&
+      (obj.operating_cost = message.operating_cost);
+    message.upload_interval !== undefined &&
+      (obj.upload_interval = message.upload_interval);
     message.total_funds !== undefined &&
       (obj.total_funds = message.total_funds);
+    message.total_delegation !== undefined &&
+      (obj.total_delegation = message.total_delegation);
     message.status !== undefined &&
       (obj.status = poolStatusToJSON(message.status));
     return obj;
@@ -252,7 +300,10 @@ export const BasicPool = {
     message.name = object.name ?? "";
     message.runtime = object.runtime ?? "";
     message.logo = object.logo ?? "";
+    message.operating_cost = object.operating_cost ?? "0";
+    message.upload_interval = object.upload_interval ?? "0";
     message.total_funds = object.total_funds ?? "0";
+    message.total_delegation = object.total_delegation ?? "0";
     message.status = object.status ?? PoolStatus.POOL_STATUS_UNSPECIFIED;
     return message;
   },
@@ -263,7 +314,7 @@ function createBaseFullStaker(): FullStaker {
     address: "",
     metadata: undefined,
     self_delegation: "0",
-    unbonding_amount: "0",
+    self_delegation_unbonding: "0",
     total_delegation: "0",
     delegator_count: "0",
     pools: [],
@@ -287,8 +338,8 @@ export const FullStaker = {
     if (message.self_delegation !== "0") {
       writer.uint32(24).uint64(message.self_delegation);
     }
-    if (message.unbonding_amount !== "0") {
-      writer.uint32(32).uint64(message.unbonding_amount);
+    if (message.self_delegation_unbonding !== "0") {
+      writer.uint32(32).uint64(message.self_delegation_unbonding);
     }
     if (message.total_delegation !== "0") {
       writer.uint32(64).uint64(message.total_delegation);
@@ -319,7 +370,9 @@ export const FullStaker = {
           message.self_delegation = longToString(reader.uint64() as Long);
           break;
         case 4:
-          message.unbonding_amount = longToString(reader.uint64() as Long);
+          message.self_delegation_unbonding = longToString(
+            reader.uint64() as Long
+          );
           break;
         case 8:
           message.total_delegation = longToString(reader.uint64() as Long);
@@ -347,8 +400,8 @@ export const FullStaker = {
       self_delegation: isSet(object.self_delegation)
         ? String(object.self_delegation)
         : "0",
-      unbonding_amount: isSet(object.unbonding_amount)
-        ? String(object.unbonding_amount)
+      self_delegation_unbonding: isSet(object.self_delegation_unbonding)
+        ? String(object.self_delegation_unbonding)
         : "0",
       total_delegation: isSet(object.total_delegation)
         ? String(object.total_delegation)
@@ -371,8 +424,8 @@ export const FullStaker = {
         : undefined);
     message.self_delegation !== undefined &&
       (obj.self_delegation = message.self_delegation);
-    message.unbonding_amount !== undefined &&
-      (obj.unbonding_amount = message.unbonding_amount);
+    message.self_delegation_unbonding !== undefined &&
+      (obj.self_delegation_unbonding = message.self_delegation_unbonding);
     message.total_delegation !== undefined &&
       (obj.total_delegation = message.total_delegation);
     message.delegator_count !== undefined &&
@@ -397,7 +450,7 @@ export const FullStaker = {
         ? StakerMetadata.fromPartial(object.metadata)
         : undefined;
     message.self_delegation = object.self_delegation ?? "0";
-    message.unbonding_amount = object.unbonding_amount ?? "0";
+    message.self_delegation_unbonding = object.self_delegation_unbonding ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
     message.delegator_count = object.delegator_count ?? "0";
     message.pools =
@@ -587,7 +640,13 @@ export const CommissionChangeEntry = {
 };
 
 function createBasePoolMembership(): PoolMembership {
-  return { pool: undefined, points: "0", is_leaving: false, valaddress: "" };
+  return {
+    pool: undefined,
+    points: "0",
+    is_leaving: false,
+    valaddress: "",
+    balance: "0",
+  };
 }
 
 export const PoolMembership = {
@@ -606,6 +665,9 @@ export const PoolMembership = {
     }
     if (message.valaddress !== "") {
       writer.uint32(34).string(message.valaddress);
+    }
+    if (message.balance !== "0") {
+      writer.uint32(40).uint64(message.balance);
     }
     return writer;
   },
@@ -629,6 +691,9 @@ export const PoolMembership = {
         case 4:
           message.valaddress = reader.string();
           break;
+        case 5:
+          message.balance = longToString(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -643,6 +708,7 @@ export const PoolMembership = {
       points: isSet(object.points) ? String(object.points) : "0",
       is_leaving: isSet(object.is_leaving) ? Boolean(object.is_leaving) : false,
       valaddress: isSet(object.valaddress) ? String(object.valaddress) : "",
+      balance: isSet(object.balance) ? String(object.balance) : "0",
     };
   },
 
@@ -653,6 +719,7 @@ export const PoolMembership = {
     message.points !== undefined && (obj.points = message.points);
     message.is_leaving !== undefined && (obj.is_leaving = message.is_leaving);
     message.valaddress !== undefined && (obj.valaddress = message.valaddress);
+    message.balance !== undefined && (obj.balance = message.balance);
     return obj;
   },
 
@@ -667,6 +734,7 @@ export const PoolMembership = {
     message.points = object.points ?? "0";
     message.is_leaving = object.is_leaving ?? false;
     message.valaddress = object.valaddress ?? "";
+    message.balance = object.balance ?? "0";
     return message;
   },
 };

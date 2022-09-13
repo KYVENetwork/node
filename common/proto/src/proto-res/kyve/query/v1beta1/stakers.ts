@@ -10,10 +10,71 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
+/** StakerStatus ... */
+export enum StakerStatus {
+  /** STAKER_STATUS_UNSPECIFIED - STAKER_STATUS_UNSPECIFIED ... */
+  STAKER_STATUS_UNSPECIFIED = "STAKER_STATUS_UNSPECIFIED",
+  /** STAKER_STATUS_ACTIVE - STAKER_STATUS_ACTIVE ... */
+  STAKER_STATUS_ACTIVE = "STAKER_STATUS_ACTIVE",
+  /** STAKER_STATUS_INACTIVE - STAKER_STATUS_INACTIVE ... */
+  STAKER_STATUS_INACTIVE = "STAKER_STATUS_INACTIVE",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function stakerStatusFromJSON(object: any): StakerStatus {
+  switch (object) {
+    case 0:
+    case "STAKER_STATUS_UNSPECIFIED":
+      return StakerStatus.STAKER_STATUS_UNSPECIFIED;
+    case 1:
+    case "STAKER_STATUS_ACTIVE":
+      return StakerStatus.STAKER_STATUS_ACTIVE;
+    case 2:
+    case "STAKER_STATUS_INACTIVE":
+      return StakerStatus.STAKER_STATUS_INACTIVE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return StakerStatus.UNRECOGNIZED;
+  }
+}
+
+export function stakerStatusToJSON(object: StakerStatus): string {
+  switch (object) {
+    case StakerStatus.STAKER_STATUS_UNSPECIFIED:
+      return "STAKER_STATUS_UNSPECIFIED";
+    case StakerStatus.STAKER_STATUS_ACTIVE:
+      return "STAKER_STATUS_ACTIVE";
+    case StakerStatus.STAKER_STATUS_INACTIVE:
+      return "STAKER_STATUS_INACTIVE";
+    case StakerStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function stakerStatusToNumber(object: StakerStatus): number {
+  switch (object) {
+    case StakerStatus.STAKER_STATUS_UNSPECIFIED:
+      return 0;
+    case StakerStatus.STAKER_STATUS_ACTIVE:
+      return 1;
+    case StakerStatus.STAKER_STATUS_INACTIVE:
+      return 2;
+    case StakerStatus.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 /** QueryStakersRequest is the request type for the Query/Stakers RPC method. */
 export interface QueryStakersRequest {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
+  /** status */
+  status: StakerStatus;
+  /** serach */
+  search: string;
 }
 
 /** QueryStakersResponse is the response type for the Query/Stakers RPC method. */
@@ -56,8 +117,26 @@ export interface StakerPoolResponse {
   valaccount?: Valaccount;
 }
 
+/** QueryStakersByPoolCountRequest ... */
+export interface QueryStakersByPoolCountRequest {
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequest;
+}
+
+/** QueryStakersByPoolCountResponse ... */
+export interface QueryStakersByPoolCountResponse {
+  /** stakers ... */
+  stakers: FullStaker[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
+}
+
 function createBaseQueryStakersRequest(): QueryStakersRequest {
-  return { pagination: undefined };
+  return {
+    pagination: undefined,
+    status: StakerStatus.STAKER_STATUS_UNSPECIFIED,
+    search: "",
+  };
 }
 
 export const QueryStakersRequest = {
@@ -67,6 +146,12 @@ export const QueryStakersRequest = {
   ): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== StakerStatus.STAKER_STATUS_UNSPECIFIED) {
+      writer.uint32(16).int32(stakerStatusToNumber(message.status));
+    }
+    if (message.search !== "") {
+      writer.uint32(26).string(message.search);
     }
     return writer;
   },
@@ -81,6 +166,12 @@ export const QueryStakersRequest = {
         case 1:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.status = stakerStatusFromJSON(reader.int32());
+          break;
+        case 3:
+          message.search = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -94,6 +185,10 @@ export const QueryStakersRequest = {
       pagination: isSet(object.pagination)
         ? PageRequest.fromJSON(object.pagination)
         : undefined,
+      status: isSet(object.status)
+        ? stakerStatusFromJSON(object.status)
+        : StakerStatus.STAKER_STATUS_UNSPECIFIED,
+      search: isSet(object.search) ? String(object.search) : "",
     };
   },
 
@@ -103,6 +198,9 @@ export const QueryStakersRequest = {
       (obj.pagination = message.pagination
         ? PageRequest.toJSON(message.pagination)
         : undefined);
+    message.status !== undefined &&
+      (obj.status = stakerStatusToJSON(message.status));
+    message.search !== undefined && (obj.search = message.search);
     return obj;
   },
 
@@ -114,6 +212,8 @@ export const QueryStakersRequest = {
       object.pagination !== undefined && object.pagination !== null
         ? PageRequest.fromPartial(object.pagination)
         : undefined;
+    message.status = object.status ?? StakerStatus.STAKER_STATUS_UNSPECIFIED;
+    message.search = object.search ?? "";
     return message;
   },
 };
@@ -524,6 +624,157 @@ export const StakerPoolResponse = {
   },
 };
 
+function createBaseQueryStakersByPoolCountRequest(): QueryStakersByPoolCountRequest {
+  return { pagination: undefined };
+}
+
+export const QueryStakersByPoolCountRequest = {
+  encode(
+    message: QueryStakersByPoolCountRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryStakersByPoolCountRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryStakersByPoolCountRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryStakersByPoolCountRequest {
+    return {
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryStakersByPoolCountRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolCountRequest>, I>>(
+    object: I
+  ): QueryStakersByPoolCountRequest {
+    const message = createBaseQueryStakersByPoolCountRequest();
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryStakersByPoolCountResponse(): QueryStakersByPoolCountResponse {
+  return { stakers: [], pagination: undefined };
+}
+
+export const QueryStakersByPoolCountResponse = {
+  encode(
+    message: QueryStakersByPoolCountResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    for (const v of message.stakers) {
+      FullStaker.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryStakersByPoolCountResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryStakersByPoolCountResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.stakers.push(FullStaker.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryStakersByPoolCountResponse {
+    return {
+      stakers: Array.isArray(object?.stakers)
+        ? object.stakers.map((e: any) => FullStaker.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryStakersByPoolCountResponse): unknown {
+    const obj: any = {};
+    if (message.stakers) {
+      obj.stakers = message.stakers.map((e) =>
+        e ? FullStaker.toJSON(e) : undefined
+      );
+    } else {
+      obj.stakers = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolCountResponse>, I>>(
+    object: I
+  ): QueryStakersByPoolCountResponse {
+    const message = createBaseQueryStakersByPoolCountResponse();
+    message.stakers =
+      object.stakers?.map((e) => FullStaker.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
+    return message;
+  },
+};
+
 /** QueryStakers ... */
 export interface QueryStakers {
   /** Stakers queries for all stakers. */
@@ -534,6 +785,13 @@ export interface QueryStakers {
   StakersByPool(
     request: QueryStakersByPoolRequest
   ): Promise<QueryStakersByPoolResponse>;
+  /**
+   * StakersByPool queries for all stakers and sorted them first by number of pools participating and
+   * then by delegation
+   */
+  StakersByPoolCount(
+    request: QueryStakersByPoolCountRequest
+  ): Promise<QueryStakersByPoolCountResponse>;
 }
 
 export class QueryStakersClientImpl implements QueryStakers {
@@ -543,6 +801,7 @@ export class QueryStakersClientImpl implements QueryStakers {
     this.Stakers = this.Stakers.bind(this);
     this.Staker = this.Staker.bind(this);
     this.StakersByPool = this.StakersByPool.bind(this);
+    this.StakersByPoolCount = this.StakersByPoolCount.bind(this);
   }
   Stakers(request: QueryStakersRequest): Promise<QueryStakersResponse> {
     const data = QueryStakersRequest.encode(request).finish();
@@ -579,6 +838,20 @@ export class QueryStakersClientImpl implements QueryStakers {
     );
     return promise.then((data) =>
       QueryStakersByPoolResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  StakersByPoolCount(
+    request: QueryStakersByPoolCountRequest
+  ): Promise<QueryStakersByPoolCountResponse> {
+    const data = QueryStakersByPoolCountRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "kyve.query.v1beta1.QueryStakers",
+      "StakersByPoolCount",
+      data
+    );
+    return promise.then((data) =>
+      QueryStakersByPoolCountResponse.decode(new _m0.Reader(data))
     );
   }
 }

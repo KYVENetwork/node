@@ -47,7 +47,7 @@ export interface PoolResponse {
   /** stakers ... */
   stakers: string[];
   /** total_stake ... */
-  total_stake: string;
+  total_self_delegation: string;
   /** total_delegation ... */
   total_delegation: string;
   /** status ... */
@@ -243,7 +243,7 @@ function createBasePoolResponse(): PoolResponse {
     data: undefined,
     bundle_proposal: undefined,
     stakers: [],
-    total_stake: "0",
+    total_self_delegation: "0",
     total_delegation: "0",
     status: PoolStatus.POOL_STATUS_UNSPECIFIED,
   };
@@ -269,8 +269,8 @@ export const PoolResponse = {
     for (const v of message.stakers) {
       writer.uint32(34).string(v!);
     }
-    if (message.total_stake !== "0") {
-      writer.uint32(40).uint64(message.total_stake);
+    if (message.total_self_delegation !== "0") {
+      writer.uint32(40).uint64(message.total_self_delegation);
     }
     if (message.total_delegation !== "0") {
       writer.uint32(48).uint64(message.total_delegation);
@@ -304,7 +304,7 @@ export const PoolResponse = {
           message.stakers.push(reader.string());
           break;
         case 5:
-          message.total_stake = longToString(reader.uint64() as Long);
+          message.total_self_delegation = longToString(reader.uint64() as Long);
           break;
         case 6:
           message.total_delegation = longToString(reader.uint64() as Long);
@@ -330,7 +330,9 @@ export const PoolResponse = {
       stakers: Array.isArray(object?.stakers)
         ? object.stakers.map((e: any) => String(e))
         : [],
-      total_stake: isSet(object.total_stake) ? String(object.total_stake) : "0",
+      total_self_delegation: isSet(object.total_self_delegation)
+        ? String(object.total_self_delegation)
+        : "0",
       total_delegation: isSet(object.total_delegation)
         ? String(object.total_delegation)
         : "0",
@@ -354,8 +356,8 @@ export const PoolResponse = {
     } else {
       obj.stakers = [];
     }
-    message.total_stake !== undefined &&
-      (obj.total_stake = message.total_stake);
+    message.total_self_delegation !== undefined &&
+      (obj.total_self_delegation = message.total_self_delegation);
     message.total_delegation !== undefined &&
       (obj.total_delegation = message.total_delegation);
     message.status !== undefined &&
@@ -377,7 +379,7 @@ export const PoolResponse = {
         ? BundleProposal.fromPartial(object.bundle_proposal)
         : undefined;
     message.stakers = object.stakers?.map((e) => e) || [];
-    message.total_stake = object.total_stake ?? "0";
+    message.total_self_delegation = object.total_self_delegation ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
     message.status = object.status ?? PoolStatus.POOL_STATUS_UNSPECIFIED;
     return message;

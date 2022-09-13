@@ -5,7 +5,6 @@ import {
   Staker,
   Valaccount,
   CommissionChangeEntry,
-  UnbondingStakeEntry,
   LeavePoolEntry,
 } from "./stakers";
 import _m0 from "protobufjs/minimal";
@@ -24,10 +23,6 @@ export interface GenesisState {
   commission_change_entries: CommissionChangeEntry[];
   /** queue_state_commission ... */
   queue_state_commission?: QueueState;
-  /** unbonding_stake_entries ... */
-  unbonding_stake_entries: UnbondingStakeEntry[];
-  /** queue_state_unstaking ... */
-  queue_state_unstaking?: QueueState;
   /** leave_pool_entries ... */
   leave_pool_entries: LeavePoolEntry[];
   /** queue_state_leave ... */
@@ -41,8 +36,6 @@ function createBaseGenesisState(): GenesisState {
     valaccount_list: [],
     commission_change_entries: [],
     queue_state_commission: undefined,
-    unbonding_stake_entries: [],
-    queue_state_unstaking: undefined,
     leave_pool_entries: [],
     queue_state_leave: undefined,
   };
@@ -69,15 +62,6 @@ export const GenesisState = {
       QueueState.encode(
         message.queue_state_commission,
         writer.uint32(66).fork()
-      ).ldelim();
-    }
-    for (const v of message.unbonding_stake_entries) {
-      UnbondingStakeEntry.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.queue_state_unstaking !== undefined) {
-      QueueState.encode(
-        message.queue_state_unstaking,
-        writer.uint32(58).fork()
       ).ldelim();
     }
     for (const v of message.leave_pool_entries) {
@@ -121,17 +105,6 @@ export const GenesisState = {
             reader.uint32()
           );
           break;
-        case 5:
-          message.unbonding_stake_entries.push(
-            UnbondingStakeEntry.decode(reader, reader.uint32())
-          );
-          break;
-        case 7:
-          message.queue_state_unstaking = QueueState.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
         case 6:
           message.leave_pool_entries.push(
             LeavePoolEntry.decode(reader, reader.uint32())
@@ -169,14 +142,6 @@ export const GenesisState = {
         : [],
       queue_state_commission: isSet(object.queue_state_commission)
         ? QueueState.fromJSON(object.queue_state_commission)
-        : undefined,
-      unbonding_stake_entries: Array.isArray(object?.unbonding_stake_entries)
-        ? object.unbonding_stake_entries.map((e: any) =>
-            UnbondingStakeEntry.fromJSON(e)
-          )
-        : [],
-      queue_state_unstaking: isSet(object.queue_state_unstaking)
-        ? QueueState.fromJSON(object.queue_state_unstaking)
         : undefined,
       leave_pool_entries: Array.isArray(object?.leave_pool_entries)
         ? object.leave_pool_entries.map((e: any) => LeavePoolEntry.fromJSON(e))
@@ -216,17 +181,6 @@ export const GenesisState = {
       (obj.queue_state_commission = message.queue_state_commission
         ? QueueState.toJSON(message.queue_state_commission)
         : undefined);
-    if (message.unbonding_stake_entries) {
-      obj.unbonding_stake_entries = message.unbonding_stake_entries.map((e) =>
-        e ? UnbondingStakeEntry.toJSON(e) : undefined
-      );
-    } else {
-      obj.unbonding_stake_entries = [];
-    }
-    message.queue_state_unstaking !== undefined &&
-      (obj.queue_state_unstaking = message.queue_state_unstaking
-        ? QueueState.toJSON(message.queue_state_unstaking)
-        : undefined);
     if (message.leave_pool_entries) {
       obj.leave_pool_entries = message.leave_pool_entries.map((e) =>
         e ? LeavePoolEntry.toJSON(e) : undefined
@@ -261,15 +215,6 @@ export const GenesisState = {
       object.queue_state_commission !== undefined &&
       object.queue_state_commission !== null
         ? QueueState.fromPartial(object.queue_state_commission)
-        : undefined;
-    message.unbonding_stake_entries =
-      object.unbonding_stake_entries?.map((e) =>
-        UnbondingStakeEntry.fromPartial(e)
-      ) || [];
-    message.queue_state_unstaking =
-      object.queue_state_unstaking !== undefined &&
-      object.queue_state_unstaking !== null
-        ? QueueState.fromPartial(object.queue_state_unstaking)
         : undefined;
     message.leave_pool_entries =
       object.leave_pool_entries?.map((e) => LeavePoolEntry.fromPartial(e)) ||
