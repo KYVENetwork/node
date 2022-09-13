@@ -34,7 +34,7 @@ export async function runNode(this: Node): Promise<void> {
       );
     }
 
-    if (await this.canVote()) {
+    if (await this.canVote(createdAt)) {
       await this.validateBundleProposal(createdAt);
     }
 
@@ -51,16 +51,10 @@ export async function runNode(this: Node): Promise<void> {
 
     this.logger.debug(`Reached upload interval of current bundle proposal`);
 
-    await this.syncPoolState();
-
-    if (+this.pool.bundle_proposal!.created_at > createdAt) {
-      continue;
-    }
-
-    if (await this.canPropose()) {
+    if (await this.canPropose(createdAt)) {
       await this.proposeBundle(createdAt);
-    } else {
-      await this.waitForNextBundleProposal(createdAt);
     }
+
+    await this.waitForNextBundleProposal(createdAt);
   }
 }

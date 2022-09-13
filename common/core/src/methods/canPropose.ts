@@ -1,15 +1,24 @@
 import { Node } from "..";
 import { sleep } from "../utils";
 
-export async function canPropose(this: Node): Promise<boolean> {
-  if (this.pool.bundle_proposal!.next_uploader !== this.staker) {
-    this.logger.info(
-      `Skipping upload. Reason: Node is not the next uploader\n`
-    );
-    return false;
-  }
-
+export async function canPropose(
+  this: Node,
+  createdAt: number
+): Promise<boolean> {
   while (true) {
+    await this.syncPoolState();
+
+    if (+this.pool.bundle_proposal!.created_at > createdAt) {
+      return false;
+    }
+
+    if (this.pool.bundle_proposal!.next_uploader !== this.staker) {
+      this.logger.info(
+        `Skipping upload. Reason: Node is not the next uploader\n`
+      );
+      return false;
+    }
+
     try {
       const fromHeight =
         +this.pool.bundle_proposal!.to_height ||
@@ -36,10 +45,10 @@ export async function canPropose(this: Node): Promise<boolean> {
       }
     } catch (error) {
       this.logger.warn(
-        ` Skipping upload. Reason: Failed to execute canPropose query\n`
+        ` Failed to request can_propose query. Retrying in 10s ...\n`
       );
       this.logger.debug(error);
-      return false;
+      await sleep(10 * 1000);
     }
   }
 }
