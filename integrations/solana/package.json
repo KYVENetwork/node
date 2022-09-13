@@ -15,6 +15,7 @@
     "assets": "./node_modules/@kyve/sdk/dist/proto/*",
     "targets": [
       "latest-linux-x64",
+      "latest-linux-arm64",
       "latest-macos-x64"
     ],
     "outputPath": "out"

@@ -13,9 +13,6 @@ export async function canPropose(
     }
 
     if (this.pool.bundle_proposal!.next_uploader !== this.staker) {
-      this.logger.info(
-        `Skipping upload. Reason: Node is not the next uploader\n`
-      );
       return false;
     }
 
