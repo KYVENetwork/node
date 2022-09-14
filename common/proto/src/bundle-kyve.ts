@@ -16,12 +16,15 @@ import * as _kyveQueryPoolsRes from "./proto-res/kyve/query/v1beta1/pools";
 import * as _kyveQueryStakers from "./proto/kyve/query/v1beta1/stakers";
 import * as _kyveQueryStakersRes from "./proto-res/kyve/query/v1beta1/stakers";
 import * as _kyveGovPool from "./proto/kyve/pool/v1beta1/gov";
+import * as _kyveQueryParams from "./proto/kyve/query/v1beta1/params";
+import * as _kyveQueryParamsRes from "./proto-res/kyve/query/v1beta1/params"
 
 export namespace kyve {
     //todo split by modules
     export namespace registry {
         export namespace v1beta1 {
             export import kyveBundles = _kyveBundles;
+            export import kyveQueryParamsRes = _kyveQueryParamsRes;
             export import kyveDelegation = _kyveDelegation;
             export import kyvePool = _kyvePool;
             export import kyveStakers = _kyveStakers;
@@ -31,7 +34,8 @@ export namespace kyve {
     }
     export namespace query {
         export namespace v1beta1 {
-            //queries
+            // queries
+            export import kyveQueryParams = _kyveQueryParams;
             export import kyveQuery = _kyveQuery;
             export import kyveQueryRes = _kyveQueryRes;
             export import kyveQueryAccount = _kyveQueryAccount
