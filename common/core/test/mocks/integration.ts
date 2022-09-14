@@ -29,7 +29,7 @@ export const formatValueMock = jest
 
 export const TestRuntime = jest.fn().mockImplementation(() => {
   return {
-    name: "TestRuntime",
+    name: "@kyve/evm",
     version: "0.0.0",
     getDataItem: getDataItemMock,
     validate: validateMock,

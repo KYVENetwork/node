@@ -2,7 +2,7 @@ import { Node } from "..";
 import { sleep } from "../utils";
 
 export async function runNode(this: Node): Promise<void> {
-  while (true) {
+  while (this.continueBundleProposalRound()) {
     await this.syncPoolState();
 
     const createdAt = +this.pool.bundle_proposal!.created_at;

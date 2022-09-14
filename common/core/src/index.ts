@@ -30,6 +30,7 @@ import {
   submitBundleProposal,
   skipUploaderRole,
   proposeBundle,
+  continueBundleProposalRound,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
@@ -98,6 +99,7 @@ export class Node {
   protected submitBundleProposal = submitBundleProposal;
   protected skipUploaderRole = skipUploaderRole;
   protected proposeBundle = proposeBundle;
+  protected continueBundleProposalRound = continueBundleProposalRound;
   protected runNode = runNode;
   protected runCache = runCache;
 
