@@ -18,7 +18,7 @@ export function shouldIdle(this: Node): boolean {
   }
 
   // check if enough stake in pool
-  if (new BigNumber(this.pool.total_stake).lt(this.pool.data!.min_stake)) {
+  if (new BigNumber(this.pool.total_delegation).lt(this.pool.data!.min_stake)) {
     this.logger.info(
       "Not enough stake in pool. Waiting for additional stakes. Idling ..."
     );

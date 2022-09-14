@@ -113,7 +113,7 @@ describe("src/methods/shouldIdle.ts", () => {
         paused: false,
         min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
       },
-      total_stake: new BigNumber(2000).multipliedBy(10 ** 9).toString(),
+      total_delegation: new BigNumber(2000).multipliedBy(10 ** 9).toString(),
     } as any;
 
     // ACT
@@ -138,7 +138,7 @@ describe("src/methods/shouldIdle.ts", () => {
         min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
         total_funds: "0",
       },
-      total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
+      total_delegation: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
     } as any;
 
     // ACT
@@ -163,7 +163,7 @@ describe("src/methods/shouldIdle.ts", () => {
         min_stake: new BigNumber(10000).multipliedBy(10 ** 9).toString(),
         total_funds: new BigNumber(1000).multipliedBy(10 ** 9).toString(),
       },
-      total_stake: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
+      total_delegation: new BigNumber(20000).multipliedBy(10 ** 9).toString(),
     } as any;
 
     // ACT
