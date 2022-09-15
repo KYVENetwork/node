@@ -386,8 +386,12 @@ describe("genesis tests", () => {
 
     const bundle = [
       {
-        key: "test_key",
-        value: "test_value",
+        key: "test_key_1",
+        value: "test_value_1",
+      },
+      {
+        key: "test_key_2",
+        value: "test_value_2",
       },
     ];
 
@@ -411,9 +415,9 @@ describe("genesis tests", () => {
             uploader: "another_test_staker",
             next_uploader: "another_test_staker",
             byte_size: byteSize,
-            to_height: "1",
-            to_key: "test_key",
-            to_value: "test_value",
+            to_height: "2",
+            to_key: "test_key_2",
+            to_value: "test_value_2",
             bundle_hash: bundleHash,
             created_at: "0",
             voters_valid: ["another_test_staker"],
@@ -424,8 +428,8 @@ describe("genesis tests", () => {
 
     const loadBundleMock = jest.fn().mockResolvedValue({
       bundle,
-      toKey: "test_key",
-      toValue: "test_value",
+      toKey: "test_key_2",
+      toValue: "test_value_2",
     });
     core["loadBundle"] = loadBundleMock;
 
@@ -496,7 +500,7 @@ describe("genesis tests", () => {
 
     expect(loadBundleMock).toHaveBeenCalledTimes(1);
 
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 1);
+    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -512,7 +516,7 @@ describe("genesis tests", () => {
     // =============================
 
     expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value");
+    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
 
     expect(validateMock).toHaveBeenCalledTimes(1);
     expect(validateMock).toHaveBeenLastCalledWith(
