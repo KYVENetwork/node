@@ -1,7 +1,6 @@
 import ArweaveClient from "arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import axios from "axios";
-import { readFileSync } from "fs";
 import { IStorageProvider } from "../types";
 
 export class Arweave implements IStorageProvider {
@@ -46,20 +45,10 @@ export class Arweave implements IStorageProvider {
     return transaction.id;
   }
 
-  async retrieveBundle(storageId: string) {
-    const { status } = await this.arweaveClient.transactions.getStatus(
-      storageId
-    );
-
-    if (status !== 200 && status !== 202) {
-      throw Error(
-        `Could not download bundle from Arweave. Status code = ${status}`
-      );
-    }
-
+  async retrieveBundle(storageId: string, timeout: number) {
     const { data: bundle } = await axios.get(
       `https://arweave.net/${storageId}`,
-      { responseType: "arraybuffer" }
+      { responseType: "arraybuffer", timeout }
     );
 
     return bundle;

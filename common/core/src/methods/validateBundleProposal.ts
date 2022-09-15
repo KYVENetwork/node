@@ -2,6 +2,7 @@ import { Node } from "..";
 import { sleep, standardizeJSON, sha256 } from "../utils";
 import { VOTE } from "../utils/constants";
 import { DataItem } from "../types";
+import BigNumber from "bignumber.js";
 
 export async function validateBundleProposal(
   this: Node,
@@ -33,13 +34,19 @@ export async function validateBundleProposal(
 
     // try to download bundle from arweave
     if (!proposedBundleCompressed!) {
+      let downloadTimeout = Math.max(
+        0,
+        parseInt(this.pool.data?.upload_interval ?? "0") - 20
+      );
+
       this.logger.debug(
-        `Attempting to download bundle from ${this.storageProvider.name}`
+        `Attempting to download bundle from ${this.storageProvider.name} with a download timeout of ${downloadTimeout}s`
       );
 
       try {
         proposedBundleCompressed = await this.storageProvider.retrieveBundle(
-          this.pool.bundle_proposal!.storage_id
+          this.pool.bundle_proposal!.storage_id,
+          downloadTimeout * 1000
         );
       } catch (error) {
         this.logger.warn(

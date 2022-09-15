@@ -1,5 +1,4 @@
 import { Bundle, Node } from "..";
-import { KYVE_NO_DATA_BUNDLE } from "../utils/constants";
 import { sleep, standardizeJSON, sha256 } from "../utils";
 
 export async function proposeBundle(

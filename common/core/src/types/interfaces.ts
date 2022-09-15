@@ -123,9 +123,10 @@ export interface IStorageProvider {
    *
    * @method retrieveBundle
    * @param {string} storageId storage Id from which the data of the bundle can be retrieved
+   * @param {number} timeout timeout defines the download timeout in milliseconds
    * @return {Promise<Buffer>} returns the data of the bundle
    */
-  retrieveBundle(storageId: string): Promise<Buffer>;
+  retrieveBundle(storageId: string, timeout: number): Promise<Buffer>;
 }
 
 /**

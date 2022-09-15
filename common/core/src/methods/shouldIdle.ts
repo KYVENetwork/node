@@ -1,37 +1,35 @@
-import BigNumber from "bignumber.js";
+import { PoolStatus } from "@kyve/proto/dist/proto-res/kyve/pool/v1beta1/pool";
 import { Node } from "..";
 
 export function shouldIdle(this: Node): boolean {
-  // check if pool is upgrading
-  if (
-    +this.pool.data!.upgrade_plan!.scheduled_at > 0 &&
-    Math.floor(Date.now() / 1000) >= +this.pool.data!.upgrade_plan!.scheduled_at
-  ) {
-    this.logger.info("Pool is upgrading. Idling ...");
-    return true;
+  switch (this.pool.status as PoolStatus) {
+    case PoolStatus.POOL_STATUS_ACTIVE:
+      return false;
+    case PoolStatus.POOL_STATUS_PAUSED:
+      this.logger.info(
+        "Pool is paused. Waiting for pool being unpaused. Idling ..."
+      );
+      return true;
+    case PoolStatus.POOL_STATUS_NO_FUNDS:
+      this.logger.info(
+        "Pool is out of funds. Waiting for additional funds. Idling ..."
+      );
+      return true;
+    case PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE:
+      this.logger.info(
+        "Not enough delegation in pool. Waiting for additional delegation. Idling ..."
+      );
+      return true;
+    case PoolStatus.POOL_STATUS_UPGRADING:
+      this.logger.info(
+        "Pool is currently upgrading. Waiting for upgrade being applied. Idling ..."
+      );
+      return true;
+    case PoolStatus.POOL_STATUS_UNSPECIFIED:
+      this.logger.info("Pool status is currently unspecified. Idling ...");
+      return true;
+    default:
+      this.logger.info("Pool status is currently unknown. Idling ...");
+      return true;
   }
-
-  // check if pool is paused
-  if (this.pool.data!.paused) {
-    this.logger.info("Pool is paused. Idling ...");
-    return true;
-  }
-
-  // check if enough stake in pool
-  if (new BigNumber(this.pool.total_delegation).lt(this.pool.data!.min_stake)) {
-    this.logger.info(
-      "Not enough stake in pool. Waiting for additional stakes. Idling ..."
-    );
-    return true;
-  }
-
-  // check if pool is funded
-  if (new BigNumber(this.pool.data!.total_funds).isZero()) {
-    this.logger.info(
-      "Pool is out of funds. Waiting for additional funds. Idling ..."
-    );
-    return true;
-  }
-
-  return false;
 }
