@@ -48,7 +48,7 @@ export const client = {
     },
   },
   account: {
-    address: "test_valaddress_0",
+    address: "test_valaddress",
     algo: "ed25519",
     pubkey: new Uint8Array(),
   },
@@ -86,7 +86,7 @@ export const base_pool = {
     paused: false,
     funders: [
       {
-        address: "test_funder_0",
+        address: "test_funder",
         amount: "100000000000",
       },
     ],
@@ -119,7 +119,7 @@ export const base_pool = {
     voters_invalid: [],
     voters_abstain: [],
   },
-  stakers: ["test_staker_0"],
+  stakers: ["test_staker"],
   total_self_delegation: "100000000000",
   total_delegation: "100000000000",
   status: "POOL_STATUS_ACTIVE",
