@@ -77,6 +77,7 @@ export class Node {
   protected config!: string;
   protected network!: string;
   protected verbose!: boolean;
+  protected metrics!: boolean;
 
   // register core methods
   protected asyncSetup = asyncSetup;
@@ -429,6 +430,11 @@ export class Node {
         "Run node in verbose mode. [optional, default = false]",
         false
       )
+      .option(
+        "-m, --metrics",
+        "Run a metrics server with prometheus (http://localhost:8080/metrics). [optional, default = false]",
+        false
+      )
       .action((options) => {
         this.start(options);
       });
@@ -457,6 +463,7 @@ export class Node {
     this.config = options.config;
     this.network = options.network;
     this.verbose = options.verbose;
+    this.metrics = options.metrics;
 
     this.coreVersion = coreVersion;
 

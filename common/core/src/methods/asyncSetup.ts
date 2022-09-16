@@ -1,4 +1,7 @@
 import { Node } from "..";
+import http from "http";
+import url from "url";
+import prom_client, { register } from "prom-client";
 
 export async function asyncSetup(this: Node): Promise<void> {
   // check if basic runtime classes are defined
@@ -60,6 +63,32 @@ export async function asyncSetup(this: Node): Promise<void> {
   }
 
   this.name = this.generateName();
+
+  // init metrics server
+  if (this.metrics) {
+    this.logger.info(
+      "Starting metric server on: http://localhost:8080/metrics"
+    );
+
+    prom_client.collectDefaultMetrics({
+      labels: { app: "kyve-core" },
+    });
+
+    // HTTP server which exposes the metrics on http://localhost:8080/metrics
+    http
+      .createServer(async (req: any, res: any) => {
+        // Retrieve route from request object
+        const route = url.parse(req.url).pathname;
+
+        if (route === "/metrics") {
+          // Return all metrics the Prometheus exposition format
+          res.setHeader("Content-Type", register.contentType);
+          const metrics = await prom_client.register.metrics();
+          res.end(metrics);
+        }
+      })
+      .listen(8080);
+  }
 
   // init storage provider with wallet
   this.storageProvider = this.storageProvider.init(wallet);
