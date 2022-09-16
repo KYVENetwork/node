@@ -12,6 +12,11 @@ export async function runCache(this: Node): Promise<void> {
     if (+this.pool.bundle_proposal!.to_height < toHeight) {
       this.logger.debug(`Attempting to clear cache`);
       await this.cache.drop();
+
+      if (this.metrics) {
+        this.metricsCurrentCacheItems.set(0);
+      }
+
       this.logger.info(`Cleared cache\n`);
     }
 

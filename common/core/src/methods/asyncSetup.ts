@@ -126,6 +126,11 @@ export async function asyncSetup(this: Node): Promise<void> {
 
   this.logger.debug(`Attempting to clear cache`);
   await this.cache.drop();
+
+  if (this.metrics) {
+    this.metricsCurrentCacheItems.set(0);
+  }
+
   this.logger.info(`Cleared cache\n`);
 
   this.validateRuntime();
