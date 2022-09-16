@@ -1,5 +1,10 @@
 import { Node } from "..";
-import { callWithBackoffStrategy, sleep } from "../utils";
+import {
+  callWithBackoffStrategy,
+  ERROR_IDLE_TIME,
+  REFRESH_TIME,
+  sleep,
+} from "../utils";
 
 export async function canValidate(this: Node): Promise<void> {
   const canValidate = await callWithBackoffStrategy(
@@ -39,7 +44,7 @@ export async function canValidate(this: Node): Promise<void> {
       `The node will not continue until the account is authorized`
     );
 
-    await sleep(10 * 1000);
+    await sleep(REFRESH_TIME);
   }
 
   while (true) {
@@ -65,7 +70,7 @@ export async function canValidate(this: Node): Promise<void> {
       this.staker = canValidate.reason;
       break;
     } else {
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   }
 }

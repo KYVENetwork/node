@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { ERROR_IDLE_TIME, sleep } from "../utils";
 
 export async function canPropose(
   this: Node,
@@ -45,7 +45,7 @@ export async function canPropose(
         ` Failed to request can_propose query. Retrying in 10s ...\n`
       );
       this.logger.debug(error);
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   }
 }

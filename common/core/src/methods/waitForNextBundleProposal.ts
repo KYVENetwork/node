@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { REFRESH_TIME, sleep } from "../utils";
 
 export async function waitForNextBundleProposal(
   this: Node,
@@ -17,7 +17,7 @@ export async function waitForNextBundleProposal(
       } else if (this.shouldIdle()) {
         break;
       } else {
-        await sleep(10 * 1000);
+        await sleep(REFRESH_TIME);
       }
     }
 

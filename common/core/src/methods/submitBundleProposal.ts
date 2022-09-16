@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { ERROR_IDLE_TIME, sleep } from "../utils";
 
 export async function submitBundleProposal(
   this: Node,
@@ -41,7 +41,7 @@ export async function submitBundleProposal(
         `Could not submit bundle proposal. Continuing in 10s ...\n`
       );
 
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   } catch (error) {
     this.logger.warn(
@@ -49,6 +49,6 @@ export async function submitBundleProposal(
     );
     this.logger.debug(error);
 
-    await sleep(10 * 1000);
+    await sleep(ERROR_IDLE_TIME);
   }
 }

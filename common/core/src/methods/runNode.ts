@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { IDLE_TIME, sleep } from "../utils";
 
 export async function runNode(this: Node): Promise<void> {
   while (this.continueBundleProposalRound()) {
@@ -12,7 +12,7 @@ export async function runNode(this: Node): Promise<void> {
     this.validateActiveNode();
 
     if (this.shouldIdle()) {
-      await sleep("1m");
+      await sleep(IDLE_TIME);
       continue;
     }
 

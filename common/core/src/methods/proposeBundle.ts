@@ -1,5 +1,5 @@
 import { Bundle, Node } from "..";
-import { sleep, standardizeJSON, sha256 } from "../utils";
+import { sleep, standardizeJSON, sha256, ERROR_IDLE_TIME } from "../utils";
 
 export async function proposeBundle(
   this: Node,
@@ -74,7 +74,7 @@ export async function proposeBundle(
         ` Failed to save bundle on ${this.storageProvider.name}. Retrying in 10s ...`
       );
       this.logger.debug(error);
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   }
 

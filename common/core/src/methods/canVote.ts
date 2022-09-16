@@ -1,4 +1,4 @@
-import { Node, sleep } from "..";
+import { ERROR_IDLE_TIME, Node, sleep } from "..";
 
 // TODO: idle here if canVote can not be called
 export async function canVote(this: Node, createdAt: number): Promise<boolean> {
@@ -40,7 +40,7 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
         ` Failed to request can_vote query. Retrying in 10s ...\n`
       );
       this.logger.debug(error);
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   }
 }

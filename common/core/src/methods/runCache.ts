@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { ERROR_IDLE_TIME, sleep } from "../utils";
 
 export async function runCache(this: Node): Promise<void> {
   let createdAt = 0;
@@ -70,7 +70,7 @@ export async function runCache(this: Node): Promise<void> {
         height++;
       } catch {
         this.logger.warn(` Failed to get data item from height ${height}`);
-        await sleep(10 * 1000);
+        await sleep(ERROR_IDLE_TIME);
       }
     }
 

@@ -1,6 +1,6 @@
 import { Node } from "..";
 import { sleep, standardizeJSON, sha256 } from "../utils";
-import { VOTE } from "../utils/constants";
+import { ERROR_IDLE_TIME, VOTE } from "../utils/constants";
 import { DataItem } from "../types";
 
 export async function validateBundleProposal(
@@ -59,7 +59,7 @@ export async function validateBundleProposal(
           hasVotedAbstain = true;
         }
 
-        await sleep(10 * 1000);
+        await sleep(ERROR_IDLE_TIME);
         continue;
       }
 
@@ -93,7 +93,7 @@ export async function validateBundleProposal(
           hasVotedAbstain = true;
         }
 
-        await sleep(10 * 1000);
+        await sleep(ERROR_IDLE_TIME);
         continue;
       }
     }
@@ -130,7 +130,7 @@ export async function validateBundleProposal(
         hasVotedAbstain = true;
       }
 
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
       continue;
     }
   }

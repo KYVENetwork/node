@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep } from "../utils";
+import { ERROR_IDLE_TIME, sleep } from "../utils";
 
 export async function skipUploaderRole(
   this: Node,
@@ -23,12 +23,12 @@ export async function skipUploaderRole(
     } else {
       this.logger.info(`Could not skip uploader role. Continuing in 10s ...\n`);
 
-      await sleep(10 * 1000);
+      await sleep(ERROR_IDLE_TIME);
     }
   } catch (error) {
     this.logger.warn(" Failed to skip uploader role. Continuing in 10s ...\n");
     this.logger.debug(error);
 
-    await sleep(10 * 1000);
+    await sleep(ERROR_IDLE_TIME);
   }
 }
