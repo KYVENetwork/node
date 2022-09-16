@@ -173,8 +173,6 @@ describe("propose bundle tests", () => {
     // assert that only one round ran
     expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
 
-    // expect(canVoteMock).toHaveBeenCalledOnceWith();
-
     // TODO: assert timeouts
   });
 });
