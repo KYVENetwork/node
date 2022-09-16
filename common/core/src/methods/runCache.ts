@@ -37,7 +37,7 @@ export async function runCache(this: Node): Promise<void> {
         await this.cache.del(current.toString());
 
         if (this.metrics) {
-          this.metricsCurrentCacheItems.metricsCacheHeight.dec();
+          this.metricsCurrentCacheItems.dec();
         }
       } catch {
         break;
