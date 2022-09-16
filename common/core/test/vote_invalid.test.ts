@@ -41,8 +41,8 @@ TEST CASES - invalid votes tests
 * try to vote invalid after validator has voted abstain bebore
 * try to vote invalid after validator has voted invalid before
 * try to vote invalid after validator has voted valid before
-* TODO: vote invalid but local bundle could not be loaded in the first try
-* TODO: vote invalid but bundle from storage provider could not be loaded in the first try
+* vote invalid but local bundle could not be loaded in the first try
+* vote invalid but bundle from storage provider could not be loaded in the first try
 
 */
 
