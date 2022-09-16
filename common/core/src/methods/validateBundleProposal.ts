@@ -2,7 +2,6 @@ import { Node } from "..";
 import { sleep, standardizeJSON, sha256 } from "../utils";
 import { VOTE } from "../utils/constants";
 import { DataItem } from "../types";
-import BigNumber from "bignumber.js";
 
 export async function validateBundleProposal(
   this: Node,

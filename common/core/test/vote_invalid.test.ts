@@ -41,6 +41,8 @@ TEST CASES - invalid votes tests
 * try to vote invalid after validator has voted abstain bebore
 * try to vote invalid after validator has voted invalid before
 * try to vote invalid after validator has voted valid before
+* TODO: vote invalid but local bundle could not be loaded in the first try
+* TODO: vote invalid but bundle from storage provider could not be loaded in the first try
 
 */
 
@@ -127,7 +129,6 @@ describe("invalid votes tests", () => {
   test("vote invalid because runtime validate function returns false", async () => {
     // ARRANGE
     const validateMock = jest.fn().mockResolvedValue(false);
-
     core["runtime"].validate = validateMock;
 
     const bundle = [
@@ -228,7 +229,6 @@ describe("invalid votes tests", () => {
     // =======================
 
     expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
     expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
 
     // =============================
@@ -1068,7 +1068,6 @@ describe("invalid votes tests", () => {
       possible: false,
       reaseon: "already voted valid",
     });
-
     core.lcd.kyve.query.v1beta1.canVote = canVoteMock;
 
     const bundle = [
@@ -1175,6 +1174,326 @@ describe("invalid votes tests", () => {
     expect(formatValueMock).toHaveBeenCalledTimes(0);
 
     expect(validateMock).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("vote invalid but local bundle could not be loaded in the first try", async () => {
+    // ARRANGE
+    const validateMock = jest.fn().mockResolvedValue(false);
+    core["runtime"].validate = validateMock;
+
+    const canVoteMock = jest.fn().mockResolvedValue({
+      possible: true,
+      reaseon: "",
+    });
+    core.lcd.kyve.query.v1beta1.canVote = canVoteMock;
+
+    const bundle = [
+      { key: "test_key_1", value: "test_value_1" },
+      { key: "test_key_2", value: "test_value_2" },
+    ];
+
+    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const byteSize = compressedBundle.byteLength.toString();
+    const bundleHash = sha256(standardizeJSON(bundle));
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...base_pool,
+        bundle_proposal: {
+          ...base_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "another_test_staker",
+          byte_size: byteSize,
+          to_height: "2",
+          to_key: "test_key_2",
+          to_value: "test_value_2",
+          bundle_hash: bundleHash,
+          created_at: "0",
+          voters_valid: ["another_test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const loadBundleMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        bundle: [],
+        toKey: "",
+        toValue: "",
+      })
+      .mockResolvedValue({
+        bundle,
+        toKey: "test_key_2",
+        toValue: "test_value_2",
+      });
+    core["loadBundle"] = loadBundleMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueBundleProposalRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_ABSTAIN,
+    });
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_NO,
+    });
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenLastCalledWith(
+      "another_test_storage_id",
+      (120 - 20) * 1000
+    );
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(loadBundleMock).toHaveBeenCalledTimes(2);
+    expect(loadBundleMock).toHaveBeenNthCalledWith(1, 0, 2);
+    expect(loadBundleMock).toHaveBeenNthCalledWith(2, 0, 2);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(0);
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenLastCalledWith(compressedBundle);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(formatValueMock).toHaveBeenCalledTimes(1);
+    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenLastCalledWith(
+      expect.anything(),
+      standardizeJSON(bundle),
+      standardizeJSON(bundle)
+    );
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("vote invalid but bundle from storage provider could not be loaded in the first try", async () => {
+    // ARRANGE
+    const validateMock = jest.fn().mockResolvedValue(false);
+    core["runtime"].validate = validateMock;
+
+    const canVoteMock = jest.fn().mockResolvedValue({
+      possible: true,
+      reaseon: "",
+    });
+    core.lcd.kyve.query.v1beta1.canVote = canVoteMock;
+
+    const bundle = [
+      { key: "test_key_1", value: "test_value_1" },
+      { key: "test_key_2", value: "test_value_2" },
+    ];
+
+    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const byteSize = compressedBundle.byteLength.toString();
+    const bundleHash = sha256(standardizeJSON(bundle));
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...base_pool,
+        bundle_proposal: {
+          ...base_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "another_test_staker",
+          byte_size: byteSize,
+          to_height: "2",
+          to_key: "test_key_2",
+          to_value: "test_value_2",
+          bundle_hash: bundleHash,
+          created_at: "0",
+          voters_valid: ["another_test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const loadBundleMock = jest.fn().mockResolvedValue({
+      bundle,
+      toKey: "test_key_2",
+      toValue: "test_value_2",
+    });
+    core["loadBundle"] = loadBundleMock;
+
+    const retrieveBundleMock = jest
+      .fn()
+      .mockRejectedValueOnce(new Error())
+      .mockResolvedValue(compressedBundle);
+    core["storageProvider"].retrieveBundle = retrieveBundleMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueBundleProposalRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(2);
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(1, {
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_ABSTAIN,
+    });
+    expect(voteBundleProposalMock).toHaveBeenNthCalledWith(2, {
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_NO,
+    });
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(2);
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(
+      1,
+      "another_test_storage_id",
+      (120 - 20) * 1000
+    );
+    expect(retrieveBundleMock).toHaveBeenNthCalledWith(
+      2,
+      "another_test_storage_id",
+      (120 - 20) * 1000
+    );
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(loadBundleMock).toHaveBeenCalledTimes(1);
+    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(0);
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenLastCalledWith(compressedBundle);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(formatValueMock).toHaveBeenCalledTimes(1);
+    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+
+    expect(validateMock).toHaveBeenCalledTimes(1);
+    expect(validateMock).toHaveBeenLastCalledWith(
+      expect.anything(),
+      standardizeJSON(bundle),
+      standardizeJSON(bundle)
+    );
 
     // ========================
     // ASSERT NODEJS INTERFACES

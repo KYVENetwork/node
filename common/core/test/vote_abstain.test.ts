@@ -26,7 +26,6 @@ import {
   canProposeMock,
   lcd,
   skipUploaderRoleMock,
-  unsuccessfulExecuteMock,
 } from "./mocks/helpers";
 import { VoteType } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
 
