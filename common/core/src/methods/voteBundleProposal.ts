@@ -33,11 +33,23 @@ export async function voteBundleProposal(
 
     if (receipt.code === 0) {
       this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"\n`);
+
+      if (this.metrics) {
+        this.metricsTotalSuccessfulTxs.inc();
+      }
     } else {
       this.logger.info(`Could not vote on proposal. Continuing ...\n`);
+
+      if (this.metrics) {
+        this.metricsTotalUnsuccessfulTxs.inc();
+      }
     }
   } catch (error) {
     this.logger.warn(" Failed to vote. Continuing ...\n");
     this.logger.debug(error);
+
+    if (this.metrics) {
+      this.metricsTotalFailedTxs.inc();
+    }
   }
 }

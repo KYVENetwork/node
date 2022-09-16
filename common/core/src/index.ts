@@ -72,6 +72,9 @@ export class Node {
   // metrics
   public prometheus!: typeof prom_client;
   public metricsCurrentCacheItems!: any;
+  public metricsTotalSuccessfulTxs!: any;
+  public metricsTotalUnsuccessfulTxs!: any;
+  public metricsTotalFailedTxs!: any;
 
   // options
   protected poolId!: number;

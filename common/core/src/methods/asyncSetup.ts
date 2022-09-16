@@ -79,6 +79,21 @@ export async function asyncSetup(this: Node): Promise<void> {
       help: "The amount of data items currently in the cache.",
     });
 
+    this.metricsTotalSuccessfulTxs = new prom_client.Counter({
+      name: "total_successful_txs",
+      help: "The amount of transactions with receipt code = 0.",
+    });
+
+    this.metricsTotalUnsuccessfulTxs = new prom_client.Counter({
+      name: "total_unsuccessful_txs",
+      help: "The amount of transactions with receipt code != 0.",
+    });
+
+    this.metricsTotalFailedTxs = new prom_client.Counter({
+      name: "total_failed_txs",
+      help: "The amount of transactions that failed with an error.",
+    });
+
     this.prometheus = prom_client;
 
     // HTTP server which exposes the metrics on http://localhost:8080/metrics

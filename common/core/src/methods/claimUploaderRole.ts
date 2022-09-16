@@ -20,14 +20,29 @@ export async function claimUploaderRole(this: Node): Promise<boolean> {
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully claimed uploader role\n`);
+
+      if (this.metrics) {
+        this.metricsTotalSuccessfulTxs.inc();
+      }
+
       return true;
     } else {
       this.logger.info(`Could not claim uploader role. Continuing ...\n`);
+
+      if (this.metrics) {
+        this.metricsTotalUnsuccessfulTxs.inc();
+      }
+
       return false;
     }
   } catch (error) {
     this.logger.warn(" Failed to claim uploader role. Continuing ...\n");
     this.logger.debug(error);
+
+    if (this.metrics) {
+      this.metricsTotalFailedTxs.inc();
+    }
+
     return false;
   }
 }

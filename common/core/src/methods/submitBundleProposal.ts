@@ -36,10 +36,18 @@ export async function submitBundleProposal(
       this.logger.info(
         `Successfully submitted bundle proposal with Storage Id "${storageId}"\n`
       );
+
+      if (this.metrics) {
+        this.metricsTotalSuccessfulTxs.inc();
+      }
     } else {
       this.logger.info(
         `Could not submit bundle proposal. Continuing in 10s ...\n`
       );
+
+      if (this.metrics) {
+        this.metricsTotalUnsuccessfulTxs.inc();
+      }
 
       await sleep(ERROR_IDLE_TIME);
     }
@@ -48,6 +56,10 @@ export async function submitBundleProposal(
       " Failed to submit bundle proposal. Continuing in 10s ...\n"
     );
     this.logger.debug(error);
+
+    if (this.metrics) {
+      this.metricsTotalFailedTxs.inc();
+    }
 
     await sleep(ERROR_IDLE_TIME);
   }

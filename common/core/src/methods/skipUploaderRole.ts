@@ -20,15 +20,27 @@ export async function skipUploaderRole(
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully skipped uploader role\n`);
+
+      if (this.metrics) {
+        this.metricsTotalSuccessfulTxs.inc();
+      }
     } else {
       this.logger.info(`Could not skip uploader role. Continuing in 10s ...\n`);
 
       await sleep(ERROR_IDLE_TIME);
+
+      if (this.metrics) {
+        this.metricsTotalUnsuccessfulTxs.inc();
+      }
     }
   } catch (error) {
     this.logger.warn(" Failed to skip uploader role. Continuing in 10s ...\n");
     this.logger.debug(error);
 
     await sleep(ERROR_IDLE_TIME);
+
+    if (this.metrics) {
+      this.metricsTotalFailedTxs.inc();
+    }
   }
 }
