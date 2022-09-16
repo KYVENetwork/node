@@ -57,9 +57,9 @@ export function stakerStatusToJSON(object: StakerStatus): string {
 export interface QueryStakersRequest {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
-  /** status */
+  /** status looks whether a staker is participating in pools or not */
   status: StakerStatus;
-  /** serach */
+  /** search searches for moniker OR address */
   search: string;
 }
 

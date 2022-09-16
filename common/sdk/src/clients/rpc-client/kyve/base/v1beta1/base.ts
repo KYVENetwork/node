@@ -4,8 +4,8 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { BigNumber } from "bignumber.js";
 import { KYVE_DECIMALS } from "../../../../../constants";
 import { DENOM } from "../../../../../constants";
-import {signTx, TxPromise} from "../../../../../utils/helper";
-import {withTypeUrl} from "../../../../../registry/tx.registry";
+import { signTx, TxPromise } from "../../../../../utils/helper";
+import { withTypeUrl } from "../../../../../registry/tx.registry";
 
 export default class KyveBaseMsg {
   private nativeClient: SigningStargateClient;
@@ -24,19 +24,18 @@ export default class KyveBaseMsg {
       memo?: string;
     }
   ) {
-
     const tx = {
       typeUrl: "/cosmos.bank.v1beta1.MsgSend",
       value: {
         fromAddress: this.account.address,
         toAddress: recipient,
-        amount: coins(amount, DENOM)
-      }
-    }
+        amount: coins(amount, DENOM),
+      },
+    };
 
     return new TxPromise(
-        this.nativeClient,
-        await signTx(this.nativeClient, this.account.address, tx, options)
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
     );
   }
 

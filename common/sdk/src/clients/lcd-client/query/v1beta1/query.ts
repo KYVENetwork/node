@@ -12,7 +12,8 @@ import kyveQueryStakersRes = kyve.query.v1beta1.kyveQueryStakersRes;
 import kyveQueryStakers = kyve.query.v1beta1.kyveQueryStakers;
 import kyveQueryDelegation = kyve.query.v1beta1.kyveQueryDelegation;
 import kyveQueryDelegationRes = kyve.query.v1beta1.kyveQueryDelegationRes;
-
+import kyveQueryParamsReq = kyve.query.v1beta1.kyveQueryParams;
+import kyveQueryParamsRes = kyve.query.v1beta1.kyveQueryParams;
 import PageRequest = cosmos.registry.v1beta1.cosmosPaginationQuery.PageRequest;
 import { AbstractKyveLCDClient } from "../../lcd-client.abstract";
 
@@ -55,6 +56,12 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   constructor(restEndpoint: string) {
     super(restEndpoint);
   }
+
+  async params(): Promise<kyveQueryParamsRes.QueryParamsResponse> {
+    const endpoint = `/kyve/query/v1beta1/params`;
+    return await this.request(endpoint);
+  }
+
   /** Pools **/
   async pool(
     params: kyveQueryPools.QueryPoolRequest
