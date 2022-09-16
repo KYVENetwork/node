@@ -91,8 +91,8 @@ describe("vote valid tests", () => {
     core["poolId"] = 0;
     core["staker"] = "test_staker";
 
-    core.client = client;
-    core.lcd = lcd;
+    core.client = client();
+    core.lcd = lcd();
   });
 
   afterEach(() => {

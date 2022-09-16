@@ -36,34 +36,36 @@ export const canProposeMock = jest.fn().mockResolvedValue({
   reason: "",
 });
 
-export const client = {
-  kyve: {
-    bundles: {
-      v1beta1: {
-        claimUploaderRole: claimUploaderRoleMock,
-        skipUploaderRole: skipUploaderRoleMock,
-        voteBundleProposal: voteBundleProposalMock,
-        submitBundleProposal: submitBundleProposalMock,
+export const client = () =>
+  ({
+    kyve: {
+      bundles: {
+        v1beta1: {
+          claimUploaderRole: claimUploaderRoleMock,
+          skipUploaderRole: skipUploaderRoleMock,
+          voteBundleProposal: voteBundleProposalMock,
+          submitBundleProposal: submitBundleProposalMock,
+        },
       },
     },
-  },
-  account: {
-    address: "test_valaddress",
-    algo: "ed25519",
-    pubkey: new Uint8Array(),
-  },
-} as any;
+    account: {
+      address: "test_valaddress",
+      algo: "ed25519",
+      pubkey: new Uint8Array(),
+    },
+  } as any);
 
-export const lcd = {
-  kyve: {
-    query: {
-      v1beta1: {
-        canVote: canVoteMock,
-        canPropose: canProposeMock,
+export const lcd = () =>
+  ({
+    kyve: {
+      query: {
+        v1beta1: {
+          canVote: canVoteMock,
+          canPropose: canProposeMock,
+        },
       },
     },
-  },
-} as any;
+  } as any);
 
 export const base_pool = {
   id: "0",

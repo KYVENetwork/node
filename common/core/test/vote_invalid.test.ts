@@ -98,8 +98,8 @@ describe("invalid votes tests", () => {
     core["poolId"] = 0;
     core["staker"] = "test_staker";
 
-    core.client = client;
-    core.lcd = lcd;
+    core.client = client();
+    core.lcd = lcd();
   });
 
   afterEach(() => {
@@ -1190,12 +1190,6 @@ describe("invalid votes tests", () => {
     const validateMock = jest.fn().mockResolvedValue(false);
     core["runtime"].validate = validateMock;
 
-    const canVoteMock = jest.fn().mockResolvedValue({
-      possible: true,
-      reaseon: "",
-    });
-    core.lcd.kyve.query.v1beta1.canVote = canVoteMock;
-
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
       { key: "test_key_2", value: "test_value_2" },
@@ -1347,12 +1341,6 @@ describe("invalid votes tests", () => {
     // ARRANGE
     const validateMock = jest.fn().mockResolvedValue(false);
     core["runtime"].validate = validateMock;
-
-    const canVoteMock = jest.fn().mockResolvedValue({
-      possible: true,
-      reaseon: "",
-    });
-    core.lcd.kyve.query.v1beta1.canVote = canVoteMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
