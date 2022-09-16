@@ -74,6 +74,13 @@ export async function asyncSetup(this: Node): Promise<void> {
       labels: { app: "kyve-core" },
     });
 
+    this.metricsCurrentCacheItems = new prom_client.Gauge({
+      name: "current_cache_items",
+      help: "The amount of data items currently in the cache.",
+    });
+
+    this.prometheus = prom_client;
+
     // HTTP server which exposes the metrics on http://localhost:8080/metrics
     http
       .createServer(async (req: any, res: any) => {

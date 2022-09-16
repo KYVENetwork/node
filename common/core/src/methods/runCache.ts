@@ -30,6 +30,10 @@ export async function runCache(this: Node): Promise<void> {
 
       try {
         await this.cache.del(current.toString());
+
+        if (this.metrics) {
+          this.metricsCurrentCacheItems.metricsCacheHeight.dec();
+        }
       } catch {
         break;
       }
@@ -64,6 +68,11 @@ export async function runCache(this: Node): Promise<void> {
         const item = await this.runtime.getDataItem(this, nextKey);
 
         await this.cache.put(height.toString(), item);
+
+        if (this.metrics) {
+          this.metricsCurrentCacheItems.inc();
+        }
+
         await sleep(50);
 
         key = nextKey;

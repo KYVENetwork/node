@@ -38,6 +38,7 @@ import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
 import { parseNetwork, parsePoolId } from "./commander";
 import { kyve } from "@kyve/proto";
+import prom_client from "prom-client";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 
 /**
@@ -67,6 +68,10 @@ export class Node {
 
   // logger attributes
   public logger!: Logger;
+
+  // metrics
+  public prometheus!: typeof prom_client;
+  public metricsCurrentCacheItems!: any;
 
   // options
   protected poolId!: number;
