@@ -63,6 +63,7 @@ export async function proposeBundle(
       this.logger.debug(`Attempting to save bundle on storage provider`);
 
       storageId = await this.storageProvider.saveBundle(bundleCompressed, tags);
+      this.prom.storage_provider_save_successful.inc();
 
       this.logger.info(
         `Saved bundle on ${this.storageProvider.name} with Storage Id "${storageId}"\n`
@@ -74,6 +75,8 @@ export async function proposeBundle(
         ` Failed to save bundle on ${this.storageProvider.name}. Retrying in 10s ...`
       );
       this.logger.debug(error);
+      this.prom.storage_provider_save_failed.inc();
+
       await sleep(ERROR_IDLE_TIME);
     }
   }

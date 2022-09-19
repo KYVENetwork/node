@@ -3,6 +3,10 @@ import { IDLE_TIME, sleep } from "../utils";
 
 export async function runNode(this: Node): Promise<void> {
   while (this.continueBundleProposalRound()) {
+    // record round time
+    this.prom.bundles_round_time.setToCurrentTime();
+    const roundTimeEnd = this.prom.bundles_round_time.startTimer();
+
     await this.syncPoolState();
 
     const createdAt = +this.pool.bundle_proposal!.created_at;
@@ -56,5 +60,6 @@ export async function runNode(this: Node): Promise<void> {
     }
 
     await this.waitForNextBundleProposal(createdAt);
+    roundTimeEnd();
   }
 }

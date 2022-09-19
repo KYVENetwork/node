@@ -22,8 +22,11 @@ export async function canValidate(this: Node): Promise<void> {
         ).toFixed(2)}s ...`
       );
       this.logger.debug(error);
+      this.prom.query_can_validate_failed.inc();
     }
   );
+
+  this.prom.query_can_validate_successful.inc();
 
   if (canValidate.possible) {
     this.staker = canValidate.reason;

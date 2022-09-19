@@ -4,6 +4,7 @@ import {
   ICache,
   ICompression,
   IBackend,
+  IMetrics,
 } from "./types";
 import { FileBackend } from "./backend";
 import { version as coreVersion } from "../package.json";
@@ -31,6 +32,7 @@ import {
   skipUploaderRole,
   proposeBundle,
   continueBundleProposalRound,
+  setupMetrics,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
@@ -70,11 +72,7 @@ export class Node {
   public logger!: Logger;
 
   // metrics
-  public prometheus!: typeof prom_client;
-  public metricsCurrentCacheItems!: any;
-  public metricsTotalSuccessfulTxs!: any;
-  public metricsTotalUnsuccessfulTxs!: any;
-  public metricsTotalFailedTxs!: any;
+  public prom!: IMetrics;
 
   // options
   protected poolId!: number;
@@ -109,6 +107,7 @@ export class Node {
   protected skipUploaderRole = skipUploaderRole;
   protected proposeBundle = proposeBundle;
   protected continueBundleProposalRound = continueBundleProposalRound;
+  protected setupMetrics = setupMetrics;
   protected runNode = runNode;
   protected runCache = runCache;
 

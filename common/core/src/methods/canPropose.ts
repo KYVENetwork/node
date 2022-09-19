@@ -30,6 +30,8 @@ export async function canPropose(
         }
       );
 
+      this.prom.query_can_propose_successful.inc();
+
       if (possible) {
         this.logger.info(`Node is able to propose a new bundle\n`);
         return true;
@@ -45,6 +47,8 @@ export async function canPropose(
         ` Failed to request can_propose query. Retrying in 10s ...\n`
       );
       this.logger.debug(error);
+      this.prom.query_can_propose_failed.inc();
+
       await sleep(ERROR_IDLE_TIME);
     }
   }

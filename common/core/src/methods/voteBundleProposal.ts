@@ -33,23 +33,22 @@ export async function voteBundleProposal(
 
     if (receipt.code === 0) {
       this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"\n`);
+      this.prom.tx_vote_bundle_proposal_successful.inc();
 
-      if (this.metrics) {
-        this.metricsTotalSuccessfulTxs.inc();
+      if (vote === 1) {
+        this.prom.bundles_voted_valid.inc();
+      } else if (vote === 2) {
+        this.prom.bundles_voted_invalid.inc();
+      } else if (vote === 3) {
+        this.prom.bundles_voted_abstain.inc();
       }
     } else {
       this.logger.info(`Could not vote on proposal. Continuing ...\n`);
-
-      if (this.metrics) {
-        this.metricsTotalUnsuccessfulTxs.inc();
-      }
+      this.prom.tx_vote_bundle_proposal_unsuccessful.inc();
     }
   } catch (error) {
     this.logger.warn(" Failed to vote. Continuing ...\n");
     this.logger.debug(error);
-
-    if (this.metrics) {
-      this.metricsTotalFailedTxs.inc();
-    }
+    this.prom.tx_vote_bundle_proposal_failed.inc();
   }
 }

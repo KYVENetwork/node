@@ -1,7 +1,4 @@
 import { Node } from "..";
-import http from "http";
-import url from "url";
-import prom_client, { register } from "prom-client";
 
 export async function asyncSetup(this: Node): Promise<void> {
   // check if basic runtime classes are defined
@@ -64,53 +61,7 @@ export async function asyncSetup(this: Node): Promise<void> {
 
   this.name = this.generateName();
 
-  // init metrics server
-  if (this.metrics) {
-    this.logger.info(
-      "Starting metric server on: http://localhost:8080/metrics"
-    );
-
-    prom_client.collectDefaultMetrics({
-      labels: { app: "kyve-core" },
-    });
-
-    this.metricsCurrentCacheItems = new prom_client.Gauge({
-      name: "current_cache_items",
-      help: "The amount of data items currently in the cache.",
-    });
-
-    this.metricsTotalSuccessfulTxs = new prom_client.Counter({
-      name: "total_successful_txs",
-      help: "The amount of transactions with receipt code = 0.",
-    });
-
-    this.metricsTotalUnsuccessfulTxs = new prom_client.Counter({
-      name: "total_unsuccessful_txs",
-      help: "The amount of transactions with receipt code != 0.",
-    });
-
-    this.metricsTotalFailedTxs = new prom_client.Counter({
-      name: "total_failed_txs",
-      help: "The amount of transactions that failed with an error.",
-    });
-
-    this.prometheus = prom_client;
-
-    // HTTP server which exposes the metrics on http://localhost:8080/metrics
-    http
-      .createServer(async (req: any, res: any) => {
-        // Retrieve route from request object
-        const route = url.parse(req.url).pathname;
-
-        if (route === "/metrics") {
-          // Return all metrics the Prometheus exposition format
-          res.setHeader("Content-Type", register.contentType);
-          const metrics = await prom_client.register.metrics();
-          res.end(metrics);
-        }
-      })
-      .listen(8080);
-  }
+  this.setupMetrics();
 
   // init storage provider with wallet
   this.storageProvider = this.storageProvider.init(wallet);
@@ -141,10 +92,7 @@ export async function asyncSetup(this: Node): Promise<void> {
 
   this.logger.debug(`Attempting to clear cache`);
   await this.cache.drop();
-
-  if (this.metrics) {
-    this.metricsCurrentCacheItems.set(0);
-  }
+  this.prom.cache_current_items.set(0);
 
   this.logger.info(`Cleared cache\n`);
 

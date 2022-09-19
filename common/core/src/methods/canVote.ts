@@ -28,6 +28,8 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
         storage_id: this.pool.bundle_proposal!.storage_id,
       });
 
+      this.prom.query_can_vote_successful.inc();
+
       if (possible) {
         this.logger.info(`Node is able to vote on bundle proposal\n`);
         return true;
@@ -40,6 +42,8 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
         ` Failed to request can_vote query. Retrying in 10s ...\n`
       );
       this.logger.debug(error);
+      this.prom.query_can_vote_failed.inc();
+
       await sleep(ERROR_IDLE_TIME);
     }
   }

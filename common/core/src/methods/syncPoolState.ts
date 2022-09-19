@@ -9,6 +9,8 @@ export async function syncPoolState(this: Node): Promise<void> {
       });
       this.pool = pool!;
 
+      this.prom.query_pool_successful.inc();
+
       try {
         this.poolConfig = JSON.parse(this.pool.data!.config);
       } catch (error) {
@@ -26,6 +28,7 @@ export async function syncPoolState(this: Node): Promise<void> {
         ).toFixed(2)}s ...`
       );
       this.logger.debug(error);
+      this.prom.query_pool_failed.inc();
     }
   );
 }

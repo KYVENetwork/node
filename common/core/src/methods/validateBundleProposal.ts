@@ -47,10 +47,13 @@ export async function validateBundleProposal(
           this.pool.bundle_proposal!.storage_id,
           downloadTimeout * 1000
         );
+        this.prom.storage_provider_retrieve_successful.inc();
       } catch (error) {
         this.logger.warn(
           ` Failed to retrieve bundle from ${this.storageProvider.name}. Retrying in 10s ...\n`
         );
+        this.prom.storage_provider_retrieve_failed.inc();
+
         if (!hasVotedAbstain) {
           await this.voteBundleProposal(
             this.pool.bundle_proposal!.storage_id,
@@ -192,6 +195,10 @@ export async function validateBundleProposal(
         VOTE.INVALID
       );
     }
+
+    this.prom.bundles_amount.inc();
+    this.prom.bundles_data_items.inc(uploadedBundle.length);
+    this.prom.bundles_byte_size.inc(+proposedByteSize);
   } catch (error) {
     this.logger.warn(` Failed to validate bundle`);
     this.logger.debug(error);
