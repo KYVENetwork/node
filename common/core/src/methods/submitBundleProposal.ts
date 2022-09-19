@@ -40,8 +40,8 @@ export async function submitBundleProposal(
       this.prom.bundles_proposed.inc();
 
       this.prom.bundles_amount.inc();
-      this.prom.bundles_data_items.inc(byteSize);
-      this.prom.bundles_byte_size.inc(toHeight - fromHeight);
+      this.prom.bundles_data_items.inc(toHeight - fromHeight);
+      this.prom.bundles_byte_size.inc(byteSize);
     } else {
       this.logger.info(
         `Could not submit bundle proposal. Continuing in 10s ...\n`

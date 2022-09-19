@@ -2,10 +2,17 @@ import { Node } from "..";
 import { IDLE_TIME, sleep } from "../utils";
 
 export async function runNode(this: Node): Promise<void> {
+  let roundTimeEnd = null;
+
   while (this.continueBundleProposalRound()) {
     // record round time
+
+    if (roundTimeEnd) {
+      roundTimeEnd();
+    }
+
     this.prom.bundles_round_time.setToCurrentTime();
-    const roundTimeEnd = this.prom.bundles_round_time.startTimer();
+    roundTimeEnd = this.prom.bundles_round_time.startTimer();
 
     await this.syncPoolState();
 
@@ -60,6 +67,5 @@ export async function runNode(this: Node): Promise<void> {
     }
 
     await this.waitForNextBundleProposal(createdAt);
-    roundTimeEnd();
   }
 }
