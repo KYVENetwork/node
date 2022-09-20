@@ -1,6 +1,6 @@
 {
   "name": "@kyve/substrate",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -23,7 +23,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.21.0",
+    "@kyve/core": "1.21.1",
     "axios": "^0.27.2"
   },
   "devDependencies": {
