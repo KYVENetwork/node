@@ -11,7 +11,6 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
         with:
-          fetch-depth: 2
           ref: 'main'
       - name: featch tags
         run: git fetch --tags
@@ -49,9 +48,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
         with:
-          fetch-depth: 2
           ref: 'main'
-          submodules: true
       - name: set integration name
         run: echo "INTEGRATION_NAME=$(echo ${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: install yarn
