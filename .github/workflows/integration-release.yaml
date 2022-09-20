@@ -63,10 +63,12 @@ jobs:
           ls
           yarn build:binaries
           cd out
-          zip kyve-linux.zip kyve-linux
-          rm kyve-linux
-          zip kyve-macos.zip kyve-macos
-          rm kyve-macos
+          zip kyve-linux-arm64.zip kyve-linux-arm64
+          rm  kyve-linux-arm64
+          zip kyve-linux-x64.zip kyve-linux-x64
+          rm kyve-linux-x64
+          zip kyve-macos-x64.zip kyve-macos-x64
+          rm kyve-macos-x64
           cd ..
 #      - name: Generate Changelog
 #        id: github_release
