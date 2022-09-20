@@ -171,10 +171,19 @@ export function setupMetrics(this: Node): void {
     help: "The amount of bundles the validator proposed.",
   });
 
-  // bundle round time
   this.prom.bundles_round_time = new prom_client.Gauge({
     name: "bundles_round_time",
     help: "The time for a bundle proposal round.",
+  });
+
+  this.prom.bundles_remaining_upload_interval_time = new prom_client.Gauge({
+    name: "bundles_remaining_upload_interval_time",
+    help: "The time for the remaining upload interval.",
+  });
+
+  this.prom.bundles_wait_for_next_round_time = new prom_client.Gauge({
+    name: "bundles_wait_for_next_round_time",
+    help: "The time to wait for the next proposal round.",
   });
 
   this.prom.bundles_amount = new prom_client.Counter({

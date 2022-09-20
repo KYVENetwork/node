@@ -2,15 +2,15 @@ import { Node } from "..";
 import { IDLE_TIME, sleep } from "../utils";
 
 export async function runNode(this: Node): Promise<void> {
-  let roundTimeEnd = null;
+  let endTimeRound = null;
 
   while (this.continueBundleProposalRound()) {
     // record round time
-    if (roundTimeEnd) {
-      roundTimeEnd();
+    if (endTimeRound) {
+      endTimeRound();
     }
 
-    roundTimeEnd = this.prom.bundles_round_time.startTimer();
+    endTimeRound = this.prom.bundles_round_time.startTimer();
 
     await this.syncPoolState();
 
@@ -56,7 +56,10 @@ export async function runNode(this: Node): Promise<void> {
     );
 
     // sleep until upload interval is reached
+    const endTimeRemaining =
+      this.prom.bundles_remaining_upload_interval_time.startTimer();
     await sleep(timeRemaining.toNumber());
+    endTimeRemaining();
 
     this.logger.debug(`Reached upload interval of current bundle proposal`);
 
@@ -64,8 +67,9 @@ export async function runNode(this: Node): Promise<void> {
       await this.proposeBundle(createdAt);
     }
 
-    const waitTime = this.prom.bundles_wait_for_next_round_time.startTimer();
+    const endTimeNextBundleProposal =
+      this.prom.bundles_wait_for_next_round_time.startTimer();
     await this.waitForNextBundleProposal(createdAt);
-    waitTime();
+    endTimeNextBundleProposal();
   }
 }

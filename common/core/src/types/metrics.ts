@@ -66,6 +66,7 @@ export interface IMetrics {
 
   // bundle round time
   bundles_round_time: PromGauge;
+  bundles_remaining_upload_interval_time: PromGauge;
   bundles_wait_for_next_round_time: PromGauge;
 
   bundles_amount: PromCounter;
