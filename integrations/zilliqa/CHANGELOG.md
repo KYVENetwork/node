@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/KYVENetwork/node/compare/@kyve/zilliqa@0.5.0...@kyve/zilliqa@0.6.0) (2022-09-20)
+
+
+### Features
+
+* migrated core to monorepo ([43f7970](https://github.com/KYVENetwork/node/commit/43f7970a5fa51d7e0575b131e277b3473f18cb28))
+* migrated proto & sdk ([9f4e239](https://github.com/KYVENetwork/node/commit/9f4e239e295f2107d66f790152487d47d08d3e02))
+
+
+
+
+
 # [0.5.0](https://github.com/KYVENetwork/node/compare/@kyve/zilliqa@0.4.57...@kyve/zilliqa@0.5.0) (2022-08-12)
 
 

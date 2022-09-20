@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.7.0...@kyve/evm@1.8.0) (2022-09-20)
+
+
+### Bug Fixes
+
+* fixed minor bugs ([df59dec](https://github.com/KYVENetwork/node/commit/df59dec8c1f9564141756d78d7e5eb8becc474c5))
+* tests compilation errors ([a8429de](https://github.com/KYVENetwork/node/commit/a8429de4423628e1bf7e2b383294c8f619f726ba))
+
+
+### Features
+
+* migrated core to monorepo ([43f7970](https://github.com/KYVENetwork/node/commit/43f7970a5fa51d7e0575b131e277b3473f18cb28))
+* migrated proto & sdk ([9f4e239](https://github.com/KYVENetwork/node/commit/9f4e239e295f2107d66f790152487d47d08d3e02))
+
+
+
+
+
 # [1.7.0](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.6.0...@kyve/evm@1.7.0) (2022-08-15)
 
 

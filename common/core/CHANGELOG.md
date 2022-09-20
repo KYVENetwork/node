@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.21.0](https://github.com/KYVENetwork/node/compare/@kyve/core@1.18.0...@kyve/core@1.21.0) (2022-09-20)
+
+
+### Bug Fixes
+
+* fixed canPropose tests ([98e345f](https://github.com/KYVENetwork/node/commit/98e345f9c00d00d6b8e328ffdb203e30a992a7a1))
+* fixed existing unit tests ([2e4503c](https://github.com/KYVENetwork/node/commit/2e4503c1d0c600227776daff17c4b69033c11b60))
+* fixed minor bugs ([df59dec](https://github.com/KYVENetwork/node/commit/df59dec8c1f9564141756d78d7e5eb8becc474c5))
+* refactored existing tests ([fd6a8de](https://github.com/KYVENetwork/node/commit/fd6a8de49ee1bede7fe196382acabae2c053574b))
+* renamed accounts to valaccounts ([b6cc256](https://github.com/KYVENetwork/node/commit/b6cc256e7d9b24cdd151c9acd167669e7de6774a))
+* tests compilation errors ([a8429de](https://github.com/KYVENetwork/node/commit/a8429de4423628e1bf7e2b383294c8f619f726ba))
+
+
+### Features
+
+* added basis for proposeBundle tests ([6a7dbdc](https://github.com/KYVENetwork/node/commit/6a7dbdc57ba72510c0c146f2695c5f4ab428e563))
+* added basis for proposeBundle tests ([d9b82cb](https://github.com/KYVENetwork/node/commit/d9b82cb27d155072a57ce21166ce7b77ff8415eb))
+* added basis for proposeBundle tests ([a7b1f74](https://github.com/KYVENetwork/node/commit/a7b1f744952c99ce739e0e689d5b36c87472a676))
+* added canPropose test ([2921090](https://github.com/KYVENetwork/node/commit/292109002edbee44bbd6135a7e5b4665a0b35841))
+* added canValidate check ([21262d7](https://github.com/KYVENetwork/node/commit/21262d7439450945815838810fed81bfb5cd1c11))
+* added shouldIdle test ([6e1605b](https://github.com/KYVENetwork/node/commit/6e1605bd732828ed1e341d7d6a2874f74cce67be))
+* added syncPoolState test ([1656b98](https://github.com/KYVENetwork/node/commit/1656b9805c9d5913231b8841bd153730ca89024c))
+* change package for test ([dc8bb58](https://github.com/KYVENetwork/node/commit/dc8bb5878e0bdf253f2a3bdf6a1b55ec5ec77eaa))
+* expanded validateBundle tests ([beb921b](https://github.com/KYVENetwork/node/commit/beb921b56431d64776e576012e4b993b4c9406ff))
+* expanded validateBundle tests ([c06e13f](https://github.com/KYVENetwork/node/commit/c06e13fbf8ce413011159a9337ca65aef49841d8))
+* expanded validateBundle tests ([8ea592f](https://github.com/KYVENetwork/node/commit/8ea592f5124a0537cb9270c443acd768ae698702))
+* finished unit test for first core method ([2531aee](https://github.com/KYVENetwork/node/commit/2531aee614ea13bdfa1b2c11e3f0741a9974a79c))
+* fixed timer mocks ([774afca](https://github.com/KYVENetwork/node/commit/774afca73daf2ee01e4433d6104d4c936a983d19))
+* further implemented validateBundleProposal tests ([d0542af](https://github.com/KYVENetwork/node/commit/d0542af315bb0c17adb8e470875b9156ec9a64fc))
+* implemented canVote tests ([467a119](https://github.com/KYVENetwork/node/commit/467a119fba5574e265f63848b36b5980e74877a8))
+* implemented claimUploaderRole tests ([5291e7f](https://github.com/KYVENetwork/node/commit/5291e7f1f265b3fb660c9acce316a055b690c88e))
+* initialized unit tests for @kyve/core ([9e0b738](https://github.com/KYVENetwork/node/commit/9e0b738f49d7afb338242809e78592699b7ca9c2))
+* migrated core to monorepo ([43f7970](https://github.com/KYVENetwork/node/commit/43f7970a5fa51d7e0575b131e277b3473f18cb28))
+* migrated proto & sdk ([d29a176](https://github.com/KYVENetwork/node/commit/d29a176892ef3aec2fffd8f98c2c20fb3a82d7bc))
+* migrated proto & sdk ([9f4e239](https://github.com/KYVENetwork/node/commit/9f4e239e295f2107d66f790152487d47d08d3e02))
+* package release ([c4b681a](https://github.com/KYVENetwork/node/commit/c4b681a9815f0a18a4cf11a0f09bdb042662c6d2))
+* proto & sdk migrate ([77013a3](https://github.com/KYVENetwork/node/commit/77013a3e12d17537f6de3266ec2113eeb5c8f03c))
+* using new sdk in core ([885cfca](https://github.com/KYVENetwork/node/commit/885cfcabc5b4794de5bf99f0f483923a3471434c))
+* using new sdk in core ([9387dbc](https://github.com/KYVENetwork/node/commit/9387dbc67a0d294c6d830ca1de656d11edbd43d9))
+
+
+
+
+
 # 1.20.0 (2022-08-12)
 
 ### Bug Fixes
