@@ -25,5 +25,6 @@
     "test:unit": "lerna run test:unit",
     "fmt": "prettier --write .",
     "clean": "lerna run --parallel clean"
-  }
+  },
+  "version": "0.0.0"
 }
