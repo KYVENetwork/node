@@ -6,12 +6,10 @@ export async function runNode(this: Node): Promise<void> {
 
   while (this.continueBundleProposalRound()) {
     // record round time
-
     if (roundTimeEnd) {
       roundTimeEnd();
     }
 
-    this.prom.bundles_round_time.setToCurrentTime();
     roundTimeEnd = this.prom.bundles_round_time.startTimer();
 
     await this.syncPoolState();
@@ -66,6 +64,8 @@ export async function runNode(this: Node): Promise<void> {
       await this.proposeBundle(createdAt);
     }
 
+    const waitTime = this.prom.bundles_wait_for_next_round_time.startTimer();
     await this.waitForNextBundleProposal(createdAt);
+    waitTime();
   }
 }

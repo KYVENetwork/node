@@ -37,11 +37,11 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
         this.logger.info(`Skipping vote. Reason: ${reason}\n`);
         return false;
       }
-    } catch (error) {
+    } catch (error: any) {
       this.logger.warn(
         ` Failed to request can_vote query. Retrying in 10s ...\n`
       );
-      this.logger.debug(error);
+      this.logger.debug(error?.response ?? error);
       this.prom.query_can_vote_failed.inc();
 
       await sleep(ERROR_IDLE_TIME);

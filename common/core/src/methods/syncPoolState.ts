@@ -21,13 +21,13 @@ export async function syncPoolState(this: Node): Promise<void> {
       }
     },
     { limitTimeout: "5m", increaseBy: "10s" },
-    (error, ctx) => {
+    (error: any, ctx) => {
       this.logger.info(
         `Failed to sync pool state. Retrying in ${(
           ctx.nextTimeoutInMs / 1000
         ).toFixed(2)}s ...`
       );
-      this.logger.debug(error);
+      this.logger.debug(error?.response ?? error);
       this.prom.query_pool_failed.inc();
     }
   );

@@ -15,13 +15,13 @@ export async function canValidate(this: Node): Promise<void> {
       });
     },
     { limitTimeout: "5m", increaseBy: "10s" },
-    (error, ctx) => {
+    (error: any, ctx) => {
       this.logger.info(
         `Failed to fetch canValidate. Retrying in ${(
           ctx.nextTimeoutInMs / 1000
         ).toFixed(2)}s ...`
       );
-      this.logger.debug(error);
+      this.logger.debug(error?.response ?? error);
       this.prom.query_can_validate_failed.inc();
     }
   );
@@ -59,15 +59,18 @@ export async function canValidate(this: Node): Promise<void> {
         });
       },
       { limitTimeout: "5m", increaseBy: "10s" },
-      (error, ctx) => {
+      (error: any, ctx) => {
         this.logger.info(
           `Failed to fetch canValidate. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(error);
+        this.logger.debug(error?.response ?? error);
+        this.prom.query_can_validate_failed.inc();
       }
     );
+
+    this.prom.query_can_validate_successful.inc();
 
     if (canValidate.possible) {
       this.staker = canValidate.reason;
