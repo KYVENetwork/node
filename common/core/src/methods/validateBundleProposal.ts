@@ -196,9 +196,9 @@ export async function validateBundleProposal(
       );
     }
 
-    this.prom.bundles_amount.inc();
-    this.prom.bundles_data_items.inc(uploadedBundle.length);
-    this.prom.bundles_byte_size.inc(+proposedByteSize);
+    this.prom.bundles_amount.setToCurrentTime();
+    this.prom.bundles_data_items.set(uploadedBundle.length);
+    this.prom.bundles_byte_size.set(+proposedByteSize);
   } catch (error) {
     this.logger.warn(` Failed to validate bundle`);
     this.logger.debug(error);

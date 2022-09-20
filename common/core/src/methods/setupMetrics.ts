@@ -186,17 +186,17 @@ export function setupMetrics(this: Node): void {
     help: "The time to wait for the next proposal round.",
   });
 
-  this.prom.bundles_amount = new prom_client.Counter({
+  this.prom.bundles_amount = new prom_client.Gauge({
     name: "bundles_amount",
     help: "The amount of bundles the validator participated in.",
   });
 
-  this.prom.bundles_data_items = new prom_client.Counter({
+  this.prom.bundles_data_items = new prom_client.Gauge({
     name: "bundles_data_items",
     help: "The amount of data items the validator participated in.",
   });
 
-  this.prom.bundles_byte_size = new prom_client.Counter({
+  this.prom.bundles_byte_size = new prom_client.Gauge({
     name: "bundles_byte_size",
     help: "The amount of data in bytes the validator participated in.",
   });

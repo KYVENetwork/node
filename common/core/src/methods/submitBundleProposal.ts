@@ -39,9 +39,9 @@ export async function submitBundleProposal(
       this.prom.tx_submit_bundle_proposal_successful.inc();
       this.prom.bundles_proposed.inc();
 
-      this.prom.bundles_amount.inc();
-      this.prom.bundles_data_items.inc(toHeight - fromHeight);
-      this.prom.bundles_byte_size.inc(byteSize);
+      this.prom.bundles_amount.setToCurrentTime();
+      this.prom.bundles_data_items.set(toHeight - fromHeight);
+      this.prom.bundles_byte_size.set(byteSize);
     } else {
       this.logger.info(
         `Could not submit bundle proposal. Continuing in 10s ...\n`

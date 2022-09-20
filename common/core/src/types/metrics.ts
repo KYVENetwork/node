@@ -69,9 +69,9 @@ export interface IMetrics {
   bundles_remaining_upload_interval_time: PromGauge;
   bundles_wait_for_next_round_time: PromGauge;
 
-  bundles_amount: PromCounter;
-  bundles_data_items: PromCounter;
-  bundles_byte_size: PromCounter;
+  bundles_amount: PromGauge;
+  bundles_data_items: PromGauge;
+  bundles_byte_size: PromGauge;
 
   // RUNTIME METRICS
 
