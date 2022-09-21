@@ -47,11 +47,6 @@ export class FileBackend implements IBackend {
 
       let content = JSON.parse(file.content);
 
-      if (content[name]) {
-        console.log(`${name} already found`);
-        return;
-      }
-
       if (!password) {
         password = await this.validatePassword(usePassword, dirPath);
       }

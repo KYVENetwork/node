@@ -33,6 +33,7 @@ import {
   proposeBundle,
   continueBundleProposalRound,
   setupMetrics,
+  getBalances,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
@@ -107,6 +108,7 @@ export class Node {
   protected skipUploaderRole = skipUploaderRole;
   protected proposeBundle = proposeBundle;
   protected continueBundleProposalRound = continueBundleProposalRound;
+  protected getBalances = getBalances;
   protected setupMetrics = setupMetrics;
   protected runNode = runNode;
   protected runCache = runCache;

@@ -1,10 +1,12 @@
 import ArweaveClient from "arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import axios from "axios";
+import BigNumber from "bignumber.js";
 import { IStorageProvider } from "../types";
 
 export class Arweave implements IStorageProvider {
   public name = "Arweave";
+  public decimals = 12;
 
   private wallet!: JWKInterface;
   private arweaveClient = new ArweaveClient({
@@ -19,6 +21,12 @@ export class Arweave implements IStorageProvider {
     return this;
   }
 
+  async getBalance() {
+    return await this.arweaveClient.wallets.getBalance(
+      await this.arweaveClient.wallets.getAddress(this.wallet)
+    );
+  }
+
   async saveBundle(bundle: Buffer, tags: [string, string][]) {
     const transaction = await this.arweaveClient.createTransaction({
       data: bundle,
@@ -30,9 +38,7 @@ export class Arweave implements IStorageProvider {
 
     await this.arweaveClient.transactions.sign(transaction, this.wallet);
 
-    const balance = await this.arweaveClient.wallets.getBalance(
-      await this.arweaveClient.wallets.getAddress(this.wallet)
-    );
+    const balance = await this.getBalance();
 
     if (+transaction.reward > +balance) {
       throw Error(

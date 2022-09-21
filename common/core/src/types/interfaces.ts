@@ -99,6 +99,14 @@ export interface IStorageProvider {
   name: string;
 
   /**
+   * How many decimals the native currency of the storage provider has
+   *
+   * @property decimals
+   * @type {number}
+   */
+  decimals: number;
+
+  /**
    * Initializes the Storage Provider with a wallet. This method is responsible
    * for setting up the wallet so the storage provider can save data
    *
@@ -107,6 +115,14 @@ export interface IStorageProvider {
    * @return {this}
    */
   init(wallet: string): this;
+
+  /**
+   * Gets the balance of the storage provider wallet
+   *
+   * @method getBalance
+   * @return {Promise<string>}
+   */
+  getBalance(): Promise<string>;
 
   /**
    * Saves a bundle on the storage provider and returns a Storage Id

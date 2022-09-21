@@ -13,6 +13,7 @@ export async function runNode(this: Node): Promise<void> {
     endTimeRound = this.prom.bundles_round_time.startTimer();
 
     await this.syncPoolState();
+    await this.getBalances();
 
     const createdAt = +this.pool.bundle_proposal!.created_at;
 

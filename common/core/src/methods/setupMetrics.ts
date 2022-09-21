@@ -213,6 +213,23 @@ export function setupMetrics(this: Node): void {
     help: "The amount of failed returned data items from the runtime.",
   });
 
+  // BALANCE METRICS
+
+  this.prom.balance_staker = new prom_client.Gauge({
+    name: "balance_staker",
+    help: "The current $KYVE balance of the staker.",
+  });
+
+  this.prom.balance_valaccount = new prom_client.Gauge({
+    name: "balance_valaccount",
+    help: "The current $KYVE balance of the valaccount.",
+  });
+
+  this.prom.balance_wallet = new prom_client.Gauge({
+    name: "balance_wallet",
+    help: "The current balance of the wallet.",
+  });
+
   // CACHE METRICS
 
   this.prom.cache_current_items = new prom_client.Gauge({

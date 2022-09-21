@@ -19,6 +19,7 @@ export * from "./skipUploaderRole";
 export * from "./proposeBundle";
 export * from "./continueBundleProposalRound";
 export * from "./setupMetrics";
+export * from "./getBalances";
 
 export * from "./runNode";
 export * from "./runCache";

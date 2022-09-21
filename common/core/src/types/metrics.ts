@@ -73,6 +73,12 @@ export interface IMetrics {
   bundles_data_items: PromGauge;
   bundles_byte_size: PromGauge;
 
+  // BALANCE METRICS
+
+  balance_staker: PromGauge;
+  balance_valaccount: PromGauge;
+  balance_wallet: PromGauge;
+
   // RUNTIME METRICS
 
   // get data item
