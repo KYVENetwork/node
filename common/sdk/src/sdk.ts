@@ -216,6 +216,15 @@ export class KyveSDK {
     );
   }
 
+  static async getAddressFromMnemonic(mnemonic: string) {
+    const aminoSigner = await Secp256k1HdWallet.fromMnemonic(mnemonic, {
+      prefix: PREFIX,
+    });
+
+    const [account] = await aminoSigner.getAccounts();
+    return account.address;
+  }
+
   static async verifyString(
     signature: string,
     data: string,

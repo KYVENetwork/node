@@ -295,21 +295,6 @@ export interface IBackend {
   ): Promise<void>;
 
   /**
-   * Show the value of a secret
-   *
-   * @method show
-   * @param {string} name
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<void>}
-   */
-  reveal(
-    name: string,
-    usePassword: boolean,
-    customPath: string | undefined
-  ): Promise<void>;
-
-  /**
    * Get the value of a secret
    *
    * @method get

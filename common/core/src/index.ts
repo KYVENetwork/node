@@ -254,11 +254,18 @@ export class Node {
         "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
       )
       .action(async (key, options) => {
-        await this.backend.reveal(
+        const mnemonic = await this.backend.get(
           `valaccount.${key}`,
           options.usePassword,
           options.config
         );
+
+        if (mnemonic) {
+          const address = await KyveSDK.getAddressFromMnemonic(mnemonic);
+
+          console.log(`Valaccount: ${address}`);
+          console.log(`Mnemonic:   ${mnemonic}`);
+        }
       });
     valaccounts
       .command("list")
@@ -347,11 +354,12 @@ export class Node {
         "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
       )
       .action(async (key, options) => {
-        await this.backend.reveal(
+        const secret = await this.backend.get(
           `wallet.${key}`,
           options.usePassword,
           options.config
         );
+        console.log(`Wallet: ${secret}`);
       });
     wallets
       .command("list")

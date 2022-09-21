@@ -106,46 +106,6 @@ export class FileBackend implements IBackend {
     }
   }
 
-  public async reveal(
-    name: string,
-    usePassword: boolean,
-    customPath: string | undefined
-  ) {
-    const dirPath = customPath || this.defaultPath;
-    let password;
-
-    if (!fs.existsSync(path.join(dirPath, this.fileName))) {
-      password = await this.choosePassword(usePassword);
-      await this.createFileBackend(password, dirPath);
-    }
-
-    try {
-      const file = this.readFile(dirPath);
-
-      let content = JSON.parse(file.content);
-
-      if (!content[name]) {
-        console.log(`"${name}" not found`);
-        return;
-      }
-
-      if (!password) {
-        password = await this.validatePassword(usePassword, dirPath);
-      }
-
-      const secret = this.aesDecrypt(
-        content[name],
-        password,
-        file.salt,
-        file.iv
-      );
-
-      console.log(JSON.parse(secret));
-    } catch (err) {
-      console.log(`Could not reveal: ${err}`);
-    }
-  }
-
   public async get(
     name: string,
     usePassword: boolean,
