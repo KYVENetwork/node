@@ -9,7 +9,7 @@ export async function getBalances(this: Node): Promise<void> {
       DENOM
     );
     const stakerBalance = new BigNumber(stakerBalanceRaw.amount)
-      .dividedBy(KYVE_DECIMALS)
+      .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
 
     this.prom.balance_staker.set(stakerBalance);
@@ -24,7 +24,7 @@ export async function getBalances(this: Node): Promise<void> {
       DENOM
     );
     const valaccountBalance = new BigNumber(valaccountBalanceRaw.amount)
-      .dividedBy(KYVE_DECIMALS)
+      .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
 
     this.prom.balance_valaccount.set(valaccountBalance);
