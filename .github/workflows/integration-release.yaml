@@ -11,7 +11,6 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
         with:
-          fetch-depth: 2
           ref: 'main'
       - name: featch tags
         run: git fetch --tags
@@ -49,9 +48,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@main
         with:
-          fetch-depth: 2
           ref: 'main'
-          submodules: true
       - name: set integration name
         run: echo "INTEGRATION_NAME=$(echo ${{ matrix.tag }} | awk -F'[/@]' '{print $3}' | sed 's/ *$//g')" >> $GITHUB_ENV
       - name: install yarn
@@ -66,10 +63,12 @@ jobs:
           ls
           yarn build:binaries
           cd out
-          zip kyve-linux.zip kyve-linux
-          rm kyve-linux
-          zip kyve-macos.zip kyve-macos
-          rm kyve-macos
+          zip kyve-linux-arm64.zip kyve-linux-arm64
+          rm  kyve-linux-arm64
+          zip kyve-linux-x64.zip kyve-linux-x64
+          rm kyve-linux-x64
+          zip kyve-macos-x64.zip kyve-macos-x64
+          rm kyve-macos-x64
           cd ..
 #      - name: Generate Changelog
 #        id: github_release
