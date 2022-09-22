@@ -7,10 +7,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @kyve/core
 
-
-
-
-
 ## [1.21.4](https://github.com/KYVENetwork/node/compare/@kyve/core@1.21.3...@kyve/core@1.21.4) (2022-09-21)
 
 **Note:** Version bump only for package @kyve/core
