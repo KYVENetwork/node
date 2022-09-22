@@ -28,6 +28,8 @@ import {
   skipUploaderRoleMock,
 } from "./mocks/helpers";
 import { VoteType } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { setupMetrics } from "../src/methods";
+import { register } from "prom-client";
 
 /*
 
@@ -96,6 +98,8 @@ describe("vote valid tests", () => {
 
     core.client = client();
     core.lcd = lcd();
+
+    setupMetrics.call(core);
   });
 
   afterEach(() => {
@@ -120,6 +124,9 @@ describe("vote valid tests", () => {
     // integration mocks
     formatValueMock.mockClear();
     validateMock.mockClear();
+
+    // reset prometheus
+    register.clear();
   });
 
   test("vote valid because bundle was proposed correctly", async () => {
@@ -131,7 +138,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -266,7 +273,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -415,7 +422,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -568,7 +575,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -711,7 +718,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -835,7 +842,7 @@ describe("vote valid tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {

@@ -12,8 +12,12 @@ export const validateMock = jest
   .fn()
   .mockImplementation(
     (core: Node, uploadedBundle: DataItem[], validationBundle: DataItem[]) => {
-      const uploadedBundleHash = sha256(uploadedBundle);
-      const validationBundleHash = sha256(validationBundle);
+      const uploadedBundleHash = sha256(
+        Buffer.from(JSON.stringify(uploadedBundle))
+      );
+      const validationBundleHash = sha256(
+        Buffer.from(JSON.stringify(validationBundle))
+      );
 
       return uploadedBundleHash === validationBundleHash;
     }

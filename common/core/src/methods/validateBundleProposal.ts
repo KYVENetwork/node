@@ -16,6 +16,7 @@ export async function validateBundleProposal(
   );
 
   let uploadedBundle: DataItem[] = [];
+  let uploadedBundleHash: string = "";
   let proposedBundleCompressed: Buffer;
 
   let validationBundle: DataItem[] = [];
@@ -72,9 +73,13 @@ export async function validateBundleProposal(
         );
 
         try {
-          uploadedBundle = await this.compression.decompress(
+          const uploadedBundleBytes = await this.compression.decompress(
             proposedBundleCompressed
           );
+
+          uploadedBundle = JSON.parse(uploadedBundleBytes.toString());
+          uploadedBundleHash = sha256(uploadedBundleBytes);
+
           this.logger.info(
             `Successfully decompressed bundle with compression type ${this.compression.name}`
           );
@@ -139,7 +144,6 @@ export async function validateBundleProposal(
   }
 
   try {
-    const uploadedBundleHash = sha256(standardizeJSON(uploadedBundle));
     const proposedBundleHash = this.pool.bundle_proposal!.bundle_hash;
 
     const uploadedByteSize = proposedBundleCompressed.byteLength;

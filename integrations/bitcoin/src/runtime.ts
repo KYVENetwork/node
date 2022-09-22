@@ -43,8 +43,12 @@ export default class Bitcoin implements IRuntime {
     uploadedBundle: DataItem[],
     validationBundle: DataItem[]
   ) {
-    const uploadedBundleHash = sha256(uploadedBundle);
-    const validationBundleHash = sha256(validationBundle);
+    const uploadedBundleHash = sha256(
+      Buffer.from(JSON.stringify(uploadedBundle))
+    );
+    const validationBundleHash = sha256(
+      Buffer.from(JSON.stringify(validationBundle))
+    );
 
     core.logger.debug(`Validating bundle proposal by hash`);
     core.logger.debug(`Uploaded:     ${uploadedBundleHash}`);

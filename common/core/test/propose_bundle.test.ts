@@ -27,6 +27,8 @@ import {
   lcd,
   skipUploaderRoleMock,
 } from "./mocks/helpers";
+import { setupMetrics } from "../src/methods";
+import { register } from "prom-client";
 
 /*
 
@@ -91,6 +93,8 @@ describe("propose bundle tests", () => {
 
     core.client = client();
     core.lcd = lcd();
+
+    setupMetrics.call(core);
   });
 
   afterEach(() => {
@@ -115,6 +119,9 @@ describe("propose bundle tests", () => {
     // integration mocks
     formatValueMock.mockClear();
     validateMock.mockClear();
+
+    // reset prometheus
+    register.clear();
   });
 
   test("propose genesis bundle with valid data bundle", async () => {

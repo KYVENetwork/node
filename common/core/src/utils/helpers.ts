@@ -123,7 +123,7 @@ export const fromBytes = (input: string): string => {
 export const standardizeJSON = (object: any) =>
   JSON.parse(JSON.stringify(object));
 
-export const sha256 = (object: any) => {
+export const sha256 = (data: Buffer) => {
   const sha256Hasher = crypto.createHmac("sha256", "");
-  return sha256Hasher.update(JSON.stringify(object)).digest("hex");
+  return sha256Hasher.update(data).digest("hex");
 };

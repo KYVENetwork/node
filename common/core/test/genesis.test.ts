@@ -29,6 +29,8 @@ import {
   unsuccessfulExecuteMock,
 } from "./mocks/helpers";
 import { VoteType } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { setupMetrics } from "../src/methods";
+import { register } from "prom-client";
 
 /*
 
@@ -94,6 +96,8 @@ describe("genesis tests", () => {
 
     core.client = client();
     core.lcd = lcd();
+
+    setupMetrics.call(core);
   });
 
   afterEach(() => {
@@ -118,6 +122,9 @@ describe("genesis tests", () => {
     // integration mocks
     formatValueMock.mockClear();
     validateMock.mockClear();
+
+    // reset prometheus
+    register.clear();
   });
 
   test("propose genesis bundle with valid data bundle", async () => {
@@ -194,7 +201,7 @@ describe("genesis tests", () => {
       from_key: "",
       to_key: "test_key_2",
       to_value: "test_value_2",
-      bundle_hash: sha256(standardizeJSON(bundle)),
+      bundle_hash: sha256(Buffer.from(JSON.stringify(bundle))),
     });
 
     expect(skipUploaderRoleMock).toHaveBeenCalledTimes(0);
@@ -237,7 +244,9 @@ describe("genesis tests", () => {
     // =============================
 
     expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(bundle);
+    expect(compressMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle))
+    );
 
     expect(decompressMock).toHaveBeenCalledTimes(0);
 
@@ -397,7 +406,7 @@ describe("genesis tests", () => {
 
     const compressedBundle = Buffer.from(JSON.stringify(bundle));
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(standardizeJSON(bundle));
+    const bundleHash = sha256(compressedBundle);
 
     const syncPoolStateMock = jest
       .fn()

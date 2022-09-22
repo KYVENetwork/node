@@ -247,19 +247,19 @@ export interface ICompression {
    * Compresses a bundle
    *
    * @method compress
-   * @param {DataItem[]} bundle
+   * @param {Buffer} data
    * @return {Promise<Buffer>}
    */
-  compress(bundle: DataItem[]): Promise<Buffer>;
+  compress(data: Buffer): Promise<Buffer>;
 
   /**
    * Decompresses a bundle
    *
    * @method decompress
    * @param {Buffer} data
-   * @return {Promise<DataItem[]>}
+   * @return {Promise<Buffer>}
    */
-  decompress(data: Buffer): Promise<DataItem[]>;
+  decompress(data: Buffer): Promise<Buffer>;
 }
 
 /**

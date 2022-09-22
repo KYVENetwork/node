@@ -13,6 +13,7 @@ export async function proposeBundle(
 
   let storageId: string;
   let bundleProposal: Bundle;
+  let bundleHash: string = "";
   let bundleCompressed: Buffer;
 
   while (true) {
@@ -43,7 +44,10 @@ export async function proposeBundle(
         `Compressing bundle with compression type ${this.compression.name}`
       );
 
-      bundleCompressed = await this.compression.compress(bundleProposal.bundle);
+      const bundleBytes = Buffer.from(JSON.stringify(bundleProposal.bundle));
+
+      bundleCompressed = await this.compression.compress(bundleBytes);
+      bundleHash = sha256(bundleBytes);
 
       const tags: [string, string][] = [
         ["Application", "KYVE"],
@@ -92,8 +96,6 @@ export async function proposeBundle(
   }
 
   if (storageId!) {
-    const bundleHash = sha256(standardizeJSON(bundleProposal.bundle));
-
     await this.submitBundleProposal(
       storageId,
       bundleCompressed!.byteLength,

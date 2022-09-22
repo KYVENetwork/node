@@ -3,11 +3,11 @@ import { DataItem, ICompression } from "../types";
 export class NoCompression implements ICompression {
   public name = "NoCompression";
 
-  async compress(bundle: DataItem[]) {
-    return Buffer.from(JSON.stringify(bundle));
+  async compress(data: Buffer) {
+    return data;
   }
 
   async decompress(data: Buffer) {
-    return JSON.parse(data.toString());
+    return data;
   }
 }
