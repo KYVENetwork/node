@@ -1,6 +1,6 @@
 {
   "name": "@kyve/celo",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@celo-tools/celo-ethers-wrapper": "^0.3.0",
-    "@kyve/core": "1.21.4"
+    "@kyve/core": "1.21.5"
   },
   "devDependencies": {
     "ethers": "^5.6.9",
