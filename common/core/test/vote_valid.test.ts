@@ -1,5 +1,5 @@
 import { Logger } from "tslog";
-import { Node, sha256, standardizeJSON } from "../src/index";
+import { bundleToBytes, Node, sha256, standardizeJSON } from "../src/index";
 import {
   formatValueMock,
   TestRuntime,
@@ -136,9 +136,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -271,9 +272,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -420,9 +422,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -573,9 +576,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -716,9 +720,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -840,9 +845,10 @@ describe("vote valid tests", () => {
       { key: "test_key_2", value: "test_value_2" },
     ];
 
-    const compressedBundle = Buffer.from(JSON.stringify(bundle));
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
     const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(Buffer.from(JSON.stringify(bundle)));
+    const bundleHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {

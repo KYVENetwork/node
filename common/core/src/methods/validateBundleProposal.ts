@@ -1,5 +1,5 @@
 import { Node } from "..";
-import { sleep, standardizeJSON, sha256 } from "../utils";
+import { sleep, standardizeJSON, sha256, bytesToBundle } from "../utils";
 import { ERROR_IDLE_TIME, VOTE } from "../utils/constants";
 import { DataItem } from "../types";
 
@@ -77,7 +77,7 @@ export async function validateBundleProposal(
             proposedBundleCompressed
           );
 
-          uploadedBundle = JSON.parse(uploadedBundleBytes.toString());
+          uploadedBundle = bytesToBundle(uploadedBundleBytes);
           uploadedBundleHash = sha256(uploadedBundleBytes);
 
           this.logger.info(

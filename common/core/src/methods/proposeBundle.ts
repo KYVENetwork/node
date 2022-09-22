@@ -1,5 +1,11 @@
 import { Bundle, Node } from "..";
-import { sleep, standardizeJSON, sha256, ERROR_IDLE_TIME } from "../utils";
+import {
+  sleep,
+  standardizeJSON,
+  sha256,
+  ERROR_IDLE_TIME,
+  bundleToBytes,
+} from "../utils";
 
 export async function proposeBundle(
   this: Node,
@@ -44,10 +50,10 @@ export async function proposeBundle(
         `Compressing bundle with compression type ${this.compression.name}`
       );
 
-      const bundleBytes = Buffer.from(JSON.stringify(bundleProposal.bundle));
+      const bundleBytes = bundleToBytes(bundleProposal.bundle);
 
-      bundleCompressed = await this.compression.compress(bundleBytes);
       bundleHash = sha256(bundleBytes);
+      bundleCompressed = await this.compression.compress(bundleBytes);
 
       const tags: [string, string][] = [
         ["Application", "KYVE"],
