@@ -32,15 +32,16 @@
     "outputPath": "out"
   },
   "dependencies": {
+    "@kyve/sdk": "3.1.1",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
+    "bignumber.js": "^9.1.0",
     "commander": "^9.4.0",
     "download": "^8.0.0",
     "extract-zip": "^2.0.1",
     "pkg": "^5.8.0",
     "prompts": "^2.4.2",
-    "tslog": "^3.3.3",
-    "@kyve/sdk": "3.1.1"
+    "tslog": "^3.3.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
