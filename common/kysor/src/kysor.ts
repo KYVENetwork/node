@@ -141,7 +141,9 @@ export const run = async (options: any) => {
 
       // if download link was not found exit
       if (!downloadLink) {
-        logger.error("No upgrade binaries found on pool. Exiting KYSOR ...");
+        logger.error(
+          `Upgrade binary "kyve-${platform}-${arch}" not found on pool. Exiting KYSOR ...`
+        );
         process.exit(0);
       }
 

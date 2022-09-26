@@ -131,6 +131,6 @@ export const bytesToBundle = (bytes: Buffer): DataItem[] =>
   JSON.parse(bytes.toString());
 
 export const sha256 = (data: Buffer) => {
-  const sha256Hasher = crypto.createHmac("sha256", "");
+  const sha256Hasher = crypto.createHash("sha256");
   return sha256Hasher.update(data).digest("hex");
 };

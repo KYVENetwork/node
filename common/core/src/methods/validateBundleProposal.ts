@@ -40,7 +40,7 @@ export async function validateBundleProposal(
       );
 
       this.logger.debug(
-        `Attempting to download bundle from ${this.storageProvider.name} with a download timeout of ${downloadTimeout}s`
+        `Attempting to download bundle from StorageProvider:${this.storageProvider.name} with a download timeout of ${downloadTimeout}s`
       );
 
       try {
@@ -51,7 +51,7 @@ export async function validateBundleProposal(
         this.prom.storage_provider_retrieve_successful.inc();
       } catch (error) {
         this.logger.warn(
-          ` Failed to retrieve bundle from ${this.storageProvider.name}. Retrying in 10s ...\n`
+          ` Failed to retrieve bundle from StorageProvider:${this.storageProvider.name}. Retrying in 10s ...\n`
         );
         this.prom.storage_provider_retrieve_failed.inc();
 
@@ -69,28 +69,29 @@ export async function validateBundleProposal(
 
       if (proposedBundleCompressed!) {
         this.logger.info(
-          `Successfully downloaded bundle from ${this.storageProvider.name}`
+          `Successfully downloaded bundle from StorageProvider:${this.storageProvider.name}`
         );
 
         try {
+          uploadedBundleHash = sha256(proposedBundleCompressed);
+
           const uploadedBundleBytes = await this.compression.decompress(
             proposedBundleCompressed
           );
 
           uploadedBundle = bytesToBundle(uploadedBundleBytes);
-          uploadedBundleHash = sha256(uploadedBundleBytes);
 
           this.logger.info(
-            `Successfully decompressed bundle with compression type ${this.compression.name}`
+            `Successfully decompressed bundle with compression type Compression:${this.compression.name}`
           );
         } catch (error) {
           this.logger.info(
-            `Could not decompress bundle with compression type ${this.compression.name}`
+            `Could not decompress bundle with compression type Compression:${this.compression.name}`
           );
         }
       } else {
         this.logger.info(
-          `Could not download bundle from ${this.storageProvider.name}. Retrying in 10s ...`
+          `Could not download bundle from StorageProvider:${this.storageProvider.name}. Retrying in 10s ...`
         );
 
         if (!hasVotedAbstain) {
