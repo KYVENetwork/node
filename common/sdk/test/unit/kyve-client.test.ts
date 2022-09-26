@@ -271,21 +271,21 @@ for (let [bundleConfig, methods] of methodsByGroup) {
 describe("Base methods", () => {
   it("transfer", async () => {
     const testRecipient = "kyveTestRecipient";
-    const testAmount = "1";
+    const testAmount = "10000000000";
     await kyveClient.kyve.base.v1beta1.transfer(testRecipient, testAmount, {
       memo: TEST_MEMO,
       fee: TEST_FEE,
     });
-    expect(mockSendTokens).toHaveBeenCalledTimes(1);
-    const [[ownerAddress, recipient, [coin], fee, memo]] =
-      mockSendTokens.mock.calls;
-    expect(ownerAddress).toEqual(mockAccountData.address);
-    expect(recipient).toEqual(testRecipient);
+    expect(mockSign).toHaveBeenCalledTimes(1);
+
+    const [[_, [tx], fee, memo]] = mockSign.mock.calls;
+    expect(tx.value.fromAddress).toEqual(mockAccountData.address);
+    expect(tx.value.toAddress).toEqual(testRecipient);
     expect(memo).toEqual(TEST_MEMO);
-    expect(fee).toEqual(TEST_FEE);
-    expect(coin).toEqual({
+    expect(fee.gas.toString()).toEqual(TEST_FEE.toString());
+    expect(tx.value.amount[0]).toEqual({
       denom: DENOM,
-      amount: new BigNumber(10).pow(KYVE_DECIMALS).toString(),
+      amount: testAmount
     });
   });
 
