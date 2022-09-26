@@ -1,25 +1,17 @@
 import { Command } from "commander";
-import { Keys } from "./backend/KeyBackend";
-import keysCommands from "./commands/keys";
-import txCommands from "./commands/tx";
+import valaccounts from "./commands/valaccounts";
+import start from "./commands/start";
 
 const main = async () => {
   // define main program
   const program = new Command();
 
-  // define start command
-  program
-    .command("init")
-    .description("Initialize KYSOR on this machine")
-    .action(() => {
-      new Keys().init();
-    });
+  // add valaccounts commands
+  // TODO: save valaccounts under $HOME/.kysor/valaccounts/
+  program.addCommand(valaccounts);
 
-  // add keys commands
-  program.addCommand(keysCommands);
-
-  // add txs commands
-  program.addCommand(txCommands);
+  // add start commands
+  program.addCommand(start);
 
   // bootstrap program
   program.parse();
