@@ -29,10 +29,9 @@ export async function getSigningKyveClient(
   rpcEndpoint: string,
   signer: OfflineSigner,
   aminoSigner: OfflineAminoSigner | null,
-  walletName?: string,
-  defaultTypes = defaultRegistryTypes
+  walletName?: string
 ): Promise<KyveWebClient | KyveClient> {
-  const registry = new Registry([...defaultTypes, ...KyveRegistryTx.registry]);
+  const registry = new Registry([...KyveRegistryTx.registry]);
   const gasPrice = GasPrice.fromString("0tkyve");
   const client: SigningStargateClient =
     await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {

@@ -16,7 +16,7 @@ import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
 import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
 import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
 import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
-
+import { defaultRegistryTypes } from "@cosmjs/stargate"
 /** bundles **/
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
@@ -27,6 +27,7 @@ import MsgSkipUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgSkipUploaderRo
 import MsgSubmitProposal = cosmos.registry.v1beta1.cosmosGovTx.MsgSubmitProposal;
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
+  ...defaultRegistryTypes,
   /**pool **/
   ["/kyve.pool.v1beta1.MsgFundPool", MsgFundPool],
   ["/kyve.pool.v1beta1.MsgDefundPool", MsgDefundPool],
