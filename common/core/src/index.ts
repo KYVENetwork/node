@@ -80,6 +80,7 @@ export class Node {
   protected verbose!: boolean;
   protected metrics!: boolean;
   protected metricsPort!: number;
+  protected home!: string;
 
   // register core methods
   protected asyncSetup = asyncSetup;
@@ -217,6 +218,11 @@ export class Node {
         "Specify the port of the metrics server. Only considered if '--metrics' is set [default = 8080]",
         "8080"
       )
+      .option(
+        "--home <string>",
+        "Specify the home directory of the node where logs and the cache should save their data. [default current directory]",
+        "./"
+      )
       .action((options) => {
         this.start(options);
       });
@@ -245,6 +251,7 @@ export class Node {
     this.verbose = options.verbose;
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
+    this.home = options.home;
 
     this.coreVersion = coreVersion;
 

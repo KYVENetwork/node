@@ -44,7 +44,9 @@ valaccounts
   .option("--recover", "Create a valaccount by importing an existing mnemonic")
   .action(async (options) => {
     try {
-      if (fs.existsSync(path.join(home, `${options.name}.toml`))) {
+      if (
+        fs.existsSync(path.join(home, "valaccounts", `${options.name}.toml`))
+      ) {
         console.log(`Already created valaccount with name ${options.name}`);
         return;
       }
@@ -93,8 +95,9 @@ valaccounts
         metricsPort: options.metricsPort,
       };
 
+      fs.mkdirSync(path.join(home, "valaccounts"), { recursive: true });
       fs.writeFileSync(
-        path.join(home, `${options.name}.toml`),
+        path.join(home, "valaccounts", `${options.name}.toml`),
         TOML.stringify(config as any)
       );
       console.log(`Successfully created valaccount ${options.name}`);
@@ -112,12 +115,14 @@ valaccounts
   )
   .action(async (options) => {
     try {
-      if (!fs.existsSync(path.join(home, `${options.name}.toml`))) {
+      if (
+        !fs.existsSync(path.join(home, "valaccounts", `${options.name}.toml`))
+      ) {
         console.log(`Valaccount with name ${options.name} does not exist`);
         return;
       }
 
-      fs.unlinkSync(path.join(home, `${options.name}.toml`));
+      fs.unlinkSync(path.join(home, "valaccounts", `${options.name}.toml`));
       console.log(`Successfully deleted valaccount ${options.name}`);
     } catch (err) {
       console.log(`Could not delete valaccount: ${err}`);

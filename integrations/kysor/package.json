@@ -1,5 +1,5 @@
 {
-  "name": "kysor",
+  "name": "@kyve/kysor",
   "description": "The Cosmovisor for KYVE protocol nodes",
   "version": "0.0.0",
   "main": "./dist/index.js",

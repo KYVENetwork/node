@@ -49,7 +49,11 @@ export const run = async (options: any) => {
 
   // verify that valaccount toml exists
   try {
-    if (!fs.existsSync(path.join(home, `${options.valaccount}.toml`))) {
+    if (
+      !fs.existsSync(
+        path.join(home, "valaccounts", `${options.valaccount}.toml`)
+      )
+    ) {
       logger.error(
         `Valaccount with name ${options.valaccount} does not exist. Exiting KYSOR ...`
       );
@@ -65,7 +69,10 @@ export const run = async (options: any) => {
   // verify that valaccount toml can be parsed
   try {
     config = TOML.parse(
-      fs.readFileSync(path.join(home, `${options.valaccount}.toml`), "utf-8")
+      fs.readFileSync(
+        path.join(home, "valaccounts", `${options.valaccount}.toml`),
+        "utf-8"
+      )
     ) as any;
   } catch (err) {
     logger.error(
@@ -248,6 +255,8 @@ export const run = async (options: any) => {
         `${config.storagePriv}`,
         `--network`,
         `${config.network}`,
+        `--home`,
+        `${home}`,
       ];
 
       if (config.verbose) {

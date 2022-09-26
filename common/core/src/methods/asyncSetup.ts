@@ -1,3 +1,4 @@
+import path from "path/posix";
 import { Node } from "..";
 
 export async function asyncSetup(this: Node): Promise<void> {
@@ -39,7 +40,7 @@ export async function asyncSetup(this: Node): Promise<void> {
   this.storageProvider = this.storageProvider.init(this.storagePriv);
 
   // init cache with work dir
-  this.cache = this.cache.init(`./cache/${this.name}`);
+  this.cache = this.cache.init(path.join(this.home, "cache"));
 
   // check if valaccount already joined pool
   await this.canValidate();
