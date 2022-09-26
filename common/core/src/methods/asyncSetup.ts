@@ -22,38 +22,10 @@ export async function asyncSetup(this: Node): Promise<void> {
     process.exit(1);
   }
 
-  // retrieve mnemonic of account from file backend
-  const [mnemonic, wallet] = await this.backend.getMultiple(
-    [`valaccount.${this.account}`, `wallet.${this.wallet}`],
-    this.usePassword,
-    this.config
-  );
-
-  if (!mnemonic) {
-    this.logger.error(
-      `Valaccount ${this.account} or wallet ${this.wallet} not found. Exiting ...`
-    );
-    process.exit(1);
-  }
-
-  if (!wallet) {
-    this.logger.error(`Wallet ${this.wallet} not found. Exiting ...`);
-    process.exit(1);
-  }
-
-  // validate mnemonic
-  const parsedValue = mnemonic.split(" ");
-
-  if (!(parsedValue.length === 12 || parsedValue.length === 24)) {
-    this.logger.error(`Mnemonic has an invalid format. Exiting ...`);
-    this.logger.debug(mnemonic);
-    process.exit(1);
-  }
-
   try {
-    this.client = await this.sdk.fromMnemonic(mnemonic);
+    this.client = await this.sdk.fromMnemonic(this.valaccount);
   } catch (error) {
-    this.logger.error(`Failed to init KYVE client. Exiting ...`);
+    this.logger.error(`Failed to init KYVE client from mnemonic. Exiting ...`);
     this.logger.debug(error);
 
     process.exit(1);
@@ -64,7 +36,7 @@ export async function asyncSetup(this: Node): Promise<void> {
   this.setupMetrics();
 
   // init storage provider with wallet
-  this.storageProvider = this.storageProvider.init(wallet);
+  this.storageProvider = this.storageProvider.init(this.storagePriv);
 
   // init cache with work dir
   this.cache = this.cache.init(`./cache/${this.name}`);
@@ -75,7 +47,6 @@ export async function asyncSetup(this: Node): Promise<void> {
   // log basic node info on startup
   this.logger.info("Starting node ...\n");
   this.logger.info(`Name \t\t = ${this.name}`);
-  this.logger.info(`Account \t\t = ${this.account}`);
   this.logger.info(`Address \t\t = ${this.client.account.address}`);
   this.logger.info(`Pool Id \t\t = ${this.poolId}\n`);
 

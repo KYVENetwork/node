@@ -34,7 +34,7 @@ export async function canValidate(this: Node): Promise<void> {
   } else {
     // log join pool credentials
     this.logger.info(
-      `Valaccount ${this.account} has not joined the pool with id ${this.poolId} yet`
+      `Valaccount ${this.client.account.address} has not joined the pool with id ${this.poolId} yet`
     );
     this.logger.info(
       `Visit https://app.kyve.network/#/pools/${this.poolId} and add join the pool with the following information:\n`

@@ -111,10 +111,10 @@ export interface IStorageProvider {
    * for setting up the wallet so the storage provider can save data
    *
    * @method init
-   * @param {string} wallet can be a private key a mnemonic or even a file path to the wallet
+   * @param {string} storagePriv can be a private key a mnemonic or even a file path to the wallet
    * @return {this}
    */
-  init(wallet: string): this;
+  init(storagePriv: string): this;
 
   /**
    * Gets the balance of the storage provider wallet
@@ -260,102 +260,4 @@ export interface ICompression {
    * @return {Promise<Buffer>}
    */
   decompress(data: Buffer): Promise<Buffer>;
-}
-
-/**
- * Interface of Backend.
- *
- * The Backend is responsible for managing secrets like the account mnemonics
- *
- * @interface IBackend
- */
-export interface IBackend {
-  /**
-   * Name of the backend. This should be unique for every backend type.
-   *
-   * @property name
-   * @type {string}
-   */
-  name: string;
-
-  /**
-   * Add a new secret
-   *
-   * @method add
-   * @param {string} name
-   * @param {string} secret
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<void>}
-   */
-  add(
-    name: string,
-    secret: string,
-    usePassword: boolean,
-    customPath: string | undefined
-  ): Promise<void>;
-
-  /**
-   * Remove an existing secret
-   *
-   * @method remove
-   * @param {string} name
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<void>}
-   */
-  remove(
-    name: string,
-    usePassword: boolean,
-    customPath: string | undefined
-  ): Promise<void>;
-
-  /**
-   * Get the value of a secret
-   *
-   * @method get
-   * @param {string} name
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<string | null>}
-   */
-  get(
-    name: string,
-    usePassword: boolean,
-    customPath: string | undefined
-  ): Promise<string | null>;
-
-  /**
-   * Get multiple secrets at once
-   *
-   * @method getMultiple
-   * @param {string[]} names
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<string[] | null>}
-   */
-  getMultiple(
-    names: string[],
-    usePassword: boolean,
-    customPath: string | undefined
-  ): Promise<string[]>;
-
-  /**
-   * List all secrets
-   *
-   * @method list
-   * @param {boolean} usePassword
-   * @param {string | undefined} customPath
-   * @return {Promise<void>}
-   */
-  list(usePassword: boolean, customPath: string | undefined): Promise<void>;
-
-  /**
-   * Reset file backend
-   *
-   * @method reset
-   * @param {string | undefined} customPath
-   * @return {Promise<void>}
-   */
-  reset(customPath: string | undefined): Promise<void>;
 }
