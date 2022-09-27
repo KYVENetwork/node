@@ -1,14 +1,18 @@
 import { Node } from "..";
 import { appendFileSync, existsSync, mkdirSync } from "fs";
 import { ILogObject, Logger } from "tslog";
+import path from "path/posix";
 
 export function setupLogger(this: Node): Logger {
-  if (!existsSync("./logs")) {
-    mkdirSync("./logs");
+  if (!existsSync(path.join(this.home, "logs"))) {
+    mkdirSync(path.join(this.home, "logs"), { recursive: true });
   }
 
   const logToTransport = (log: ILogObject) => {
-    appendFileSync(`./logs/${this.name}.txt`, JSON.stringify(log) + "\n");
+    appendFileSync(
+      path.join(this.home, "logs", `${this.name}.txt`),
+      JSON.stringify(log) + "\n"
+    );
   };
 
   const logger = new Logger({

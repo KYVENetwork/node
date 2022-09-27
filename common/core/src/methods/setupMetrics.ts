@@ -250,7 +250,7 @@ export function setupMetrics(this: Node): void {
   // init metrics server
   if (this.metrics) {
     this.logger.info(
-      "Starting metric server on: http://localhost:8080/metrics"
+      `Starting metric server on: http://localhost:${this.metricsPort}/metrics`
     );
 
     // HTTP server which exposes the metrics on http://localhost:8080/metrics
@@ -266,6 +266,6 @@ export function setupMetrics(this: Node): void {
           res.end(metrics);
         }
       })
-      .listen(8080);
+      .listen(this.metricsPort);
   }
 }

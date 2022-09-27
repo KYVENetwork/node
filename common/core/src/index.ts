@@ -3,10 +3,8 @@ import {
   IStorageProvider,
   ICache,
   ICompression,
-  IBackend,
   IMetrics,
 } from "./types";
-import { FileBackend } from "./backend";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
@@ -39,9 +37,8 @@ import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
-import { parseNetwork, parsePoolId } from "./commander";
+import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
 import { kyve } from "@kyve/proto";
-import prom_client from "prom-client";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 
 /**
@@ -56,7 +53,6 @@ export class Node {
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
   protected cache!: ICache;
-  protected backend: IBackend = new FileBackend();
 
   // register sdk attributes
   public sdk!: KyveSDK;
@@ -78,13 +74,13 @@ export class Node {
   // options
   protected poolId!: number;
   protected staker!: string;
-  protected account!: string;
-  protected wallet!: string;
-  protected usePassword!: boolean;
-  protected config!: string;
+  protected valaccount!: string;
+  protected storagePriv!: string;
   protected network!: string;
   protected verbose!: boolean;
   protected metrics!: boolean;
+  protected metricsPort!: number;
+  protected home!: string;
 
   // register core methods
   protected asyncSetup = asyncSetup;
@@ -189,268 +185,43 @@ export class Node {
     // define main program
     const program = new Command();
 
-    // define accounts
-    const valaccounts = new Command("valaccounts").description(
-      "Manage valaccounts in encrypted file backend"
-    );
-
-    valaccounts
-      .command("create")
-      .description("Create a new valaccount with a random mnemonic")
-      .argument("<account_name>", "Name of the valaccount")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, options) => {
-        const mnemonic = await KyveSDK.generateMnemonic();
-        await this.backend.add(
-          `valaccount.${key}`,
-          mnemonic,
-          options.usePassword,
-          options.config
-        );
-      });
-    valaccounts
-      .command("add")
-      .description("Add an existing valaccount with the mnemonic")
-      .argument("<account_name>", "Name of the valaccount")
-      .argument("<account_secret>", "Mnemonic of the valaccount")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, mnemonic, options) => {
-        const parsedMnemonic = mnemonic.split(" ");
-
-        if (!(parsedMnemonic.length === 12 || parsedMnemonic.length === 24)) {
-          console.log(`Mnemonic has an invalid format: ${parsedMnemonic}`);
-          return;
-        }
-
-        await this.backend.add(
-          `valaccount.${key}`,
-          mnemonic,
-          options.usePassword,
-          options.config
-        );
-      });
-    valaccounts
-      .command("reveal")
-      .description("Reveal the mnemonic of a valaccount")
-      .argument("<account_name>", "Name of the valaccount")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, options) => {
-        const mnemonic = await this.backend.get(
-          `valaccount.${key}`,
-          options.usePassword,
-          options.config
-        );
-
-        if (mnemonic) {
-          const address = await KyveSDK.getAddressFromMnemonic(mnemonic);
-
-          console.log(`Valaccount: ${address}`);
-          console.log(`Mnemonic:   ${mnemonic}`);
-        }
-      });
-    valaccounts
-      .command("list")
-      .description("List all valaccounts available")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (options) => {
-        await this.backend.list(options.usePassword, options.config);
-      });
-    valaccounts
-      .command("remove")
-      .description("Remove an existing valaccount")
-      .argument("<account_name>", "Name of the valaccount")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, options) => {
-        await this.backend.remove(
-          `valaccount.${key}`,
-          options.usePassword,
-          options.config
-        );
-      });
-    valaccounts
-      .command("reset")
-      .description(
-        "Reset the file backend and delete all valaccounts AND wallets"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (options) => {
-        await this.backend.reset(options.config);
-      });
-
-    program.addCommand(valaccounts);
-
-    // define wallets
-    const wallets = new Command("wallets").description(
-      "Manage wallets in encrypted file backend"
-    );
-
-    wallets
-      .command("add")
-      .description("Add an existing wallet with the secret")
-      .argument("<wallet_name>", "Name of the wallet")
-      .argument("<wallet_secret>", "Secret of the wallet")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, secret, options) => {
-        await this.backend.add(
-          `wallet.${key}`,
-          secret,
-          options.usePassword,
-          options.config
-        );
-      });
-    wallets
-      .command("reveal")
-      .description("Reveal the secret of a wallet")
-      .argument("<wallet_name>", "Name of the wallet")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, options) => {
-        const secret = await this.backend.get(
-          `wallet.${key}`,
-          options.usePassword,
-          options.config
-        );
-        console.log(`Wallet: ${secret}`);
-      });
-    wallets
-      .command("list")
-      .description("List all wallets available")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (options) => {
-        await this.backend.list(options.usePassword, options.config);
-      });
-    wallets
-      .command("remove")
-      .description("Remove an existing wallet")
-      .argument("<wallet_name>", "Name of the wallet")
-      .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (key, options) => {
-        await this.backend.remove(
-          `wallet.${key}`,
-          options.usePassword,
-          options.config
-        );
-      });
-    wallets
-      .command("reset")
-      .description(
-        "Reset the file backend and delete all wallets AND valaccounts"
-      )
-      .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .action(async (options) => {
-        await this.backend.reset(options.config);
-      });
-
-    program.addCommand(wallets);
-
     // define start command
     program
       .command("start")
       .description("Run the protocol node")
       .requiredOption(
-        "-p, --pool <number>",
-        "The id of the pool the node should join",
+        "--pool <string>",
+        "The ID of the pool this valaccount should participate as a validator",
         parsePoolId
       )
       .requiredOption(
-        "-a, --account <string>",
-        "The account the node should run with"
+        "--valaccount <string>",
+        "The mnemonic of the valaccount",
+        parseMnemonic
       )
       .requiredOption(
-        "-w, --wallet <string>",
-        "The name of the wallet which should be used for the storage provider"
+        "--storage-priv <string>",
+        "The private key of the storage provider"
+      )
+      .requiredOption(
+        "--network <local|alpha|beta|korellia>",
+        "The network of the KYVE chain",
+        parseNetwork
+      )
+      .option("--verbose", "Run the validator node in verbose logging mode")
+      .option(
+        "--metrics",
+        "Start a prometheus metrics server on http://localhost:8080/metrics"
       )
       .option(
-        "-u, --use-password",
-        "Use a password to encrypt the file backend. [optional, default = false]"
+        "--metrics-port <number>",
+        "Specify the port of the metrics server. Only considered if '--metrics' is set [default = 8080]",
+        "8080"
       )
       .option(
-        "-c, --config <string>",
-        "Specify the path where to node config is saved. [optional, default = $HOME/.kyve-node/]"
-      )
-      .option(
-        "-n, --network <string>",
-        "The chain id of the network. [optional, default = korellia]",
-        parseNetwork,
-        "korellia"
-      )
-      .option(
-        "-v, --verbose",
-        "Run node in verbose mode. [optional, default = false]",
-        false
-      )
-      .option(
-        "-m, --metrics",
-        "Run a metrics server with prometheus (http://localhost:8080/metrics). [optional, default = false]",
-        false
+        "--home <string>",
+        "Specify the home directory of the node where logs and the cache should save their data. [default current directory]",
+        "./"
       )
       .action((options) => {
         this.start(options);
@@ -474,13 +245,13 @@ export class Node {
   private async start(options: OptionValues): Promise<void> {
     // assign program options
     this.poolId = options.pool;
-    this.account = options.account;
-    this.wallet = options.wallet;
-    this.usePassword = options.usePassword;
-    this.config = options.config;
+    this.valaccount = options.valaccount;
+    this.storagePriv = options.storagePriv;
     this.network = options.network;
     this.verbose = options.verbose;
     this.metrics = options.metrics;
+    this.metricsPort = options.metricsPort;
+    this.home = options.home;
 
     this.coreVersion = coreVersion;
 

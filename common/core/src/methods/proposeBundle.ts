@@ -1,11 +1,5 @@
 import { Bundle, Node } from "..";
-import {
-  sleep,
-  standardizeJSON,
-  sha256,
-  ERROR_IDLE_TIME,
-  bundleToBytes,
-} from "../utils";
+import { sleep, sha256, ERROR_IDLE_TIME, bundleToBytes } from "../utils";
 
 export async function proposeBundle(
   this: Node,
@@ -47,13 +41,13 @@ export async function proposeBundle(
         `Created bundle of length ${bundleProposal.bundle.length}`
       );
       this.logger.debug(
-        `Compressing bundle with compression type ${this.compression.name}`
+        `Compressing bundle with compression type Compression:${this.compression.name}`
       );
 
       const bundleBytes = bundleToBytes(bundleProposal.bundle);
 
-      bundleHash = sha256(bundleBytes);
       bundleCompressed = await this.compression.compress(bundleBytes);
+      bundleHash = sha256(bundleCompressed);
 
       const tags: [string, string][] = [
         ["Application", "KYVE"],
@@ -68,6 +62,7 @@ export async function proposeBundle(
         ["FromKey", fromKey],
         ["ToKey", bundleProposal.toKey],
         ["Value", bundleProposal.toValue],
+        ["BundleHash", bundleHash],
       ];
 
       this.logger.debug(`Attempting to save bundle on storage provider`);
@@ -76,13 +71,13 @@ export async function proposeBundle(
       this.prom.storage_provider_save_successful.inc();
 
       this.logger.info(
-        `Saved bundle on ${this.storageProvider.name} with Storage Id "${storageId}"\n`
+        `Saved bundle on StorageProvider:${this.storageProvider.name} with Storage Id "${storageId}"\n`
       );
 
       break;
     } catch (error) {
       this.logger.warn(
-        ` Failed to save bundle on ${this.storageProvider.name}. Retrying in 10s ...`
+        ` Failed to save bundle on StorageProvider:${this.storageProvider.name}. Retrying in 10s ...`
       );
       this.logger.debug(error);
       this.prom.storage_provider_save_failed.inc();
