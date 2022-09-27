@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk@3.1.1...@kyve/sdk@3.2.0) (2022-09-27)
+
+
+### Features
+
+* **sdk:** export registry from sdk ([d92ab64](https://github.com/KYVENetwork/node/commit/d92ab643d3bf637bc5985f30e6e1657d8b63afdd))
+
+
+
+
+
 ## [3.1.1](https://github.com/KYVENetwork/node/compare/@kyve/sdk@3.1.0...@kyve/sdk@3.1.1) (2022-09-21)
 
 **Note:** Version bump only for package @kyve/sdk
