@@ -1,7 +1,7 @@
 import { Node } from "..";
 import { appendFileSync, existsSync, mkdirSync } from "fs";
 import { ILogObject, Logger } from "tslog";
-import path from "path/posix";
+import path from "path";
 
 export function setupLogger(this: Node): Logger {
   if (!existsSync(path.join(this.home, "logs"))) {

@@ -11,11 +11,10 @@ import os from "os";
 import fs from "fs";
 import { Logger } from "tslog";
 import TOML from "@iarna/toml";
-import { IConfig } from "./types/interfaces";
+import { IConfig, IValaccountConfig } from "./types/interfaces";
 import extract from "extract-zip";
 import KyveSDK, { KyveLCDClientType } from "@kyve/sdk";
 import { kyve } from "@kyve/proto";
-import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import download from "download";
 import { getChecksum, startNodeProcess } from "./utils";
 
@@ -41,13 +40,42 @@ const logger: Logger = new Logger({
 
 export const run = async (options: any) => {
   let config: IConfig = {} as IConfig;
-  let autoDownloadBinaries: boolean = options.autoDownloadBinaries;
+  let valaccount: IValaccountConfig = {} as IValaccountConfig;
   let pool: PoolResponse;
   let lcd: KyveLCDClientType = {} as KyveLCDClientType;
 
   logger.info("Starting KYSOR ...");
+  logger.info(`Running on platform and architecture "${platform}" - "${arch}"`);
 
-  // verify that valaccount toml exists
+  // verify that KYSOR config toml exists and can be parsed
+  try {
+    if (!fs.existsSync(path.join(home, `config.toml`))) {
+      logger.error(`KYSOR config.toml does not exist. Exiting KYSOR ...`);
+      process.exit(0);
+    }
+  } catch (err) {
+    logger.error(
+      `Error opening KYSOR config file config.toml. Exiting KYSOR ...`
+    );
+    logger.error(err);
+    process.exit(0);
+  }
+
+  // verify that KYSOR config toml can be parsed
+  try {
+    config = TOML.parse(
+      fs.readFileSync(path.join(home, `config.toml`), "utf-8")
+    ) as any;
+    logger.info(`Found KYSOR config file "config.toml"`);
+  } catch (err) {
+    logger.error(
+      `Error parsing KYSOR config file config.toml. Exiting KYSOR ...`
+    );
+    logger.error(err);
+    process.exit(0);
+  }
+
+  // verify that valaccount toml exists and can be parsed
   try {
     if (
       !fs.existsSync(
@@ -57,33 +85,36 @@ export const run = async (options: any) => {
       logger.error(
         `Valaccount with name ${options.valaccount} does not exist. Exiting KYSOR ...`
       );
-      return;
+      process.exit(0);
     }
   } catch (err) {
     logger.error(
       `Error opening valaccount config file ${options.valaccount}.toml. Exiting KYSOR ...`
     );
     logger.error(err);
+    process.exit(0);
   }
 
   // verify that valaccount toml can be parsed
   try {
-    config = TOML.parse(
+    valaccount = TOML.parse(
       fs.readFileSync(
         path.join(home, "valaccounts", `${options.valaccount}.toml`),
         "utf-8"
       )
     ) as any;
+    logger.info(`Found valaccount config file "${options.valaccount}.toml"`);
   } catch (err) {
     logger.error(
       `Error parsing valaccount config file ${options.valaccount}.toml. Exiting KYSOR ...`
     );
     logger.error(err);
+    process.exit(0);
   }
 
   // verify kyve sdk client can be created
   try {
-    lcd = new KyveSDK(config.network as KYVE_NETWORK).createLCDClient();
+    lcd = new KyveSDK(config.network).createLCDClient();
   } catch (err) {
     logger.error(
       `Error creating LCD client from network ${options.network}. Exiting KYSOR ...`
@@ -102,7 +133,7 @@ export const run = async (options: any) => {
 
     // fetch pool state
     const data = await lcd.kyve.query.v1beta1.pool({
-      id: config.pool.toString(),
+      id: valaccount.pool.toString(),
     });
 
     pool = data.pool as PoolResponse;
@@ -136,7 +167,7 @@ export const run = async (options: any) => {
       );
 
       // if binary needs to be downloaded and autoDownload is disable exit
-      if (!autoDownloadBinaries) {
+      if (!config.autoDownloadBinaries) {
         logger.error(
           "Auto download is disabled and new upgrade binary could not be found. Exiting KYSOR ..."
         );
@@ -247,25 +278,25 @@ export const run = async (options: any) => {
       const args = [
         `start`,
         `--pool`,
-        `${config.pool}`,
+        `${valaccount.pool}`,
         `--valaccount`,
-        `${config.valaccount}`,
+        `${valaccount.valaccount}`,
         `--storage-priv`,
-        `${config.storagePriv}`,
+        `${valaccount.storagePriv}`,
         `--network`,
         `${config.network}`,
         `--home`,
         `${binHome}`,
       ];
 
-      if (config.verbose) {
+      if (valaccount.verbose) {
         args.push("--verbose");
       }
 
-      if (config.metrics) {
+      if (valaccount.metrics) {
         args.push("--metrics");
         args.push("--metrics-port");
-        args.push(`${config.metricsPort}`);
+        args.push(`${valaccount.metricsPort}`);
       }
 
       logger.info("Starting process ...");

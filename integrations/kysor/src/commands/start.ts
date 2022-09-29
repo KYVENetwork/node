@@ -6,7 +6,6 @@ const start = new Command("start").description("Start KYSOR");
 start
   .requiredOption("-v, --valaccount <string>", "Name of the valaccount to run")
   .option("-d, --auto-download-binaries")
-  // TODO: what about binary platform and architecture?
   .action(async (options) => {
     await run(options);
   });

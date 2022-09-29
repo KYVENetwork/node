@@ -1,4 +1,4 @@
-import path from "path/posix";
+import path from "path";
 import { Node } from "..";
 
 export async function asyncSetup(this: Node): Promise<void> {

@@ -1,10 +1,10 @@
 import { Command } from "commander";
 import KyveSDK from "@kyve/sdk";
 import fs from "fs";
-import path from "path/posix";
+import path from "path";
 import TOML from "@iarna/toml";
 import prompts from "prompts";
-import { IConfig } from "../types/interfaces";
+import { IConfig, IValaccountConfig } from "../types/interfaces";
 
 const home = path.join(process.env.HOME!, ".kysor");
 
@@ -26,10 +26,6 @@ valaccounts
   .requiredOption(
     "--storage-priv <string>",
     "The private key of the storage provider"
-  )
-  .requiredOption(
-    "--network <local|alpha|beta|korellia>",
-    "The network of the KYVE chain"
   )
   .option("--verbose", "Run the validator node in verbose logging mode")
   .option(
@@ -85,11 +81,10 @@ valaccounts
         valaccount = await KyveSDK.generateMnemonic();
       }
 
-      const config: IConfig = {
+      const config: IValaccountConfig = {
         pool,
         valaccount,
         storagePriv: options.storagePriv,
-        network: options.network,
         verbose: options.verbose,
         metrics: options.metrics,
         metricsPort: options.metricsPort,
@@ -102,7 +97,7 @@ valaccounts
       );
       console.log(`Successfully created valaccount ${options.name}`);
     } catch (err) {
-      console.log(`Could not create valaccount: ${err}`);
+      console.log(`ERROR: Could not create valaccount: ${err}`);
     }
   });
 
@@ -125,7 +120,7 @@ valaccounts
       fs.unlinkSync(path.join(home, "valaccounts", `${options.name}.toml`));
       console.log(`Successfully deleted valaccount ${options.name}`);
     } catch (err) {
-      console.log(`Could not delete valaccount: ${err}`);
+      console.log(`ERROR: Could not delete valaccount: ${err}`);
     }
   });
 
