@@ -95,7 +95,7 @@ export const run = async (options: any) => {
     // create pool directory if it does not exist yet
     if (!existsSync("./upgrades")) {
       logger.info(`Creating "upgrades" directory ...`);
-      mkdirSync(path.join(home, "upgrades"), {
+      mkdirSync(path.join(home, `upgrades`), {
         recursive: true,
       });
     }
@@ -120,13 +120,13 @@ export const run = async (options: any) => {
       process.exit(0);
     }
 
-    // create pool runtime directory if does not exist yet
-    if (!existsSync(path.join(home, "upgrades", runtime))) {
-      mkdirSync(path.join(home, "upgrades", runtime), { recursive: true });
+    // create pool directory if does not exist yet
+    if (!existsSync(path.join(home, `upgrades`, `${pool.id}`))) {
+      mkdirSync(path.join(home, `upgrades`, `${pool.id}`), { recursive: true });
     }
 
     // check if directory with version already exists
-    if (existsSync(path.join(home, "upgrades", runtime, version))) {
+    if (existsSync(path.join(home, `upgrades`, runtime, version))) {
       logger.info(
         `Binary of runtime "${runtime}" with version ${version} found locally`
       );
@@ -159,7 +159,7 @@ export const run = async (options: any) => {
       const checksum = new URL(downloadLink).searchParams.get("checksum") || "";
 
       // create directories for new version
-      mkdirSync(path.join(home, "upgrades", runtime, version), {
+      mkdirSync(path.join(home, `upgrades`, runtime, version), {
         recursive: true,
       });
 
@@ -168,7 +168,7 @@ export const run = async (options: any) => {
         logger.info(`Downloading from ${downloadLink} ...`);
 
         writeFileSync(
-          path.join(home, "upgrades", runtime, version, "kyve.zip"),
+          path.join(home, `upgrades`, runtime, version, "kyve.zip"),
           await download(downloadLink)
         );
       } catch (err) {
@@ -178,7 +178,7 @@ export const run = async (options: any) => {
         logger.error(err);
 
         // exit and delete version folders if binary could not be downloaded
-        rmdirSync(path.join(home, "upgrades", runtime, version));
+        rmdirSync(path.join(home, `upgrades`, runtime, version));
         process.exit(0);
       }
 
@@ -186,40 +186,40 @@ export const run = async (options: any) => {
         logger.info(
           `Extracting binary to ${path.join(
             home,
-            "upgrades",
+            `upgrades`,
             runtime,
             version,
             "kyve.zip"
           )} ...`
         );
         await extract(
-          path.join(home, "upgrades", runtime, version, "kyve.zip"),
+          path.join(home, `upgrades`, runtime, version, "kyve.zip"),
           {
-            dir: path.resolve(path.join(home, "upgrades", runtime, version)),
+            dir: path.resolve(path.join(home, `upgrades`, runtime, version)),
           }
         );
 
         // check if kyve.zip exists
         if (
-          existsSync(path.join(home, "upgrades", runtime, version, "kyve.zip"))
+          existsSync(path.join(home, `upgrades`, runtime, version, "kyve.zip"))
         ) {
           logger.info(`Deleting kyve.zip ...`);
           // delete zip afterwards
-          unlinkSync(path.join(home, "upgrades", runtime, version, "kyve.zip"));
+          unlinkSync(path.join(home, `upgrades`, runtime, version, "kyve.zip"));
         }
       } catch (err) {
         logger.error("Error extracting binary. Exiting KYSOR ...");
         logger.error(err);
 
         // exit and delete version folders if binary could not be extracted
-        rmdirSync(path.join(home, "upgrades", runtime, version));
+        rmdirSync(path.join(home, `upgrades`, runtime, version));
         process.exit(0);
       }
 
       const binName = readdirSync(
-        path.join(home, "upgrades", runtime, version)
+        path.join(home, `upgrades`, runtime, version)
       )[0];
-      const binPath = path.join(home, "upgrades", runtime, version, binName);
+      const binPath = path.join(home, `upgrades`, runtime, version, binName);
 
       if (checksum) {
         const localChecksum = await getChecksum(binPath);
@@ -240,10 +240,9 @@ export const run = async (options: any) => {
     }
 
     try {
-      const binName = readdirSync(
-        path.join(home, "upgrades", runtime, version)
-      )[0];
-      const binPath = path.join(home, "upgrades", runtime, version, binName);
+      const binHome = path.join(home, `upgrades`, runtime, version);
+      const binName = readdirSync(binHome)[0];
+      const binPath = path.join(binHome, binName);
 
       const args = [
         `start`,
@@ -256,7 +255,7 @@ export const run = async (options: any) => {
         `--network`,
         `${config.network}`,
         `--home`,
-        `${home}`,
+        `${binHome}`,
       ];
 
       if (config.verbose) {

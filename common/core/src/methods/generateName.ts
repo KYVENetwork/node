@@ -9,7 +9,7 @@ import {
 
 export function generateName(this: Node): string {
   const r = new Prando(
-    `${this.poolId}-${this.runtime.name}-${this.client.account.address}`
+    `${this.network}-${this.poolId}-${this.runtime.name}-${this.runtime.version}-${this.client.account.address}`
   );
 
   return uniqueNamesGenerator({

@@ -10,7 +10,7 @@ export function setupLogger(this: Node): Logger {
 
   const logToTransport = (log: ILogObject) => {
     appendFileSync(
-      path.join(this.home, "logs", `${this.name}.txt`),
+      path.join(this.home, `logs`, `${new Date().toISOString()}.log`),
       JSON.stringify(log) + "\n"
     );
   };

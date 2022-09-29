@@ -1,3 +1,4 @@
+import { readdirSync } from "fs";
 import { Node } from "..";
 import { ERROR_IDLE_TIME, sleep } from "../utils";
 
@@ -8,6 +9,8 @@ export async function runCache(this: Node): Promise<void> {
   let maxHeight = 0;
 
   while (true) {
+    this.prom.cache_current_items.set(readdirSync(this.cache.path).length);
+
     // a smaller to_height means a bundle got dropped or invalidated
     if (+this.pool.bundle_proposal!.to_height < toHeight) {
       this.logger.debug(`Attempting to clear cache`);
@@ -38,6 +41,7 @@ export async function runCache(this: Node): Promise<void> {
       }
     }
 
+    this.prom.cache_current_items.set(readdirSync(this.cache.path).length);
     this.prom.cache_height_tail.set(currentHeight);
 
     let startHeight: number;
