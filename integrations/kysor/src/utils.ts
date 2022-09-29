@@ -1,6 +1,50 @@
 import { spawn, SpawnOptionsWithoutStdio } from "child_process";
 import crypto from "crypto";
-import { createReadStream } from "fs";
+import fs from "fs";
+import path from "path";
+import { ILogObject, Logger } from "tslog";
+
+const home = path.join(process.env.HOME!, ".kysor");
+
+export const setupLogger = () => {
+  // create log folder
+  fs.mkdirSync(path.join(home, `logs`), { recursive: true });
+
+  const logFile = `${new Date().toISOString()}.log`;
+
+  const logToTransport = (log: ILogObject) => {
+    fs.appendFileSync(
+      path.join(home, `logs`, logFile),
+      JSON.stringify(log) + "\n"
+    );
+  };
+
+  const logger: Logger = new Logger({
+    displayFilePath: "hidden",
+    displayFunctionName: false,
+    logLevelsColors: {
+      0: "white",
+      1: "white",
+      2: "white",
+      3: "white",
+      4: "white",
+      5: "white",
+      6: "white",
+    },
+  });
+
+  logger.attachTransport({
+    silly: logToTransport,
+    debug: logToTransport,
+    trace: logToTransport,
+    info: logToTransport,
+    warn: logToTransport,
+    error: logToTransport,
+    fatal: logToTransport,
+  });
+
+  return logger;
+};
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -43,7 +87,7 @@ export const startNodeProcess = (
 export const getChecksum = (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     const hash = crypto.createHash("sha256");
-    const input = createReadStream(path);
+    const input = fs.createReadStream(path);
 
     input.on("error", reject);
 

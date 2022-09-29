@@ -1,14 +1,14 @@
 import path from "path";
 import os from "os";
 import fs from "fs";
-import { Logger } from "tslog";
+
 import TOML from "@iarna/toml";
 import { IConfig, IValaccountConfig } from "./types/interfaces";
 import extract from "extract-zip";
 import KyveSDK, { KyveLCDClientType } from "@kyve/sdk";
 import { kyve } from "@kyve/proto";
 import download from "download";
-import { getChecksum, startNodeProcess } from "./utils";
+import { getChecksum, setupLogger, startNodeProcess } from "./utils";
 
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 
@@ -16,19 +16,7 @@ const home = path.join(process.env.HOME!, ".kysor");
 const platform = os.platform() === "darwin" ? "macos" : os.platform();
 const arch = os.arch();
 
-const logger: Logger = new Logger({
-  displayFilePath: "hidden",
-  displayFunctionName: false,
-  logLevelsColors: {
-    0: "white",
-    1: "white",
-    2: "white",
-    3: "white",
-    4: "white",
-    5: "white",
-    6: "white",
-  },
-});
+const logger = setupLogger();
 
 export const run = async (options: any) => {
   let config: IConfig = {} as IConfig;
@@ -37,7 +25,7 @@ export const run = async (options: any) => {
   let lcd: KyveLCDClientType = {} as KyveLCDClientType;
 
   if (!fs.existsSync(path.join(home, `config.toml`))) {
-    console.log(
+    logger.error(
       `KYSOR is not initialized yet. You can initialize it by running: ./kysor init --network <desired_network> --auto-download-binaries`
     );
     return;
