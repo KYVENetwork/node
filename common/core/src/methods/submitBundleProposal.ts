@@ -11,7 +11,7 @@ export async function submitBundleProposal(
   toKey: string,
   toValue: string,
   bundleHash: string
-): Promise<void> {
+): Promise<boolean> {
   try {
     this.logger.debug(`Attempting to submit bundle proposal`);
 
@@ -42,6 +42,8 @@ export async function submitBundleProposal(
       this.prom.bundles_amount.setToCurrentTime();
       this.prom.bundles_data_items.set(toHeight - fromHeight);
       this.prom.bundles_byte_size.set(byteSize);
+
+      return true;
     } else {
       this.logger.info(
         `Could not submit bundle proposal. Continuing in 10s ...\n`
@@ -49,6 +51,8 @@ export async function submitBundleProposal(
       this.prom.tx_submit_bundle_proposal_unsuccessful.inc();
 
       await sleep(ERROR_IDLE_TIME);
+
+      return false;
     }
   } catch (error) {
     this.logger.warn(
@@ -58,5 +62,7 @@ export async function submitBundleProposal(
     this.prom.tx_submit_bundle_proposal_failed.inc();
 
     await sleep(ERROR_IDLE_TIME);
+
+    return false;
   }
 }

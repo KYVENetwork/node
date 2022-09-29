@@ -4,7 +4,7 @@ import { ERROR_IDLE_TIME, sleep } from "../utils";
 export async function skipUploaderRole(
   this: Node,
   fromHeight: number
-): Promise<void> {
+): Promise<boolean> {
   try {
     this.logger.debug(`Attempting to skip uploader role`);
 
@@ -21,11 +21,15 @@ export async function skipUploaderRole(
     if (receipt.code === 0) {
       this.logger.info(`Successfully skipped uploader role\n`);
       this.prom.tx_skip_uploader_role_successful.inc();
+
+      return true;
     } else {
       this.logger.info(`Could not skip uploader role. Continuing in 10s ...\n`);
       this.prom.tx_skip_uploader_role_unsuccessful.inc();
 
       await sleep(ERROR_IDLE_TIME);
+
+      return false;
     }
   } catch (error) {
     this.logger.warn(" Failed to skip uploader role. Continuing in 10s ...\n");
@@ -33,5 +37,7 @@ export async function skipUploaderRole(
     this.prom.tx_skip_uploader_role_failed.inc();
 
     await sleep(ERROR_IDLE_TIME);
+
+    return false;
   }
 }

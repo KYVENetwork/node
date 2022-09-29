@@ -16,6 +16,7 @@ export * from "./waitForNextBundleProposal";
 export * from "./canPropose";
 export * from "./submitBundleProposal";
 export * from "./skipUploaderRole";
+export * from "./uploadBundle";
 export * from "./proposeBundle";
 export * from "./continueBundleProposalRound";
 export * from "./setupMetrics";
