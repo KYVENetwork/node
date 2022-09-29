@@ -112,7 +112,7 @@ export async function validateBundleProposal(
     const toHeight = +this.pool.bundle_proposal!.to_height || currentHeight;
 
     this.logger.debug(
-      `Attemping to load local bundle from ${currentHeight} to ${toHeight} ...`
+      `Attempting to load local bundle from ${currentHeight} to ${toHeight} ...`
     );
 
     const { bundle } = await this.loadBundle(currentHeight, toHeight);

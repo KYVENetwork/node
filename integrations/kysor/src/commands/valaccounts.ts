@@ -2,14 +2,14 @@ import { Command } from "commander";
 import KyveSDK from "@kyve/sdk";
 import fs from "fs";
 import path from "path";
-import TOML from "@iarna/toml";
 import prompts from "prompts";
-import { IConfig, IValaccountConfig } from "../types/interfaces";
+import { IValaccountConfig } from "../types/interfaces";
+import TOML from "@iarna/toml";
 
 const home = path.join(process.env.HOME!, ".kysor");
 
 const valaccounts = new Command("valaccounts").description(
-  "Perform txs with validator account"
+  "Create and delete valaccounts"
 );
 
 valaccounts
@@ -40,15 +40,36 @@ valaccounts
   .option("--recover", "Create a valaccount by importing an existing mnemonic")
   .action(async (options) => {
     try {
-      if (
-        fs.existsSync(path.join(home, "valaccounts", `${options.name}.toml`))
-      ) {
-        console.log(`Already created valaccount with name ${options.name}`);
+      if (!fs.existsSync(path.join(home, `config.toml`))) {
+        console.log(
+          `KYSOR is not initialized yet. You can initialize it by running: ./kysor init --network <desired_network> --auto-download-binaries`
+        );
         return;
+      }
+
+      // create home directory for valaccount configs
+      fs.mkdirSync(path.join(home, "valaccounts"), { recursive: true });
+
+      // check if valaccount with same pool id was already created
+      const pools = [];
+      const valaccounts = fs.readdirSync(path.join(home, "valaccounts"));
+
+      for (let valaccount of valaccounts) {
+        const config: IValaccountConfig = TOML.parse(
+          fs.readFileSync(path.join(home, "valaccounts", valaccount), "utf-8")
+        ) as any;
+        pools.push(config.pool);
       }
 
       // parse pool id
       const pool = parseInt(options.pool, 10);
+
+      if (pools.includes(pool)) {
+        console.log(
+          `ERROR: Already created a valaccount with Pool Id = ${pool}`
+        );
+        return;
+      }
 
       // get mnemonic for valaccount
       let valaccount;
@@ -90,7 +111,6 @@ valaccounts
         metricsPort: options.metricsPort,
       };
 
-      fs.mkdirSync(path.join(home, "valaccounts"), { recursive: true });
       fs.writeFileSync(
         path.join(home, "valaccounts", `${options.name}.toml`),
         TOML.stringify(config as any)

@@ -1,8 +1,8 @@
 import { Command } from "commander";
-import { existsSync, mkdirSync } from "fs";
-import path from "path";
 import fs from "fs";
+import path from "path";
 import TOML from "@iarna/toml";
+import KyveSDK from "@kyve/sdk";
 
 const home = path.join(process.env.HOME!, ".kysor");
 
@@ -19,7 +19,7 @@ init
   )
   .action(async (options) => {
     try {
-      if (existsSync(path.join(home, `config.toml`))) {
+      if (fs.existsSync(path.join(home, `config.toml`))) {
         console.log(
           `KYSOR was already initialized. You can directly edit the config file under ${path.join(
             home,
@@ -28,9 +28,16 @@ init
         );
       } else {
         // create KYSOR home directory
-        mkdirSync(home, {
+        fs.mkdirSync(home, {
           recursive: true,
         });
+
+        try {
+          new KyveSDK(options.network);
+        } catch (err) {
+          console.log(`ERROR: network ${options.network} was not recognized`);
+          return;
+        }
 
         const config = {
           network: options.network,
@@ -40,6 +47,10 @@ init
         fs.writeFileSync(
           path.join(home, `config.toml`),
           TOML.stringify(config as any)
+        );
+
+        console.log(
+          `Successfully initialized KYSOR in the following home directory: ${home}`
         );
       }
     } catch (err) {
