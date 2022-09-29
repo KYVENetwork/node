@@ -8,9 +8,11 @@ export function setupLogger(this: Node): Logger {
     mkdirSync(path.join(this.home, "logs"), { recursive: true });
   }
 
+  const logFile = `${new Date().toISOString()}.log`;
+
   const logToTransport = (log: ILogObject) => {
     appendFileSync(
-      path.join(this.home, `logs`, `${new Date().toISOString()}.log`),
+      path.join(this.home, `logs`, logFile),
       JSON.stringify(log) + "\n"
     );
   };

@@ -187,16 +187,26 @@ export const run = async (options: any) => {
       const checksum = new URL(downloadLink).searchParams.get("checksum") || "";
 
       // create directories for new version
-      fs.mkdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version), {
-        recursive: true,
-      });
+      fs.mkdirSync(
+        path.join(home, `upgrades`, `pool-${pool.id}`, version, `bin`),
+        {
+          recursive: true,
+        }
+      );
 
       // try to download binary
       try {
         logger.info(`Downloading from ${downloadLink} ...`);
 
         fs.writeFileSync(
-          path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip"),
+          path.join(
+            home,
+            `upgrades`,
+            `pool-${pool.id}`,
+            version,
+            `bin`,
+            "kyve.zip"
+          ),
           await download(downloadLink)
         );
       } catch (err) {
@@ -206,7 +216,9 @@ export const run = async (options: any) => {
         logger.error(err);
 
         // exit and delete version folders if binary could not be downloaded
-        fs.rmdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version));
+        fs.rmSync(path.join(home, `upgrades`, `pool-${pool.id}`, version), {
+          recursive: true,
+        });
         process.exit(0);
       }
 
@@ -217,14 +229,22 @@ export const run = async (options: any) => {
             `upgrades`,
             `pool-${pool.id}`,
             version,
+            `bin`,
             "kyve.zip"
           )} ...`
         );
         await extract(
-          path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip"),
+          path.join(
+            home,
+            `upgrades`,
+            `pool-${pool.id}`,
+            version,
+            `bin`,
+            "kyve.zip"
+          ),
           {
             dir: path.resolve(
-              path.join(home, `upgrades`, `pool-${pool.id}`, version)
+              path.join(home, `upgrades`, `pool-${pool.id}`, version, `bin`)
             ),
           }
         );
@@ -232,13 +252,27 @@ export const run = async (options: any) => {
         // check if kyve.zip exists
         if (
           fs.existsSync(
-            path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip")
+            path.join(
+              home,
+              `upgrades`,
+              `pool-${pool.id}`,
+              version,
+              `bin`,
+              "kyve.zip"
+            )
           )
         ) {
           logger.info(`Deleting kyve.zip ...`);
           // delete zip afterwards
           fs.unlinkSync(
-            path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip")
+            path.join(
+              home,
+              `upgrades`,
+              `pool-${pool.id}`,
+              version,
+              `bin`,
+              "kyve.zip"
+            )
           );
         }
       } catch (err) {
@@ -246,22 +280,23 @@ export const run = async (options: any) => {
         logger.error(err);
 
         // exit and delete version folders if binary could not be extracted
-        fs.rmdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version));
+        fs.rmSync(path.join(home, `upgrades`, `pool-${pool.id}`, version), {
+          recursive: true,
+        });
         process.exit(0);
       }
 
-      const binName = fs.readdirSync(
-        path.join(home, `upgrades`, `pool-${pool.id}`, version)
-      )[0];
-      const binPath = path.join(
-        home,
-        `upgrades`,
-        `pool-${pool.id}`,
-        version,
-        binName
-      );
-
       if (checksum) {
+        const versionHome = path.join(
+          home,
+          `upgrades`,
+          `pool-${pool.id}`,
+          version
+        );
+        const binHome = path.join(versionHome, `bin`);
+        const binName = fs.readdirSync(binHome)[0];
+        const binPath = path.join(binHome, binName);
+
         const localChecksum = await getChecksum(binPath);
 
         logger.info("Comparing binary checksums ...");
@@ -280,7 +315,13 @@ export const run = async (options: any) => {
     }
 
     try {
-      const binHome = path.join(home, `upgrades`, `pool-${pool.id}`, version);
+      const versionHome = path.join(
+        home,
+        `upgrades`,
+        `pool-${pool.id}`,
+        version
+      );
+      const binHome = path.join(versionHome, `bin`);
       const binName = fs.readdirSync(binHome)[0];
       const binPath = path.join(binHome, binName);
 
@@ -295,7 +336,7 @@ export const run = async (options: any) => {
         `--network`,
         `${config.network}`,
         `--home`,
-        `${binHome}`,
+        `${versionHome}`,
       ];
 
       if (valaccount.verbose) {
