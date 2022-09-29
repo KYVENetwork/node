@@ -137,13 +137,7 @@ export const run = async (options: any) => {
 
     pool = data.pool as PoolResponse;
 
-    const runtime = pool.data?.runtime;
     const version = pool.data?.protocol?.version;
-
-    if (!runtime) {
-      logger.error("Runtime not found on pool. Exiting KYSOR ...");
-      process.exit(0);
-    }
 
     if (!version) {
       logger.error("Version tag not found on pool. Exiting KYSOR ...");
@@ -151,20 +145,22 @@ export const run = async (options: any) => {
     }
 
     // create pool directory if does not exist yet
-    if (!fs.existsSync(path.join(home, `upgrades`, `${pool.id}`))) {
-      fs.mkdirSync(path.join(home, `upgrades`, `${pool.id}`), {
+    if (!fs.existsSync(path.join(home, `upgrades`, `pool-${pool.id}`))) {
+      fs.mkdirSync(path.join(home, `upgrades`, `pool-${pool.id}`), {
         recursive: true,
       });
     }
 
     // check if directory with version already exists
-    if (fs.existsSync(path.join(home, `upgrades`, runtime, version))) {
+    if (
+      fs.existsSync(path.join(home, `upgrades`, `pool-${pool.id}`, version))
+    ) {
       logger.info(
-        `Binary of runtime "${runtime}" with version ${version} found locally`
+        `Binary of pool "${pool.id}" with version ${version} found locally`
       );
     } else {
       logger.info(
-        `Binary of runtime "${runtime}" with version ${version} not found locally`
+        `Binary of pool "${pool.id}" with version ${version} not found locally`
       );
 
       // if binary needs to be downloaded and autoDownload is disable exit
@@ -191,7 +187,7 @@ export const run = async (options: any) => {
       const checksum = new URL(downloadLink).searchParams.get("checksum") || "";
 
       // create directories for new version
-      fs.mkdirSync(path.join(home, `upgrades`, runtime, version), {
+      fs.mkdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version), {
         recursive: true,
       });
 
@@ -200,7 +196,7 @@ export const run = async (options: any) => {
         logger.info(`Downloading from ${downloadLink} ...`);
 
         fs.writeFileSync(
-          path.join(home, `upgrades`, runtime, version, "kyve.zip"),
+          path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip"),
           await download(downloadLink)
         );
       } catch (err) {
@@ -210,7 +206,7 @@ export const run = async (options: any) => {
         logger.error(err);
 
         // exit and delete version folders if binary could not be downloaded
-        fs.rmdirSync(path.join(home, `upgrades`, runtime, version));
+        fs.rmdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version));
         process.exit(0);
       }
 
@@ -219,28 +215,30 @@ export const run = async (options: any) => {
           `Extracting binary to ${path.join(
             home,
             `upgrades`,
-            runtime,
+            `pool-${pool.id}`,
             version,
             "kyve.zip"
           )} ...`
         );
         await extract(
-          path.join(home, `upgrades`, runtime, version, "kyve.zip"),
+          path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip"),
           {
-            dir: path.resolve(path.join(home, `upgrades`, runtime, version)),
+            dir: path.resolve(
+              path.join(home, `upgrades`, `pool-${pool.id}`, version)
+            ),
           }
         );
 
         // check if kyve.zip exists
         if (
           fs.existsSync(
-            path.join(home, `upgrades`, runtime, version, "kyve.zip")
+            path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip")
           )
         ) {
           logger.info(`Deleting kyve.zip ...`);
           // delete zip afterwards
           fs.unlinkSync(
-            path.join(home, `upgrades`, runtime, version, "kyve.zip")
+            path.join(home, `upgrades`, `pool-${pool.id}`, version, "kyve.zip")
           );
         }
       } catch (err) {
@@ -248,14 +246,20 @@ export const run = async (options: any) => {
         logger.error(err);
 
         // exit and delete version folders if binary could not be extracted
-        fs.rmdirSync(path.join(home, `upgrades`, runtime, version));
+        fs.rmdirSync(path.join(home, `upgrades`, `pool-${pool.id}`, version));
         process.exit(0);
       }
 
       const binName = fs.readdirSync(
-        path.join(home, `upgrades`, runtime, version)
+        path.join(home, `upgrades`, `pool-${pool.id}`, version)
       )[0];
-      const binPath = path.join(home, `upgrades`, runtime, version, binName);
+      const binPath = path.join(
+        home,
+        `upgrades`,
+        `pool-${pool.id}`,
+        version,
+        binName
+      );
 
       if (checksum) {
         const localChecksum = await getChecksum(binPath);
@@ -276,7 +280,7 @@ export const run = async (options: any) => {
     }
 
     try {
-      const binHome = path.join(home, `upgrades`, runtime, version);
+      const binHome = path.join(home, `upgrades`, `pool-${pool.id}`, version);
       const binName = fs.readdirSync(binHome)[0];
       const binPath = path.join(binHome, binName);
 
