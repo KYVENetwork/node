@@ -2,6 +2,7 @@ import { Node } from "..";
 import { sleep, standardizeJSON, sha256, bytesToBundle } from "../utils";
 import { ERROR_IDLE_TIME, VOTE } from "../utils/constants";
 import { DataItem } from "../types";
+import BigNumber from "bignumber.js";
 
 export async function validateBundleProposal(
   this: Node,
@@ -24,11 +25,22 @@ export async function validateBundleProposal(
   while (true) {
     await this.syncPoolState();
 
+    const unixNow = new BigNumber(Date.now());
+    const unixIntervalEnd = new BigNumber(this.pool.bundle_proposal!.created_at)
+      .plus(this.pool.data!.upload_interval)
+      .multipliedBy(1000);
+
     if (+this.pool.bundle_proposal!.created_at > createdAt) {
       // check if new proposal is available in the meantime
       return;
     } else if (this.shouldIdle()) {
       // check if pool got paused in the meantime
+      return;
+    } else if (
+      this.pool.bundle_proposal!.next_uploader === this.staker &&
+      unixNow.gte(unixIntervalEnd)
+    ) {
+      // check if validator needs to upload
       return;
     }
 
