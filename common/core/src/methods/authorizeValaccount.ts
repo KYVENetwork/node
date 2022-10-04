@@ -24,8 +24,8 @@ export async function authorizeValaccount(this: Node): Promise<void> {
       },
       { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
       (error: any, ctx) => {
-        this.logger.info(
-          `Failed to fetch canValidate. Retrying in ${(
+        this.logger.debug(
+          `Failed to request canValidate. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
