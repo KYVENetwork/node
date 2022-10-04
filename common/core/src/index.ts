@@ -8,15 +8,14 @@ import {
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  canValidate,
-  generateName,
+  authorizeValaccount,
   syncPoolState,
   validateRuntime,
   validateVersion,
   validateActiveNode,
   runNode,
   runCache,
-  asyncSetup,
+  setupValidator,
   shouldIdle,
   claimUploaderRole,
   canVote,
@@ -33,9 +32,10 @@ import {
   continueRound,
   setupMetrics,
   getBalances,
+  setupSDK,
+  setupModules,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
-import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
 import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
@@ -84,10 +84,11 @@ export class Node {
   protected home!: string;
 
   // setups
-  protected generateName = generateName;
-  protected asyncSetup = asyncSetup;
   protected setupLogger = setupLogger;
+  protected setupModules = setupModules;
   protected setupMetrics = setupMetrics;
+  protected setupSDK = setupSDK;
+  protected setupValidator = setupValidator;
 
   // checks
   protected validateRuntime = validateRuntime;
@@ -109,7 +110,7 @@ export class Node {
   protected submitBundleProposal = submitBundleProposal;
 
   // queries
-  protected canValidate = canValidate;
+  protected authorizeValaccount = authorizeValaccount;
   protected syncPoolState = syncPoolState;
   protected getBalances = getBalances;
   protected canVote = canVote;
@@ -257,11 +258,12 @@ export class Node {
    * an incorrect runtime or version.
    *
    * @method start
-   * @param {OptionValues} options which contains all relevant node options
+   * @param {OptionValues} options contains all node options defined in bootstrap
    * @return {Promise<void>}
    */
   private async start(options: OptionValues): Promise<void> {
     // assign program options
+    // to node instance
     this.poolId = options.pool;
     this.valaccount = options.valaccount;
     this.storagePriv = options.storagePriv;
@@ -270,25 +272,22 @@ export class Node {
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
     this.home = options.home;
-
     this.coreVersion = coreVersion;
 
-    this.logger = this.setupLogger();
+    // perform setups
+    this.setupLogger();
+    this.setupModules();
+    this.setupMetrics();
 
+    // perform async setups
+    await this.setupSDK();
+    await this.setupValidator();
+
+    // start the node process
+    // node and cache should run at the same time
+    // thats why, although they are async they are
+    // called synchronously
     try {
-      // assign main attributes
-      this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
-      this.lcd = this.sdk.createLCDClient();
-    } catch (error) {
-      this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
-      this.logger.debug(error);
-
-      process.exit(1);
-    }
-
-    try {
-      await this.asyncSetup();
-
       this.runNode();
       this.runCache();
     } catch (error) {

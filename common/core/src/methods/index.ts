@@ -1,26 +1,42 @@
-export * from "./asyncSetup";
-
+// setups
 export * from "./setupLogger";
-export * from "./canValidate";
-export * from "./generateName";
-export * from "./syncPoolState";
+export * from "./setupModules";
+export * from "./setupMetrics";
+export * from "./setupSDK";
+export * from "./setupValidator";
+
+// checks
 export * from "./validate";
 export * from "./shouldIdle";
-export * from "./claimUploaderRole";
-export * from "./loadBundle";
-export * from "./canVote";
-export * from "./validateBundleProposal";
-export * from "./voteBundleProposal";
+
+// timeouts
 export * from "./waitForUploadInterval";
 export * from "./waitForNextBundleProposal";
-export * from "./canPropose";
-export * from "./submitBundleProposal";
+
+// helpers
+export * from "./continueRound";
+
+// txs
+export * from "./claimUploaderRole";
 export * from "./skipUploaderRole";
+export * from "./voteBundleProposal";
+export * from "./submitBundleProposal";
+
+// queries
+export * from "./authorizeValaccount";
+export * from "./syncPoolState";
+export * from "./getBalances";
+export * from "./canVote";
+export * from "./canPropose";
+
+// validate
+export * from "./loadBundle";
+export * from "./validateBundleProposal";
+
+// upload
 export * from "./uploadBundle";
 export * from "./proposeBundle";
-export * from "./continueRound";
-export * from "./setupMetrics";
-export * from "./getBalances";
 
+// main
 export * from "./runNode";
 export * from "./runCache";

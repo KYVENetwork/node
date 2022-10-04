@@ -17,8 +17,8 @@ import { IDLE_TIME, sleep } from "../utils";
  */
 export async function runNode(this: Node): Promise<void> {
   // run rounds indefinitely, continueRound returns always
-  // true and is only used by unit tests to control the termination of rounds
-  // by mocking it
+  // true and is only used by unit tests to control the termination of
+  // rounds by mocking it
   while (this.continueRound()) {
     // record entire proposal round time for metrics
     const endTimeRound = this.prom.bundles_round_time.startTimer();
@@ -27,13 +27,13 @@ export async function runNode(this: Node): Promise<void> {
     await this.syncPoolState();
     await this.getBalances();
 
-    // perform basic validation checks, if one fails -> exit
+    // perform basic validation checks, if one fails exit
     this.validateRuntime();
     this.validateVersion();
     this.validateActiveNode();
 
     // perform basic logic checks if pool is up and running, if it fails
-    // -> idle until pool is active again
+    // idle until pool is active again
     if (this.shouldIdle()) {
       await sleep(IDLE_TIME);
       endTimeRound();

@@ -23,7 +23,7 @@ export function validateRuntime(this: Node): void {
     this.logger.info(`Node running on runtime = ${this.runtime.name}`);
     this.logger.debug(`Successfully validated pool runtime\n`);
   } catch (error) {
-    this.logger.error(`Unexpected error while validating runtime. Exiting ...`);
+    this.logger.error(`Error while validating runtime. Exiting ...`);
     this.logger.debug(error);
 
     process.exit(1);
@@ -55,9 +55,7 @@ export function validateVersion(this: Node): void {
     );
     this.logger.debug(`Successfully validated pool runtime version\n`);
   } catch (error) {
-    this.logger.error(
-      `Unexpected error while validating runtime version. Exiting ...`
-    );
+    this.logger.error(`Error while validating runtime version. Exiting ...`);
     this.logger.debug(error);
 
     process.exit(1);
@@ -85,7 +83,7 @@ export function validateActiveNode(this: Node): void {
     this.logger.debug(`Successfully validated node stake\n`);
   } catch (error) {
     this.logger.error(
-      `Unexpected error while validating if node is a validator. Exiting ...`
+      `Error while validating if node is a validator. Exiting ...`
     );
     this.logger.debug(error);
 
