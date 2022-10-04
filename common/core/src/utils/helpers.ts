@@ -78,7 +78,7 @@ type OptionsRetryerType = {
   maxRequests?: number;
 };
 
-type onEachErrorRetryerType = (
+type onErrorRetryerType = (
   value: Error,
   ctx: {
     nextTimeoutInMs: number;
@@ -94,13 +94,13 @@ type onEachErrorRetryerType = (
  * @method callWithBackoffStrategy
  * @param {() => Promise<T>} execution the method to execute with a backoff strategy
  * @param {OptionsRetryerType} options defines the backoff strategy. e.g the number of retries or the timeout limit
- * @param {onEachErrorRetryerType} onEachError a method which gets called if specified and if an error occurs calling the execution method
+ * @param {onErrorRetryerType} onError a method which gets called if specified and if an error occurs calling the execution method
  * @return {Promise<T>} returns what the execution method returns
  */
 export async function callWithBackoffStrategy<T>(
   execution: () => Promise<T>,
   options: OptionsRetryerType,
-  onEachError?: onEachErrorRetryerType
+  onError?: onErrorRetryerType
 ): Promise<T> {
   let time = options.increaseByMs;
   let requests = 1;
@@ -110,8 +110,8 @@ export async function callWithBackoffStrategy<T>(
       try {
         return resolve(await execution());
       } catch (e) {
-        if (onEachError) {
-          await onEachError(e as Error, {
+        if (onError) {
+          await onError(e as Error, {
             nextTimeoutInMs: time,
             numberOfRetries: requests,
             options,

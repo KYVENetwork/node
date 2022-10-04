@@ -77,7 +77,7 @@ export interface IMetrics {
 
   balance_staker: PromGauge;
   balance_valaccount: PromGauge;
-  balance_wallet: PromGauge;
+  balance_storage_provider: PromGauge;
 
   // RUNTIME METRICS
 

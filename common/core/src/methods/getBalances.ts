@@ -2,6 +2,15 @@ import { DENOM, KYVE_DECIMALS } from "@kyve/sdk/dist/constants";
 import BigNumber from "bignumber.js";
 import { Node } from "..";
 
+/**
+ * getBalances tries to retrieve the $KYVE balance of the staker account, the $KYVE
+ * balance of the valaccount and the balance of the storage provider which
+ * can be of any currency for metrics
+ *
+ * @method getBalances
+ * @param {Node} this
+ * @return {Promise<void>}
+ */
 export async function getBalances(this: Node): Promise<void> {
   try {
     const stakerBalanceRaw = await this.client.nativeClient.getBalance(
@@ -34,16 +43,16 @@ export async function getBalances(this: Node): Promise<void> {
   }
 
   try {
-    const walletBalanceRaw = await this.storageProvider.getBalance();
-    const walletBalance = new BigNumber(walletBalanceRaw)
+    const storageProviderBalanceRaw = await this.storageProvider.getBalance();
+    const storageProviderBalance = new BigNumber(storageProviderBalanceRaw)
       .dividedBy(
         new BigNumber(10).exponentiatedBy(this.storageProvider.decimals)
       )
       .toNumber();
 
-    this.prom.balance_wallet.set(walletBalance);
+    this.prom.balance_storage_provider.set(storageProviderBalance);
   } catch (error) {
-    this.logger.info(`Failed to get wallet balance ...`);
+    this.logger.info(`Failed to get storage provider balance ...`);
     this.logger.debug(error);
   }
 }

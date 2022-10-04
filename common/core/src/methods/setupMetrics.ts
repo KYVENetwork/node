@@ -225,9 +225,9 @@ export function setupMetrics(this: Node): void {
     help: "The current $KYVE balance of the valaccount.",
   });
 
-  this.prom.balance_wallet = new prom_client.Gauge({
-    name: "balance_wallet",
-    help: "The current balance of the wallet.",
+  this.prom.balance_storage_provider = new prom_client.Gauge({
+    name: "balance_storage_provider",
+    help: "The current balance of the storage provider.",
   });
 
   // CACHE METRICS

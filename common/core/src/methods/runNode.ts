@@ -1,14 +1,20 @@
 import { Node } from "..";
 import { IDLE_TIME, sleep } from "../utils";
 
-// runNode is the main execution thread for validating and proposing bundles.
-// It runs indefintitely in rounds and should only exit when basic validation
-// checks fail. Each round looks the same. It starts by retrieving the latest
-// state from the chain and checking if the pool is still active. After that
-// it tries to claim the uploader role, then it tries to validate the current
-// bundle proposal and last but not least it tries to upload the next bundle
-// proposal. Between those actions are special waiting times and timeouts to
-// stay in sync with the network.
+/**
+ * runNode is the main execution thread for validating and proposing bundles.
+ * It runs indefintitely in rounds and should only exit when basic validation
+ * checks fail. Each round looks the same. It starts by retrieving the latest
+ * state from the chain and checking if the pool is still active. After that
+ * it tries to claim the uploader role, then it tries to validate the current
+ * bundle proposal and last but not least it tries to upload the next bundle
+ * proposal. Between those actions are special waiting times and timeouts to
+ * stay in sync with the network.
+ *
+ * @method runNode
+ * @param {Node} this
+ * @return {Promise<void>}
+ */
 export async function runNode(this: Node): Promise<void> {
   // run rounds indefinitely, continueRound returns always
   // true and is only used by unit tests to control the termination of rounds

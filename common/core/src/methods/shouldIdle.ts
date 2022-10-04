@@ -1,6 +1,14 @@
 import { PoolStatus } from "@kyve/proto/dist/proto-res/kyve/pool/v1beta1/pool";
 import { Node } from "..";
 
+/**
+ * shouldIdle checks if the pool is active or not. It returns true or false,
+ * wether it is active or not.
+ *
+ * @method shouldIdle
+ * @param {Node} this
+ * @return {boolean}
+ */
 export function shouldIdle(this: Node): boolean {
   switch (this.pool.status as PoolStatus) {
     case PoolStatus.POOL_STATUS_ACTIVE:
