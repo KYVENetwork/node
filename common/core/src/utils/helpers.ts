@@ -2,36 +2,74 @@ import { BigNumber } from "bignumber.js";
 import crypto from "crypto";
 import { DataItem } from "..";
 
-export const toHumanReadable = (amount: string, stringDecimals = 4): string => {
-  const fmt = new BigNumber(amount || "0")
-    .div(10 ** 9)
-    .toFixed(stringDecimals, 1);
+/**
+ * Waits for a specific amount of time
+ *
+ * @method sleep
+ * @param {number} timeoutMs
+ * @return {Promise<void>}
+ */
+export const sleep = (timeoutMs: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, timeoutMs));
 
-  if (stringDecimals > 1) {
+/**
+ * Standardizes any JSON object
+ *
+ * @method standardizeJSON
+ * @param {object} object
+ * @return {object}
+ */
+export const standardizeJSON = (object: object): object =>
+  JSON.parse(JSON.stringify(object));
+
+/**
+ * Transforms a data bundle to raw bytes
+ *
+ * @method bundleToBytes
+ * @param {DataItem[]} bundle
+ * @return {Buffer}
+ */
+export const bundleToBytes = (bundle: DataItem[]): Buffer =>
+  Buffer.from(JSON.stringify(bundle));
+
+/**
+ * Transforms raw bytes to a data bundle
+ *
+ * @method bytesToBundle
+ * @param {DataItem[]} bundle
+ * @return {Buffer}
+ */
+export const bytesToBundle = (bytes: Buffer): DataItem[] =>
+  JSON.parse(bytes.toString());
+
+/**
+ * Creates a sha256 hash of raw byte data
+ *
+ * @method sha256
+ * @param {Buffer} data
+ * @return {string}
+ */
+export const sha256 = (data: Buffer): string =>
+  crypto.createHash("sha256").update(data).digest("hex");
+
+/**
+ * Formats any bignumber into a human readable format
+ *
+ * @method toHumanReadable
+ * @param {string} amount
+ * @param {number} precision defines how many decimals after the comma should be returned
+ * @return {string}
+ */
+export const toHumanReadable = (amount: string, precision = 4): string => {
+  const fmt = new BigNumber(amount || "0").div(10 ** 9).toFixed(precision, 1);
+
+  if (precision > 1) {
     return `${fmt.split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")}.${
       fmt.split(".")[1]
     }`;
   }
 
   return fmt.split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-export const sleep = (timeoutMs: number) => {
-  return new Promise((resolve) => setTimeout(resolve, timeoutMs));
-};
-
-export const standardizeJSON = (object: any): any =>
-  JSON.parse(JSON.stringify(object));
-
-export const bundleToBytes = (bundle: DataItem[]): Buffer =>
-  Buffer.from(JSON.stringify(bundle));
-
-export const bytesToBundle = (bytes: Buffer): DataItem[] =>
-  JSON.parse(bytes.toString());
-
-export const sha256 = (data: Buffer) => {
-  const sha256Hasher = crypto.createHash("sha256");
-  return sha256Hasher.update(data).digest("hex");
 };
 
 type OptionsRetryerType = {
@@ -49,6 +87,16 @@ type onEachErrorRetryerType = (
   }
 ) => void;
 
+/**
+ * Calls any async function with a backoff strategy which behaviour
+ * can be defined with options
+ *
+ * @method callWithBackoffStrategy
+ * @param {() => Promise<T>} execution the method to execute with a backoff strategy
+ * @param {OptionsRetryerType} options defines the backoff strategy. e.g the number of retries or the timeout limit
+ * @param {onEachErrorRetryerType} onEachError a method which gets called if specified and if an error occurs calling the execution method
+ * @return {Promise<T>} returns what the execution method returns
+ */
 export async function callWithBackoffStrategy<T>(
   execution: () => Promise<T>,
   options: OptionsRetryerType,

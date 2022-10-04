@@ -14,7 +14,7 @@ export async function canValidate(this: Node): Promise<void> {
         valaddress: this.client.account.address,
       });
     },
-    { limitTimeout: "5m", increaseBy: "10s" },
+    { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     (error: any, ctx) => {
       this.logger.info(
         `Failed to fetch canValidate. Retrying in ${(
@@ -58,7 +58,7 @@ export async function canValidate(this: Node): Promise<void> {
           valaddress: this.client.account.address,
         });
       },
-      { limitTimeout: "5m", increaseBy: "10s" },
+      { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
       (error: any, ctx) => {
         this.logger.info(
           `Failed to fetch canValidate. Retrying in ${(
