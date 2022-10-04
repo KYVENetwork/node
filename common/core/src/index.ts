@@ -49,18 +49,18 @@ import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
  * @constructor
  */
 export class Node {
-  // register class attributes
+  // module attributes
   protected runtime!: IRuntime;
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
   protected cache!: ICache;
 
-  // register sdk attributes
+  // sdk attributes
   public sdk!: KyveSDK;
   public client!: KyveClient;
   public lcd!: KyveLCDClientType;
 
-  // register attributes
+  // node attributes
   public coreVersion!: string;
   public pool!: PoolResponse;
   public poolConfig!: any;
@@ -69,10 +69,10 @@ export class Node {
   // logger attributes
   public logger!: Logger;
 
-  // metrics
+  // metrics attributes
   public prom!: IMetrics;
 
-  // options
+  // node option attributes
   protected poolId!: number;
   protected staker!: string;
   protected valaccount!: string;
@@ -283,10 +283,8 @@ export class Node {
     await this.setupSDK();
     await this.setupValidator();
 
-    // start the node process
-    // node and cache should run at the same time
-    // thats why, although they are async they are
-    // called synchronously
+    // start the node process node and cache should run at the same time
+    // thats why, although they are async they are called synchronously
     try {
       this.runNode();
       this.runCache();
