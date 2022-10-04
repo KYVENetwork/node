@@ -20,7 +20,7 @@ export async function syncPoolState(this: Node): Promise<void> {
         this.poolConfig = {};
       }
     },
-    { limitTimeout: "5m", increaseBy: "10s" },
+    { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     (error: any, ctx) => {
       this.logger.info(
         `Failed to sync pool state. Retrying in ${(

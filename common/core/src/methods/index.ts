@@ -11,14 +11,14 @@ export * from "./loadBundle";
 export * from "./canVote";
 export * from "./validateBundleProposal";
 export * from "./voteBundleProposal";
-export * from "./remainingUploadInterval";
+export * from "./waitForUploadInterval";
 export * from "./waitForNextBundleProposal";
 export * from "./canPropose";
 export * from "./submitBundleProposal";
 export * from "./skipUploaderRole";
 export * from "./uploadBundle";
 export * from "./proposeBundle";
-export * from "./continueBundleProposalRound";
+export * from "./continueRound";
 export * from "./setupMetrics";
 export * from "./getBalances";
 

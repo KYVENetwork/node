@@ -1,5 +1,8 @@
 import { Node } from "..";
 
+// tries to claim the uploader role for the next bundle proposal
+// round. If successfully claimed it returns true, otherwise it will
+// return false. Additionally metrics are tracked.
 export async function claimUploaderRole(this: Node): Promise<boolean> {
   // check if next uploader is free to claim
   if (this.pool.bundle_proposal!.next_uploader) {

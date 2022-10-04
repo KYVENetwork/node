@@ -178,7 +178,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -314,7 +314,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -446,7 +446,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -578,7 +578,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -710,7 +710,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -847,7 +847,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -996,7 +996,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -1124,7 +1124,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -1252,7 +1252,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);
@@ -1404,7 +1404,7 @@ describe("invalid votes tests", () => {
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
 
-    core["continueBundleProposalRound"] = jest
+    core["continueRound"] = jest
       .fn()
       .mockReturnValueOnce(true)
       .mockReturnValue(false);

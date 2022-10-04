@@ -35,7 +35,6 @@
     "@types/jsonfile": "^6.0.1",
     "arweave": "^1.10.17",
     "axios": "^0.24.0",
-    "base64url": "^3.0.1",
     "bignumber.js": "^9.0.1",
     "commander": "^8.3.0",
     "fs-extra": "^10.0.1",

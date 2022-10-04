@@ -23,14 +23,14 @@ import {
   validateBundleProposal,
   voteBundleProposal,
   loadBundle,
-  remainingUploadInterval,
+  waitForUploadInterval,
   waitForNextBundleProposal,
   canPropose,
   submitBundleProposal,
   skipUploaderRole,
   uploadBundle,
   proposeBundle,
-  continueBundleProposalRound,
+  continueRound,
   setupMetrics,
   getBalances,
 } from "./methods";
@@ -83,31 +83,47 @@ export class Node {
   protected metricsPort!: number;
   protected home!: string;
 
-  // register core methods
+  // setups
+  protected generateName = generateName;
   protected asyncSetup = asyncSetup;
   protected setupLogger = setupLogger;
-  protected canValidate = canValidate;
-  protected generateName = generateName;
-  protected syncPoolState = syncPoolState;
+  protected setupMetrics = setupMetrics;
+
+  // checks
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
   protected validateActiveNode = validateActiveNode;
   protected shouldIdle = shouldIdle;
-  protected claimUploaderRole = claimUploaderRole;
-  protected loadBundle = loadBundle;
-  protected canVote = canVote;
-  protected validateBundleProposal = validateBundleProposal;
-  protected voteBundleProposal = voteBundleProposal;
-  protected remainingUploadInterval = remainingUploadInterval;
+
+  // timeouts
+  protected waitForUploadInterval = waitForUploadInterval;
   protected waitForNextBundleProposal = waitForNextBundleProposal;
-  protected canPropose = canPropose;
-  protected submitBundleProposal = submitBundleProposal;
+
+  // helpers
+  protected continueRound = continueRound;
+
+  // txs
+  protected claimUploaderRole = claimUploaderRole;
   protected skipUploaderRole = skipUploaderRole;
+  protected voteBundleProposal = voteBundleProposal;
+  protected submitBundleProposal = submitBundleProposal;
+
+  // queries
+  protected canValidate = canValidate;
+  protected syncPoolState = syncPoolState;
+  protected getBalances = getBalances;
+  protected canVote = canVote;
+  protected canPropose = canPropose;
+
+  // validate
+  protected loadBundle = loadBundle;
+  protected validateBundleProposal = validateBundleProposal;
+
+  // upload
   protected uploadBundle = uploadBundle;
   protected proposeBundle = proposeBundle;
-  protected continueBundleProposalRound = continueBundleProposalRound;
-  protected getBalances = getBalances;
-  protected setupMetrics = setupMetrics;
+
+  // main
   protected runNode = runNode;
   protected runCache = runCache;
 
