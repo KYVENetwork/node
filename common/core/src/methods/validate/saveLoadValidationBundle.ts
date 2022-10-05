@@ -2,6 +2,17 @@ import BigNumber from "bignumber.js";
 import { DataItem, Node } from "../..";
 import { callWithBackoffStrategy, VOTE } from "../../utils";
 
+/**
+ * saveLoadValidationBundle loads the bundle from the local
+ * cache for validation with the proposed bundle. If there is
+ * an error loading the bundle from cache the node instantly votes
+ * with abstain and continues to try to load the bundle
+ *
+ * @method saveLoadValidationBundle
+ * @param {Node} this
+ * @param {number} createdAt
+ * @return {Promise<DataItem[] | undefined>}
+ */
 export async function saveLoadValidationBundle(
   this: Node,
   createdAt: number

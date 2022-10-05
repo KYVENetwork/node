@@ -2,6 +2,15 @@ import { Node } from "../..";
 import { bytesToBundle } from "../../utils";
 import { DataItem } from "../../types";
 
+/**
+ * saveBundleDecompress decompresses a bundle with the specified compression.
+ * It never throws an error and returns no data if one occurs.
+ *
+ * @method saveBundleDecompress
+ * @param {Node} this
+ * @param {Buffer} rawStorageData
+ * @return {Promise<DataItem[]>}
+ */
 export async function saveBundleDecompress(
   this: Node,
   rawStorageData: Buffer

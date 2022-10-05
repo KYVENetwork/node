@@ -2,15 +2,26 @@ import { Node } from "../..";
 import { callWithBackoffStrategy, VOTE } from "../../utils";
 import BigNumber from "bignumber.js";
 
+/**
+ * saveBundleDownload downloads a bundle from the storage provider.
+ * The download should be aborted if the pool is not
+ * active anymore or a new bundle proposal has been found
+ * or the node is the current uploader and the upload interval
+ * has passed.
+ *
+ * If there is an error retrieving the bundle from the storage provider
+ * the node instantly votes with abstain and continues to try to retrieve
+ * the bundle.
+ *
+ * @method saveBundleDownload
+ * @param {Node} this
+ * @param {number} createdAt
+ * @return {Promise<Buffer | undefined>}
+ */
 export async function saveBundleDownload(
   this: Node,
   createdAt: number
 ): Promise<Buffer | undefined> {
-  // download bundle from storage provider.
-  // the download should be aborted if the pool is not
-  // active anymore or a new bundle proposal has been found
-  // or the node is the current uploader and the upload interval
-  // has passed
   return await callWithBackoffStrategy(
     async () => {
       await this.syncPoolState();

@@ -1,6 +1,18 @@
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
+/**
+ * validateBundleProposal validates a proposed bundle proposal
+ * by first downloading the proposed data bundle from the storage
+ * provider and then comparing it with a locally created validation
+ * bundle. Furthermore, custom validation from the runtime is applied
+ * at the end.
+ *
+ * @method validateBundleProposal
+ * @param {Node} this
+ * @param {number} createdAt
+ * @return {Promise<void>}
+ */
 export async function validateBundleProposal(
   this: Node,
   createdAt: number
