@@ -30,6 +30,7 @@ import {
 import { VoteType } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
+import { TestCache } from "./mocks/cache";
 
 /*
 
@@ -61,6 +62,7 @@ describe("vote valid tests", () => {
     core.addRuntime(new TestRuntime());
     core.addStorageProvider(new TestStorageProvider());
     core.addCompression(new TestCompression());
+    core.addCache(new TestCache());
 
     // mock process.exit
     processExit = jest.fn<never, never>();

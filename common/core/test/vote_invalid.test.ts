@@ -30,6 +30,7 @@ import {
 import { VoteType } from "@kyve/proto/dist/proto/kyve/bundles/v1beta1/tx";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
+import { TestCache } from "./mocks/cache";
 
 /*
 
@@ -65,6 +66,7 @@ describe("invalid votes tests", () => {
     core.addRuntime(new TestRuntime());
     core.addStorageProvider(new TestStorageProvider());
     core.addCompression(new TestCompression());
+    core.addCache(new TestCache());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -372,9 +374,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(loadBundleMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -382,15 +382,13 @@ describe("invalid votes tests", () => {
 
     expect(compressMock).toHaveBeenCalledTimes(0);
 
-    expect(decompressMock).toHaveBeenCalledTimes(1);
-    expect(decompressMock).toHaveBeenLastCalledWith(compressedBundle);
+    expect(decompressMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(formatValueMock).toHaveBeenCalledTimes(0);
 
     expect(validateMock).toHaveBeenCalledTimes(0);
 
@@ -521,8 +519,7 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(formatValueMock).toHaveBeenCalledTimes(0);
 
     expect(validateMock).toHaveBeenCalledTimes(0);
 
@@ -768,9 +765,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(loadBundleMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -778,15 +773,13 @@ describe("invalid votes tests", () => {
 
     expect(compressMock).toHaveBeenCalledTimes(0);
 
-    expect(decompressMock).toHaveBeenCalledTimes(1);
-    expect(decompressMock).toHaveBeenLastCalledWith(compressedBundle);
+    expect(decompressMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(formatValueMock).toHaveBeenCalledTimes(0);
 
     expect(validateMock).toHaveBeenCalledTimes(0);
 

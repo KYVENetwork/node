@@ -1,0 +1,76 @@
+import BigNumber from "bignumber.js";
+import { DataItem, Node } from "../..";
+import { callWithBackoffStrategy, VOTE } from "../../utils";
+
+export async function saveLoadValidationBundle(
+  this: Node,
+  createdAt: number
+): Promise<DataItem[] | undefined> {
+  return await callWithBackoffStrategy(
+    async () => {
+      await this.syncPoolState();
+
+      const unixNow = new BigNumber(Date.now());
+      const unixIntervalEnd = new BigNumber(
+        this.pool.bundle_proposal!.created_at
+      )
+        .plus(this.pool.data!.upload_interval)
+        .multipliedBy(1000);
+
+      // check if new proposal is available in the meantime
+      if (+this.pool.bundle_proposal!.created_at > createdAt) {
+        return;
+      }
+
+      // check if pool got inactive in the meantime
+      if (this.shouldIdle()) {
+        return;
+      }
+
+      // check if validator needs to upload
+      if (
+        this.pool.bundle_proposal!.next_uploader === this.staker &&
+        unixNow.gte(unixIntervalEnd)
+      ) {
+        return;
+      }
+
+      // load bundle from current pool height to proposed height
+      const currentHeight = +this.pool.data!.current_height;
+      const toHeight = +this.pool.bundle_proposal!.to_height || currentHeight;
+
+      // attempt to load bundle from cache
+      const { bundle } = await this.loadBundle(currentHeight, toHeight);
+
+      // check if bundle length is equal to request bundle
+      if (bundle.length !== toHeight - currentHeight) {
+        throw new Error(`Requested bundle could not be loaded from cache yet`);
+      }
+
+      this.logger.info(
+        `Successfully loaded validation bundle from Cache:${this.cache.name}`
+      );
+
+      return bundle;
+    },
+    { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
+    async (error: any, ctx) => {
+      this.logger.debug(
+        `Failed to load validation bundle from Cache:${
+          this.cache.name
+        }. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(2)}s ...\n`
+      );
+      this.logger.debug(error);
+
+      // vote abstain if validation bundle could not be loaded from cache.
+      // With voting abstain the network knows that the node
+      // is still online but just could not vote
+      if (!this.pool.bundle_proposal?.voters_abstain.includes(this.staker)) {
+        await this.voteBundleProposal(
+          this.pool.bundle_proposal!.storage_id,
+          VOTE.ABSTAIN
+        );
+      }
+    }
+  );
+}

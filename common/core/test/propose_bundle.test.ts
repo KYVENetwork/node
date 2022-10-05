@@ -29,6 +29,7 @@ import {
 } from "./mocks/helpers";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
+import { TestCache } from "./mocks/cache";
 
 /*
 
@@ -56,6 +57,7 @@ describe("propose bundle tests", () => {
     core.addRuntime(new TestRuntime());
     core.addStorageProvider(new TestStorageProvider());
     core.addCompression(new TestCompression());
+    core.addCache(new TestCache());
 
     // mock process.exit
     processExit = jest.fn<never, never>();

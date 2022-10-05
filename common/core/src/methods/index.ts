@@ -31,7 +31,11 @@ export * from "./canPropose";
 
 // validate
 export * from "./loadBundle";
-export * from "./validateBundleProposal";
+
+export * from "./validate/saveBundleDownload";
+export * from "./validate/saveBundleDecompress";
+export * from "./validate/saveLoadValidationBundle";
+export * from "./validate/validateBundleProposal";
 
 // upload
 export * from "./uploadBundle";

@@ -34,6 +34,9 @@ import {
   getBalances,
   setupSDK,
   setupModules,
+  saveBundleDownload,
+  saveBundleDecompress,
+  saveLoadValidationBundle,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { Logger } from "tslog";
@@ -118,6 +121,9 @@ export class Node {
 
   // validate
   protected loadBundle = loadBundle;
+  protected saveBundleDownload = saveBundleDownload;
+  protected saveBundleDecompress = saveBundleDecompress;
+  protected saveLoadValidationBundle = saveLoadValidationBundle;
   protected validateBundleProposal = validateBundleProposal;
 
   // upload
@@ -283,8 +289,8 @@ export class Node {
     await this.setupSDK();
     await this.setupValidator();
 
-    // start the node process node and cache should run at the same time
-    // thats why, although they are async they are called synchronously
+    // start the node process. Node and cache should run at the same time.
+    // Thats why, although they are async they are called synchronously
     try {
       this.runNode();
       this.runCache();

@@ -1,5 +1,3 @@
-import { DataItem } from "../../src";
-
 export const compressMock = jest
   .fn()
   .mockImplementation((data: Buffer) => Promise.resolve(data));
