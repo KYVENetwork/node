@@ -38,8 +38,7 @@ export * from "./validate/saveLoadValidationBundle";
 export * from "./validate/validateBundleProposal";
 
 // upload
-export * from "./uploadBundle";
-export * from "./proposeBundle";
+export * from "./upload/createBundleProposal";
 
 // main
 export * from "./runNode";

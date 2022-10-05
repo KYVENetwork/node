@@ -80,9 +80,9 @@ export async function runNode(this: Node): Promise<void> {
     // checks if the node is able to propose the bundle for the next round
     // by calling a special query from chain
     if (await this.canPropose(createdAt)) {
-      // if node can propose the next bundle a bundle gets assembled,
+      // if node can propose the next bundle a proposal gets assembled,
       // uploaded and submitted to the network
-      await this.proposeBundle(createdAt);
+      await this.createBundleProposal();
     }
 
     // wait until next bundle proposal is actually registered, until then idle

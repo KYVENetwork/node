@@ -24,6 +24,8 @@ export async function validateBundleProposal(
       }"`
     );
 
+    // retrieve the data of the bundle proposal in a save way
+    // by retrying the retrieval if it fails
     const storageProviderResult = await this.saveBundleDownload(createdAt);
 
     // if no bundle got returned it means that the pool is not active anymore
@@ -62,6 +64,8 @@ export async function validateBundleProposal(
       return;
     }
 
+    // decompress the bundle with the specified compression type
+    // and convert the bytes into a JSON format
     const proposedBundle = await this.saveBundleDecompress(
       storageProviderResult
     );

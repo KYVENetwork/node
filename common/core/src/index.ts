@@ -27,8 +27,7 @@ import {
   canPropose,
   submitBundleProposal,
   skipUploaderRole,
-  uploadBundle,
-  proposeBundle,
+  createBundleProposal,
   continueRound,
   setupMetrics,
   getBalances,
@@ -127,8 +126,7 @@ export class Node {
   protected validateBundleProposal = validateBundleProposal;
 
   // upload
-  protected uploadBundle = uploadBundle;
-  protected proposeBundle = proposeBundle;
+  protected createBundleProposal = createBundleProposal;
 
   // main
   protected runNode = runNode;
