@@ -1,4 +1,4 @@
-import { callWithBackoffStrategy, ERROR_IDLE_TIME, Node, sleep } from "..";
+import { callWithBackoffStrategy, Node } from "..";
 
 /**
  * canVote checks if the node is able to vote on the current

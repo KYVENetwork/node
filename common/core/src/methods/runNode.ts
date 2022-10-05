@@ -23,7 +23,7 @@ export async function runNode(this: Node): Promise<void> {
     // record entire proposal round time for metrics
     const endTimeRound = this.prom.bundles_round_time.startTimer();
 
-    // get latest state of the chain
+    // get latest state of the chain to start round
     await this.syncPoolState();
     await this.getBalances();
 
@@ -50,7 +50,7 @@ export async function runNode(this: Node): Promise<void> {
       await this.syncPoolState();
     }
 
-    // log out the role of this validator in this particular round
+    // log out the role of this node in this particular round
     if (this.pool.bundle_proposal!.next_uploader === this.staker) {
       this.logger.info(
         `Starting bundle proposal round ${
@@ -65,22 +65,22 @@ export async function runNode(this: Node): Promise<void> {
       );
     }
 
-    // checks if the validator is able to vote on the current bundle proposal
+    // checks if the node is able to vote on the current bundle proposal
     // by calling a special query from chain
     if (await this.canVote(createdAt)) {
-      // if validator can vote the current bundle proposal gets validated and
-      // voted on
+      // if the node can vote the node validates the current bundle proposal
       await this.validateBundleProposal(createdAt);
     }
 
     // wait until the upload interval has passed to continue with the proposal
-    // of a new bundle
+    // of a new bundle. the node waits because a new round won't start during
+    // that time
     await this.waitForUploadInterval();
 
-    // checks if the validator is able to propose the bundle for the next round
+    // checks if the node is able to propose the bundle for the next round
     // by calling a special query from chain
     if (await this.canPropose(createdAt)) {
-      // if validator can propose the next bundle a bundle gets assembled,
+      // if node can propose the next bundle a bundle gets assembled,
       // uploaded and submitted to the network
       await this.proposeBundle(createdAt);
     }
@@ -88,7 +88,7 @@ export async function runNode(this: Node): Promise<void> {
     // wait until next bundle proposal is actually registered, until then idle
     await this.waitForNextBundleProposal(createdAt);
 
-    // end bundles metrics round time for metrics
+    // end bundle round time for metrics
     endTimeRound();
   }
 }

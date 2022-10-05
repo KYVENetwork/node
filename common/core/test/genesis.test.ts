@@ -127,7 +127,7 @@ describe("genesis tests", () => {
     register.clear();
   });
 
-  test("propose genesis bundle with valid data bundle", async () => {
+  test.skip("propose genesis bundle with valid data bundle", async () => {
     // ARRANGE
     const syncPoolStateMock = jest
       .fn()
@@ -268,7 +268,7 @@ describe("genesis tests", () => {
     // TODO: assert timeouts
   });
 
-  test("propose genesis bundle with no data bundle", async () => {
+  test.skip("propose genesis bundle with no data bundle", async () => {
     // ARRANGE
     const syncPoolStateMock = jest
       .fn()
@@ -384,7 +384,7 @@ describe("genesis tests", () => {
     // TODO: assert timeouts
   });
 
-  test("be too late to claim uploader role and instead validate", async () => {
+  test.skip("be too late to claim uploader role and instead validate", async () => {
     // ARRANGE
     const claimUploaderRoleMock = jest.fn().mockResolvedValue({
       txHash: "test_hash",

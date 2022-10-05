@@ -10,12 +10,12 @@ import { Node } from "..";
  * @return {Promise<boolean>}
  */
 export async function claimUploaderRole(this: Node): Promise<boolean> {
-  // if next uploader is already defined abort
-  if (this.pool.bundle_proposal!.next_uploader) {
-    return false;
-  }
-
   try {
+    // if next uploader is already defined abort
+    if (this.pool.bundle_proposal!.next_uploader) {
+      return false;
+    }
+
     this.logger.debug(`Attempting to claim uploader role`);
 
     const tx = await this.client.kyve.bundles.v1beta1.claimUploaderRole({

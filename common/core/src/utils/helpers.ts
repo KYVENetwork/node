@@ -16,10 +16,10 @@ export const sleep = (timeoutMs: number): Promise<void> =>
  * Standardizes any JSON object
  *
  * @method standardizeJSON
- * @param {object} object
- * @return {object}
+ * @param {any} object
+ * @return {any}
  */
-export const standardizeJSON = (object: object): object =>
+export const standardizeJSON = (object: any): any =>
   JSON.parse(JSON.stringify(object));
 
 /**

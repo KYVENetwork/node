@@ -36,7 +36,7 @@ export async function authorizeValaccount(this: Node): Promise<void> {
 
     this.prom.query_can_validate_successful.inc();
 
-    // assign validator staker if staker has authorized this valaccount
+    // assign validator staker address if staker has authorized this valaccount
     if (canValidate.possible) {
       this.staker = canValidate.reason;
       return;
