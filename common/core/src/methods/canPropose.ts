@@ -41,6 +41,11 @@ export async function canPropose(
           };
         }
 
+        // loop until a valid response has been returned. The invalid
+        // response here is the "upload interval not surpassed". If the query
+        // returns an "upload interval not surpassed" that usually
+        // means we have to wait for the next block in the blockchain
+        // because the chain time only updates on every new block
         while (true) {
           const canPropose = await this.lcd.kyve.query.v1beta1.canPropose({
             pool_id: this.poolId.toString(),
@@ -49,9 +54,8 @@ export async function canPropose(
             from_height: fromHeight.toString(),
           });
 
-          // if query returns an "upload interval not surpassed" that usually
-          // means we have to wait for the next block in the blockchain because
-          // the chain time only updates on every new block
+          // wait until a new block with an updated block time has been
+          // produced by the blockchain
           if (
             !canPropose.possible &&
             canPropose.reason.endsWith("upload interval not surpassed")
