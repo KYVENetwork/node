@@ -1,4 +1,4 @@
-import { Node } from "..";
+import { Node } from "../..";
 import path from "path";
 
 /**

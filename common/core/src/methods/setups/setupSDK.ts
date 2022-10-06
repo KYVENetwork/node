@@ -1,4 +1,4 @@
-import { Node } from "..";
+import { Node } from "../..";
 import KyveSDK from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 

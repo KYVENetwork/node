@@ -1,5 +1,5 @@
-import { Node } from "..";
-import { REFRESH_TIME, sleep } from "../utils";
+import { Node } from "../..";
+import { REFRESH_TIME, sleep } from "../../utils";
 
 /**
  * waitForNextBundleProposal waits until the the next bundle proposal has
@@ -28,7 +28,7 @@ export async function waitForNextBundleProposal(
       await this.syncPoolState();
 
       // if pool got not active in the meantime abort
-      if (this.shouldIdle()) {
+      if (this.validateIsPoolActive()) {
         break;
       }
 

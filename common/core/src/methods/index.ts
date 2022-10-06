@@ -1,18 +1,20 @@
 // setups
-export * from "./setupLogger";
-export * from "./setupModules";
-export * from "./setupMetrics";
-export * from "./setupSDK";
-export * from "./setupValidator";
+export * from "./setups/setupLogger";
+export * from "./setups/setupModules";
+export * from "./setups/setupMetrics";
+export * from "./setups/setupSDK";
+export * from "./setups/setupValidator";
 
 // checks
-export * from "./validate";
-export * from "./shouldIdle";
+export * from "./checks/validateRuntime";
+export * from "./checks/validateVersion";
+export * from "./checks/validateIsNodeValidator";
+export * from "./checks/validateIsPoolActive";
 
 // timeouts
-export * from "./waitForAuthorization";
-export * from "./waitForUploadInterval";
-export * from "./waitForNextBundleProposal";
+export * from "./timeouts/waitForAuthorization";
+export * from "./timeouts/waitForUploadInterval";
+export * from "./timeouts/waitForNextBundleProposal";
 
 // helpers
 export * from "./continueRound";

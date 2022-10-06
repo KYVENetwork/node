@@ -1,5 +1,5 @@
-import { Node } from "..";
-import { callWithBackoffStrategy, REFRESH_TIME, sleep } from "../utils";
+import { Node } from "../..";
+import { callWithBackoffStrategy, REFRESH_TIME, sleep } from "../../utils";
 
 /**
  * waitForAuthorization ensures that the node starts with a valid validator

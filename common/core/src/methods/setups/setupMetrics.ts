@@ -1,4 +1,4 @@
-import { IMetrics, Node } from "..";
+import { IMetrics, Node } from "../..";
 import http from "http";
 import url from "url";
 import prom_client, { register } from "prom-client";

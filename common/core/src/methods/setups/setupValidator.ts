@@ -1,3 +1,4 @@
+import { Node } from "../..";
 import Prando from "prando";
 import {
   adjectives,
@@ -5,7 +6,6 @@ import {
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { Node } from "..";
 
 /**
  * setupValidator ensures the node starts as a valid validator

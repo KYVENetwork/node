@@ -1,4 +1,4 @@
-import { Node } from "..";
+import { Node } from "../..";
 import { appendFileSync, existsSync, mkdirSync } from "fs";
 import { ILogObject, Logger } from "tslog";
 import path from "path";

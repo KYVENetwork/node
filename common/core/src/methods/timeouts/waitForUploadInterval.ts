@@ -1,6 +1,6 @@
+import { Node } from "../..";
+import { sleep } from "../../utils";
 import BigNumber from "bignumber.js";
-import { Node } from "..";
-import { sleep } from "../utils";
 
 /**
  * waitForUploadInterval waits until the upload interval of the current

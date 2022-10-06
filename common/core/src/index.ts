@@ -12,11 +12,11 @@ import {
   syncPoolState,
   validateRuntime,
   validateVersion,
-  validateActiveNode,
+  validateIsNodeValidator,
+  validateIsPoolActive,
   runNode,
   runCache,
   setupValidator,
-  shouldIdle,
   claimUploaderRole,
   canVote,
   validateBundleProposal,
@@ -95,8 +95,8 @@ export class Node {
   // checks
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
-  protected validateActiveNode = validateActiveNode;
-  protected shouldIdle = shouldIdle;
+  protected validateIsNodeValidator = validateIsNodeValidator;
+  protected validateIsPoolActive = validateIsPoolActive;
 
   // timeouts
   protected waitForAuthorization = waitForAuthorization;
