@@ -135,9 +135,9 @@ export async function validateBundleProposal(
     }
 
     // update metrics
-    this.prom.bundles_amount.inc();
-    this.prom.bundles_data_items.set(proposedBundle.length);
-    this.prom.bundles_byte_size.set(+storageProviderResult.byteLength);
+    this.m.bundles_amount.inc();
+    this.m.bundles_data_items.set(proposedBundle.length);
+    this.m.bundles_byte_size.set(+storageProviderResult.byteLength);
   } catch (error) {
     this.logger.error(
       `Unexpected error validating bundle proposal. Skipping validation ...`

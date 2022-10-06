@@ -8,7 +8,7 @@ import {
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  authorizeValaccount,
+  waitForAuthorization,
   syncPoolState,
   validateRuntime,
   validateVersion,
@@ -72,7 +72,7 @@ export class Node {
   public logger!: Logger;
 
   // metrics attributes
-  public prom!: IMetrics;
+  public m!: IMetrics;
 
   // node option attributes
   protected poolId!: number;
@@ -99,6 +99,7 @@ export class Node {
   protected shouldIdle = shouldIdle;
 
   // timeouts
+  protected waitForAuthorization = waitForAuthorization;
   protected waitForUploadInterval = waitForUploadInterval;
   protected waitForNextBundleProposal = waitForNextBundleProposal;
 
@@ -112,7 +113,6 @@ export class Node {
   protected submitBundleProposal = submitBundleProposal;
 
   // queries
-  protected authorizeValaccount = authorizeValaccount;
   protected syncPoolState = syncPoolState;
   protected getBalances = getBalances;
   protected canVote = canVote;

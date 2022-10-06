@@ -20,12 +20,12 @@ export async function skipUploaderRole(
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully skipped uploader role\n`);
-      this.prom.tx_skip_uploader_role_successful.inc();
+      this.m.tx_skip_uploader_role_successful.inc();
 
       return true;
     } else {
       this.logger.info(`Could not skip uploader role. Continuing in 10s ...\n`);
-      this.prom.tx_skip_uploader_role_unsuccessful.inc();
+      this.m.tx_skip_uploader_role_unsuccessful.inc();
 
       await sleep(ERROR_IDLE_TIME);
 
@@ -34,7 +34,7 @@ export async function skipUploaderRole(
   } catch (error) {
     this.logger.warn(" Failed to skip uploader role. Continuing in 10s ...\n");
     this.logger.debug(error);
-    this.prom.tx_skip_uploader_role_failed.inc();
+    this.m.tx_skip_uploader_role_failed.inc();
 
     await sleep(ERROR_IDLE_TIME);
 

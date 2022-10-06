@@ -21,7 +21,7 @@ export async function getBalances(this: Node): Promise<void> {
       .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
 
-    this.prom.balance_staker.set(stakerBalance);
+    this.m.balance_staker.set(stakerBalance);
   } catch (error) {
     this.logger.info(`Failed to get staker balance ...`);
     this.logger.debug(error);
@@ -36,7 +36,7 @@ export async function getBalances(this: Node): Promise<void> {
       .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
 
-    this.prom.balance_valaccount.set(valaccountBalance);
+    this.m.balance_valaccount.set(valaccountBalance);
   } catch (error) {
     this.logger.info(`Failed to get valaccount balance ...`);
     this.logger.debug(error);
@@ -50,7 +50,7 @@ export async function getBalances(this: Node): Promise<void> {
       )
       .toNumber();
 
-    this.prom.balance_storage_provider.set(storageProviderBalance);
+    this.m.balance_storage_provider.set(storageProviderBalance);
   } catch (error) {
     this.logger.info(`Failed to get storage provider balance ...`);
     this.logger.debug(error);

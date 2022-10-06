@@ -69,7 +69,7 @@ export async function saveBundleDownload(
         downloadTimeoutSec * 1000
       );
 
-      this.prom.storage_provider_retrieve_successful.inc();
+      this.m.storage_provider_retrieve_successful.inc();
 
       this.logger.info(
         `Successfully downloaded bundle of id ${
@@ -88,7 +88,7 @@ export async function saveBundleDownload(
       );
       this.logger.debug(error);
 
-      this.prom.storage_provider_retrieve_failed.inc();
+      this.m.storage_provider_retrieve_failed.inc();
 
       // vote abstain if bundle could not be retrieved from storage
       // provider. With voting abstain the network knows that the node

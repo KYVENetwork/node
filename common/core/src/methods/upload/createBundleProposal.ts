@@ -82,10 +82,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
         tags
       );
 
-      this.prom.storage_provider_save_successful.inc();
+      this.m.storage_provider_save_successful.inc();
 
       this.logger.info(
-        `Saved bundle on StorageProvider:${this.storageProvider.name} with storage dd "${storageId}"\n`
+        `Saved bundle on StorageProvider:${this.storageProvider.name} with storage id "${storageId}"\n`
       );
 
       // if the bundle was successfully uploaded to the storage provider
@@ -106,7 +106,8 @@ export async function createBundleProposal(this: Node): Promise<void> {
         ` Failed to save bundle on StorageProvider:${this.storageProvider.name}`
       );
       this.logger.debug(error);
-      this.prom.storage_provider_save_failed.inc();
+
+      this.m.storage_provider_save_failed.inc();
 
       // if the bundle fails to the uploaded to the storage provider
       // let the node skip the uploader role and continue

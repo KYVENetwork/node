@@ -35,7 +35,7 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
 
     // further track remaining upload interval time for metrics
     const endTimeRemaining =
-      this.prom.bundles_remaining_upload_interval_time.startTimer();
+      this.m.bundles_remaining_upload_interval_time.startTimer();
 
     // wait for the remaining time
     await sleep(timeRemaining.toNumber());

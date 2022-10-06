@@ -21,7 +21,7 @@ export async function waitForNextBundleProposal(
 
     // track waiting time for metrics
     const endTimeNextBundleProposal =
-      this.prom.bundles_wait_for_next_round_time.startTimer();
+      this.m.bundles_wait_for_next_round_time.startTimer();
 
     // continue if the creation time of the bundle proposal increased
     while (+this.pool.bundle_proposal!.created_at <= createdAt) {

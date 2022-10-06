@@ -75,11 +75,11 @@ export async function canPropose(
           ).toFixed(2)}s ...`
         );
         this.logger.debug(error?.response ?? error);
-        this.prom.query_can_propose_failed.inc();
+        this.m.query_can_propose_failed.inc();
       }
     );
 
-    this.prom.query_can_propose_successful.inc();
+    this.m.query_can_propose_successful.inc();
 
     if (possible) {
       this.logger.info(`Node is able to propose a new bundle proposal\n`);

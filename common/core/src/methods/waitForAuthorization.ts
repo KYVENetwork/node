@@ -2,16 +2,16 @@ import { Node } from "..";
 import { callWithBackoffStrategy, REFRESH_TIME, sleep } from "../utils";
 
 /**
- * authorizeValaccount ensures that the node starts with a valid validator
+ * waitForAuthorization ensures that the node starts with a valid validator
  * who authorized this valaccount. If the valaccount was not authorized
  * by the validator yet it logs out the information to authorize it.
  * After authorization the node can continue running.
  *
- * @method authorizeValaccount
+ * @method waitForAuthorization
  * @param {Node} this
  * @return {Promise<void>}
  */
-export async function authorizeValaccount(this: Node): Promise<void> {
+export async function waitForAuthorization(this: Node): Promise<void> {
   try {
     // call canValidate query to check if valaccount
     // was already authorized to run
@@ -30,11 +30,11 @@ export async function authorizeValaccount(this: Node): Promise<void> {
           ).toFixed(2)}s ...`
         );
         this.logger.debug(error?.response ?? error);
-        this.prom.query_can_validate_failed.inc();
+        this.m.query_can_validate_failed.inc();
       }
     );
 
-    this.prom.query_can_validate_successful.inc();
+    this.m.query_can_validate_successful.inc();
 
     // assign validator staker address if staker has authorized this valaccount
     if (canValidate.possible) {
@@ -76,11 +76,11 @@ export async function authorizeValaccount(this: Node): Promise<void> {
             ).toFixed(2)}s ...`
           );
           this.logger.debug(error?.response ?? error);
-          this.prom.query_can_validate_failed.inc();
+          this.m.query_can_validate_failed.inc();
         }
       );
 
-      this.prom.query_can_validate_successful.inc();
+      this.m.query_can_validate_successful.inc();
 
       if (canValidate.possible) {
         this.staker = canValidate.reason;

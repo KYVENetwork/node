@@ -32,7 +32,7 @@ export async function setupValidator(this: Node): Promise<void> {
     }).replace(" ", "-");
 
     // check if valaccount was already authorized by a validator
-    await this.authorizeValaccount();
+    await this.waitForAuthorization();
 
     // log basic node info on startup
     this.logger.info("Starting node ...\n");
@@ -53,7 +53,7 @@ export async function setupValidator(this: Node): Promise<void> {
     this.logger.debug(`Attempting to clear cache`);
 
     await this.cache.drop();
-    this.prom.cache_current_items.set(0);
+    this.m.cache_current_items.set(0);
 
     this.logger.info(`Cleared cache\n`);
   } catch (error) {

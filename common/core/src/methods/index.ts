@@ -10,6 +10,7 @@ export * from "./validate";
 export * from "./shouldIdle";
 
 // timeouts
+export * from "./waitForAuthorization";
 export * from "./waitForUploadInterval";
 export * from "./waitForNextBundleProposal";
 
@@ -23,7 +24,6 @@ export * from "./voteBundleProposal";
 export * from "./submitBundleProposal";
 
 // queries
-export * from "./authorizeValaccount";
 export * from "./syncPoolState";
 export * from "./getBalances";
 export * from "./canVote";

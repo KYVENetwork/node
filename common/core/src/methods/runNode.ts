@@ -21,7 +21,7 @@ export async function runNode(this: Node): Promise<void> {
   // rounds by mocking it
   while (this.continueRound()) {
     // record entire proposal round time for metrics
-    const endTimeRound = this.prom.bundles_round_time.startTimer();
+    const endTimeRound = this.m.bundles_round_time.startTimer();
 
     // get latest state of the chain to start round
     await this.syncPoolState();

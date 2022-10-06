@@ -36,19 +36,19 @@ export async function submitBundleProposal(
       this.logger.info(
         `Successfully submitted bundle proposal with Storage Id "${storageId}"\n`
       );
-      this.prom.tx_submit_bundle_proposal_successful.inc();
-      this.prom.bundles_proposed.inc();
+      this.m.tx_submit_bundle_proposal_successful.inc();
+      this.m.bundles_proposed.inc();
 
-      this.prom.bundles_amount.inc();
-      this.prom.bundles_data_items.set(toHeight - fromHeight);
-      this.prom.bundles_byte_size.set(byteSize);
+      this.m.bundles_amount.inc();
+      this.m.bundles_data_items.set(toHeight - fromHeight);
+      this.m.bundles_byte_size.set(byteSize);
 
       return true;
     } else {
       this.logger.info(
         `Could not submit bundle proposal. Continuing in 10s ...\n`
       );
-      this.prom.tx_submit_bundle_proposal_unsuccessful.inc();
+      this.m.tx_submit_bundle_proposal_unsuccessful.inc();
 
       await sleep(ERROR_IDLE_TIME);
 
@@ -59,7 +59,7 @@ export async function submitBundleProposal(
       " Failed to submit bundle proposal. Continuing in 10s ...\n"
     );
     this.logger.debug(error);
-    this.prom.tx_submit_bundle_proposal_failed.inc();
+    this.m.tx_submit_bundle_proposal_failed.inc();
 
     await sleep(ERROR_IDLE_TIME);
 

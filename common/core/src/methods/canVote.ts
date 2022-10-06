@@ -55,11 +55,11 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
           ).toFixed(2)}s ...`
         );
         this.logger.debug(error?.response ?? error);
-        this.prom.query_can_vote_failed.inc();
+        this.m.query_can_vote_failed.inc();
       }
     );
 
-    this.prom.query_can_vote_successful.inc();
+    this.m.query_can_vote_successful.inc();
 
     if (possible) {
       this.logger.info(`Node is able to vote on bundle proposal\n`);

@@ -20,7 +20,7 @@ export async function syncPoolState(this: Node): Promise<void> {
       });
       this.pool = pool!;
 
-      this.prom.query_pool_successful.inc();
+      this.m.query_pool_successful.inc();
 
       try {
         this.poolConfig = JSON.parse(this.pool.data!.config);
@@ -40,7 +40,7 @@ export async function syncPoolState(this: Node): Promise<void> {
       );
 
       this.logger.debug(error?.response ?? error);
-      this.prom.query_pool_failed.inc();
+      this.m.query_pool_failed.inc();
     }
   );
 }
