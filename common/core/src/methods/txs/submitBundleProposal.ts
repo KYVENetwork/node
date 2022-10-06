@@ -1,6 +1,23 @@
-import { Node } from "..";
-import { ERROR_IDLE_TIME, sleep } from "../utils";
+import { Node } from "../..";
 
+/**
+ * submitBundleProposal submits a bundle proposal to the
+ * network. By submitting a new bundle proposal the current
+ * one gets finalized and the next uploader is automatically
+ * chosen.
+ *
+ * @method submitBundleProposal
+ * @param {Node} this
+ * @param {string} storageId the storage id of the data stored in storage provider
+ * @param {number} byteSize the raw byte size of the data stored in storage provider
+ * @param {number} fromHeight the height from where the bundle was created
+ * @param {number} toHeight the height to the bundle was created
+ * @param {string} fromKey the current key the bundle got create from
+ * @param {string} toKey the key of the last data item in the bundle
+ * @param {string} toValue the formatted value of the last data item in the bundle
+ * @param {string} bundleHash the sha256 hash of the raw data stored in storage provider
+ * @return {Promise<boolean>}
+ */
 export async function submitBundleProposal(
   this: Node,
   storageId: string,
@@ -45,23 +62,15 @@ export async function submitBundleProposal(
 
       return true;
     } else {
-      this.logger.info(
-        `Could not submit bundle proposal. Continuing in 10s ...\n`
-      );
+      this.logger.info(`Could not submit bundle proposal. Continuing ...\n`);
       this.m.tx_submit_bundle_proposal_unsuccessful.inc();
-
-      await sleep(ERROR_IDLE_TIME);
 
       return false;
     }
   } catch (error) {
-    this.logger.warn(
-      " Failed to submit bundle proposal. Continuing in 10s ...\n"
-    );
+    this.logger.warn(" Failed to submit bundle proposal. Continuing ...\n");
     this.logger.debug(error);
     this.m.tx_submit_bundle_proposal_failed.inc();
-
-    await sleep(ERROR_IDLE_TIME);
 
     return false;
   }

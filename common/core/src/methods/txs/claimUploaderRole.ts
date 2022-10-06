@@ -1,9 +1,11 @@
-import { Node } from "..";
+import { Node } from "../..";
 
 /**
  * claimUploaderRole tries to claim the uploader role for the next bundle proposal
  * round. If successfully claimed it returns true, otherwise it will
- * return false. Additionally metrics are tracked on the tx status.
+ * return false. The claim is only successful if there is currently no next
+ * uploader on the bundle proposal, otherwise if already claimed by another
+ * node the tx will just be ignored.
  *
  * @method claimUploaderRole
  * @param {Node} this

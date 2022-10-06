@@ -1,18 +1,32 @@
-import { Node } from "..";
+import { Node, VOTE } from "../..";
 
+/**
+ * voteBundleProposal submits a vote on the current bundle proposal.
+ * The storage id is used to check on chain if the vote is still
+ * dedicated to that proposal, because in rare instances while
+ * the tx is mining the next proposal could already start, thus
+ * resulting in an unwanted vote.
+ *
+ * @method voteBundleProposal
+ * @param {Node} this
+ * @param {string} storageId storage id of the current bundle proposal
+ * @param {number} vote can be 1 = VALID, 2 = INVALID or 3 = ABSTAIN
+ * @return {Promise<boolean>}
+ */
 export async function voteBundleProposal(
   this: Node,
   storageId: string,
   vote: number
-): Promise<void> {
+): Promise<boolean> {
   try {
     let voteMessage = "";
 
-    if (vote === 1) {
+    // determine vote type for verbose logging
+    if (vote === VOTE.VALID) {
       voteMessage = "valid";
-    } else if (vote === 2) {
+    } else if (vote === VOTE.INVALID) {
       voteMessage = "invalid";
-    } else if (vote === 3) {
+    } else if (vote === VOTE.ABSTAIN) {
       voteMessage = "abstain";
     } else {
       throw Error(`Invalid vote: ${vote}`);
@@ -42,13 +56,19 @@ export async function voteBundleProposal(
       } else if (vote === 3) {
         this.m.bundles_voted_abstain.inc();
       }
+
+      return true;
     } else {
       this.logger.info(`Could not vote on proposal. Continuing ...\n`);
       this.m.tx_vote_bundle_proposal_unsuccessful.inc();
+
+      return false;
     }
   } catch (error) {
     this.logger.warn(" Failed to vote. Continuing ...\n");
     this.logger.debug(error);
     this.m.tx_vote_bundle_proposal_failed.inc();
+
+    return false;
   }
 }

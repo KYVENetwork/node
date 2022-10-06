@@ -18,10 +18,10 @@ export * from "./waitForNextBundleProposal";
 export * from "./continueRound";
 
 // txs
-export * from "./claimUploaderRole";
-export * from "./skipUploaderRole";
-export * from "./voteBundleProposal";
-export * from "./submitBundleProposal";
+export * from "./txs/claimUploaderRole";
+export * from "./txs/skipUploaderRole";
+export * from "./txs/voteBundleProposal";
+export * from "./txs/submitBundleProposal";
 
 // queries
 export * from "./syncPoolState";
