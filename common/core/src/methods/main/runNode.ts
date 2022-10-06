@@ -4,7 +4,9 @@ import { IDLE_TIME, sleep } from "../../utils";
 /**
  * runNode is the main execution thread for validating and proposing bundles.
  * It runs indefintitely in rounds and should only exit when basic validation
- * checks fail. Each round looks the same. It starts by retrieving the latest
+ * checks fail.
+ *
+ * Each round looks the same. It starts by retrieving the latest
  * state from the chain and checking if the pool is still active. After that
  * it tries to claim the uploader role, then it tries to validate the current
  * bundle proposal and last but not least it tries to upload the next bundle
