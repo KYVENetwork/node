@@ -33,7 +33,13 @@ export async function runCache(this: Node): Promise<void> {
   let toHeight = 0;
   let maxRoundHeight = 0;
 
-  while (true) {
+  // get pool state so cache can start working
+  await this.syncPoolState();
+
+  // run rounds indefinitely, continueRound returns always
+  // true and is only used by unit tests to control the termination of
+  // rounds by mocking it
+  while (this.continueRound()) {
     try {
       // a smaller to_height means a bundle got dropped or invalidated
       if (+this.pool.bundle_proposal!.to_height < toHeight) {
