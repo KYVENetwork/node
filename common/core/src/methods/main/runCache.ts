@@ -100,7 +100,7 @@ export async function runCache(this: Node): Promise<void> {
       for (let h = currentHeight; h < maxRoundHeight; h++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
-        const itemFound = await this.cache.exists(h.toString());
+        const itemFound = await this.cache.exists(h);
 
         // retrieve the next key. Since keys are deterministic
         // and defined in the runtime we have to call this method
@@ -147,7 +147,7 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
-          await this.cache.put(h.toString(), item);
+          await this.cache.put(h, item);
 
           this.m.cache_current_items.inc();
           this.m.cache_height_head.set(h);

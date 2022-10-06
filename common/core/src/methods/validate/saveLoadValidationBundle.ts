@@ -1,6 +1,7 @@
+import { Node } from "../..";
 import BigNumber from "bignumber.js";
-import { DataItem, Node } from "../..";
 import { callWithBackoffStrategy, VOTE } from "../../utils";
+import { DataItem } from "../../types";
 
 /**
  * saveLoadValidationBundle loads the bundle from the local
@@ -51,11 +52,22 @@ export async function saveLoadValidationBundle(
       const toHeight = +this.pool.bundle_proposal!.to_height || currentHeight;
 
       // attempt to load bundle from cache
-      const { bundle } = await this.loadBundle(currentHeight, toHeight);
+      const bundle: DataItem[] = [];
 
-      // check if bundle length is equal to request bundle
-      if (bundle.length !== toHeight - currentHeight) {
-        throw new Error(`Requested bundle could not be loaded from cache yet`);
+      // in order to get the same bundle for validation as the one
+      // proposed the bundle is loaded with the proposed heights
+      for (let h = currentHeight; h < toHeight; h++) {
+        try {
+          // try to get the data item from local cache
+          const item = await this.cache.get(h);
+          bundle.push(item);
+        } catch {
+          // if a request data item can not be found abort and
+          // try again after a backoff time
+          throw new Error(
+            `Requested bundle could not be loaded from cache yet.`
+          );
+        }
       }
 
       this.logger.info(

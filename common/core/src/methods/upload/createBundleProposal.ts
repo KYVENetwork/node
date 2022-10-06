@@ -1,4 +1,6 @@
-import { bundleToBytes, Node, sha256 } from "../..";
+import { Node } from "../..";
+import { bundleToBytes, sha256 } from "../../utils";
+import { DataItem } from "../../types";
 
 /**
  * createBundleProposal assembles a bundle proposal by loading
@@ -32,18 +34,44 @@ export async function createBundleProposal(this: Node): Promise<void> {
       this.pool.bundle_proposal!.to_key || this.pool.data!.current_key;
 
     // load bundle proposal from local cache
-    const bundleProposal = await this.loadBundle(fromHeight, toHeight);
+    const bundleProposal: DataItem[] = [];
+
+    // here we try to fetch data items from the current height
+    // to the proposal height. If we fail before we simply
+    // abort and and submit the data collected we have available
+    // right now
+    for (let h = fromHeight; h < toHeight; h++) {
+      try {
+        // try to get the data item from local cache
+        const item = await this.cache.get(h);
+        bundleProposal.push(item);
+      } catch {
+        // if the data item was not found simply abort
+        // and submit what we just have now
+        break;
+      }
+    }
 
     // if no data was found on the cache skip the uploader role
     // so that this node does not receive an upload slash
-    if (!bundleProposal.bundle.length) {
+    if (!bundleProposal.length) {
       await this.skipUploaderRole(fromHeight);
     }
+
+    // get the last key of the bundle proposal which gets
+    // included in the bundle proposal and saved on chain
+    const toKey = bundleProposal.at(-1)?.key ?? "";
+
+    // get the last value of the bundle proposal and format
+    // it so it can be included in the bundle proposal and
+    // saved on chain
+    const toValue =
+      (await this.runtime.formatValue(bundleProposal.at(-1)?.value)) ?? "";
 
     // if data was found on the cache proceed with compressing the
     // bundle for the upload to the storage provider
     const storageProviderData = await this.compression.compress(
-      bundleToBytes(bundleProposal.bundle)
+      bundleToBytes(bundleProposal)
     );
 
     // hash the raw data which gets uploaded to the storage provider
@@ -60,11 +88,11 @@ export async function createBundleProposal(this: Node): Promise<void> {
       [this.runtime.name, this.runtime.version],
       ["Uploader", this.client.account.address],
       ["FromHeight", fromHeight.toString()],
-      ["ToHeight", (fromHeight + bundleProposal.bundle.length).toString()],
-      ["Size", bundleProposal.bundle.length.toString()],
+      ["ToHeight", (fromHeight + bundleProposal.length).toString()],
+      ["Size", bundleProposal.length.toString()],
       ["FromKey", fromKey],
-      ["ToKey", bundleProposal.toKey],
-      ["Value", bundleProposal.toValue],
+      ["ToKey", toKey],
+      ["Value", toValue],
       ["BundleHash", bundleHash],
     ];
 
@@ -95,10 +123,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
         storageId,
         storageProviderData.byteLength,
         fromHeight,
-        fromHeight + bundleProposal.bundle.length,
+        fromHeight + bundleProposal.length,
         fromKey,
-        bundleProposal.toKey,
-        bundleProposal.toValue,
+        toKey,
+        toValue,
         bundleHash
       );
     } catch (error) {

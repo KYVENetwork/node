@@ -1,5 +1,5 @@
 import { Logger } from "tslog";
-import { Node, sha256, standardizeJSON } from "../src/index";
+import { Node } from "../src/index";
 import {
   formatValueMock,
   TestRuntime,
@@ -159,12 +159,18 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;

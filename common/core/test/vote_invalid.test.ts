@@ -170,12 +170,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -238,8 +244,9 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -306,12 +313,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -374,7 +387,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(0);
+    expect(cacheGetMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -434,12 +447,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -502,9 +521,9 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -565,12 +584,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -633,9 +658,9 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -697,12 +722,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -765,7 +796,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(0);
+    expect(cacheGetMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -830,12 +861,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -898,9 +935,9 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -979,12 +1016,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -1037,7 +1080,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(0);
+    expect(cacheGetMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1065,7 +1108,7 @@ describe("invalid votes tests", () => {
     // TODO: assert timeouts
   });
 
-  test("try to vote invalid after validator has voted invalid before", async () => {
+  test("try to vote invalid after validator has voted valid before", async () => {
     // ARRANGE
     const validateMock = jest.fn().mockResolvedValue(false);
 
@@ -1107,12 +1150,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -1165,7 +1214,7 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(0);
+    expect(cacheGetMock).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1228,19 +1277,19 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest
+    const cacheGetMock = jest
       .fn()
+      .mockRejectedValueOnce(new Error("not found"))
       .mockResolvedValueOnce({
-        bundle: [],
-        toKey: "",
-        toValue: "",
+        key: "test_key_1",
+        value: "test_value_1",
       })
-      .mockResolvedValue({
-        bundle,
-        toKey: "test_key_2",
-        toValue: "test_value_2",
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
       });
-    core["loadBundle"] = loadBundleMock;
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -1309,9 +1358,10 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(2);
-    expect(loadBundleMock).toHaveBeenNthCalledWith(1, 0, 2);
-    expect(loadBundleMock).toHaveBeenNthCalledWith(2, 0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(3);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1381,12 +1431,18 @@ describe("invalid votes tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const retrieveBundleMock = jest
       .fn()
@@ -1467,8 +1523,9 @@ describe("invalid votes tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

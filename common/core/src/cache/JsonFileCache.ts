@@ -1,8 +1,7 @@
 import { readFile, writeFile } from "jsonfile";
 import { existsSync, mkdirSync, promises as fs } from "fs";
 import fse from "fs-extra";
-
-import { ICache } from "../types";
+import { DataItem, ICache } from "../types";
 
 export class JsonFileCache implements ICache {
   public name = "JsonFileCache";
@@ -18,12 +17,16 @@ export class JsonFileCache implements ICache {
     return this;
   }
 
-  public async put(key: string | number, value: any): Promise<void> {
+  public async put(key: string | number, value: DataItem): Promise<void> {
     await writeFile(`${this.path}/${key}.json`, value);
   }
 
-  public async get(key: string | number): Promise<any> {
+  public async get(key: string | number): Promise<DataItem> {
     return await readFile(`${this.path}/${key}.json`);
+  }
+
+  public async exists(key: string | number): Promise<boolean> {
+    return await fse.pathExists(`${this.path}/${key}.json`);
   }
 
   public async del(key: string | number): Promise<void> {
@@ -32,9 +35,5 @@ export class JsonFileCache implements ICache {
 
   public async drop(): Promise<void> {
     await fse.emptyDir(`${this.path}/`);
-  }
-
-  public async exists(key: string | number): Promise<boolean> {
-    return await fse.pathExists(`${this.path}/${key}.json`);
   }
 }

@@ -21,7 +21,6 @@ import {
   canVote,
   validateBundleProposal,
   voteBundleProposal,
-  loadBundle,
   waitForUploadInterval,
   waitForNextBundleProposal,
   canPropose,
@@ -119,7 +118,6 @@ export class Node {
   protected canPropose = canPropose;
 
   // validate
-  protected loadBundle = loadBundle;
   protected saveBundleDownload = saveBundleDownload;
   protected saveBundleDecompress = saveBundleDecompress;
   protected saveLoadValidationBundle = saveLoadValidationBundle;

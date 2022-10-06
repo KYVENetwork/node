@@ -32,7 +32,6 @@ export * from "./queries/canVote";
 export * from "./queries/canPropose";
 
 // validate
-export * from "./loadBundle";
 export * from "./validate/saveBundleDownload";
 export * from "./validate/saveBundleDecompress";
 export * from "./validate/saveLoadValidationBundle";

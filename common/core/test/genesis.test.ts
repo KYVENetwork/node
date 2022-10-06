@@ -160,12 +160,18 @@ describe("genesis tests", () => {
       },
     ];
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -238,8 +244,9 @@ describe("genesis tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 100);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -290,12 +297,9 @@ describe("genesis tests", () => {
       });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle: [],
-      toKey: "",
-      toValue: "",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest.fn().mockRejectedValue(new Error("not found"));
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -357,8 +361,8 @@ describe("genesis tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 100);
+    expect(cacheGetMock).toHaveBeenCalledTimes(1);
+    expect(cacheGetMock).toHaveBeenLastCalledWith(1, 0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -438,12 +442,18 @@ describe("genesis tests", () => {
       });
     core["syncPoolState"] = syncPoolStateMock;
 
-    const loadBundleMock = jest.fn().mockResolvedValue({
-      bundle,
-      toKey: "test_key_2",
-      toValue: "test_value_2",
-    });
-    core["loadBundle"] = loadBundleMock;
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
 
     const waitForNextBundleProposalMock = jest.fn();
     core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
@@ -510,9 +520,9 @@ describe("genesis tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(loadBundleMock).toHaveBeenCalledTimes(1);
-
-    expect(loadBundleMock).toHaveBeenLastCalledWith(0, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

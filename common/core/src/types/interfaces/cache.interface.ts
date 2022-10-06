@@ -1,3 +1,5 @@
+import { DataItem } from "..";
+
 /**
  * Interface of Cache.
  *
@@ -37,38 +39,38 @@ export interface ICache {
    * Saves the value with a key
    *
    * @method put
-   * @param {string} key
-   * @param {any} value
+   * @param {string | number} key
+   * @param {DataItem} value
    * @return {Promise<void>}
    */
-  put(key: string, value: any): Promise<void>;
+  put(key: string | number, value: DataItem): Promise<void>;
 
   /**
    * Loads the value from a key
    *
    * @method get
-   * @param {string} key
-   * @return {Promise<any>}
+   * @param {string | number} key
+   * @return {Promise<DataItem>}
    */
-  get(key: string): Promise<any>;
+  get(key: string | number): Promise<DataItem>;
 
   /**
    * Checks whether a value exists for a key
    *
    * @method exists
-   * @param {string} key
+   * @param {string | number} key
    * @return {Promise<boolean>}
    */
-  exists(key: string): Promise<boolean>;
+  exists(key: string | number): Promise<boolean>;
 
   /**
    * Deletes the value from a key
    *
    * @method del
-   * @param {string} key
+   * @param {string | number} key
    * @return {Promise<void>}
    */
-  del(key: string): Promise<void>;
+  del(key: string | number): Promise<void>;
 
   /**
    * Deletes the entire cache and therefore all values
