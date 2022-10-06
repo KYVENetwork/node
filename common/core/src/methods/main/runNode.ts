@@ -1,5 +1,5 @@
-import { Node } from "..";
-import { IDLE_TIME, sleep } from "../utils";
+import { Node } from "../..";
+import { IDLE_TIME, sleep } from "../../utils";
 
 /**
  * runNode is the main execution thread for validating and proposing bundles.

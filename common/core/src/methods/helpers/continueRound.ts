@@ -1,4 +1,4 @@
-import { Node } from "..";
+import { Node } from "../..";
 
 /**
  * continueRound is only used for test purposes to allow easier unit testing.

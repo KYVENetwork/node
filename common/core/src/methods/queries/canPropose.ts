@@ -1,5 +1,5 @@
-import { Node } from "..";
-import { callWithBackoffStrategy, sleep } from "../utils";
+import { Node } from "../..";
+import { callWithBackoffStrategy, sleep } from "../../utils";
 
 /**
  * canPropose checks if the node is able to propose the next

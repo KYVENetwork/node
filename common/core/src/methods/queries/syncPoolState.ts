@@ -1,5 +1,5 @@
-import { Node } from "..";
-import { callWithBackoffStrategy } from "../utils";
+import { Node } from "../..";
+import { callWithBackoffStrategy } from "../../utils";
 
 /**
  * syncPoolState fetches the state of the pool the node is running on.

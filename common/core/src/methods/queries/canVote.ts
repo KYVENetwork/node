@@ -1,4 +1,5 @@
-import { callWithBackoffStrategy, Node } from "..";
+import { Node } from "../..";
+import { callWithBackoffStrategy } from "../../utils";
 
 /**
  * canVote checks if the node is able to vote on the current

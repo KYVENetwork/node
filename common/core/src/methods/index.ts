@@ -17,7 +17,7 @@ export * from "./timeouts/waitForUploadInterval";
 export * from "./timeouts/waitForNextBundleProposal";
 
 // helpers
-export * from "./continueRound";
+export * from "./helpers/continueRound";
 
 // txs
 export * from "./txs/claimUploaderRole";
@@ -26,14 +26,13 @@ export * from "./txs/voteBundleProposal";
 export * from "./txs/submitBundleProposal";
 
 // queries
-export * from "./syncPoolState";
-export * from "./getBalances";
-export * from "./canVote";
-export * from "./canPropose";
+export * from "./queries/syncPoolState";
+export * from "./queries/getBalances";
+export * from "./queries/canVote";
+export * from "./queries/canPropose";
 
 // validate
 export * from "./loadBundle";
-
 export * from "./validate/saveBundleDownload";
 export * from "./validate/saveBundleDecompress";
 export * from "./validate/saveLoadValidationBundle";
@@ -43,5 +42,5 @@ export * from "./validate/validateBundleProposal";
 export * from "./upload/createBundleProposal";
 
 // main
-export * from "./runNode";
-export * from "./runCache";
+export * from "./main/runNode";
+export * from "./main/runCache";

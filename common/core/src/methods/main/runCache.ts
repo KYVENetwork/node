@@ -1,6 +1,6 @@
+import { Node } from "../..";
+import { ERROR_IDLE_TIME, sleep } from "../../utils";
 import { readdirSync } from "fs";
-import { Node } from "..";
-import { ERROR_IDLE_TIME, sleep } from "../utils";
 
 export async function runCache(this: Node): Promise<void> {
   let createdAt = 0;
