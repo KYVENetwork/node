@@ -266,6 +266,6 @@ export function setupMetrics(this: Node): void {
           res.end(metrics);
         }
       })
-      .listen(this.metricsPort);
+      .listen(this.metricsPort, "0.0.0.0");
   }
 }
