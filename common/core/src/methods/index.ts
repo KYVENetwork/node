@@ -15,6 +15,7 @@ export * from "./checks/validateIsPoolActive";
 export * from "./timeouts/waitForAuthorization";
 export * from "./timeouts/waitForUploadInterval";
 export * from "./timeouts/waitForNextBundleProposal";
+export * from "./timeouts/waitForCacheContinuation";
 
 // helpers
 export * from "./helpers/continueRound";

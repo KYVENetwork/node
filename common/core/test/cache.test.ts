@@ -1,6 +1,11 @@
 import { Logger } from "tslog";
 import { Node } from "../src/index";
-import { formatValueMock, TestRuntime } from "./mocks/integration";
+import {
+  formatValueMock,
+  getDataItemMock,
+  TestRuntime,
+  validateMock,
+} from "./mocks/integration";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
 import { client, lcd, base_pool } from "./mocks/helpers";
@@ -33,6 +38,8 @@ describe("cache tests", () => {
 
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
+
+  let getNextKeyMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
@@ -73,6 +80,19 @@ describe("cache tests", () => {
     core.logger.warn = loggerWarn;
     core.logger.error = loggerError;
 
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    core["waitForCacheContinuation"] = jest.fn();
+
+    getNextKeyMock = jest.fn().mockImplementation(async (key: string) => {
+      return (parseInt(key) + 1).toString();
+    });
+
+    core["runtime"].getNextKey = getNextKeyMock;
+
     core["poolId"] = 0;
     core["staker"] = "test_staker";
 
@@ -91,6 +111,9 @@ describe("cache tests", () => {
     dropMock.mockClear();
 
     // runtime mocks
+    getDataItemMock.mockClear();
+    validateMock.mockClear();
+    getNextKeyMock.mockClear();
     formatValueMock.mockClear();
 
     // reset prometheus
@@ -106,30 +129,64 @@ describe("cache tests", () => {
     });
     core["syncPoolState"] = syncPoolStateMock;
 
-    // TODO: evaluate exit condition
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runCache.call(core);
 
     // ASSERT
 
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(getDataItemMock).toHaveBeenCalledTimes(
+      +base_pool.data.max_bundle_size
+    );
+
+    for (let n = 0; n < +base_pool.data.max_bundle_size; n++) {
+      expect(getDataItemMock).toHaveBeenNthCalledWith(
+        n + 1,
+        core,
+        n.toString()
+      );
+    }
+
+    expect(validateMock).toHaveBeenCalledTimes(0);
+
+    // we only call getNextKey max_bundle_size - 1 because
+    // the pool is in genesis state and therefore start_key
+    // is used for the first time
+    expect(getNextKeyMock).toHaveBeenCalledTimes(
+      +base_pool.data.max_bundle_size - 1
+    );
+
+    for (let n = 0; n < +base_pool.data.max_bundle_size - 1; n++) {
+      expect(getNextKeyMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(formatValueMock).toHaveBeenCalledTimes(0);
+
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(1);
+    expect(putMock).toHaveBeenCalledTimes(+base_pool.data.max_bundle_size);
 
-    expect(getMock).toHaveBeenCalledTimes(1);
+    for (let n = 0; n < +base_pool.data.max_bundle_size; n++) {
+      const item = await core["runtime"].getDataItem(core, n.toString());
+      expect(putMock).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+    }
 
-    expect(existsMock).toHaveBeenCalledTimes(1);
+    expect(getMock).toHaveBeenCalledTimes(0);
 
-    expect(delMock).toHaveBeenCalledTimes(1);
+    expect(existsMock).toHaveBeenCalledTimes(+base_pool.data.max_bundle_size);
 
-    expect(dropMock).toHaveBeenCalledTimes(1);
+    for (let n = 0; n < +base_pool.data.max_bundle_size; n++) {
+      expect(existsMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(delMock).toHaveBeenCalledTimes(0);
+
+    expect(dropMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES

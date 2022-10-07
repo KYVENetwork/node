@@ -96,22 +96,25 @@ export async function runCache(this: Node): Promise<void> {
 
       this.m.cache_height_tail.set(currentHeight);
 
-      // determine the start key from where to get the next key of.
-      // If the pool starts at genesis the current_key is still not
-      // defined, in that case the start_key of the pool is taken
-      let key = this.pool.data!.current_key || this.pool.data!.start_key;
+      // determine the start key for the current caching round
+      // this key gets increased overtime to temp save the
+      // current key while collecting the data items
+      let key = this.pool.data!.current_key;
 
       // collect all data items from current pool height to
       // the maxRoundHeight
       for (let h = currentHeight; h < maxRoundHeight; h++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
-        const itemFound = await this.cache.exists(h);
+        const itemFound = await this.cache.exists(h.toString());
 
-        // retrieve the next key. Since keys are deterministic
-        // and defined in the runtime we have to call this method
-        // to find out with which key to collect the next data item
-        const nextKey = await this.runtime.getNextKey(key);
+        // retrieve the next key from the deterministic runtime
+        // specific implementation. If the start key is not defined
+        // the pool is in genesis state and therefore the pool
+        // specific start key should be used
+        const nextKey = !!key
+          ? await this.runtime.getNextKey(key)
+          : this.pool.data!.start_key;
 
         if (!itemFound) {
           // if item does not exist in cache yet collect it
@@ -153,7 +156,7 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
-          await this.cache.put(h, item);
+          await this.cache.put(h.toString(), item);
 
           this.m.cache_current_items.inc();
           this.m.cache_height_head.set(h);
@@ -170,9 +173,7 @@ export async function runCache(this: Node): Promise<void> {
       // wait until a new bundle proposal is available. We don't need
       // to sync the pool here because the pool state already gets
       // synced in the other main function "runNode" so we only listen
-      while (createdAt === +this.pool.bundle_proposal!.created_at) {
-        await sleep(1000);
-      }
+      await this.waitForCacheContinuation(createdAt);
     } catch (error) {
       this.logger.warn(
         ` Unexpected error collecting data items to local cache. Continuing ...`

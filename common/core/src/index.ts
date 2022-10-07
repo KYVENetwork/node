@@ -8,33 +8,34 @@ import {
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  waitForAuthorization,
-  syncPoolState,
+  setupModules,
+  setupMetrics,
+  setupSDK,
+  setupValidator,
   validateRuntime,
   validateVersion,
   validateIsNodeValidator,
   validateIsPoolActive,
-  runNode,
-  runCache,
-  setupValidator,
-  claimUploaderRole,
-  canVote,
-  validateBundleProposal,
-  voteBundleProposal,
+  waitForAuthorization,
   waitForUploadInterval,
   waitForNextBundleProposal,
-  canPropose,
-  submitBundleProposal,
-  skipUploaderRole,
-  createBundleProposal,
+  waitForCacheContinuation,
   continueRound,
-  setupMetrics,
+  claimUploaderRole,
+  skipUploaderRole,
+  voteBundleProposal,
+  submitBundleProposal,
+  syncPoolState,
   getBalances,
-  setupSDK,
-  setupModules,
+  canVote,
+  canPropose,
   saveBundleDownload,
   saveBundleDecompress,
   saveLoadValidationBundle,
+  validateBundleProposal,
+  createBundleProposal,
+  runNode,
+  runCache,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { Logger } from "tslog";
@@ -101,6 +102,7 @@ export class Node {
   protected waitForAuthorization = waitForAuthorization;
   protected waitForUploadInterval = waitForUploadInterval;
   protected waitForNextBundleProposal = waitForNextBundleProposal;
+  protected waitForCacheContinuation = waitForCacheContinuation;
 
   // helpers
   protected continueRound = continueRound;

@@ -245,7 +245,7 @@ describe("genesis tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "1");
     expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
 
     // =============================
@@ -521,7 +521,7 @@ describe("genesis tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "1");
     expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
 
     // =============================

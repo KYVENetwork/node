@@ -59,7 +59,7 @@ export async function saveLoadValidationBundle(
       for (let h = currentHeight; h < toHeight; h++) {
         try {
           // try to get the data item from local cache
-          const item = await this.cache.get(h);
+          const item = await this.cache.get(h.toString());
           bundle.push(item);
         } catch {
           // if a request data item can not be found abort and

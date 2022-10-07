@@ -10,6 +10,7 @@ import { REFRESH_TIME, sleep } from "../../utils";
  *
  * @method waitForNextBundleProposal
  * @param {Node} this
+ * @param {number} createdAt
  * @return {Promise<void>}
  */
 export async function waitForNextBundleProposal(

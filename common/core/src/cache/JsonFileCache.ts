@@ -17,19 +17,19 @@ export class JsonFileCache implements ICache {
     return this;
   }
 
-  public async put(key: string | number, value: DataItem): Promise<void> {
+  public async put(key: string, value: DataItem): Promise<void> {
     await writeFile(`${this.path}/${key}.json`, value);
   }
 
-  public async get(key: string | number): Promise<DataItem> {
+  public async get(key: string): Promise<DataItem> {
     return await readFile(`${this.path}/${key}.json`);
   }
 
-  public async exists(key: string | number): Promise<boolean> {
+  public async exists(key: string): Promise<boolean> {
     return await fse.pathExists(`${this.path}/${key}.json`);
   }
 
-  public async del(key: string | number): Promise<void> {
+  public async del(key: string): Promise<void> {
     await fs.unlink(`${this.path}/${key}.json`);
   }
 

@@ -43,7 +43,7 @@ export interface ICache {
    * @param {DataItem} value
    * @return {Promise<void>}
    */
-  put(key: string | number, value: DataItem): Promise<void>;
+  put(key: string, value: DataItem): Promise<void>;
 
   /**
    * Loads the value from a key
@@ -52,7 +52,7 @@ export interface ICache {
    * @param {string | number} key
    * @return {Promise<DataItem>}
    */
-  get(key: string | number): Promise<DataItem>;
+  get(key: string): Promise<DataItem>;
 
   /**
    * Checks whether a value exists for a key
@@ -61,7 +61,7 @@ export interface ICache {
    * @param {string | number} key
    * @return {Promise<boolean>}
    */
-  exists(key: string | number): Promise<boolean>;
+  exists(key: string): Promise<boolean>;
 
   /**
    * Deletes the value from a key
@@ -70,7 +70,7 @@ export interface ICache {
    * @param {string | number} key
    * @return {Promise<void>}
    */
-  del(key: string | number): Promise<void>;
+  del(key: string): Promise<void>;
 
   /**
    * Deletes the entire cache and therefore all values

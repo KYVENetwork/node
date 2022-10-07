@@ -250,9 +250,9 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(3);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -406,10 +406,10 @@ describe("vote abstain tests", () => {
 
     expect(cacheGetMock).toHaveBeenCalledTimes(4);
 
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(4, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(4, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -564,11 +564,11 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(5);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 1);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(4, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(5, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "1");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(4, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(5, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -728,8 +728,8 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -896,8 +896,8 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1059,9 +1059,9 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(3);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1205,9 +1205,9 @@ describe("vote abstain tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(3);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 0);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(3, 1);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

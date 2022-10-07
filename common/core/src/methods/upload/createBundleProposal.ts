@@ -43,7 +43,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
     for (let h = fromHeight; h < toHeight; h++) {
       try {
         // try to get the data item from local cache
-        const item = await this.cache.get(h);
+        const item = await this.cache.get(h.toString());
         bundleProposal.push(item);
       } catch {
         // if the data item was not found simply abort
