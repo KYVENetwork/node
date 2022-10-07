@@ -25,6 +25,12 @@ import {
 TEST CASES - cache tests
 
 * start caching from a pool which is in genesis state
+* TODO: start caching from a pool which has a bundle proposal ongoing
+* TODO: start caching from a pool which has multiple bundle proposals ongoing
+* TODO: start caching from a pool where last bundle proposal was dropped
+* TODO: start caching from a pool where getNextDataItem fails once
+* TODO: start caching from a pool where getNextDataItem fails multiple times
+* TODO: start caching from a pool where cache methods fail
 
 */
 
@@ -187,11 +193,107 @@ describe("cache tests", () => {
     expect(delMock).toHaveBeenCalledTimes(0);
 
     expect(dropMock).toHaveBeenCalledTimes(0);
+  });
 
-    // ========================
-    // ASSERT NODEJS INTERFACES
-    // ========================
+  test("start caching from a pool which has a bundle proposal ongoing", async () => {
+    // ARRANGE
+    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+      core.pool = {
+        ...base_pool,
+        data: {
+          ...base_pool.data,
+          current_key: "99",
+          current_height: "99",
+        },
+        bundle_proposal: {
+          ...base_pool.bundle_proposal,
+          storage_id: "test_storage_id",
+          uploader: "test_staker",
+          next_uploader: "test_staker",
+          byte_size: "123456789",
+          to_height: "149",
+          to_key: "149",
+          to_value: "149-value",
+          bundle_hash: "test_bundle_hash",
+          created_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
 
-    // TODO: assert timeouts
+    // ACT
+    await runCache.call(core);
+
+    // ASSERT
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(getDataItemMock).toHaveBeenCalledTimes(
+      50 + +base_pool.data.max_bundle_size
+    );
+
+    for (let n = 0; n < 50 + +base_pool.data.max_bundle_size; n++) {
+      expect(getDataItemMock).toHaveBeenNthCalledWith(
+        n + 1,
+        core,
+        (n + 100).toString()
+      );
+    }
+
+    expect(validateMock).toHaveBeenCalledTimes(0);
+
+    expect(getNextKeyMock).toHaveBeenCalledTimes(
+      50 + +base_pool.data.max_bundle_size
+    );
+
+    // here we subtract the key - 1 because we start using the
+    // current key
+    for (let n = 0; n < 50 + +base_pool.data.max_bundle_size; n++) {
+      expect(getNextKeyMock).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + 100 - 1).toString()
+      );
+    }
+
+    expect(formatValueMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(putMock).toHaveBeenCalledTimes(50 + +base_pool.data.max_bundle_size);
+
+    for (let n = 0; n < 50 + +base_pool.data.max_bundle_size; n++) {
+      const item = await core["runtime"].getDataItem(
+        core,
+        (n + 100).toString()
+      );
+      expect(putMock).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + 100).toString(),
+        item
+      );
+    }
+
+    expect(getMock).toHaveBeenCalledTimes(0);
+
+    expect(existsMock).toHaveBeenCalledTimes(
+      50 + +base_pool.data.max_bundle_size
+    );
+
+    for (let n = 0; n < 50 + +base_pool.data.max_bundle_size; n++) {
+      expect(existsMock).toHaveBeenNthCalledWith(n + 1, (n + 100).toString());
+    }
+
+    expect(delMock).toHaveBeenCalledTimes(100);
+
+    for (let n = 0; n < 100; n++) {
+      expect(delMock).toHaveBeenNthCalledWith(n + 1, (99 - n).toString());
+    }
+
+    expect(dropMock).toHaveBeenCalledTimes(0);
   });
 });

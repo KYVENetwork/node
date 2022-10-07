@@ -35,6 +35,9 @@ export const dropMock = jest.fn().mockImplementation(async () => {
 });
 
 export const TestCache = jest.fn().mockImplementation(() => {
+  // reset cache
+  cache = {};
+
   return {
     name: "TestCache",
     put: putMock,

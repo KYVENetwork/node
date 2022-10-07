@@ -30,6 +30,7 @@ export async function runCache(this: Node): Promise<void> {
   // define current proposal heights required for running the cache
   let createdAt = 0;
   let currentHeight = 0;
+  let continuationHeight = 0;
   let toHeight = 0;
   let maxRoundHeight = 0;
 
@@ -61,6 +62,12 @@ export async function runCache(this: Node): Promise<void> {
       // and not before
       currentHeight = +this.pool.data!.current_height;
 
+      // determine the continuation height. If the current height is zero
+      // it means that the pool is in genesis state, thefore the node should
+      // start at height zero. If the current height is set the node should
+      // continue at the next height (+1)
+      continuationHeight = !!currentHeight ? currentHeight + 1 : currentHeight;
+
       // determine the current height of the proposal. The data items
       // collected between the current height and the toHeight are
       // especially important to validating a bundle proposal since
@@ -82,7 +89,7 @@ export async function runCache(this: Node): Promise<void> {
       // delete all data items which came before the current height
       // because they got finalized and are not needed anymore
       for (
-        let h = currentHeight - 1;
+        let h = currentHeight;
         h >= Math.max(0, currentHeight - +this.pool.data!.max_bundle_size);
         h--
       ) {
@@ -94,16 +101,18 @@ export async function runCache(this: Node): Promise<void> {
         }
       }
 
-      this.m.cache_height_tail.set(currentHeight);
+      this.m.cache_height_tail.set(continuationHeight);
 
       // determine the start key for the current caching round
       // this key gets increased overtime to temp save the
       // current key while collecting the data items
       let key = this.pool.data!.current_key;
 
+      console.log(`from ${continuationHeight} to ${maxRoundHeight}`);
+
       // collect all data items from current pool height to
       // the maxRoundHeight
-      for (let h = currentHeight; h < maxRoundHeight; h++) {
+      for (let h = continuationHeight; h <= maxRoundHeight; h++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
         const itemFound = await this.cache.exists(h.toString());
@@ -179,6 +188,20 @@ export async function runCache(this: Node): Promise<void> {
         ` Unexpected error collecting data items to local cache. Continuing ...`
       );
       this.logger.error(error);
+
+      try {
+        // drop cache if an unexpected error occurs during caching
+        this.logger.debug(`Attempting to clear cache`);
+        await this.cache.drop();
+        this.m.cache_current_items.set(0);
+
+        this.logger.info(`Cleared cache\n`);
+      } catch (dropError) {
+        this.logger.warn(
+          ` Unexpected error dropping local cache. Continuing ...`
+        );
+        this.logger.error(dropError);
+      }
     }
   }
 }
