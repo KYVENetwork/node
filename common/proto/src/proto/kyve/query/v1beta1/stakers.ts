@@ -1,12 +1,9 @@
 /* eslint-disable */
-import {
-  PageRequest,
-  PageResponse,
-} from "../../../cosmos/base/query/v1beta1/pagination";
-import { FullStaker } from "./query";
-import { Valaccount } from "../../stakers/v1beta1/stakers";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Valaccount } from "../../stakers/v1beta1/stakers";
+import { FullStaker } from "./query";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -122,10 +119,7 @@ function createBaseQueryStakersRequest(): QueryStakersRequest {
 }
 
 export const QueryStakersRequest = {
-  encode(
-    message: QueryStakersRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -164,9 +158,7 @@ export const QueryStakersRequest = {
 
   fromJSON(object: any): QueryStakersRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
       status: isSet(object.status) ? stakerStatusFromJSON(object.status) : 0,
       search: isSet(object.search) ? String(object.search) : "",
     };
@@ -175,23 +167,17 @@ export const QueryStakersRequest = {
   toJSON(message: QueryStakersRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
-    message.status !== undefined &&
-      (obj.status = stakerStatusToJSON(message.status));
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.status !== undefined && (obj.status = stakerStatusToJSON(message.status));
     message.search !== undefined && (obj.search = message.search);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakersRequest>, I>>(
-    object: I
-  ): QueryStakersRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryStakersRequest>, I>>(object: I): QueryStakersRequest {
     const message = createBaseQueryStakersRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     message.status = object.status ?? 0;
     message.search = object.search ?? "";
     return message;
@@ -203,26 +189,17 @@ function createBaseQueryStakersResponse(): QueryStakersResponse {
 }
 
 export const QueryStakersResponse = {
-  encode(
-    message: QueryStakersResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.stakers) {
       FullStaker.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersResponse();
@@ -245,41 +222,29 @@ export const QueryStakersResponse = {
 
   fromJSON(object: any): QueryStakersResponse {
     return {
-      stakers: Array.isArray(object?.stakers)
-        ? object.stakers.map((e: any) => FullStaker.fromJSON(e))
-        : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => FullStaker.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryStakersResponse): unknown {
     const obj: any = {};
     if (message.stakers) {
-      obj.stakers = message.stakers.map((e) =>
-        e ? FullStaker.toJSON(e) : undefined
-      );
+      obj.stakers = message.stakers.map((e) => e ? FullStaker.toJSON(e) : undefined);
     } else {
       obj.stakers = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakersResponse>, I>>(
-    object: I
-  ): QueryStakersResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryStakersResponse>, I>>(object: I): QueryStakersResponse {
     const message = createBaseQueryStakersResponse();
-    message.stakers =
-      object.stakers?.map((e) => FullStaker.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.stakers = object.stakers?.map((e) => FullStaker.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -289,10 +254,7 @@ function createBaseQueryStakerRequest(): QueryStakerRequest {
 }
 
 export const QueryStakerRequest = {
-  encode(
-    message: QueryStakerRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakerRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -318,9 +280,7 @@ export const QueryStakerRequest = {
   },
 
   fromJSON(object: any): QueryStakerRequest {
-    return {
-      address: isSet(object.address) ? String(object.address) : "",
-    };
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryStakerRequest): unknown {
@@ -329,9 +289,7 @@ export const QueryStakerRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakerRequest>, I>>(
-    object: I
-  ): QueryStakerRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryStakerRequest>, I>>(object: I): QueryStakerRequest {
     const message = createBaseQueryStakerRequest();
     message.address = object.address ?? "";
     return message;
@@ -343,10 +301,7 @@ function createBaseQueryStakerResponse(): QueryStakerResponse {
 }
 
 export const QueryStakerResponse = {
-  encode(
-    message: QueryStakerResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.staker !== undefined) {
       FullStaker.encode(message.staker, writer.uint32(10).fork()).ldelim();
     }
@@ -372,30 +327,20 @@ export const QueryStakerResponse = {
   },
 
   fromJSON(object: any): QueryStakerResponse {
-    return {
-      staker: isSet(object.staker)
-        ? FullStaker.fromJSON(object.staker)
-        : undefined,
-    };
+    return { staker: isSet(object.staker) ? FullStaker.fromJSON(object.staker) : undefined };
   },
 
   toJSON(message: QueryStakerResponse): unknown {
     const obj: any = {};
-    message.staker !== undefined &&
-      (obj.staker = message.staker
-        ? FullStaker.toJSON(message.staker)
-        : undefined);
+    message.staker !== undefined && (obj.staker = message.staker ? FullStaker.toJSON(message.staker) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakerResponse>, I>>(
-    object: I
-  ): QueryStakerResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryStakerResponse>, I>>(object: I): QueryStakerResponse {
     const message = createBaseQueryStakerResponse();
-    message.staker =
-      object.staker !== undefined && object.staker !== null
-        ? FullStaker.fromPartial(object.staker)
-        : undefined;
+    message.staker = (object.staker !== undefined && object.staker !== null)
+      ? FullStaker.fromPartial(object.staker)
+      : undefined;
     return message;
   },
 };
@@ -405,20 +350,14 @@ function createBaseQueryStakersByPoolRequest(): QueryStakersByPoolRequest {
 }
 
 export const QueryStakersByPoolRequest = {
-  encode(
-    message: QueryStakersByPoolRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByPoolRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByPoolRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByPoolRequest();
@@ -437,9 +376,7 @@ export const QueryStakersByPoolRequest = {
   },
 
   fromJSON(object: any): QueryStakersByPoolRequest {
-    return {
-      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-    };
+    return { pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0" };
   },
 
   toJSON(message: QueryStakersByPoolRequest): unknown {
@@ -448,9 +385,7 @@ export const QueryStakersByPoolRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolRequest>, I>>(
-    object: I
-  ): QueryStakersByPoolRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolRequest>, I>>(object: I): QueryStakersByPoolRequest {
     const message = createBaseQueryStakersByPoolRequest();
     message.pool_id = object.pool_id ?? "0";
     return message;
@@ -462,20 +397,14 @@ function createBaseQueryStakersByPoolResponse(): QueryStakersByPoolResponse {
 }
 
 export const QueryStakersByPoolResponse = {
-  encode(
-    message: QueryStakersByPoolResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.stakers) {
       StakerPoolResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByPoolResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByPoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByPoolResponse();
@@ -483,9 +412,7 @@ export const QueryStakersByPoolResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.stakers.push(
-            StakerPoolResponse.decode(reader, reader.uint32())
-          );
+          message.stakers.push(StakerPoolResponse.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -497,30 +424,23 @@ export const QueryStakersByPoolResponse = {
 
   fromJSON(object: any): QueryStakersByPoolResponse {
     return {
-      stakers: Array.isArray(object?.stakers)
-        ? object.stakers.map((e: any) => StakerPoolResponse.fromJSON(e))
-        : [],
+      stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => StakerPoolResponse.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: QueryStakersByPoolResponse): unknown {
     const obj: any = {};
     if (message.stakers) {
-      obj.stakers = message.stakers.map((e) =>
-        e ? StakerPoolResponse.toJSON(e) : undefined
-      );
+      obj.stakers = message.stakers.map((e) => e ? StakerPoolResponse.toJSON(e) : undefined);
     } else {
       obj.stakers = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolResponse>, I>>(
-    object: I
-  ): QueryStakersByPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolResponse>, I>>(object: I): QueryStakersByPoolResponse {
     const message = createBaseQueryStakersByPoolResponse();
-    message.stakers =
-      object.stakers?.map((e) => StakerPoolResponse.fromPartial(e)) || [];
+    message.stakers = object.stakers?.map((e) => StakerPoolResponse.fromPartial(e)) || [];
     return message;
   },
 };
@@ -530,10 +450,7 @@ function createBaseStakerPoolResponse(): StakerPoolResponse {
 }
 
 export const StakerPoolResponse = {
-  encode(
-    message: StakerPoolResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StakerPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.staker !== undefined) {
       FullStaker.encode(message.staker, writer.uint32(10).fork()).ldelim();
     }
@@ -566,40 +483,27 @@ export const StakerPoolResponse = {
 
   fromJSON(object: any): StakerPoolResponse {
     return {
-      staker: isSet(object.staker)
-        ? FullStaker.fromJSON(object.staker)
-        : undefined,
-      valaccount: isSet(object.valaccount)
-        ? Valaccount.fromJSON(object.valaccount)
-        : undefined,
+      staker: isSet(object.staker) ? FullStaker.fromJSON(object.staker) : undefined,
+      valaccount: isSet(object.valaccount) ? Valaccount.fromJSON(object.valaccount) : undefined,
     };
   },
 
   toJSON(message: StakerPoolResponse): unknown {
     const obj: any = {};
-    message.staker !== undefined &&
-      (obj.staker = message.staker
-        ? FullStaker.toJSON(message.staker)
-        : undefined);
+    message.staker !== undefined && (obj.staker = message.staker ? FullStaker.toJSON(message.staker) : undefined);
     message.valaccount !== undefined &&
-      (obj.valaccount = message.valaccount
-        ? Valaccount.toJSON(message.valaccount)
-        : undefined);
+      (obj.valaccount = message.valaccount ? Valaccount.toJSON(message.valaccount) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<StakerPoolResponse>, I>>(
-    object: I
-  ): StakerPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<StakerPoolResponse>, I>>(object: I): StakerPoolResponse {
     const message = createBaseStakerPoolResponse();
-    message.staker =
-      object.staker !== undefined && object.staker !== null
-        ? FullStaker.fromPartial(object.staker)
-        : undefined;
-    message.valaccount =
-      object.valaccount !== undefined && object.valaccount !== null
-        ? Valaccount.fromPartial(object.valaccount)
-        : undefined;
+    message.staker = (object.staker !== undefined && object.staker !== null)
+      ? FullStaker.fromPartial(object.staker)
+      : undefined;
+    message.valaccount = (object.valaccount !== undefined && object.valaccount !== null)
+      ? Valaccount.fromPartial(object.valaccount)
+      : undefined;
     return message;
   },
 };
@@ -609,20 +513,14 @@ function createBaseQueryStakersByPoolCountRequest(): QueryStakersByPoolCountRequ
 }
 
 export const QueryStakersByPoolCountRequest = {
-  encode(
-    message: QueryStakersByPoolCountRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByPoolCountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByPoolCountRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByPoolCountRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByPoolCountRequest();
@@ -641,30 +539,23 @@ export const QueryStakersByPoolCountRequest = {
   },
 
   fromJSON(object: any): QueryStakersByPoolCountRequest {
-    return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
-    };
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
   toJSON(message: QueryStakersByPoolCountRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolCountRequest>, I>>(
-    object: I
+    object: I,
   ): QueryStakersByPoolCountRequest {
     const message = createBaseQueryStakersByPoolCountRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -674,26 +565,17 @@ function createBaseQueryStakersByPoolCountResponse(): QueryStakersByPoolCountRes
 }
 
 export const QueryStakersByPoolCountResponse = {
-  encode(
-    message: QueryStakersByPoolCountResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByPoolCountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.stakers) {
       FullStaker.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByPoolCountResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByPoolCountResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByPoolCountResponse();
@@ -716,41 +598,31 @@ export const QueryStakersByPoolCountResponse = {
 
   fromJSON(object: any): QueryStakersByPoolCountResponse {
     return {
-      stakers: Array.isArray(object?.stakers)
-        ? object.stakers.map((e: any) => FullStaker.fromJSON(e))
-        : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => FullStaker.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryStakersByPoolCountResponse): unknown {
     const obj: any = {};
     if (message.stakers) {
-      obj.stakers = message.stakers.map((e) =>
-        e ? FullStaker.toJSON(e) : undefined
-      );
+      obj.stakers = message.stakers.map((e) => e ? FullStaker.toJSON(e) : undefined);
     } else {
       obj.stakers = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryStakersByPoolCountResponse>, I>>(
-    object: I
+    object: I,
   ): QueryStakersByPoolCountResponse {
     const message = createBaseQueryStakersByPoolCountResponse();
-    message.stakers =
-      object.stakers?.map((e) => FullStaker.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.stakers = object.stakers?.map((e) => FullStaker.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -762,16 +634,12 @@ export interface QueryStakers {
   /** Staker queries for all stakers. */
   Staker(request: QueryStakerRequest): Promise<QueryStakerResponse>;
   /** StakersByPool queries for all stakers that are currently participating in the given pool */
-  StakersByPool(
-    request: QueryStakersByPoolRequest
-  ): Promise<QueryStakersByPoolResponse>;
+  StakersByPool(request: QueryStakersByPoolRequest): Promise<QueryStakersByPoolResponse>;
   /**
    * StakersByPool queries for all stakers and sorted them first by number of pools participating and
    * then by delegation
    */
-  StakersByPoolCount(
-    request: QueryStakersByPoolCountRequest
-  ): Promise<QueryStakersByPoolCountResponse>;
+  StakersByPoolCount(request: QueryStakersByPoolCountRequest): Promise<QueryStakersByPoolCountResponse>;
 }
 
 export class QueryStakersClientImpl implements QueryStakers {
@@ -785,91 +653,43 @@ export class QueryStakersClientImpl implements QueryStakers {
   }
   Stakers(request: QueryStakersRequest): Promise<QueryStakersResponse> {
     const data = QueryStakersRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryStakers",
-      "Stakers",
-      data
-    );
-    return promise.then((data) =>
-      QueryStakersResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "Stakers", data);
+    return promise.then((data) => QueryStakersResponse.decode(new _m0.Reader(data)));
   }
 
   Staker(request: QueryStakerRequest): Promise<QueryStakerResponse> {
     const data = QueryStakerRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryStakers",
-      "Staker",
-      data
-    );
-    return promise.then((data) =>
-      QueryStakerResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "Staker", data);
+    return promise.then((data) => QueryStakerResponse.decode(new _m0.Reader(data)));
   }
 
-  StakersByPool(
-    request: QueryStakersByPoolRequest
-  ): Promise<QueryStakersByPoolResponse> {
+  StakersByPool(request: QueryStakersByPoolRequest): Promise<QueryStakersByPoolResponse> {
     const data = QueryStakersByPoolRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryStakers",
-      "StakersByPool",
-      data
-    );
-    return promise.then((data) =>
-      QueryStakersByPoolResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "StakersByPool", data);
+    return promise.then((data) => QueryStakersByPoolResponse.decode(new _m0.Reader(data)));
   }
 
-  StakersByPoolCount(
-    request: QueryStakersByPoolCountRequest
-  ): Promise<QueryStakersByPoolCountResponse> {
+  StakersByPoolCount(request: QueryStakersByPoolCountRequest): Promise<QueryStakersByPoolCountResponse> {
     const data = QueryStakersByPoolCountRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryStakers",
-      "StakersByPoolCount",
-      data
-    );
-    return promise.then((data) =>
-      QueryStakersByPoolCountResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "StakersByPoolCount", data);
+    return promise.then((data) => QueryStakersByPoolCountResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

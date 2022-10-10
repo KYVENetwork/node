@@ -1,11 +1,8 @@
 /* eslint-disable */
-import {
-  PageRequest,
-  PageResponse,
-} from "../../../cosmos/base/query/v1beta1/pagination";
-import { FullStaker } from "./query";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { FullStaker } from "./query";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -88,10 +85,7 @@ function createBaseQueryDelegatorRequest(): QueryDelegatorRequest {
 }
 
 export const QueryDelegatorRequest = {
-  encode(
-    message: QueryDelegatorRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryDelegatorRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -101,10 +95,7 @@ export const QueryDelegatorRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryDelegatorRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorRequest();
@@ -139,9 +130,7 @@ export const QueryDelegatorRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryDelegatorRequest>, I>>(
-    object: I
-  ): QueryDelegatorRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorRequest>, I>>(object: I): QueryDelegatorRequest {
     const message = createBaseQueryDelegatorRequest();
     message.staker = object.staker ?? "";
     message.delegator = object.delegator ?? "";
@@ -154,23 +143,14 @@ function createBaseQueryDelegatorResponse(): QueryDelegatorResponse {
 }
 
 export const QueryDelegatorResponse = {
-  encode(
-    message: QueryDelegatorResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryDelegatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegator !== undefined) {
-      StakerDelegatorResponse.encode(
-        message.delegator,
-        writer.uint32(10).fork()
-      ).ldelim();
+      StakerDelegatorResponse.encode(message.delegator, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryDelegatorResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorResponse();
@@ -178,10 +158,7 @@ export const QueryDelegatorResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegator = StakerDelegatorResponse.decode(
-            reader,
-            reader.uint32()
-          );
+          message.delegator = StakerDelegatorResponse.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -192,48 +169,31 @@ export const QueryDelegatorResponse = {
   },
 
   fromJSON(object: any): QueryDelegatorResponse {
-    return {
-      delegator: isSet(object.delegator)
-        ? StakerDelegatorResponse.fromJSON(object.delegator)
-        : undefined,
-    };
+    return { delegator: isSet(object.delegator) ? StakerDelegatorResponse.fromJSON(object.delegator) : undefined };
   },
 
   toJSON(message: QueryDelegatorResponse): unknown {
     const obj: any = {};
     message.delegator !== undefined &&
-      (obj.delegator = message.delegator
-        ? StakerDelegatorResponse.toJSON(message.delegator)
-        : undefined);
+      (obj.delegator = message.delegator ? StakerDelegatorResponse.toJSON(message.delegator) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryDelegatorResponse>, I>>(
-    object: I
-  ): QueryDelegatorResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorResponse>, I>>(object: I): QueryDelegatorResponse {
     const message = createBaseQueryDelegatorResponse();
-    message.delegator =
-      object.delegator !== undefined && object.delegator !== null
-        ? StakerDelegatorResponse.fromPartial(object.delegator)
-        : undefined;
+    message.delegator = (object.delegator !== undefined && object.delegator !== null)
+      ? StakerDelegatorResponse.fromPartial(object.delegator)
+      : undefined;
     return message;
   },
 };
 
 function createBaseStakerDelegatorResponse(): StakerDelegatorResponse {
-  return {
-    delegator: "",
-    current_reward: "0",
-    delegation_amount: "0",
-    staker: "",
-  };
+  return { delegator: "", current_reward: "0", delegation_amount: "0", staker: "" };
 }
 
 export const StakerDelegatorResponse = {
-  encode(
-    message: StakerDelegatorResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StakerDelegatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegator !== "") {
       writer.uint32(10).string(message.delegator);
     }
@@ -249,10 +209,7 @@ export const StakerDelegatorResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): StakerDelegatorResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): StakerDelegatorResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakerDelegatorResponse();
@@ -282,12 +239,8 @@ export const StakerDelegatorResponse = {
   fromJSON(object: any): StakerDelegatorResponse {
     return {
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
-      current_reward: isSet(object.current_reward)
-        ? String(object.current_reward)
-        : "0",
-      delegation_amount: isSet(object.delegation_amount)
-        ? String(object.delegation_amount)
-        : "0",
+      current_reward: isSet(object.current_reward) ? String(object.current_reward) : "0",
+      delegation_amount: isSet(object.delegation_amount) ? String(object.delegation_amount) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
     };
   },
@@ -295,17 +248,13 @@ export const StakerDelegatorResponse = {
   toJSON(message: StakerDelegatorResponse): unknown {
     const obj: any = {};
     message.delegator !== undefined && (obj.delegator = message.delegator);
-    message.current_reward !== undefined &&
-      (obj.current_reward = message.current_reward);
-    message.delegation_amount !== undefined &&
-      (obj.delegation_amount = message.delegation_amount);
+    message.current_reward !== undefined && (obj.current_reward = message.current_reward);
+    message.delegation_amount !== undefined && (obj.delegation_amount = message.delegation_amount);
     message.staker !== undefined && (obj.staker = message.staker);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<StakerDelegatorResponse>, I>>(
-    object: I
-  ): StakerDelegatorResponse {
+  fromPartial<I extends Exact<DeepPartial<StakerDelegatorResponse>, I>>(object: I): StakerDelegatorResponse {
     const message = createBaseStakerDelegatorResponse();
     message.delegator = object.delegator ?? "";
     message.current_reward = object.current_reward ?? "0";
@@ -320,10 +269,7 @@ function createBaseQueryDelegatorsByStakerRequest(): QueryDelegatorsByStakerRequ
 }
 
 export const QueryDelegatorsByStakerRequest = {
-  encode(
-    message: QueryDelegatorsByStakerRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryDelegatorsByStakerRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -333,10 +279,7 @@ export const QueryDelegatorsByStakerRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryDelegatorsByStakerRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorsByStakerRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorsByStakerRequest();
@@ -359,9 +302,7 @@ export const QueryDelegatorsByStakerRequest = {
 
   fromJSON(object: any): QueryDelegatorsByStakerRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
       staker: isSet(object.staker) ? String(object.staker) : "",
     };
   },
@@ -369,40 +310,29 @@ export const QueryDelegatorsByStakerRequest = {
   toJSON(message: QueryDelegatorsByStakerRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     message.staker !== undefined && (obj.staker = message.staker);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryDelegatorsByStakerRequest>, I>>(
-    object: I
+    object: I,
   ): QueryDelegatorsByStakerRequest {
     const message = createBaseQueryDelegatorsByStakerRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     message.staker = object.staker ?? "";
     return message;
   },
 };
 
 function createBaseQueryDelegatorsByStakerResponse(): QueryDelegatorsByStakerResponse {
-  return {
-    delegators: [],
-    total_delegation: "0",
-    total_delegator_count: "0",
-    pagination: undefined,
-  };
+  return { delegators: [], total_delegation: "0", total_delegator_count: "0", pagination: undefined };
 }
 
 export const QueryDelegatorsByStakerResponse = {
-  encode(
-    message: QueryDelegatorsByStakerResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryDelegatorsByStakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.delegators) {
       StakerDelegatorResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -413,18 +343,12 @@ export const QueryDelegatorsByStakerResponse = {
       writer.uint32(24).uint64(message.total_delegator_count);
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(34).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryDelegatorsByStakerResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorsByStakerResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorsByStakerResponse();
@@ -432,9 +356,7 @@ export const QueryDelegatorsByStakerResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.delegators.push(
-            StakerDelegatorResponse.decode(reader, reader.uint32())
-          );
+          message.delegators.push(StakerDelegatorResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.total_delegation = longToString(reader.uint64() as Long);
@@ -458,51 +380,36 @@ export const QueryDelegatorsByStakerResponse = {
       delegators: Array.isArray(object?.delegators)
         ? object.delegators.map((e: any) => StakerDelegatorResponse.fromJSON(e))
         : [],
-      total_delegation: isSet(object.total_delegation)
-        ? String(object.total_delegation)
-        : "0",
-      total_delegator_count: isSet(object.total_delegator_count)
-        ? String(object.total_delegator_count)
-        : "0",
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
+      total_delegator_count: isSet(object.total_delegator_count) ? String(object.total_delegator_count) : "0",
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryDelegatorsByStakerResponse): unknown {
     const obj: any = {};
     if (message.delegators) {
-      obj.delegators = message.delegators.map((e) =>
-        e ? StakerDelegatorResponse.toJSON(e) : undefined
-      );
+      obj.delegators = message.delegators.map((e) => e ? StakerDelegatorResponse.toJSON(e) : undefined);
     } else {
       obj.delegators = [];
     }
-    message.total_delegation !== undefined &&
-      (obj.total_delegation = message.total_delegation);
-    message.total_delegator_count !== undefined &&
-      (obj.total_delegator_count = message.total_delegator_count);
+    message.total_delegation !== undefined && (obj.total_delegation = message.total_delegation);
+    message.total_delegator_count !== undefined && (obj.total_delegator_count = message.total_delegator_count);
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryDelegatorsByStakerResponse>, I>>(
-    object: I
+    object: I,
   ): QueryDelegatorsByStakerResponse {
     const message = createBaseQueryDelegatorsByStakerResponse();
-    message.delegators =
-      object.delegators?.map((e) => StakerDelegatorResponse.fromPartial(e)) ||
-      [];
+    message.delegators = object.delegators?.map((e) => StakerDelegatorResponse.fromPartial(e)) || [];
     message.total_delegation = object.total_delegation ?? "0";
     message.total_delegator_count = object.total_delegator_count ?? "0";
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -512,10 +419,7 @@ function createBaseQueryStakersByDelegatorRequest(): QueryStakersByDelegatorRequ
 }
 
 export const QueryStakersByDelegatorRequest = {
-  encode(
-    message: QueryStakersByDelegatorRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByDelegatorRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -525,10 +429,7 @@ export const QueryStakersByDelegatorRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByDelegatorRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByDelegatorRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByDelegatorRequest();
@@ -551,9 +452,7 @@ export const QueryStakersByDelegatorRequest = {
 
   fromJSON(object: any): QueryStakersByDelegatorRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
     };
   },
@@ -561,21 +460,18 @@ export const QueryStakersByDelegatorRequest = {
   toJSON(message: QueryStakersByDelegatorRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     message.delegator !== undefined && (obj.delegator = message.delegator);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryStakersByDelegatorRequest>, I>>(
-    object: I
+    object: I,
   ): QueryStakersByDelegatorRequest {
     const message = createBaseQueryStakersByDelegatorRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     message.delegator = object.delegator ?? "";
     return message;
   },
@@ -586,10 +482,7 @@ function createBaseQueryStakersByDelegatorResponse(): QueryStakersByDelegatorRes
 }
 
 export const QueryStakersByDelegatorResponse = {
-  encode(
-    message: QueryStakersByDelegatorResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryStakersByDelegatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegator !== "") {
       writer.uint32(10).string(message.delegator);
     }
@@ -597,18 +490,12 @@ export const QueryStakersByDelegatorResponse = {
       DelegationForStakerResponse.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(26).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryStakersByDelegatorResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryStakersByDelegatorResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryStakersByDelegatorResponse();
@@ -619,9 +506,7 @@ export const QueryStakersByDelegatorResponse = {
           message.delegator = reader.string();
           break;
         case 2:
-          message.stakers.push(
-            DelegationForStakerResponse.decode(reader, reader.uint32())
-          );
+          message.stakers.push(DelegationForStakerResponse.decode(reader, reader.uint32()));
           break;
         case 3:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -638,13 +523,9 @@ export const QueryStakersByDelegatorResponse = {
     return {
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       stakers: Array.isArray(object?.stakers)
-        ? object.stakers.map((e: any) =>
-            DelegationForStakerResponse.fromJSON(e)
-          )
+        ? object.stakers.map((e: any) => DelegationForStakerResponse.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
@@ -652,31 +533,24 @@ export const QueryStakersByDelegatorResponse = {
     const obj: any = {};
     message.delegator !== undefined && (obj.delegator = message.delegator);
     if (message.stakers) {
-      obj.stakers = message.stakers.map((e) =>
-        e ? DelegationForStakerResponse.toJSON(e) : undefined
-      );
+      obj.stakers = message.stakers.map((e) => e ? DelegationForStakerResponse.toJSON(e) : undefined);
     } else {
       obj.stakers = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryStakersByDelegatorResponse>, I>>(
-    object: I
+    object: I,
   ): QueryStakersByDelegatorResponse {
     const message = createBaseQueryStakersByDelegatorResponse();
     message.delegator = object.delegator ?? "";
-    message.stakers =
-      object.stakers?.map((e) => DelegationForStakerResponse.fromPartial(e)) ||
-      [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.stakers = object.stakers?.map((e) => DelegationForStakerResponse.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -686,10 +560,7 @@ function createBaseDelegationForStakerResponse(): DelegationForStakerResponse {
 }
 
 export const DelegationForStakerResponse = {
-  encode(
-    message: DelegationForStakerResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DelegationForStakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.staker !== undefined) {
       FullStaker.encode(message.staker, writer.uint32(10).fork()).ldelim();
     }
@@ -702,10 +573,7 @@ export const DelegationForStakerResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): DelegationForStakerResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): DelegationForStakerResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelegationForStakerResponse();
@@ -731,39 +599,25 @@ export const DelegationForStakerResponse = {
 
   fromJSON(object: any): DelegationForStakerResponse {
     return {
-      staker: isSet(object.staker)
-        ? FullStaker.fromJSON(object.staker)
-        : undefined,
-      current_reward: isSet(object.current_reward)
-        ? String(object.current_reward)
-        : "0",
-      delegation_amount: isSet(object.delegation_amount)
-        ? String(object.delegation_amount)
-        : "0",
+      staker: isSet(object.staker) ? FullStaker.fromJSON(object.staker) : undefined,
+      current_reward: isSet(object.current_reward) ? String(object.current_reward) : "0",
+      delegation_amount: isSet(object.delegation_amount) ? String(object.delegation_amount) : "0",
     };
   },
 
   toJSON(message: DelegationForStakerResponse): unknown {
     const obj: any = {};
-    message.staker !== undefined &&
-      (obj.staker = message.staker
-        ? FullStaker.toJSON(message.staker)
-        : undefined);
-    message.current_reward !== undefined &&
-      (obj.current_reward = message.current_reward);
-    message.delegation_amount !== undefined &&
-      (obj.delegation_amount = message.delegation_amount);
+    message.staker !== undefined && (obj.staker = message.staker ? FullStaker.toJSON(message.staker) : undefined);
+    message.current_reward !== undefined && (obj.current_reward = message.current_reward);
+    message.delegation_amount !== undefined && (obj.delegation_amount = message.delegation_amount);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationForStakerResponse>, I>>(
-    object: I
-  ): DelegationForStakerResponse {
+  fromPartial<I extends Exact<DeepPartial<DelegationForStakerResponse>, I>>(object: I): DelegationForStakerResponse {
     const message = createBaseDelegationForStakerResponse();
-    message.staker =
-      object.staker !== undefined && object.staker !== null
-        ? FullStaker.fromPartial(object.staker)
-        : undefined;
+    message.staker = (object.staker !== undefined && object.staker !== null)
+      ? FullStaker.fromPartial(object.staker)
+      : undefined;
     message.current_reward = object.current_reward ?? "0";
     message.delegation_amount = object.delegation_amount ?? "0";
     return message;
@@ -778,16 +632,12 @@ export interface QueryDelegation {
    * DelegatorsByStaker returns all delegators that have delegated to the given staker
    * This query is paginated.
    */
-  DelegatorsByStaker(
-    request: QueryDelegatorsByStakerRequest
-  ): Promise<QueryDelegatorsByStakerResponse>;
+  DelegatorsByStaker(request: QueryDelegatorsByStakerRequest): Promise<QueryDelegatorsByStakerResponse>;
   /**
    * StakersByPoolAndDelegator returns all stakers the given delegator has delegated to.
    * This query is paginated.
    */
-  StakersByDelegator(
-    request: QueryStakersByDelegatorRequest
-  ): Promise<QueryStakersByDelegatorResponse>;
+  StakersByDelegator(request: QueryStakersByDelegatorRequest): Promise<QueryStakersByDelegatorResponse>;
 }
 
 export class QueryDelegationClientImpl implements QueryDelegation {
@@ -800,79 +650,37 @@ export class QueryDelegationClientImpl implements QueryDelegation {
   }
   Delegator(request: QueryDelegatorRequest): Promise<QueryDelegatorResponse> {
     const data = QueryDelegatorRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryDelegation",
-      "Delegator",
-      data
-    );
-    return promise.then((data) =>
-      QueryDelegatorResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "Delegator", data);
+    return promise.then((data) => QueryDelegatorResponse.decode(new _m0.Reader(data)));
   }
 
-  DelegatorsByStaker(
-    request: QueryDelegatorsByStakerRequest
-  ): Promise<QueryDelegatorsByStakerResponse> {
+  DelegatorsByStaker(request: QueryDelegatorsByStakerRequest): Promise<QueryDelegatorsByStakerResponse> {
     const data = QueryDelegatorsByStakerRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryDelegation",
-      "DelegatorsByStaker",
-      data
-    );
-    return promise.then((data) =>
-      QueryDelegatorsByStakerResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "DelegatorsByStaker", data);
+    return promise.then((data) => QueryDelegatorsByStakerResponse.decode(new _m0.Reader(data)));
   }
 
-  StakersByDelegator(
-    request: QueryStakersByDelegatorRequest
-  ): Promise<QueryStakersByDelegatorResponse> {
+  StakersByDelegator(request: QueryStakersByDelegatorRequest): Promise<QueryStakersByDelegatorResponse> {
     const data = QueryStakersByDelegatorRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryDelegation",
-      "StakersByDelegator",
-      data
-    );
-    return promise.then((data) =>
-      QueryStakersByDelegatorResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "StakersByDelegator", data);
+    return promise.then((data) => QueryStakersByDelegatorResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

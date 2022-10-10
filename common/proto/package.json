@@ -14,9 +14,11 @@
     "generate": "sh proto-gen.sh && yarn build"
   },
   "dependencies": {
-    "@protobufs/cosmos": "^0.0.9",
-    "@protobufs/gogoproto": "^0.0.9",
-    "@protobufs/google": "^0.0.9",
+    "@protobufs/cosmos": "^0.0.11",
+    "@protobufs/gogoproto": "^0.0.10",
+    "@protobufs/google": "^0.0.10",
+    "lerna": "^5.2.0",
+    "nx": "^14.4.3",
     "ts-proto": "^1.115.4"
   },
   "devDependencies": {

@@ -1,11 +1,8 @@
 /* eslint-disable */
-import {
-  PageRequest,
-  PageResponse,
-} from "../../../cosmos/base/query/v1beta1/pagination";
-import { FinalizedBundle } from "../../bundles/v1beta1/bundles";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { FinalizedBundle } from "../../bundles/v1beta1/bundles";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -144,10 +141,7 @@ function createBaseQueryFinalizedBundlesRequest(): QueryFinalizedBundlesRequest 
 }
 
 export const QueryFinalizedBundlesRequest = {
-  encode(
-    message: QueryFinalizedBundlesRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundlesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -157,10 +151,7 @@ export const QueryFinalizedBundlesRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundlesRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundlesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundlesRequest();
@@ -183,9 +174,7 @@ export const QueryFinalizedBundlesRequest = {
 
   fromJSON(object: any): QueryFinalizedBundlesRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
     };
   },
@@ -193,21 +182,16 @@ export const QueryFinalizedBundlesRequest = {
   toJSON(message: QueryFinalizedBundlesRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundlesRequest>, I>>(
-    object: I
-  ): QueryFinalizedBundlesRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundlesRequest>, I>>(object: I): QueryFinalizedBundlesRequest {
     const message = createBaseQueryFinalizedBundlesRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     message.pool_id = object.pool_id ?? "0";
     return message;
   },
@@ -218,26 +202,17 @@ function createBaseQueryFinalizedBundlesResponse(): QueryFinalizedBundlesRespons
 }
 
 export const QueryFinalizedBundlesResponse = {
-  encode(
-    message: QueryFinalizedBundlesResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundlesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.finalized_bundles) {
       FinalizedBundle.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundlesResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundlesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundlesResponse();
@@ -245,9 +220,7 @@ export const QueryFinalizedBundlesResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.finalized_bundles.push(
-            FinalizedBundle.decode(reader, reader.uint32())
-          );
+          message.finalized_bundles.push(FinalizedBundle.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -265,39 +238,30 @@ export const QueryFinalizedBundlesResponse = {
       finalized_bundles: Array.isArray(object?.finalized_bundles)
         ? object.finalized_bundles.map((e: any) => FinalizedBundle.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryFinalizedBundlesResponse): unknown {
     const obj: any = {};
     if (message.finalized_bundles) {
-      obj.finalized_bundles = message.finalized_bundles.map((e) =>
-        e ? FinalizedBundle.toJSON(e) : undefined
-      );
+      obj.finalized_bundles = message.finalized_bundles.map((e) => e ? FinalizedBundle.toJSON(e) : undefined);
     } else {
       obj.finalized_bundles = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundlesResponse>, I>>(
-    object: I
+    object: I,
   ): QueryFinalizedBundlesResponse {
     const message = createBaseQueryFinalizedBundlesResponse();
-    message.finalized_bundles =
-      object.finalized_bundles?.map((e) => FinalizedBundle.fromPartial(e)) ||
-      [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.finalized_bundles = object.finalized_bundles?.map((e) => FinalizedBundle.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -307,10 +271,7 @@ function createBaseQueryFinalizedBundleRequest(): QueryFinalizedBundleRequest {
 }
 
 export const QueryFinalizedBundleRequest = {
-  encode(
-    message: QueryFinalizedBundleRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundleRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -320,10 +281,7 @@ export const QueryFinalizedBundleRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundleRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundleRequest();
@@ -358,9 +316,7 @@ export const QueryFinalizedBundleRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleRequest>, I>>(
-    object: I
-  ): QueryFinalizedBundleRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleRequest>, I>>(object: I): QueryFinalizedBundleRequest {
     const message = createBaseQueryFinalizedBundleRequest();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -373,23 +329,14 @@ function createBaseQueryFinalizedBundleResponse(): QueryFinalizedBundleResponse 
 }
 
 export const QueryFinalizedBundleResponse = {
-  encode(
-    message: QueryFinalizedBundleResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.finalized_bundle !== undefined) {
-      FinalizedBundle.encode(
-        message.finalized_bundle,
-        writer.uint32(10).fork()
-      ).ldelim();
+      FinalizedBundle.encode(message.finalized_bundle, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundleResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundleResponse();
@@ -397,10 +344,7 @@ export const QueryFinalizedBundleResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.finalized_bundle = FinalizedBundle.decode(
-            reader,
-            reader.uint32()
-          );
+          message.finalized_bundle = FinalizedBundle.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -412,29 +356,22 @@ export const QueryFinalizedBundleResponse = {
 
   fromJSON(object: any): QueryFinalizedBundleResponse {
     return {
-      finalized_bundle: isSet(object.finalized_bundle)
-        ? FinalizedBundle.fromJSON(object.finalized_bundle)
-        : undefined,
+      finalized_bundle: isSet(object.finalized_bundle) ? FinalizedBundle.fromJSON(object.finalized_bundle) : undefined,
     };
   },
 
   toJSON(message: QueryFinalizedBundleResponse): unknown {
     const obj: any = {};
     message.finalized_bundle !== undefined &&
-      (obj.finalized_bundle = message.finalized_bundle
-        ? FinalizedBundle.toJSON(message.finalized_bundle)
-        : undefined);
+      (obj.finalized_bundle = message.finalized_bundle ? FinalizedBundle.toJSON(message.finalized_bundle) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleResponse>, I>>(
-    object: I
-  ): QueryFinalizedBundleResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleResponse>, I>>(object: I): QueryFinalizedBundleResponse {
     const message = createBaseQueryFinalizedBundleResponse();
-    message.finalized_bundle =
-      object.finalized_bundle !== undefined && object.finalized_bundle !== null
-        ? FinalizedBundle.fromPartial(object.finalized_bundle)
-        : undefined;
+    message.finalized_bundle = (object.finalized_bundle !== undefined && object.finalized_bundle !== null)
+      ? FinalizedBundle.fromPartial(object.finalized_bundle)
+      : undefined;
     return message;
   },
 };
@@ -444,20 +381,14 @@ function createBaseQueryFinalizedBundleByStorageIdRequest(): QueryFinalizedBundl
 }
 
 export const QueryFinalizedBundleByStorageIdRequest = {
-  encode(
-    message: QueryFinalizedBundleByStorageIdRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundleByStorageIdRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.storage_id !== "") {
       writer.uint32(10).string(message.storage_id);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleByStorageIdRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundleByStorageIdRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundleByStorageIdRequest();
@@ -476,9 +407,7 @@ export const QueryFinalizedBundleByStorageIdRequest = {
   },
 
   fromJSON(object: any): QueryFinalizedBundleByStorageIdRequest {
-    return {
-      storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
-    };
+    return { storage_id: isSet(object.storage_id) ? String(object.storage_id) : "" };
   },
 
   toJSON(message: QueryFinalizedBundleByStorageIdRequest): unknown {
@@ -487,9 +416,9 @@ export const QueryFinalizedBundleByStorageIdRequest = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdRequest>, I>
-  >(object: I): QueryFinalizedBundleByStorageIdRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdRequest>, I>>(
+    object: I,
+  ): QueryFinalizedBundleByStorageIdRequest {
     const message = createBaseQueryFinalizedBundleByStorageIdRequest();
     message.storage_id = object.storage_id ?? "";
     return message;
@@ -501,23 +430,14 @@ function createBaseQueryFinalizedBundleByStorageIdResponse(): QueryFinalizedBund
 }
 
 export const QueryFinalizedBundleByStorageIdResponse = {
-  encode(
-    message: QueryFinalizedBundleByStorageIdResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundleByStorageIdResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.finalized_bundle !== undefined) {
-      FinalizedBundle.encode(
-        message.finalized_bundle,
-        writer.uint32(10).fork()
-      ).ldelim();
+      FinalizedBundle.encode(message.finalized_bundle, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundleByStorageIdResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundleByStorageIdResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundleByStorageIdResponse();
@@ -525,10 +445,7 @@ export const QueryFinalizedBundleByStorageIdResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.finalized_bundle = FinalizedBundle.decode(
-            reader,
-            reader.uint32()
-          );
+          message.finalized_bundle = FinalizedBundle.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -540,29 +457,24 @@ export const QueryFinalizedBundleByStorageIdResponse = {
 
   fromJSON(object: any): QueryFinalizedBundleByStorageIdResponse {
     return {
-      finalized_bundle: isSet(object.finalized_bundle)
-        ? FinalizedBundle.fromJSON(object.finalized_bundle)
-        : undefined,
+      finalized_bundle: isSet(object.finalized_bundle) ? FinalizedBundle.fromJSON(object.finalized_bundle) : undefined,
     };
   },
 
   toJSON(message: QueryFinalizedBundleByStorageIdResponse): unknown {
     const obj: any = {};
     message.finalized_bundle !== undefined &&
-      (obj.finalized_bundle = message.finalized_bundle
-        ? FinalizedBundle.toJSON(message.finalized_bundle)
-        : undefined);
+      (obj.finalized_bundle = message.finalized_bundle ? FinalizedBundle.toJSON(message.finalized_bundle) : undefined);
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdResponse>, I>
-  >(object: I): QueryFinalizedBundleByStorageIdResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundleByStorageIdResponse>, I>>(
+    object: I,
+  ): QueryFinalizedBundleByStorageIdResponse {
     const message = createBaseQueryFinalizedBundleByStorageIdResponse();
-    message.finalized_bundle =
-      object.finalized_bundle !== undefined && object.finalized_bundle !== null
-        ? FinalizedBundle.fromPartial(object.finalized_bundle)
-        : undefined;
+    message.finalized_bundle = (object.finalized_bundle !== undefined && object.finalized_bundle !== null)
+      ? FinalizedBundle.fromPartial(object.finalized_bundle)
+      : undefined;
     return message;
   },
 };
@@ -572,10 +484,7 @@ function createBaseQueryFinalizedBundlesByHeightRequest(): QueryFinalizedBundles
 }
 
 export const QueryFinalizedBundlesByHeightRequest = {
-  encode(
-    message: QueryFinalizedBundlesByHeightRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundlesByHeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -585,10 +494,7 @@ export const QueryFinalizedBundlesByHeightRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundlesByHeightRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundlesByHeightRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundlesByHeightRequest();
@@ -623,9 +529,9 @@ export const QueryFinalizedBundlesByHeightRequest = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightRequest>, I>
-  >(object: I): QueryFinalizedBundlesByHeightRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightRequest>, I>>(
+    object: I,
+  ): QueryFinalizedBundlesByHeightRequest {
     const message = createBaseQueryFinalizedBundlesByHeightRequest();
     message.pool_id = object.pool_id ?? "0";
     message.height = object.height ?? "0";
@@ -638,23 +544,14 @@ function createBaseQueryFinalizedBundlesByHeightResponse(): QueryFinalizedBundle
 }
 
 export const QueryFinalizedBundlesByHeightResponse = {
-  encode(
-    message: QueryFinalizedBundlesByHeightResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryFinalizedBundlesByHeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.finalized_bundle !== undefined) {
-      FinalizedBundle.encode(
-        message.finalized_bundle,
-        writer.uint32(10).fork()
-      ).ldelim();
+      FinalizedBundle.encode(message.finalized_bundle, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryFinalizedBundlesByHeightResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryFinalizedBundlesByHeightResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryFinalizedBundlesByHeightResponse();
@@ -662,10 +559,7 @@ export const QueryFinalizedBundlesByHeightResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.finalized_bundle = FinalizedBundle.decode(
-            reader,
-            reader.uint32()
-          );
+          message.finalized_bundle = FinalizedBundle.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -677,29 +571,24 @@ export const QueryFinalizedBundlesByHeightResponse = {
 
   fromJSON(object: any): QueryFinalizedBundlesByHeightResponse {
     return {
-      finalized_bundle: isSet(object.finalized_bundle)
-        ? FinalizedBundle.fromJSON(object.finalized_bundle)
-        : undefined,
+      finalized_bundle: isSet(object.finalized_bundle) ? FinalizedBundle.fromJSON(object.finalized_bundle) : undefined,
     };
   },
 
   toJSON(message: QueryFinalizedBundlesByHeightResponse): unknown {
     const obj: any = {};
     message.finalized_bundle !== undefined &&
-      (obj.finalized_bundle = message.finalized_bundle
-        ? FinalizedBundle.toJSON(message.finalized_bundle)
-        : undefined);
+      (obj.finalized_bundle = message.finalized_bundle ? FinalizedBundle.toJSON(message.finalized_bundle) : undefined);
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightResponse>, I>
-  >(object: I): QueryFinalizedBundlesByHeightResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryFinalizedBundlesByHeightResponse>, I>>(
+    object: I,
+  ): QueryFinalizedBundlesByHeightResponse {
     const message = createBaseQueryFinalizedBundlesByHeightResponse();
-    message.finalized_bundle =
-      object.finalized_bundle !== undefined && object.finalized_bundle !== null
-        ? FinalizedBundle.fromPartial(object.finalized_bundle)
-        : undefined;
+    message.finalized_bundle = (object.finalized_bundle !== undefined && object.finalized_bundle !== null)
+      ? FinalizedBundle.fromPartial(object.finalized_bundle)
+      : undefined;
     return message;
   },
 };
@@ -709,20 +598,14 @@ function createBaseQueryCurrentVoteStatusRequest(): QueryCurrentVoteStatusReques
 }
 
 export const QueryCurrentVoteStatusRequest = {
-  encode(
-    message: QueryCurrentVoteStatusRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentVoteStatusRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentVoteStatusRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentVoteStatusRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentVoteStatusRequest();
@@ -741,9 +624,7 @@ export const QueryCurrentVoteStatusRequest = {
   },
 
   fromJSON(object: any): QueryCurrentVoteStatusRequest {
-    return {
-      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-    };
+    return { pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0" };
   },
 
   toJSON(message: QueryCurrentVoteStatusRequest): unknown {
@@ -753,7 +634,7 @@ export const QueryCurrentVoteStatusRequest = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryCurrentVoteStatusRequest>, I>>(
-    object: I
+    object: I,
   ): QueryCurrentVoteStatusRequest {
     const message = createBaseQueryCurrentVoteStatusRequest();
     message.pool_id = object.pool_id ?? "0";
@@ -766,10 +647,7 @@ function createBaseQueryCurrentVoteStatusResponse(): QueryCurrentVoteStatusRespo
 }
 
 export const QueryCurrentVoteStatusResponse = {
-  encode(
-    message: QueryCurrentVoteStatusResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCurrentVoteStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.valid !== "0") {
       writer.uint32(8).uint64(message.valid);
     }
@@ -785,10 +663,7 @@ export const QueryCurrentVoteStatusResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCurrentVoteStatusResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCurrentVoteStatusResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentVoteStatusResponse();
@@ -834,7 +709,7 @@ export const QueryCurrentVoteStatusResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryCurrentVoteStatusResponse>, I>>(
-    object: I
+    object: I,
   ): QueryCurrentVoteStatusResponse {
     const message = createBaseQueryCurrentVoteStatusResponse();
     message.valid = object.valid ?? "0";
@@ -850,10 +725,7 @@ function createBaseQueryCanValidateRequest(): QueryCanValidateRequest {
 }
 
 export const QueryCanValidateRequest = {
-  encode(
-    message: QueryCanValidateRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanValidateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -863,10 +735,7 @@ export const QueryCanValidateRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCanValidateRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCanValidateRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCanValidateRequest();
@@ -901,9 +770,7 @@ export const QueryCanValidateRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanValidateRequest>, I>>(
-    object: I
-  ): QueryCanValidateRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCanValidateRequest>, I>>(object: I): QueryCanValidateRequest {
     const message = createBaseQueryCanValidateRequest();
     message.pool_id = object.pool_id ?? "0";
     message.valaddress = object.valaddress ?? "";
@@ -916,10 +783,7 @@ function createBaseQueryCanValidateResponse(): QueryCanValidateResponse {
 }
 
 export const QueryCanValidateResponse = {
-  encode(
-    message: QueryCanValidateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanValidateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.possible === true) {
       writer.uint32(8).bool(message.possible);
     }
@@ -929,10 +793,7 @@ export const QueryCanValidateResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCanValidateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCanValidateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCanValidateResponse();
@@ -967,9 +828,7 @@ export const QueryCanValidateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanValidateResponse>, I>>(
-    object: I
-  ): QueryCanValidateResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCanValidateResponse>, I>>(object: I): QueryCanValidateResponse {
     const message = createBaseQueryCanValidateResponse();
     message.possible = object.possible ?? false;
     message.reason = object.reason ?? "";
@@ -982,10 +841,7 @@ function createBaseQueryCanProposeRequest(): QueryCanProposeRequest {
 }
 
 export const QueryCanProposeRequest = {
-  encode(
-    message: QueryCanProposeRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanProposeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -1001,10 +857,7 @@ export const QueryCanProposeRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCanProposeRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCanProposeRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCanProposeRequest();
@@ -1045,14 +898,11 @@ export const QueryCanProposeRequest = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.staker !== undefined && (obj.staker = message.staker);
     message.proposer !== undefined && (obj.proposer = message.proposer);
-    message.from_height !== undefined &&
-      (obj.from_height = message.from_height);
+    message.from_height !== undefined && (obj.from_height = message.from_height);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanProposeRequest>, I>>(
-    object: I
-  ): QueryCanProposeRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCanProposeRequest>, I>>(object: I): QueryCanProposeRequest {
     const message = createBaseQueryCanProposeRequest();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -1067,10 +917,7 @@ function createBaseQueryCanProposeResponse(): QueryCanProposeResponse {
 }
 
 export const QueryCanProposeResponse = {
-  encode(
-    message: QueryCanProposeResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanProposeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.possible === true) {
       writer.uint32(8).bool(message.possible);
     }
@@ -1080,10 +927,7 @@ export const QueryCanProposeResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCanProposeResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCanProposeResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCanProposeResponse();
@@ -1118,9 +962,7 @@ export const QueryCanProposeResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanProposeResponse>, I>>(
-    object: I
-  ): QueryCanProposeResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCanProposeResponse>, I>>(object: I): QueryCanProposeResponse {
     const message = createBaseQueryCanProposeResponse();
     message.possible = object.possible ?? false;
     message.reason = object.reason ?? "";
@@ -1133,10 +975,7 @@ function createBaseQueryCanVoteRequest(): QueryCanVoteRequest {
 }
 
 export const QueryCanVoteRequest = {
-  encode(
-    message: QueryCanVoteRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanVoteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -1197,9 +1036,7 @@ export const QueryCanVoteRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanVoteRequest>, I>>(
-    object: I
-  ): QueryCanVoteRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCanVoteRequest>, I>>(object: I): QueryCanVoteRequest {
     const message = createBaseQueryCanVoteRequest();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -1214,10 +1051,7 @@ function createBaseQueryCanVoteResponse(): QueryCanVoteResponse {
 }
 
 export const QueryCanVoteResponse = {
-  encode(
-    message: QueryCanVoteResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryCanVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.possible === true) {
       writer.uint32(8).bool(message.possible);
     }
@@ -1227,10 +1061,7 @@ export const QueryCanVoteResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryCanVoteResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCanVoteResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCanVoteResponse();
@@ -1265,9 +1096,7 @@ export const QueryCanVoteResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryCanVoteResponse>, I>>(
-    object: I
-  ): QueryCanVoteResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCanVoteResponse>, I>>(object: I): QueryCanVoteResponse {
     const message = createBaseQueryCanVoteResponse();
     message.possible = object.possible ?? false;
     message.reason = object.reason ?? "";
@@ -1278,29 +1107,21 @@ export const QueryCanVoteResponse = {
 /** QueryDelegation contains all rpc requests related to direct delegation data */
 export interface QueryBundles {
   /** FinalizedBundles ... */
-  FinalizedBundles(
-    request: QueryFinalizedBundlesRequest
-  ): Promise<QueryFinalizedBundlesResponse>;
+  FinalizedBundles(request: QueryFinalizedBundlesRequest): Promise<QueryFinalizedBundlesResponse>;
   /** FinalizedBundle ... */
-  FinalizedBundle(
-    request: QueryFinalizedBundleRequest
-  ): Promise<QueryFinalizedBundleResponse>;
+  FinalizedBundle(request: QueryFinalizedBundleRequest): Promise<QueryFinalizedBundleResponse>;
   /** StorageID -> single */
   FinalizedBundleByStorageId(
-    request: QueryFinalizedBundleByStorageIdRequest
+    request: QueryFinalizedBundleByStorageIdRequest,
   ): Promise<QueryFinalizedBundleByStorageIdResponse>;
   /** Queries the bundle which contains the data given height */
   FinalizedBundlesByHeight(
-    request: QueryFinalizedBundlesByHeightRequest
+    request: QueryFinalizedBundlesByHeightRequest,
   ): Promise<QueryFinalizedBundlesByHeightResponse>;
   /** CurrentVoteStatus ... */
-  CurrentVoteStatus(
-    request: QueryCurrentVoteStatusRequest
-  ): Promise<QueryCurrentVoteStatusResponse>;
+  CurrentVoteStatus(request: QueryCurrentVoteStatusRequest): Promise<QueryCurrentVoteStatusResponse>;
   /** CanValidate ... */
-  CanValidate(
-    request: QueryCanValidateRequest
-  ): Promise<QueryCanValidateResponse>;
+  CanValidate(request: QueryCanValidateRequest): Promise<QueryCanValidateResponse>;
   /** CanPropose ... */
   CanPropose(request: QueryCanProposeRequest): Promise<QueryCanProposeResponse>;
   /** CanVote checks if voter on pool can still vote for the given bundle */
@@ -1313,160 +1134,80 @@ export class QueryBundlesClientImpl implements QueryBundles {
     this.rpc = rpc;
     this.FinalizedBundles = this.FinalizedBundles.bind(this);
     this.FinalizedBundle = this.FinalizedBundle.bind(this);
-    this.FinalizedBundleByStorageId =
-      this.FinalizedBundleByStorageId.bind(this);
+    this.FinalizedBundleByStorageId = this.FinalizedBundleByStorageId.bind(this);
     this.FinalizedBundlesByHeight = this.FinalizedBundlesByHeight.bind(this);
     this.CurrentVoteStatus = this.CurrentVoteStatus.bind(this);
     this.CanValidate = this.CanValidate.bind(this);
     this.CanPropose = this.CanPropose.bind(this);
     this.CanVote = this.CanVote.bind(this);
   }
-  FinalizedBundles(
-    request: QueryFinalizedBundlesRequest
-  ): Promise<QueryFinalizedBundlesResponse> {
+  FinalizedBundles(request: QueryFinalizedBundlesRequest): Promise<QueryFinalizedBundlesResponse> {
     const data = QueryFinalizedBundlesRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "FinalizedBundles",
-      data
-    );
-    return promise.then((data) =>
-      QueryFinalizedBundlesResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundles", data);
+    return promise.then((data) => QueryFinalizedBundlesResponse.decode(new _m0.Reader(data)));
   }
 
-  FinalizedBundle(
-    request: QueryFinalizedBundleRequest
-  ): Promise<QueryFinalizedBundleResponse> {
+  FinalizedBundle(request: QueryFinalizedBundleRequest): Promise<QueryFinalizedBundleResponse> {
     const data = QueryFinalizedBundleRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "FinalizedBundle",
-      data
-    );
-    return promise.then((data) =>
-      QueryFinalizedBundleResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundle", data);
+    return promise.then((data) => QueryFinalizedBundleResponse.decode(new _m0.Reader(data)));
   }
 
   FinalizedBundleByStorageId(
-    request: QueryFinalizedBundleByStorageIdRequest
+    request: QueryFinalizedBundleByStorageIdRequest,
   ): Promise<QueryFinalizedBundleByStorageIdResponse> {
-    const data =
-      QueryFinalizedBundleByStorageIdRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "FinalizedBundleByStorageId",
-      data
-    );
-    return promise.then((data) =>
-      QueryFinalizedBundleByStorageIdResponse.decode(new _m0.Reader(data))
-    );
+    const data = QueryFinalizedBundleByStorageIdRequest.encode(request).finish();
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundleByStorageId", data);
+    return promise.then((data) => QueryFinalizedBundleByStorageIdResponse.decode(new _m0.Reader(data)));
   }
 
   FinalizedBundlesByHeight(
-    request: QueryFinalizedBundlesByHeightRequest
+    request: QueryFinalizedBundlesByHeightRequest,
   ): Promise<QueryFinalizedBundlesByHeightResponse> {
     const data = QueryFinalizedBundlesByHeightRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "FinalizedBundlesByHeight",
-      data
-    );
-    return promise.then((data) =>
-      QueryFinalizedBundlesByHeightResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundlesByHeight", data);
+    return promise.then((data) => QueryFinalizedBundlesByHeightResponse.decode(new _m0.Reader(data)));
   }
 
-  CurrentVoteStatus(
-    request: QueryCurrentVoteStatusRequest
-  ): Promise<QueryCurrentVoteStatusResponse> {
+  CurrentVoteStatus(request: QueryCurrentVoteStatusRequest): Promise<QueryCurrentVoteStatusResponse> {
     const data = QueryCurrentVoteStatusRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "CurrentVoteStatus",
-      data
-    );
-    return promise.then((data) =>
-      QueryCurrentVoteStatusResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CurrentVoteStatus", data);
+    return promise.then((data) => QueryCurrentVoteStatusResponse.decode(new _m0.Reader(data)));
   }
 
-  CanValidate(
-    request: QueryCanValidateRequest
-  ): Promise<QueryCanValidateResponse> {
+  CanValidate(request: QueryCanValidateRequest): Promise<QueryCanValidateResponse> {
     const data = QueryCanValidateRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "CanValidate",
-      data
-    );
-    return promise.then((data) =>
-      QueryCanValidateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanValidate", data);
+    return promise.then((data) => QueryCanValidateResponse.decode(new _m0.Reader(data)));
   }
 
-  CanPropose(
-    request: QueryCanProposeRequest
-  ): Promise<QueryCanProposeResponse> {
+  CanPropose(request: QueryCanProposeRequest): Promise<QueryCanProposeResponse> {
     const data = QueryCanProposeRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "CanPropose",
-      data
-    );
-    return promise.then((data) =>
-      QueryCanProposeResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanPropose", data);
+    return promise.then((data) => QueryCanProposeResponse.decode(new _m0.Reader(data)));
   }
 
   CanVote(request: QueryCanVoteRequest): Promise<QueryCanVoteResponse> {
     const data = QueryCanVoteRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryBundles",
-      "CanVote",
-      data
-    );
-    return promise.then((data) =>
-      QueryCanVoteResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanVote", data);
+    return promise.then((data) => QueryCanVoteResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();
