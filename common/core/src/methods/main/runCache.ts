@@ -72,10 +72,12 @@ export async function runCache(this: Node): Promise<void> {
       // delete all data items which came before the current index
       // because they got finalized and are not needed anymore
       for (
-        let i = Math.max(0, currentIndex - 1);
-        i >=
-        Math.max(0, currentIndex - parseInt(this.pool.data!.max_bundle_size));
-        i--
+        let i = Math.max(
+          0,
+          currentIndex - parseInt(this.pool.data!.max_bundle_size)
+        );
+        i < currentIndex;
+        i++
       ) {
         try {
           await this.cache.del(i.toString());
@@ -94,7 +96,7 @@ export async function runCache(this: Node): Promise<void> {
 
       // collect all data items from current pool index to
       // the target index
-      for (let i = currentIndex; i <= targetIndex; i++) {
+      for (let i = currentIndex; i < targetIndex; i++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
         const itemFound = await this.cache.exists(i.toString());

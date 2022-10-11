@@ -126,7 +126,7 @@ describe("cache tests", () => {
     register.clear();
   });
 
-  test.skip("start caching from a pool which is in genesis state", async () => {
+  test("start caching from a pool which is in genesis state", async () => {
     // ARRANGE
     const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
       core.pool = {
@@ -194,10 +194,10 @@ describe("cache tests", () => {
 
     expect(delMock).toHaveBeenCalledTimes(0);
 
-    expect(dropMock).toHaveBeenCalledTimes(0);
+    expect(dropMock).toHaveBeenCalledTimes(1);
   });
 
-  test.skip("start caching from a pool which has a bundle proposal ongoing", async () => {
+  test("start caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
     const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
       core.pool = {
@@ -205,19 +205,20 @@ describe("cache tests", () => {
         data: {
           ...genesis_pool.data,
           current_key: "99",
-          current_height: "99",
+          current_index: "100",
         },
         bundle_proposal: {
           ...genesis_pool.bundle_proposal,
           storage_id: "test_storage_id",
           uploader: "test_staker",
           next_uploader: "test_staker",
-          byte_size: "123456789",
-          to_height: "149",
+          data_size: "123456789",
+          data_hash: "test_bundle_hash",
+          bundle_size: "50",
+          from_key: "100",
           to_key: "149",
-          to_value: "149-value",
-          bundle_hash: "test_bundle_hash",
-          created_at: "0",
+          bundle_summary: "test_summary",
+          updated_at: "0",
           voters_valid: ["test_staker"],
         },
       } as any;
@@ -234,10 +235,10 @@ describe("cache tests", () => {
     // =========================
 
     expect(getDataItemMockByKey).toHaveBeenCalledTimes(
-      50 + +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
-    for (let n = 0; n < 50 + +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
         n + 1,
         core,
@@ -248,12 +249,12 @@ describe("cache tests", () => {
     expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     expect(nextKeyMock).toHaveBeenCalledTimes(
-      50 + +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
     // here we subtract the key - 1 because we start using the
     // current key
-    for (let n = 0; n < 50 + +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       expect(nextKeyMock).toHaveBeenNthCalledWith(
         n + 1,
         (n + 100 - 1).toString()
@@ -267,10 +268,10 @@ describe("cache tests", () => {
     // =======================
 
     expect(putMock).toHaveBeenCalledTimes(
-      50 + +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
-    for (let n = 0; n < 50 + +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       const item = await core["runtime"].getDataItemByKey(
         core,
         (n + 100).toString()
@@ -285,17 +286,17 @@ describe("cache tests", () => {
     expect(getMock).toHaveBeenCalledTimes(0);
 
     expect(existsMock).toHaveBeenCalledTimes(
-      50 + +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
-    for (let n = 0; n < 50 + +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       expect(existsMock).toHaveBeenNthCalledWith(n + 1, (n + 100).toString());
     }
 
     expect(delMock).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < 100; n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, (99 - n).toString());
+      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
     expect(dropMock).toHaveBeenCalledTimes(0);
