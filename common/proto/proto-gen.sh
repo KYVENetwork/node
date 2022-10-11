@@ -1,7 +1,6 @@
 #!/bin/bash
 rm -rf temp
 mkdir temp
-#todo remove useless git submodules
 KYVE_CHAIN_REPO="git@github.com:KYVENetwork/chain-beta.git"
 BRANCH_KYVE="restructuring"
 git -C ./temp clone  -b ${BRANCH_KYVE} --single-branch ${KYVE_CHAIN_REPO}
