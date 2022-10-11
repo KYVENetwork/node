@@ -1,15 +1,16 @@
 /* eslint-disable */
+import _m0 from "protobufjs/minimal";
+import { QueryParamsResponse as QueryParamsResponse3 } from "../../../cosmos/gov/v1/query";
 import { Params } from "../../bundles/v1beta1/params";
 import { Params as Params1 } from "../../delegation/v1beta1/params";
-import { Params as Params2 } from "../../pool/v1beta1/params";
-import { Params as Params3 } from "../../stakers/v1beta1/params";
-import { Params as Params4 } from "../../fees/v1beta1/fees";
-import _m0 from "protobufjs/minimal";
+import { Params as Params2 } from "../../fees/v1beta1/fees";
+import { Params as Params4 } from "../../stakers/v1beta1/params";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
 /** QueryParamsRequest ... */
-export interface QueryParamsRequest {}
+export interface QueryParamsRequest {
+}
 
 /** QueryParamsResponse ... */
 export interface QueryParamsResponse {
@@ -17,12 +18,12 @@ export interface QueryParamsResponse {
   bundles_params?: Params;
   /** delegation_params ... */
   delegation_params?: Params1;
-  /** pool_params ... */
-  pool_params?: Params2;
-  /** stakers_params ... */
-  stakers_params?: Params3;
   /** fees_params ... */
-  fees_params?: Params4;
+  fees_params?: Params2;
+  /** gov_params ... */
+  gov_params?: QueryParamsResponse3;
+  /** stakers_params ... */
+  stakers_params?: Params4;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -30,10 +31,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 
 export const QueryParamsRequest = {
-  encode(
-    _: QueryParamsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -61,9 +59,7 @@ export const QueryParamsRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
-    _: I
-  ): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -73,34 +69,28 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     bundles_params: undefined,
     delegation_params: undefined,
-    pool_params: undefined,
-    stakers_params: undefined,
     fees_params: undefined,
+    gov_params: undefined,
+    stakers_params: undefined,
   };
 }
 
 export const QueryParamsResponse = {
-  encode(
-    message: QueryParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bundles_params !== undefined) {
       Params.encode(message.bundles_params, writer.uint32(10).fork()).ldelim();
     }
     if (message.delegation_params !== undefined) {
-      Params1.encode(
-        message.delegation_params,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    if (message.pool_params !== undefined) {
-      Params2.encode(message.pool_params, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.stakers_params !== undefined) {
-      Params3.encode(message.stakers_params, writer.uint32(34).fork()).ldelim();
+      Params1.encode(message.delegation_params, writer.uint32(18).fork()).ldelim();
     }
     if (message.fees_params !== undefined) {
-      Params4.encode(message.fees_params, writer.uint32(42).fork()).ldelim();
+      Params2.encode(message.fees_params, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.gov_params !== undefined) {
+      QueryParamsResponse3.encode(message.gov_params, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.stakers_params !== undefined) {
+      Params4.encode(message.stakers_params, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -119,13 +109,13 @@ export const QueryParamsResponse = {
           message.delegation_params = Params1.decode(reader, reader.uint32());
           break;
         case 3:
-          message.pool_params = Params2.decode(reader, reader.uint32());
+          message.fees_params = Params2.decode(reader, reader.uint32());
           break;
         case 4:
-          message.stakers_params = Params3.decode(reader, reader.uint32());
+          message.gov_params = QueryParamsResponse3.decode(reader, reader.uint32());
           break;
         case 5:
-          message.fees_params = Params4.decode(reader, reader.uint32());
+          message.stakers_params = Params4.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -137,74 +127,46 @@ export const QueryParamsResponse = {
 
   fromJSON(object: any): QueryParamsResponse {
     return {
-      bundles_params: isSet(object.bundles_params)
-        ? Params.fromJSON(object.bundles_params)
-        : undefined,
-      delegation_params: isSet(object.delegation_params)
-        ? Params1.fromJSON(object.delegation_params)
-        : undefined,
-      pool_params: isSet(object.pool_params)
-        ? Params2.fromJSON(object.pool_params)
-        : undefined,
-      stakers_params: isSet(object.stakers_params)
-        ? Params3.fromJSON(object.stakers_params)
-        : undefined,
-      fees_params: isSet(object.fees_params)
-        ? Params4.fromJSON(object.fees_params)
-        : undefined,
+      bundles_params: isSet(object.bundles_params) ? Params.fromJSON(object.bundles_params) : undefined,
+      delegation_params: isSet(object.delegation_params) ? Params1.fromJSON(object.delegation_params) : undefined,
+      fees_params: isSet(object.fees_params) ? Params2.fromJSON(object.fees_params) : undefined,
+      gov_params: isSet(object.gov_params) ? QueryParamsResponse3.fromJSON(object.gov_params) : undefined,
+      stakers_params: isSet(object.stakers_params) ? Params4.fromJSON(object.stakers_params) : undefined,
     };
   },
 
   toJSON(message: QueryParamsResponse): unknown {
     const obj: any = {};
     message.bundles_params !== undefined &&
-      (obj.bundles_params = message.bundles_params
-        ? Params.toJSON(message.bundles_params)
-        : undefined);
+      (obj.bundles_params = message.bundles_params ? Params.toJSON(message.bundles_params) : undefined);
     message.delegation_params !== undefined &&
-      (obj.delegation_params = message.delegation_params
-        ? Params1.toJSON(message.delegation_params)
-        : undefined);
-    message.pool_params !== undefined &&
-      (obj.pool_params = message.pool_params
-        ? Params2.toJSON(message.pool_params)
-        : undefined);
-    message.stakers_params !== undefined &&
-      (obj.stakers_params = message.stakers_params
-        ? Params3.toJSON(message.stakers_params)
-        : undefined);
+      (obj.delegation_params = message.delegation_params ? Params1.toJSON(message.delegation_params) : undefined);
     message.fees_params !== undefined &&
-      (obj.fees_params = message.fees_params
-        ? Params4.toJSON(message.fees_params)
-        : undefined);
+      (obj.fees_params = message.fees_params ? Params2.toJSON(message.fees_params) : undefined);
+    message.gov_params !== undefined &&
+      (obj.gov_params = message.gov_params ? QueryParamsResponse3.toJSON(message.gov_params) : undefined);
+    message.stakers_params !== undefined &&
+      (obj.stakers_params = message.stakers_params ? Params4.toJSON(message.stakers_params) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
-    object: I
-  ): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
-    message.bundles_params =
-      object.bundles_params !== undefined && object.bundles_params !== null
-        ? Params.fromPartial(object.bundles_params)
-        : undefined;
-    message.delegation_params =
-      object.delegation_params !== undefined &&
-      object.delegation_params !== null
-        ? Params1.fromPartial(object.delegation_params)
-        : undefined;
-    message.pool_params =
-      object.pool_params !== undefined && object.pool_params !== null
-        ? Params2.fromPartial(object.pool_params)
-        : undefined;
-    message.stakers_params =
-      object.stakers_params !== undefined && object.stakers_params !== null
-        ? Params3.fromPartial(object.stakers_params)
-        : undefined;
-    message.fees_params =
-      object.fees_params !== undefined && object.fees_params !== null
-        ? Params4.fromPartial(object.fees_params)
-        : undefined;
+    message.bundles_params = (object.bundles_params !== undefined && object.bundles_params !== null)
+      ? Params.fromPartial(object.bundles_params)
+      : undefined;
+    message.delegation_params = (object.delegation_params !== undefined && object.delegation_params !== null)
+      ? Params1.fromPartial(object.delegation_params)
+      : undefined;
+    message.fees_params = (object.fees_params !== undefined && object.fees_params !== null)
+      ? Params2.fromPartial(object.fees_params)
+      : undefined;
+    message.gov_params = (object.gov_params !== undefined && object.gov_params !== null)
+      ? QueryParamsResponse3.fromPartial(object.gov_params)
+      : undefined;
+    message.stakers_params = (object.stakers_params !== undefined && object.stakers_params !== null)
+      ? Params4.fromPartial(object.stakers_params)
+      : undefined;
     return message;
   },
 };
@@ -223,51 +185,25 @@ export class QueryParamsClientImpl implements QueryParams {
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryParams",
-      "Params",
-      data
-    );
-    return promise.then((data) =>
-      QueryParamsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.query.v1beta1.QueryParams", "Params", data);
+    return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -15,7 +15,8 @@ export interface MsgDelegate {
 }
 
 /** MsgDelegatePoolResponse defines the Msg/DelegatePool response type. */
-export interface MsgDelegateResponse {}
+export interface MsgDelegateResponse {
+}
 
 /** MsgWithdrawPool defines a SDK message for withdrawing delegation rewards from a specific pool. */
 export interface MsgWithdrawRewards {
@@ -26,7 +27,8 @@ export interface MsgWithdrawRewards {
 }
 
 /** MsgWithdrawPoolResponse defines the Msg/WithdrawPool response type. */
-export interface MsgWithdrawRewardsResponse {}
+export interface MsgWithdrawRewardsResponse {
+}
 
 /** MsgUndelegatePool defines a SDK message for undelegating from a specific pool. */
 export interface MsgUndelegate {
@@ -39,7 +41,8 @@ export interface MsgUndelegate {
 }
 
 /** MsgUndelegatePoolResponse defines the Msg/UndelegatePool response type. */
-export interface MsgUndelegateResponse {}
+export interface MsgUndelegateResponse {
+}
 
 /**
  * MsgRedelegatePool defines a SDK message for redelegating from a
@@ -57,17 +60,27 @@ export interface MsgRedelegate {
 }
 
 /** MsgUndelegatePoolResponse defines the Msg/UndelegatePool response type. */
-export interface MsgRedelegateResponse {}
+export interface MsgRedelegateResponse {
+}
+
+/** MsgUpdateParams defines a SDK message for updating the module parameters. */
+export interface MsgUpdateParams {
+  /** authority is the address of the governance account. */
+  authority: string;
+  /** payload defines the x/delegation parameters to update. */
+  payload: string;
+}
+
+/** MsgUpdateParamsResponse defines the Msg/UpdateParams response type. */
+export interface MsgUpdateParamsResponse {
+}
 
 function createBaseMsgDelegate(): MsgDelegate {
   return { creator: "", staker: "", amount: "0" };
 }
 
 export const MsgDelegate = {
-  encode(
-    message: MsgDelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgDelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -120,9 +133,7 @@ export const MsgDelegate = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDelegate>, I>>(
-    object: I
-  ): MsgDelegate {
+  fromPartial<I extends Exact<DeepPartial<MsgDelegate>, I>>(object: I): MsgDelegate {
     const message = createBaseMsgDelegate();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -136,10 +147,7 @@ function createBaseMsgDelegateResponse(): MsgDelegateResponse {
 }
 
 export const MsgDelegateResponse = {
-  encode(
-    _: MsgDelegateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgDelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -167,9 +175,7 @@ export const MsgDelegateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDelegateResponse>, I>>(
-    _: I
-  ): MsgDelegateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgDelegateResponse>, I>>(_: I): MsgDelegateResponse {
     const message = createBaseMsgDelegateResponse();
     return message;
   },
@@ -180,10 +186,7 @@ function createBaseMsgWithdrawRewards(): MsgWithdrawRewards {
 }
 
 export const MsgWithdrawRewards = {
-  encode(
-    message: MsgWithdrawRewards,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgWithdrawRewards, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -228,9 +231,7 @@ export const MsgWithdrawRewards = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawRewards>, I>>(
-    object: I
-  ): MsgWithdrawRewards {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawRewards>, I>>(object: I): MsgWithdrawRewards {
     const message = createBaseMsgWithdrawRewards();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -243,17 +244,11 @@ function createBaseMsgWithdrawRewardsResponse(): MsgWithdrawRewardsResponse {
 }
 
 export const MsgWithdrawRewardsResponse = {
-  encode(
-    _: MsgWithdrawRewardsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgWithdrawRewardsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgWithdrawRewardsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawRewardsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawRewardsResponse();
@@ -277,9 +272,7 @@ export const MsgWithdrawRewardsResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawRewardsResponse>, I>>(
-    _: I
-  ): MsgWithdrawRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawRewardsResponse>, I>>(_: I): MsgWithdrawRewardsResponse {
     const message = createBaseMsgWithdrawRewardsResponse();
     return message;
   },
@@ -290,10 +283,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
 }
 
 export const MsgUndelegate = {
-  encode(
-    message: MsgUndelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUndelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -346,9 +336,7 @@ export const MsgUndelegate = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUndelegate>, I>>(
-    object: I
-  ): MsgUndelegate {
+  fromPartial<I extends Exact<DeepPartial<MsgUndelegate>, I>>(object: I): MsgUndelegate {
     const message = createBaseMsgUndelegate();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -362,17 +350,11 @@ function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
 }
 
 export const MsgUndelegateResponse = {
-  encode(
-    _: MsgUndelegateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUndelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUndelegateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUndelegateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUndelegateResponse();
@@ -396,9 +378,7 @@ export const MsgUndelegateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUndelegateResponse>, I>>(
-    _: I
-  ): MsgUndelegateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUndelegateResponse>, I>>(_: I): MsgUndelegateResponse {
     const message = createBaseMsgUndelegateResponse();
     return message;
   },
@@ -409,10 +389,7 @@ function createBaseMsgRedelegate(): MsgRedelegate {
 }
 
 export const MsgRedelegate = {
-  encode(
-    message: MsgRedelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRedelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -467,16 +444,13 @@ export const MsgRedelegate = {
   toJSON(message: MsgRedelegate): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.from_staker !== undefined &&
-      (obj.from_staker = message.from_staker);
+    message.from_staker !== undefined && (obj.from_staker = message.from_staker);
     message.to_staker !== undefined && (obj.to_staker = message.to_staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRedelegate>, I>>(
-    object: I
-  ): MsgRedelegate {
+  fromPartial<I extends Exact<DeepPartial<MsgRedelegate>, I>>(object: I): MsgRedelegate {
     const message = createBaseMsgRedelegate();
     message.creator = object.creator ?? "";
     message.from_staker = object.from_staker ?? "";
@@ -491,17 +465,11 @@ function createBaseMsgRedelegateResponse(): MsgRedelegateResponse {
 }
 
 export const MsgRedelegateResponse = {
-  encode(
-    _: MsgRedelegateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgRedelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRedelegateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRedelegateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRedelegateResponse();
@@ -525,26 +493,124 @@ export const MsgRedelegateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRedelegateResponse>, I>>(
-    _: I
-  ): MsgRedelegateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRedelegateResponse>, I>>(_: I): MsgRedelegateResponse {
     const message = createBaseMsgRedelegateResponse();
+    return message;
+  },
+};
+
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return { authority: "", payload: "" };
+}
+
+export const MsgUpdateParams = {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.payload !== "") {
+      writer.uint32(18).string(message.payload);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.payload = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      payload: isSet(object.payload) ? String(object.payload) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.payload !== undefined && (obj.payload = message.payload);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.payload = object.payload ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+
+export const MsgUpdateParamsResponse = {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
 };
 
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** DelegatePool ... */
+  /** Delegate ... */
   Delegate(request: MsgDelegate): Promise<MsgDelegateResponse>;
-  /** WithdrawPool ... */
-  WithdrawRewards(
-    request: MsgWithdrawRewards
-  ): Promise<MsgWithdrawRewardsResponse>;
-  /** UndelegatePool ... */
+  /** Withdraw ... */
+  WithdrawRewards(request: MsgWithdrawRewards): Promise<MsgWithdrawRewardsResponse>;
+  /** Undelegate ... */
   Undelegate(request: MsgUndelegate): Promise<MsgUndelegateResponse>;
-  /** RedelegatePool ... */
+  /** Redelegate ... */
   Redelegate(request: MsgRedelegate): Promise<MsgRedelegateResponse>;
+  /**
+   * UpdateParams defines a governance operation for updating the x/delegation module
+   * parameters. The authority is hard-coded to the x/gov module account.
+   */
+  UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -555,92 +621,53 @@ export class MsgClientImpl implements Msg {
     this.WithdrawRewards = this.WithdrawRewards.bind(this);
     this.Undelegate = this.Undelegate.bind(this);
     this.Redelegate = this.Redelegate.bind(this);
+    this.UpdateParams = this.UpdateParams.bind(this);
   }
   Delegate(request: MsgDelegate): Promise<MsgDelegateResponse> {
     const data = MsgDelegate.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.delegation.v1beta1.Msg",
-      "Delegate",
-      data
-    );
-    return promise.then((data) =>
-      MsgDelegateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Delegate", data);
+    return promise.then((data) => MsgDelegateResponse.decode(new _m0.Reader(data)));
   }
 
-  WithdrawRewards(
-    request: MsgWithdrawRewards
-  ): Promise<MsgWithdrawRewardsResponse> {
+  WithdrawRewards(request: MsgWithdrawRewards): Promise<MsgWithdrawRewardsResponse> {
     const data = MsgWithdrawRewards.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.delegation.v1beta1.Msg",
-      "WithdrawRewards",
-      data
-    );
-    return promise.then((data) =>
-      MsgWithdrawRewardsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "WithdrawRewards", data);
+    return promise.then((data) => MsgWithdrawRewardsResponse.decode(new _m0.Reader(data)));
   }
 
   Undelegate(request: MsgUndelegate): Promise<MsgUndelegateResponse> {
     const data = MsgUndelegate.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.delegation.v1beta1.Msg",
-      "Undelegate",
-      data
-    );
-    return promise.then((data) =>
-      MsgUndelegateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Undelegate", data);
+    return promise.then((data) => MsgUndelegateResponse.decode(new _m0.Reader(data)));
   }
 
   Redelegate(request: MsgRedelegate): Promise<MsgRedelegateResponse> {
     const data = MsgRedelegate.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.delegation.v1beta1.Msg",
-      "Redelegate",
-      data
-    );
-    return promise.then((data) =>
-      MsgRedelegateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Redelegate", data);
+    return promise.then((data) => MsgRedelegateResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
+    const data = MsgUpdateParams.encode(request).finish();
+    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "UpdateParams", data);
+    return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

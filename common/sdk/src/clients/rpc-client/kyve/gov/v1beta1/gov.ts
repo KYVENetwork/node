@@ -14,7 +14,6 @@ import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.Param
 import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.CreatePoolProposal;
 import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CancelPoolUpgradeProposal;
 import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.ResetPoolProposal;
 import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
 import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
 import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
@@ -176,26 +175,6 @@ export default class KyveGovMsg {
     const content = {
       type_url: "/kyve.pool.v1beta1.CancelPoolUpgradeProposal",
       value: CancelPoolUpgradeProposal.encode(value).finish(),
-    };
-    const tx = this.createGovTx(amount, content, options?.isExpedited);
-    return new TxPromise(
-      this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
-    );
-  }
-
-  public async resetPoolProposal(
-    amount: string,
-    value: ResetPoolProposal,
-    options?: {
-      isExpedited?: boolean;
-      fee?: StdFee | "auto" | number;
-      memo?: string;
-    }
-  ) {
-    const content = {
-      type_url: "/kyve.pool.v1beta1.ResetPoolProposal",
-      value: ResetPoolProposal.encode(value).finish(),
     };
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(

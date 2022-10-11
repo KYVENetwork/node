@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { Any } from "../../../google/protobuf/any";
 import _m0 from "protobufjs/minimal";
+import { Any } from "../../../google/protobuf/any";
 
 export const protobufPackage = "cosmos.crypto.multisig";
 
@@ -19,10 +19,7 @@ function createBaseLegacyAminoPubKey(): LegacyAminoPubKey {
 }
 
 export const LegacyAminoPubKey = {
-  encode(
-    message: LegacyAminoPubKey,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: LegacyAminoPubKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.threshold !== 0) {
       writer.uint32(8).uint32(message.threshold);
     }
@@ -56,63 +53,39 @@ export const LegacyAminoPubKey = {
   fromJSON(object: any): LegacyAminoPubKey {
     return {
       threshold: isSet(object.threshold) ? Number(object.threshold) : 0,
-      public_keys: Array.isArray(object?.public_keys)
-        ? object.public_keys.map((e: any) => Any.fromJSON(e))
-        : [],
+      public_keys: Array.isArray(object?.public_keys) ? object.public_keys.map((e: any) => Any.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: LegacyAminoPubKey): unknown {
     const obj: any = {};
-    message.threshold !== undefined &&
-      (obj.threshold = Math.round(message.threshold));
+    message.threshold !== undefined && (obj.threshold = Math.round(message.threshold));
     if (message.public_keys) {
-      obj.public_keys = message.public_keys.map((e) =>
-        e ? Any.toJSON(e) : undefined
-      );
+      obj.public_keys = message.public_keys.map((e) => e ? Any.toJSON(e) : undefined);
     } else {
       obj.public_keys = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<LegacyAminoPubKey>, I>>(
-    object: I
-  ): LegacyAminoPubKey {
+  fromPartial<I extends Exact<DeepPartial<LegacyAminoPubKey>, I>>(object: I): LegacyAminoPubKey {
     const message = createBaseLegacyAminoPubKey();
     message.threshold = object.threshold ?? 0;
-    message.public_keys =
-      object.public_keys?.map((e) => Any.fromPartial(e)) || [];
+    message.public_keys = object.public_keys?.map((e) => Any.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

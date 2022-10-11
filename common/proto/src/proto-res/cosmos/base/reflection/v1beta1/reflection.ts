@@ -4,7 +4,8 @@ import _m0 from "protobufjs/minimal";
 export const protobufPackage = "cosmos.base.reflection.v1beta1";
 
 /** ListAllInterfacesRequest is the request type of the ListAllInterfaces RPC. */
-export interface ListAllInterfacesRequest {}
+export interface ListAllInterfacesRequest {
+}
 
 /** ListAllInterfacesResponse is the response type of the ListAllInterfaces RPC. */
 export interface ListAllInterfacesResponse {
@@ -34,17 +35,11 @@ function createBaseListAllInterfacesRequest(): ListAllInterfacesRequest {
 }
 
 export const ListAllInterfacesRequest = {
-  encode(
-    _: ListAllInterfacesRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: ListAllInterfacesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): ListAllInterfacesRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListAllInterfacesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListAllInterfacesRequest();
@@ -68,9 +63,7 @@ export const ListAllInterfacesRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ListAllInterfacesRequest>, I>>(
-    _: I
-  ): ListAllInterfacesRequest {
+  fromPartial<I extends Exact<DeepPartial<ListAllInterfacesRequest>, I>>(_: I): ListAllInterfacesRequest {
     const message = createBaseListAllInterfacesRequest();
     return message;
   },
@@ -81,20 +74,14 @@ function createBaseListAllInterfacesResponse(): ListAllInterfacesResponse {
 }
 
 export const ListAllInterfacesResponse = {
-  encode(
-    message: ListAllInterfacesResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ListAllInterfacesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.interface_names) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): ListAllInterfacesResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListAllInterfacesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListAllInterfacesResponse();
@@ -114,9 +101,7 @@ export const ListAllInterfacesResponse = {
 
   fromJSON(object: any): ListAllInterfacesResponse {
     return {
-      interface_names: Array.isArray(object?.interface_names)
-        ? object.interface_names.map((e: any) => String(e))
-        : [],
+      interface_names: Array.isArray(object?.interface_names) ? object.interface_names.map((e: any) => String(e)) : [],
     };
   },
 
@@ -130,9 +115,7 @@ export const ListAllInterfacesResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ListAllInterfacesResponse>, I>>(
-    object: I
-  ): ListAllInterfacesResponse {
+  fromPartial<I extends Exact<DeepPartial<ListAllInterfacesResponse>, I>>(object: I): ListAllInterfacesResponse {
     const message = createBaseListAllInterfacesResponse();
     message.interface_names = object.interface_names?.map((e) => e) || [];
     return message;
@@ -144,20 +127,14 @@ function createBaseListImplementationsRequest(): ListImplementationsRequest {
 }
 
 export const ListImplementationsRequest = {
-  encode(
-    message: ListImplementationsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ListImplementationsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.interface_name !== "") {
       writer.uint32(10).string(message.interface_name);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): ListImplementationsRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListImplementationsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListImplementationsRequest();
@@ -176,23 +153,16 @@ export const ListImplementationsRequest = {
   },
 
   fromJSON(object: any): ListImplementationsRequest {
-    return {
-      interface_name: isSet(object.interface_name)
-        ? String(object.interface_name)
-        : "",
-    };
+    return { interface_name: isSet(object.interface_name) ? String(object.interface_name) : "" };
   },
 
   toJSON(message: ListImplementationsRequest): unknown {
     const obj: any = {};
-    message.interface_name !== undefined &&
-      (obj.interface_name = message.interface_name);
+    message.interface_name !== undefined && (obj.interface_name = message.interface_name);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ListImplementationsRequest>, I>>(
-    object: I
-  ): ListImplementationsRequest {
+  fromPartial<I extends Exact<DeepPartial<ListImplementationsRequest>, I>>(object: I): ListImplementationsRequest {
     const message = createBaseListImplementationsRequest();
     message.interface_name = object.interface_name ?? "";
     return message;
@@ -204,20 +174,14 @@ function createBaseListImplementationsResponse(): ListImplementationsResponse {
 }
 
 export const ListImplementationsResponse = {
-  encode(
-    message: ListImplementationsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ListImplementationsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.implementation_message_names) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): ListImplementationsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ListImplementationsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListImplementationsResponse();
@@ -237,9 +201,7 @@ export const ListImplementationsResponse = {
 
   fromJSON(object: any): ListImplementationsResponse {
     return {
-      implementation_message_names: Array.isArray(
-        object?.implementation_message_names
-      )
+      implementation_message_names: Array.isArray(object?.implementation_message_names)
         ? object.implementation_message_names.map((e: any) => String(e))
         : [],
     };
@@ -248,20 +210,16 @@ export const ListImplementationsResponse = {
   toJSON(message: ListImplementationsResponse): unknown {
     const obj: any = {};
     if (message.implementation_message_names) {
-      obj.implementation_message_names =
-        message.implementation_message_names.map((e) => e);
+      obj.implementation_message_names = message.implementation_message_names.map((e) => e);
     } else {
       obj.implementation_message_names = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ListImplementationsResponse>, I>>(
-    object: I
-  ): ListImplementationsResponse {
+  fromPartial<I extends Exact<DeepPartial<ListImplementationsResponse>, I>>(object: I): ListImplementationsResponse {
     const message = createBaseListImplementationsResponse();
-    message.implementation_message_names =
-      object.implementation_message_names?.map((e) => e) || [];
+    message.implementation_message_names = object.implementation_message_names?.map((e) => e) || [];
     return message;
   },
 };
@@ -272,16 +230,12 @@ export interface ReflectionService {
    * ListAllInterfaces lists all the interfaces registered in the interface
    * registry.
    */
-  ListAllInterfaces(
-    request: ListAllInterfacesRequest
-  ): Promise<ListAllInterfacesResponse>;
+  ListAllInterfaces(request: ListAllInterfacesRequest): Promise<ListAllInterfacesResponse>;
   /**
    * ListImplementations list all the concrete types that implement a given
    * interface.
    */
-  ListImplementations(
-    request: ListImplementationsRequest
-  ): Promise<ListImplementationsResponse>;
+  ListImplementations(request: ListImplementationsRequest): Promise<ListImplementationsResponse>;
 }
 
 export class ReflectionServiceClientImpl implements ReflectionService {
@@ -291,69 +245,33 @@ export class ReflectionServiceClientImpl implements ReflectionService {
     this.ListAllInterfaces = this.ListAllInterfaces.bind(this);
     this.ListImplementations = this.ListImplementations.bind(this);
   }
-  ListAllInterfaces(
-    request: ListAllInterfacesRequest
-  ): Promise<ListAllInterfacesResponse> {
+  ListAllInterfaces(request: ListAllInterfacesRequest): Promise<ListAllInterfacesResponse> {
     const data = ListAllInterfacesRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "cosmos.base.reflection.v1beta1.ReflectionService",
-      "ListAllInterfaces",
-      data
-    );
-    return promise.then((data) =>
-      ListAllInterfacesResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("cosmos.base.reflection.v1beta1.ReflectionService", "ListAllInterfaces", data);
+    return promise.then((data) => ListAllInterfacesResponse.decode(new _m0.Reader(data)));
   }
 
-  ListImplementations(
-    request: ListImplementationsRequest
-  ): Promise<ListImplementationsResponse> {
+  ListImplementations(request: ListImplementationsRequest): Promise<ListImplementationsResponse> {
     const data = ListImplementationsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "cosmos.base.reflection.v1beta1.ReflectionService",
-      "ListImplementations",
-      data
-    );
-    return promise.then((data) =>
-      ListImplementationsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("cosmos.base.reflection.v1beta1.ReflectionService", "ListImplementations", data);
+    return promise.then((data) => ListImplementationsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
