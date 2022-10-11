@@ -67,7 +67,7 @@ export const lcd = () =>
     },
   } as any);
 
-export const base_pool = {
+export const genesis_pool = {
   id: "0",
   data: {
     id: "0",
@@ -78,8 +78,8 @@ export const base_pool = {
       '{"rpc":"https://rpc.api.moonbeam.network","github":"https://github.com/KYVENetwork/evm"}',
     start_key: "0",
     current_key: "",
-    current_value: "",
-    current_height: "0",
+    current_summary: "",
+    current_index: "0",
     total_bundles: "0",
     upload_interval: "120",
     operating_cost: "2500000000",
@@ -111,12 +111,13 @@ export const base_pool = {
     storage_id: "",
     uploader: "",
     next_uploader: "",
-    byte_size: "0",
-    to_height: "0",
+    data_size: "0",
+    data_hash: "",
+    bundle_size: "0",
+    from_key: "",
     to_key: "",
-    to_value: "",
-    bundle_hash: "",
-    created_at: "0",
+    bundle_summary: "",
+    updated_at: "0",
     voters_valid: [],
     voters_invalid: [],
     voters_abstain: [],

@@ -1,9 +1,9 @@
 import { Logger } from "tslog";
 import { Node } from "../src/index";
 import {
-  formatValueMock,
+  summarizeBundleMock,
   TestRuntime,
-  validateMock,
+  validateBundleMock,
 } from "./mocks/integration";
 import { runNode } from "../src/methods/main/runNode";
 import {
@@ -21,7 +21,7 @@ import {
   claimUploaderRoleMock,
   voteBundleProposalMock,
   submitBundleProposalMock,
-  base_pool,
+  genesis_pool,
   canVoteMock,
   canProposeMock,
   lcd,
@@ -119,8 +119,8 @@ describe("propose bundle tests", () => {
     decompressMock.mockClear();
 
     // integration mocks
-    formatValueMock.mockClear();
-    validateMock.mockClear();
+    summarizeBundleMock.mockClear();
+    validateBundleMock.mockClear();
 
     // reset prometheus
     register.clear();
@@ -130,18 +130,19 @@ describe("propose bundle tests", () => {
     // ARRANGE
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "test_staker",
           next_uploader: "test_staker",
-          byte_size: "123456789",
-          to_height: "2",
+          data_size: "123456789",
+          data_hash: "previous_test_bundle_hash",
+          bundle_size: "2",
+          from_key: "previous_test_key",
           to_key: "previous_test_key",
-          to_value: "previous_test_value",
-          bundle_hash: "previous_test_bundle_hash",
-          created_at: "0",
+          bundle_summary: "previous_test_value",
+          updated_at: "0",
           voters_valid: ["test_staker"],
         },
       } as any;

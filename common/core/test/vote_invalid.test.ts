@@ -1,9 +1,9 @@
 import { Logger } from "tslog";
 import { bundleToBytes, Node, sha256, standardizeJSON } from "../src/index";
 import {
-  formatValueMock,
+  summarizeBundleMock,
   TestRuntime,
-  validateMock,
+  validateBundleMock,
 } from "./mocks/integration";
 import { runNode } from "../src/methods/main/runNode";
 import {
@@ -21,7 +21,7 @@ import {
   claimUploaderRoleMock,
   voteBundleProposalMock,
   submitBundleProposalMock,
-  base_pool,
+  genesis_pool,
   canVoteMock,
   canProposeMock,
   lcd,
@@ -37,10 +37,11 @@ import { TestCache } from "./mocks/cache";
 TEST CASES - invalid votes tests
 
 * vote invalid because runtime validate function returns false
-* vote invalid because proposed byte_size does not match
+* vote invalid because proposed data_size does not match
+* vote invalid because proposed from_key does not match
 * vote invalid because proposed to_key does not match
-* vote invalid because proposed to_value does not match
-* vote invalid because proposed bundle_hash does not match
+* vote invalid because proposed bundle_summary does not match
+* vote invalid because proposed data_hash does not match
 * try to vote invalid after validator has voted abstain bebore
 * try to vote invalid after validator has voted invalid before
 * try to vote invalid after validator has voted valid before
@@ -128,8 +129,8 @@ describe("invalid votes tests", () => {
     decompressMock.mockClear();
 
     // integration mocks
-    formatValueMock.mockClear();
-    validateMock.mockClear();
+    summarizeBundleMock.mockClear();
+    validateBundleMock.mockClear();
 
     // reset prometheus
     register.clear();
@@ -137,8 +138,8 @@ describe("invalid votes tests", () => {
 
   test("vote invalid because runtime validate function returns false", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
-    core["runtime"].validate = validateMock;
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
+    core["runtime"].validateBundle = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -147,23 +148,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -261,11 +263,13 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
+      JSON.stringify(bundle)
+    );
 
-    expect(validateMock).toHaveBeenCalledTimes(1);
-    expect(validateMock).toHaveBeenLastCalledWith(
+    expect(validateBundleMock).toHaveBeenCalledTimes(1);
+    expect(validateBundleMock).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -281,7 +285,7 @@ describe("invalid votes tests", () => {
     // TODO: assert timeouts
   });
 
-  test("vote invalid because proposed byte_size does not match", async () => {
+  test("vote invalid because proposed data_size does not match", async () => {
     // ARRANGE
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -290,23 +294,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: "123456789",
-          to_height: "2",
+          data_hash: dataHash,
+          data_size: "123456789",
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundleSummary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -401,9 +406,147 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("vote invalid because proposed from_key does not match", async () => {
+    // ARRANGE
+    const bundle = [
+      { key: "test_key_1", value: "test_value_1" },
+      { key: "test_key_2", value: "test_value_2" },
+    ];
+
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...genesis_pool,
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "another_test_staker",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "invalid_from_key",
+          to_key: "invalid_to_key",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
+          voters_valid: ["another_test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    core["cache"].get = cacheGetMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(voteBundleProposalMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_NO,
+    });
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(1);
+    expect(retrieveBundleMock).toHaveBeenLastCalledWith(
+      "another_test_storage_id",
+      (120 - 20) * 1000
+    );
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cacheGetMock).toHaveBeenCalledTimes(2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(0);
+
+    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(decompressMock).toHaveBeenLastCalledWith(compressedBundle);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -424,23 +567,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "invalid_to_key",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -538,9 +682,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -552,7 +696,7 @@ describe("invalid votes tests", () => {
     // TODO: assert timeouts
   });
 
-  test("vote invalid because proposed to_value does not match", async () => {
+  test("vote invalid because proposed bundle_summary does not match", async () => {
     // ARRANGE
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -561,23 +705,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "invalid_test_value",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: "invalid_test_value",
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -675,10 +820,12 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
+      JSON.stringify(bundle)
+    );
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -690,7 +837,7 @@ describe("invalid votes tests", () => {
     // TODO: assert timeouts
   });
 
-  test("vote invalid because proposed bundle_hash does not match", async () => {
+  test("vote invalid because proposed data_hash does not match", async () => {
     // ARRANGE
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -699,23 +846,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: "invalid_bundle_hash",
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: "invalid_bundle_hash",
-          created_at: "0",
+          bundle_summary: "test_value_2",
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -810,9 +958,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -826,9 +974,9 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted abstain bebore", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
-    core["runtime"].validate = validateMock;
+    core["runtime"].validateBundle = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -837,23 +985,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
           voters_abstain: ["test_staker"],
         },
@@ -952,11 +1101,13 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
+      JSON.stringify(bundle)
+    );
 
-    expect(validateMock).toHaveBeenCalledTimes(1);
-    expect(validateMock).toHaveBeenLastCalledWith(
+    expect(validateBundleMock).toHaveBeenCalledTimes(1);
+    expect(validateBundleMock).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -974,9 +1125,9 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted invalid before", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
-    core["runtime"].validate = validateMock;
+    core["runtime"].validateBundle = validateBundleMock;
 
     const canVoteMock = jest.fn().mockResolvedValue({
       possible: false,
@@ -992,23 +1143,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
           voters_invalid: ["test_staker"],
         },
@@ -1094,9 +1246,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1110,9 +1262,9 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted valid before", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
-    core["runtime"].validate = validateMock;
+    core["runtime"].validateBundle = validateBundleMock;
 
     const canVoteMock = jest.fn().mockResolvedValue({
       possible: false,
@@ -1127,23 +1279,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker", "test_staker"],
         },
       } as any;
@@ -1228,9 +1381,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
 
-    expect(validateMock).toHaveBeenCalledTimes(0);
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1244,8 +1397,8 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but local bundle could not be loaded in the first try", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
-    core["runtime"].validate = validateMock;
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
+    core["runtime"].validateBundle = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1254,23 +1407,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -1376,11 +1530,13 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
+      JSON.stringify(bundle)
+    );
 
-    expect(validateMock).toHaveBeenCalledTimes(1);
-    expect(validateMock).toHaveBeenLastCalledWith(
+    expect(validateBundleMock).toHaveBeenCalledTimes(1);
+    expect(validateBundleMock).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1398,8 +1554,8 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but bundle from storage provider could not be loaded in the first try", async () => {
     // ARRANGE
-    const validateMock = jest.fn().mockResolvedValue(false);
-    core["runtime"].validate = validateMock;
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
+    core["runtime"].validateBundle = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1408,23 +1564,24 @@ describe("invalid votes tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest.fn().mockImplementation(() => {
       core.pool = {
-        ...base_pool,
+        ...genesis_pool,
         bundle_proposal: {
-          ...base_pool.bundle_proposal,
+          ...genesis_pool.bundle_proposal,
           storage_id: "another_test_storage_id",
           uploader: "another_test_staker",
           next_uploader: "another_test_staker",
-          byte_size: byteSize,
-          to_height: "2",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
           to_key: "test_key_2",
-          to_value: "test_value_2",
-          bundle_hash: bundleHash,
-          created_at: "0",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
           voters_valid: ["another_test_staker"],
         },
       } as any;
@@ -1540,11 +1697,13 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(formatValueMock).toHaveBeenCalledTimes(1);
-    expect(formatValueMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
+      JSON.stringify(bundle)
+    );
 
-    expect(validateMock).toHaveBeenCalledTimes(1);
-    expect(validateMock).toHaveBeenLastCalledWith(
+    expect(validateBundleMock).toHaveBeenCalledTimes(1);
+    expect(validateBundleMock).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)

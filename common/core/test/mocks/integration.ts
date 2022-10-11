@@ -1,6 +1,6 @@
 import { DataItem, Node, sha256 } from "../../src";
 
-export const getDataItemMock = jest
+export const getDataItemMockByKey = jest
   .fn()
   .mockImplementation((core: Node, key: string) =>
     Promise.resolve({
@@ -8,7 +8,7 @@ export const getDataItemMock = jest
       value: `${key}-value`,
     })
   );
-export const validateMock = jest
+export const validateBundleMock = jest
   .fn()
   .mockImplementation(
     (core: Node, uploadedBundle: DataItem[], validationBundle: DataItem[]) => {
@@ -22,22 +22,24 @@ export const validateMock = jest
       return uploadedBundleHash === validationBundleHash;
     }
   );
-export const getNextKeyMock = jest
+export const nextKeyMock = jest
   .fn()
   .mockImplementation((key: string) =>
     Promise.resolve((parseInt(key) + 1).toString())
   );
-export const formatValueMock = jest
+export const summarizeBundleMock = jest
   .fn()
-  .mockImplementation((value: string) => Promise.resolve(value));
+  .mockImplementation((bundle: DataItem[]) =>
+    Promise.resolve(JSON.stringify(bundle))
+  );
 
 export const TestRuntime = jest.fn().mockImplementation(() => {
   return {
     name: "@kyve/evm",
     version: "0.0.0",
-    getDataItem: getDataItemMock,
-    validate: validateMock,
-    getNextKey: getNextKeyMock,
-    formatValue: formatValueMock,
+    getDataItem: getDataItemMockByKey,
+    validate: validateBundleMock,
+    getNextKey: nextKeyMock,
+    formatValue: summarizeBundleMock,
   };
 });
