@@ -16,7 +16,7 @@ export async function waitForCacheContinuation(
   updatedAt: number
 ): Promise<void> {
   // continue if a new proposal is available
-  while (updatedAt === +this.pool.bundle_proposal!.updated_at) {
+  while (updatedAt === parseInt(this.pool.bundle_proposal!.updated_at)) {
     await sleep(1000);
   }
 }

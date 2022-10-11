@@ -25,7 +25,7 @@ export async function waitForNextBundleProposal(
       this.m.bundles_wait_for_next_round_time.startTimer();
 
     // continue if the creation time of the bundle proposal increased
-    while (+this.pool.bundle_proposal!.updated_at <= updatedAt) {
+    while (parseInt(this.pool.bundle_proposal!.updated_at) <= updatedAt) {
       await this.syncPoolState();
 
       // if pool got not active in the meantime abort

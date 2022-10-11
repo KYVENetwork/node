@@ -51,7 +51,8 @@ export async function validateBundleProposal(
 
     // vote invalid if data size does not match with proposed data size
     if (
-      +this.pool.bundle_proposal!.data_size !== storageProviderResult.byteLength
+      parseInt(this.pool.bundle_proposal!.data_size) !==
+      storageProviderResult.byteLength
     ) {
       this.logger.info(
         `Found different byte size on bundle downloaded from storage provider`
@@ -148,7 +149,7 @@ export async function validateBundleProposal(
     // update metrics
     this.m.bundles_amount.inc();
     this.m.bundles_data_items.set(proposedBundle.length);
-    this.m.bundles_byte_size.set(+storageProviderResult.byteLength);
+    this.m.bundles_byte_size.set(storageProviderResult.byteLength);
   } catch (error) {
     this.logger.error(
       `Unexpected error validating bundle proposal. Skipping validation ...`

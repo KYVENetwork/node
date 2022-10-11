@@ -21,9 +21,8 @@ export class Arweave implements IStorageProvider {
   }
 
   async getBalance() {
-    return await this.arweaveClient.wallets.getBalance(
-      await this.arweaveClient.wallets.getAddress(this.wallet)
-    );
+    const account = await this.arweaveClient.wallets.getAddress(this.wallet);
+    return await this.arweaveClient.wallets.getBalance(account);
   }
 
   async saveBundle(bundle: Buffer, tags: BundleTag[]) {
@@ -39,7 +38,7 @@ export class Arweave implements IStorageProvider {
 
     const balance = await this.getBalance();
 
-    if (+transaction.reward > +balance) {
+    if (parseInt(transaction.reward) > parseInt(balance)) {
       throw Error(
         `Not enough funds in Arweave wallet. Found = ${balance} required = ${transaction.reward}`
       );

@@ -34,7 +34,7 @@ export async function canPropose(
         }
 
         // abort if a new bundle proposal was found
-        if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
+        if (parseInt(this.pool.bundle_proposal!.updated_at) > updatedAt) {
           return {
             possible: false,
             reason: "New bundle proposal was found",

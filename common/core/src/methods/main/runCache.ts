@@ -113,7 +113,7 @@ export async function runCache(this: Node): Promise<void> {
             async () => {
               // if a new bundle proposal was created in the meantime
               // skip the current caching and proceed
-              if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
+              if (parseInt(this.pool.bundle_proposal!.updated_at) > updatedAt) {
                 return null;
               }
 

@@ -44,7 +44,7 @@ export async function runNode(this: Node): Promise<void> {
 
     // temp save proposal creation time to detect if a new proposal is
     // available in the meantime
-    const updatedAt = +this.pool.bundle_proposal!.updated_at;
+    const updatedAt = parseInt(this.pool.bundle_proposal!.updated_at);
 
     // try to claim the uploader role of the current proposal round
     if (await this.claimUploaderRole()) {
