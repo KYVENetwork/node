@@ -51,10 +51,7 @@ function createBaseEventDelegate(): EventDelegate {
 }
 
 export const EventDelegate = {
-  encode(
-    message: EventDelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventDelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -107,9 +104,7 @@ export const EventDelegate = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventDelegate>, I>>(
-    object: I
-  ): EventDelegate {
+  fromPartial<I extends Exact<DeepPartial<EventDelegate>, I>>(object: I): EventDelegate {
     const message = createBaseEventDelegate();
     message.address = object.address ?? "";
     message.node = object.node ?? "";
@@ -123,10 +118,7 @@ function createBaseEventUndelegate(): EventUndelegate {
 }
 
 export const EventUndelegate = {
-  encode(
-    message: EventUndelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventUndelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -179,9 +171,7 @@ export const EventUndelegate = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventUndelegate>, I>>(
-    object: I
-  ): EventUndelegate {
+  fromPartial<I extends Exact<DeepPartial<EventUndelegate>, I>>(object: I): EventUndelegate {
     const message = createBaseEventUndelegate();
     message.address = object.address ?? "";
     message.node = object.node ?? "";
@@ -195,10 +185,7 @@ function createBaseEventRedelegate(): EventRedelegate {
 }
 
 export const EventRedelegate = {
-  encode(
-    message: EventRedelegate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventRedelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -259,9 +246,7 @@ export const EventRedelegate = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventRedelegate>, I>>(
-    object: I
-  ): EventRedelegate {
+  fromPartial<I extends Exact<DeepPartial<EventRedelegate>, I>>(object: I): EventRedelegate {
     const message = createBaseEventRedelegate();
     message.address = object.address ?? "";
     message.from_node = object.from_node ?? "";
@@ -276,10 +261,7 @@ function createBaseEventWithdrawRewards(): EventWithdrawRewards {
 }
 
 export const EventWithdrawRewards = {
-  encode(
-    message: EventWithdrawRewards,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventWithdrawRewards, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -292,10 +274,7 @@ export const EventWithdrawRewards = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): EventWithdrawRewards {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventWithdrawRewards {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventWithdrawRewards();
@@ -335,9 +314,7 @@ export const EventWithdrawRewards = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventWithdrawRewards>, I>>(
-    object: I
-  ): EventWithdrawRewards {
+  fromPartial<I extends Exact<DeepPartial<EventWithdrawRewards>, I>>(object: I): EventWithdrawRewards {
     const message = createBaseEventWithdrawRewards();
     message.address = object.address ?? "";
     message.from_node = object.from_node ?? "";
@@ -346,32 +323,16 @@ export const EventWithdrawRewards = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

@@ -36,10 +36,7 @@ function createBaseCommitInfo(): CommitInfo {
 }
 
 export const CommitInfo = {
-  encode(
-    message: CommitInfo,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CommitInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "0") {
       writer.uint32(8).int64(message.version);
     }
@@ -73,9 +70,7 @@ export const CommitInfo = {
   fromJSON(object: any): CommitInfo {
     return {
       version: isSet(object.version) ? String(object.version) : "0",
-      store_infos: Array.isArray(object?.store_infos)
-        ? object.store_infos.map((e: any) => StoreInfo.fromJSON(e))
-        : [],
+      store_infos: Array.isArray(object?.store_infos) ? object.store_infos.map((e: any) => StoreInfo.fromJSON(e)) : [],
     };
   },
 
@@ -83,22 +78,17 @@ export const CommitInfo = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     if (message.store_infos) {
-      obj.store_infos = message.store_infos.map((e) =>
-        e ? StoreInfo.toJSON(e) : undefined
-      );
+      obj.store_infos = message.store_infos.map((e) => e ? StoreInfo.toJSON(e) : undefined);
     } else {
       obj.store_infos = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CommitInfo>, I>>(
-    object: I
-  ): CommitInfo {
+  fromPartial<I extends Exact<DeepPartial<CommitInfo>, I>>(object: I): CommitInfo {
     const message = createBaseCommitInfo();
     message.version = object.version ?? "0";
-    message.store_infos =
-      object.store_infos?.map((e) => StoreInfo.fromPartial(e)) || [];
+    message.store_infos = object.store_infos?.map((e) => StoreInfo.fromPartial(e)) || [];
     return message;
   },
 };
@@ -108,10 +98,7 @@ function createBaseStoreInfo(): StoreInfo {
 }
 
 export const StoreInfo = {
-  encode(
-    message: StoreInfo,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StoreInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -145,9 +132,7 @@ export const StoreInfo = {
   fromJSON(object: any): StoreInfo {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      commit_id: isSet(object.commit_id)
-        ? CommitID.fromJSON(object.commit_id)
-        : undefined,
+      commit_id: isSet(object.commit_id) ? CommitID.fromJSON(object.commit_id) : undefined,
     };
   },
 
@@ -155,21 +140,16 @@ export const StoreInfo = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.commit_id !== undefined &&
-      (obj.commit_id = message.commit_id
-        ? CommitID.toJSON(message.commit_id)
-        : undefined);
+      (obj.commit_id = message.commit_id ? CommitID.toJSON(message.commit_id) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<StoreInfo>, I>>(
-    object: I
-  ): StoreInfo {
+  fromPartial<I extends Exact<DeepPartial<StoreInfo>, I>>(object: I): StoreInfo {
     const message = createBaseStoreInfo();
     message.name = object.name ?? "";
-    message.commit_id =
-      object.commit_id !== undefined && object.commit_id !== null
-        ? CommitID.fromPartial(object.commit_id)
-        : undefined;
+    message.commit_id = (object.commit_id !== undefined && object.commit_id !== null)
+      ? CommitID.fromPartial(object.commit_id)
+      : undefined;
     return message;
   },
 };
@@ -179,10 +159,7 @@ function createBaseCommitID(): CommitID {
 }
 
 export const CommitID = {
-  encode(
-    message: CommitID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CommitID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "0") {
       writer.uint32(8).int64(message.version);
     }
@@ -216,9 +193,7 @@ export const CommitID = {
   fromJSON(object: any): CommitID {
     return {
       version: isSet(object.version) ? String(object.version) : "0",
-      hash: isSet(object.hash)
-        ? bytesFromBase64(object.hash)
-        : new Uint8Array(),
+      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
     };
   },
 
@@ -226,9 +201,7 @@ export const CommitID = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.hash !== undefined &&
-      (obj.hash = base64FromBytes(
-        message.hash !== undefined ? message.hash : new Uint8Array()
-      ));
+      (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
     return obj;
   },
 
@@ -244,62 +217,56 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

@@ -147,10 +147,7 @@ function createBaseStaker(): Staker {
 }
 
 export const Staker = {
-  encode(
-    message: Staker,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Staker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -231,20 +228,11 @@ export const Staker = {
 };
 
 function createBaseValaccount(): Valaccount {
-  return {
-    pool_id: "0",
-    staker: "",
-    valaddress: "",
-    points: "0",
-    is_leaving: false,
-  };
+  return { pool_id: "0", staker: "", valaddress: "", points: "0", is_leaving: false };
 }
 
 export const Valaccount = {
-  encode(
-    message: Valaccount,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Valaccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -313,9 +301,7 @@ export const Valaccount = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Valaccount>, I>>(
-    object: I
-  ): Valaccount {
+  fromPartial<I extends Exact<DeepPartial<Valaccount>, I>>(object: I): Valaccount {
     const message = createBaseValaccount();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -331,10 +317,7 @@ function createBaseCommissionChangeEntry(): CommissionChangeEntry {
 }
 
 export const CommissionChangeEntry = {
-  encode(
-    message: CommissionChangeEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CommissionChangeEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -350,10 +333,7 @@ export const CommissionChangeEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): CommissionChangeEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommissionChangeEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommissionChangeEntry();
@@ -385,9 +365,7 @@ export const CommissionChangeEntry = {
       index: isSet(object.index) ? String(object.index) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       commission: isSet(object.commission) ? String(object.commission) : "",
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
     };
   },
 
@@ -396,14 +374,11 @@ export const CommissionChangeEntry = {
     message.index !== undefined && (obj.index = message.index);
     message.staker !== undefined && (obj.staker = message.staker);
     message.commission !== undefined && (obj.commission = message.commission);
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CommissionChangeEntry>, I>>(
-    object: I
-  ): CommissionChangeEntry {
+  fromPartial<I extends Exact<DeepPartial<CommissionChangeEntry>, I>>(object: I): CommissionChangeEntry {
     const message = createBaseCommissionChangeEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -418,10 +393,7 @@ function createBaseUnbondingStakeEntry(): UnbondingStakeEntry {
 }
 
 export const UnbondingStakeEntry = {
-  encode(
-    message: UnbondingStakeEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingStakeEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -469,9 +441,7 @@ export const UnbondingStakeEntry = {
       index: isSet(object.index) ? String(object.index) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
     };
   },
 
@@ -480,14 +450,11 @@ export const UnbondingStakeEntry = {
     message.index !== undefined && (obj.index = message.index);
     message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UnbondingStakeEntry>, I>>(
-    object: I
-  ): UnbondingStakeEntry {
+  fromPartial<I extends Exact<DeepPartial<UnbondingStakeEntry>, I>>(object: I): UnbondingStakeEntry {
     const message = createBaseUnbondingStakeEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -502,10 +469,7 @@ function createBaseLeavePoolEntry(): LeavePoolEntry {
 }
 
 export const LeavePoolEntry = {
-  encode(
-    message: LeavePoolEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: LeavePoolEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -553,9 +517,7 @@ export const LeavePoolEntry = {
       index: isSet(object.index) ? String(object.index) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
     };
   },
 
@@ -564,14 +526,11 @@ export const LeavePoolEntry = {
     message.index !== undefined && (obj.index = message.index);
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<LeavePoolEntry>, I>>(
-    object: I
-  ): LeavePoolEntry {
+  fromPartial<I extends Exact<DeepPartial<LeavePoolEntry>, I>>(object: I): LeavePoolEntry {
     const message = createBaseLeavePoolEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -586,10 +545,7 @@ function createBaseQueueState(): QueueState {
 }
 
 export const QueueState = {
-  encode(
-    message: QueueState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueueState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.low_index !== "0") {
       writer.uint32(8).uint64(message.low_index);
     }
@@ -634,9 +590,7 @@ export const QueueState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(
-    object: I
-  ): QueueState {
+  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(object: I): QueueState {
     const message = createBaseQueueState();
     message.low_index = object.low_index ?? "0";
     message.high_index = object.high_index ?? "0";
@@ -644,32 +598,16 @@ export const QueueState = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

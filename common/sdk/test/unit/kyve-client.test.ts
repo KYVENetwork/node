@@ -27,17 +27,14 @@ import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
 import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
 
 import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.CreatePoolProposal;
-import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CancelPoolUpgradeProposal;
 import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import ResetPoolProposal = kyve.registry.v1beta1.kyveGov.ResetPoolProposal;
 import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
 import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
 import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
 
 import Mock = jest.Mock;
-import { DENOM, KYVE_DECIMALS } from "../../src/constants";
+import { DENOM  } from "../../src/constants";
 
-import BigNumber from "bignumber.js";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
@@ -332,10 +329,6 @@ const GovMethods = [
   //   method: "cancelPoolUpgradeProposal",
   //   decoder: CancelPoolUpgradeProposal,
   // },
-  {
-    method: "resetPoolProposal",
-    decoder: ResetPoolProposal,
-  },
   {
     method: "createPoolProposal",
     decoder: CreatePoolProposal,

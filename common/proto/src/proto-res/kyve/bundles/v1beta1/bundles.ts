@@ -152,10 +152,7 @@ function createBaseBundleProposal(): BundleProposal {
 }
 
 export const BundleProposal = {
-  encode(
-    message: BundleProposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BundleProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -257,24 +254,16 @@ export const BundleProposal = {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
-      next_uploader: isSet(object.next_uploader)
-        ? String(object.next_uploader)
-        : "",
+      next_uploader: isSet(object.next_uploader) ? String(object.next_uploader) : "",
       byte_size: isSet(object.byte_size) ? String(object.byte_size) : "0",
       to_height: isSet(object.to_height) ? String(object.to_height) : "0",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
       to_value: isSet(object.to_value) ? String(object.to_value) : "",
       bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
       created_at: isSet(object.created_at) ? String(object.created_at) : "0",
-      voters_valid: Array.isArray(object?.voters_valid)
-        ? object.voters_valid.map((e: any) => String(e))
-        : [],
-      voters_invalid: Array.isArray(object?.voters_invalid)
-        ? object.voters_invalid.map((e: any) => String(e))
-        : [],
-      voters_abstain: Array.isArray(object?.voters_abstain)
-        ? object.voters_abstain.map((e: any) => String(e))
-        : [],
+      voters_valid: Array.isArray(object?.voters_valid) ? object.voters_valid.map((e: any) => String(e)) : [],
+      voters_invalid: Array.isArray(object?.voters_invalid) ? object.voters_invalid.map((e: any) => String(e)) : [],
+      voters_abstain: Array.isArray(object?.voters_abstain) ? object.voters_abstain.map((e: any) => String(e)) : [],
     };
   },
 
@@ -283,14 +272,12 @@ export const BundleProposal = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.next_uploader !== undefined &&
-      (obj.next_uploader = message.next_uploader);
+    message.next_uploader !== undefined && (obj.next_uploader = message.next_uploader);
     message.byte_size !== undefined && (obj.byte_size = message.byte_size);
     message.to_height !== undefined && (obj.to_height = message.to_height);
     message.to_key !== undefined && (obj.to_key = message.to_key);
     message.to_value !== undefined && (obj.to_value = message.to_value);
-    message.bundle_hash !== undefined &&
-      (obj.bundle_hash = message.bundle_hash);
+    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
     message.created_at !== undefined && (obj.created_at = message.created_at);
     if (message.voters_valid) {
       obj.voters_valid = message.voters_valid.map((e) => e);
@@ -310,9 +297,7 @@ export const BundleProposal = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(
-    object: I
-  ): BundleProposal {
+  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(object: I): BundleProposal {
     const message = createBaseBundleProposal();
     message.pool_id = object.pool_id ?? "0";
     message.storage_id = object.storage_id ?? "";
@@ -347,10 +332,7 @@ function createBaseFinalizedBundle(): FinalizedBundle {
 }
 
 export const FinalizedBundle = {
-  encode(
-    message: FinalizedBundle,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FinalizedBundle, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -440,9 +422,7 @@ export const FinalizedBundle = {
       key: isSet(object.key) ? String(object.key) : "",
       value: isSet(object.value) ? String(object.value) : "",
       bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
-      finalized_at: isSet(object.finalized_at)
-        ? String(object.finalized_at)
-        : "0",
+      finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
     };
   },
 
@@ -452,21 +432,16 @@ export const FinalizedBundle = {
     message.id !== undefined && (obj.id = message.id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.from_height !== undefined &&
-      (obj.from_height = message.from_height);
+    message.from_height !== undefined && (obj.from_height = message.from_height);
     message.to_height !== undefined && (obj.to_height = message.to_height);
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
-    message.bundle_hash !== undefined &&
-      (obj.bundle_hash = message.bundle_hash);
-    message.finalized_at !== undefined &&
-      (obj.finalized_at = message.finalized_at);
+    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
+    message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<FinalizedBundle>, I>>(
-    object: I
-  ): FinalizedBundle {
+  fromPartial<I extends Exact<DeepPartial<FinalizedBundle>, I>>(object: I): FinalizedBundle {
     const message = createBaseFinalizedBundle();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -482,32 +457,16 @@ export const FinalizedBundle = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

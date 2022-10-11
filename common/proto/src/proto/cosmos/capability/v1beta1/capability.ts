@@ -34,10 +34,7 @@ function createBaseCapability(): Capability {
 }
 
 export const Capability = {
-  encode(
-    message: Capability,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Capability, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -63,9 +60,7 @@ export const Capability = {
   },
 
   fromJSON(object: any): Capability {
-    return {
-      index: isSet(object.index) ? String(object.index) : "0",
-    };
+    return { index: isSet(object.index) ? String(object.index) : "0" };
   },
 
   toJSON(message: Capability): unknown {
@@ -74,9 +69,7 @@ export const Capability = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Capability>, I>>(
-    object: I
-  ): Capability {
+  fromPartial<I extends Exact<DeepPartial<Capability>, I>>(object: I): Capability {
     const message = createBaseCapability();
     message.index = object.index ?? "0";
     return message;
@@ -146,10 +139,7 @@ function createBaseCapabilityOwners(): CapabilityOwners {
 }
 
 export const CapabilityOwners = {
-  encode(
-    message: CapabilityOwners,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CapabilityOwners, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.owners) {
       Owner.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -175,58 +165,36 @@ export const CapabilityOwners = {
   },
 
   fromJSON(object: any): CapabilityOwners {
-    return {
-      owners: Array.isArray(object?.owners)
-        ? object.owners.map((e: any) => Owner.fromJSON(e))
-        : [],
-    };
+    return { owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => Owner.fromJSON(e)) : [] };
   },
 
   toJSON(message: CapabilityOwners): unknown {
     const obj: any = {};
     if (message.owners) {
-      obj.owners = message.owners.map((e) => (e ? Owner.toJSON(e) : undefined));
+      obj.owners = message.owners.map((e) => e ? Owner.toJSON(e) : undefined);
     } else {
       obj.owners = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CapabilityOwners>, I>>(
-    object: I
-  ): CapabilityOwners {
+  fromPartial<I extends Exact<DeepPartial<CapabilityOwners>, I>>(object: I): CapabilityOwners {
     const message = createBaseCapabilityOwners();
     message.owners = object.owners?.map((e) => Owner.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

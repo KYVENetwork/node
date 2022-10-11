@@ -1,12 +1,8 @@
 /* eslint-disable */
-import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "./tx";
-import {
-  BundleStatus,
-  bundleStatusFromJSON,
-  bundleStatusToJSON,
-} from "./bundles";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { BundleStatus, bundleStatusFromJSON, bundleStatusToJSON } from "./bundles";
+import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "./tx";
 
 export const protobufPackage = "kyve.bundles.v1beta1";
 
@@ -93,10 +89,7 @@ function createBaseEventBundleVote(): EventBundleVote {
 }
 
 export const EventBundleVote = {
-  encode(
-    message: EventBundleVote,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventBundleVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -157,9 +150,7 @@ export const EventBundleVote = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventBundleVote>, I>>(
-    object: I
-  ): EventBundleVote {
+  fromPartial<I extends Exact<DeepPartial<EventBundleVote>, I>>(object: I): EventBundleVote {
     const message = createBaseEventBundleVote();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -187,10 +178,7 @@ function createBaseEventBundleProposed(): EventBundleProposed {
 }
 
 export const EventBundleProposed = {
-  encode(
-    message: EventBundleProposed,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventBundleProposed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -305,21 +293,17 @@ export const EventBundleProposed = {
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
     message.byte_size !== undefined && (obj.byte_size = message.byte_size);
-    message.from_height !== undefined &&
-      (obj.from_height = message.from_height);
+    message.from_height !== undefined && (obj.from_height = message.from_height);
     message.to_height !== undefined && (obj.to_height = message.to_height);
     message.from_key !== undefined && (obj.from_key = message.from_key);
     message.to_key !== undefined && (obj.to_key = message.to_key);
     message.value !== undefined && (obj.value = message.value);
-    message.bundle_hash !== undefined &&
-      (obj.bundle_hash = message.bundle_hash);
+    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
     message.created_at !== undefined && (obj.created_at = message.created_at);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventBundleProposed>, I>>(
-    object: I
-  ): EventBundleProposed {
+  fromPartial<I extends Exact<DeepPartial<EventBundleProposed>, I>>(object: I): EventBundleProposed {
     const message = createBaseEventBundleProposed();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -354,10 +338,7 @@ function createBaseEventBundleFinalized(): EventBundleFinalized {
 }
 
 export const EventBundleFinalized = {
-  encode(
-    message: EventBundleFinalized,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventBundleFinalized, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -394,10 +375,7 @@ export const EventBundleFinalized = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): EventBundleFinalized {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventBundleFinalized {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventBundleFinalized();
@@ -454,18 +432,10 @@ export const EventBundleFinalized = {
       abstain: isSet(object.abstain) ? String(object.abstain) : "0",
       total: isSet(object.total) ? String(object.total) : "0",
       status: isSet(object.status) ? bundleStatusFromJSON(object.status) : 0,
-      reward_treasury: isSet(object.reward_treasury)
-        ? String(object.reward_treasury)
-        : "0",
-      reward_uploader: isSet(object.reward_uploader)
-        ? String(object.reward_uploader)
-        : "0",
-      reward_delegation: isSet(object.reward_delegation)
-        ? String(object.reward_delegation)
-        : "0",
-      reward_total: isSet(object.reward_total)
-        ? String(object.reward_total)
-        : "0",
+      reward_treasury: isSet(object.reward_treasury) ? String(object.reward_treasury) : "0",
+      reward_uploader: isSet(object.reward_uploader) ? String(object.reward_uploader) : "0",
+      reward_delegation: isSet(object.reward_delegation) ? String(object.reward_delegation) : "0",
+      reward_total: isSet(object.reward_total) ? String(object.reward_total) : "0",
     };
   },
 
@@ -477,22 +447,15 @@ export const EventBundleFinalized = {
     message.invalid !== undefined && (obj.invalid = message.invalid);
     message.abstain !== undefined && (obj.abstain = message.abstain);
     message.total !== undefined && (obj.total = message.total);
-    message.status !== undefined &&
-      (obj.status = bundleStatusToJSON(message.status));
-    message.reward_treasury !== undefined &&
-      (obj.reward_treasury = message.reward_treasury);
-    message.reward_uploader !== undefined &&
-      (obj.reward_uploader = message.reward_uploader);
-    message.reward_delegation !== undefined &&
-      (obj.reward_delegation = message.reward_delegation);
-    message.reward_total !== undefined &&
-      (obj.reward_total = message.reward_total);
+    message.status !== undefined && (obj.status = bundleStatusToJSON(message.status));
+    message.reward_treasury !== undefined && (obj.reward_treasury = message.reward_treasury);
+    message.reward_uploader !== undefined && (obj.reward_uploader = message.reward_uploader);
+    message.reward_delegation !== undefined && (obj.reward_delegation = message.reward_delegation);
+    message.reward_total !== undefined && (obj.reward_total = message.reward_total);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventBundleFinalized>, I>>(
-    object: I
-  ): EventBundleFinalized {
+  fromPartial<I extends Exact<DeepPartial<EventBundleFinalized>, I>>(object: I): EventBundleFinalized {
     const message = createBaseEventBundleFinalized();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -514,10 +477,7 @@ function createBaseEventSkippedUploaderRole(): EventSkippedUploaderRole {
 }
 
 export const EventSkippedUploaderRole = {
-  encode(
-    message: EventSkippedUploaderRole,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventSkippedUploaderRole, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -533,10 +493,7 @@ export const EventSkippedUploaderRole = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): EventSkippedUploaderRole {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventSkippedUploaderRole {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventSkippedUploaderRole();
@@ -567,12 +524,8 @@ export const EventSkippedUploaderRole = {
     return {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       id: isSet(object.id) ? String(object.id) : "0",
-      previous_uploader: isSet(object.previous_uploader)
-        ? String(object.previous_uploader)
-        : "",
-      new_uploader: isSet(object.new_uploader)
-        ? String(object.new_uploader)
-        : "",
+      previous_uploader: isSet(object.previous_uploader) ? String(object.previous_uploader) : "",
+      new_uploader: isSet(object.new_uploader) ? String(object.new_uploader) : "",
     };
   },
 
@@ -580,16 +533,12 @@ export const EventSkippedUploaderRole = {
     const obj: any = {};
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.id !== undefined && (obj.id = message.id);
-    message.previous_uploader !== undefined &&
-      (obj.previous_uploader = message.previous_uploader);
-    message.new_uploader !== undefined &&
-      (obj.new_uploader = message.new_uploader);
+    message.previous_uploader !== undefined && (obj.previous_uploader = message.previous_uploader);
+    message.new_uploader !== undefined && (obj.new_uploader = message.new_uploader);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventSkippedUploaderRole>, I>>(
-    object: I
-  ): EventSkippedUploaderRole {
+  fromPartial<I extends Exact<DeepPartial<EventSkippedUploaderRole>, I>>(object: I): EventSkippedUploaderRole {
     const message = createBaseEventSkippedUploaderRole();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -599,32 +548,16 @@ export const EventSkippedUploaderRole = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();
