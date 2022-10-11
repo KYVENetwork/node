@@ -1,3 +1,8 @@
+export type BundleTag = {
+  name: string;
+  value: string;
+};
+
 /**
  * Interface of Storage Provider.
  *
@@ -46,10 +51,10 @@ export interface IStorageProvider {
    *
    * @method saveBundle
    * @param {Buffer} bundle data of the bundle which will get saved
-   * @param {[string, string][]} tags metadata that should be included
+   * @param {BundleTag[]} tags metadata that should be included
    * @return {Promise<string>} returns a storage Id which should be able to retrieve the bundle again
    */
-  saveBundle(bundle: Buffer, tags: [string, string][]): Promise<string>;
+  saveBundle(bundle: Buffer, tags: BundleTag[]): Promise<string>;
 
   /**
    * Retrieves the bundle from the storage provider with the Storage Id

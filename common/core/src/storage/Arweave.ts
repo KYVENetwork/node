@@ -1,8 +1,7 @@
 import ArweaveClient from "arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import axios from "axios";
-import BigNumber from "bignumber.js";
-import { IStorageProvider } from "../types";
+import { BundleTag, IStorageProvider } from "../types";
 
 export class Arweave implements IStorageProvider {
   public name = "Arweave";
@@ -27,13 +26,13 @@ export class Arweave implements IStorageProvider {
     );
   }
 
-  async saveBundle(bundle: Buffer, tags: [string, string][]) {
+  async saveBundle(bundle: Buffer, tags: BundleTag[]) {
     const transaction = await this.arweaveClient.createTransaction({
       data: bundle,
     });
 
     for (let tag of tags) {
-      transaction.addTag(...tag);
+      transaction.addTag(tag.name, tag.value);
     }
 
     await this.arweaveClient.transactions.sign(transaction, this.wallet);

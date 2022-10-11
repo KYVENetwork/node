@@ -1,6 +1,6 @@
 import { Node } from "../..";
 import { bundleToBytes, sha256 } from "../../utils";
-import { DataItem } from "../../types";
+import { BundleTag, DataItem } from "../../types";
 
 /**
  * createBundleProposal assembles a bundle proposal by loading
@@ -86,20 +86,59 @@ export async function createBundleProposal(this: Node): Promise<void> {
 
     // create tags for bundle to make it easier to find KYVE data
     // on the storage provider itself
-    const tags: [string, string][] = [
-      ["Application", "KYVE"],
-      ["ChainId", await this.client.nativeClient.getChainId()],
-      ["Pool", this.poolId.toString()],
-      ["@kyve/core", this.coreVersion],
-      [this.runtime.name, this.runtime.version],
-      ["Uploader", this.client.account.address],
-      ["DataSize", dataSize.toString()],
-      ["DataHash", dataHash],
-      ["FromIndex", toIndex.toString()],
-      ["BundleSize", bundleProposal.length.toString()],
-      ["FromKey", fromKey],
-      ["ToKey", toKey],
-      ["BundleSummary", bundleSummary],
+    const tags: BundleTag[] = [
+      {
+        name: "Application",
+        value: "KYVE",
+      },
+      {
+        name: "ChainId",
+        value: await this.client.nativeClient.getChainId(),
+      },
+      {
+        name: "@kyve/core",
+        value: "KYVE",
+      },
+      {
+        name: this.runtime.name,
+        value: this.runtime.version,
+      },
+      {
+        name: "Pool",
+        value: this.poolId.toString(),
+      },
+      {
+        name: "Uploader",
+        value: this.client.account.address,
+      },
+      {
+        name: "DataSize",
+        value: dataSize.toString(),
+      },
+      {
+        name: "DataHash",
+        value: dataHash,
+      },
+      {
+        name: "FromIndex",
+        value: toIndex.toString(),
+      },
+      {
+        name: "BundleSize",
+        value: bundleProposal.length.toString(),
+      },
+      {
+        name: "FromKey",
+        value: fromKey,
+      },
+      {
+        name: "ToKey",
+        value: toKey,
+      },
+      {
+        name: "BundleSummary",
+        value: bundleSummary,
+      },
     ];
 
     // try to upload the bundle proposal to the storage provider
