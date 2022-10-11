@@ -15,12 +15,12 @@ import BigNumber from "bignumber.js";
  *
  * @method saveBundleDownload
  * @param {Node} this
- * @param {number} createdAt
+ * @param {number} updatedAt
  * @return {Promise<Buffer | undefined>}
  */
 export async function saveBundleDownload(
   this: Node,
-  createdAt: number
+  updatedAt: number
 ): Promise<Buffer | undefined> {
   return await callWithBackoffStrategy(
     async () => {
@@ -28,13 +28,13 @@ export async function saveBundleDownload(
 
       const unixNow = new BigNumber(Date.now());
       const unixIntervalEnd = new BigNumber(
-        this.pool.bundle_proposal!.created_at
+        this.pool.bundle_proposal!.updated_at
       )
         .plus(this.pool.data!.upload_interval)
         .multipliedBy(1000);
 
       // check if new proposal is available in the meantime
-      if (+this.pool.bundle_proposal!.created_at > createdAt) {
+      if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
         return;
       }
 

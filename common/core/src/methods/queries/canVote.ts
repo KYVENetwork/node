@@ -8,10 +8,10 @@ import { callWithBackoffStrategy } from "../../utils";
  *
  * @method canVote
  * @param {Node} this
- * @param {number} createdAt the creation time of the current bundle proposal
+ * @param {number} updatedAt the last update time of the current bundle proposal
  * @return {Promise<boolean>}
  */
-export async function canVote(this: Node, createdAt: number): Promise<boolean> {
+export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
   try {
     const { possible, reason } = await callWithBackoffStrategy(
       async () => {
@@ -34,7 +34,7 @@ export async function canVote(this: Node, createdAt: number): Promise<boolean> {
         }
 
         // abort if a new bundle proposal was found
-        if (+this.pool.bundle_proposal!.created_at > createdAt) {
+        if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
           return {
             possible: false,
             reason: "New bundle proposal was found",

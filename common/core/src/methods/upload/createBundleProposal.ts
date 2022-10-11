@@ -20,30 +20,26 @@ export async function createBundleProposal(this: Node): Promise<void> {
   try {
     this.logger.info(`Loading bundle from cache to create a bundle proposal`);
 
-    // create bundle proposal from current to height of current bundle proposal
-    // if there is no bundle proposal create the bundle from the current pool height
-    const fromHeight =
-      +this.pool.bundle_proposal!.to_height || +this.pool.data!.current_height;
+    // create bundle proposal from the current bundle proposal index
+    const fromIndex =
+      parseInt(this.pool.data!.current_index) +
+      parseInt(this.pool.bundle_proposal!.bundle_size);
 
-    // create the bundle proposal from the previously determined start height
-    // until the max bundle size specified by the pool
-    const toHeight = +this.pool.data!.max_bundle_size + fromHeight;
-
-    // determine current key of pool for tagging purposes
-    const fromKey =
-      this.pool.bundle_proposal!.to_key || this.pool.data!.current_key;
+    // create the bundle proposal from the determined bundle start index
+    // and index all the way until the maximum bundle size is reached
+    const toIndex = fromIndex + parseInt(this.pool.data!.max_bundle_size);
 
     // load bundle proposal from local cache
     const bundleProposal: DataItem[] = [];
 
-    // here we try to fetch data items from the current height
-    // to the proposal height. If we fail before we simply
+    // here we try to fetch data items from the current index
+    // to the proposal index. If we fail before we simply
     // abort and and submit the data collected we have available
     // right now
-    for (let h = fromHeight; h < toHeight; h++) {
+    for (let i = fromIndex; i < toIndex; i++) {
       try {
         // try to get the data item from local cache
-        const item = await this.cache.get(h.toString());
+        const item = await this.cache.get(i.toString());
         bundleProposal.push(item);
       } catch {
         // if the data item was not found simply abort
@@ -55,17 +51,23 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // if no data was found on the cache skip the uploader role
     // so that this node does not receive an upload slash
     if (!bundleProposal.length) {
-      await this.skipUploaderRole(fromHeight);
+      await this.skipUploaderRole(fromIndex);
     }
+
+    // get the first key of the bundle proposal which gets
+    // included in the bundle proposal and saved on chain
+    // as from_key
+    const fromKey = bundleProposal.at(0)?.key ?? "";
 
     // get the last key of the bundle proposal which gets
     // included in the bundle proposal and saved on chain
+    // as to_key
     const toKey = bundleProposal.at(-1)?.key ?? "";
 
     // get the last value of the bundle proposal and format
     // it so it can be included in the bundle proposal and
     // saved on chain
-    const toValue =
+    const bundleSummary =
       (await this.runtime.formatValue(bundleProposal.at(-1)?.value)) ?? "";
 
     // if data was found on the cache proceed with compressing the
@@ -76,7 +78,11 @@ export async function createBundleProposal(this: Node): Promise<void> {
 
     // hash the raw data which gets uploaded to the storage provider
     // with sha256
-    const bundleHash = sha256(storageProviderData);
+    const dataSize = storageProviderData.byteLength;
+
+    // hash the raw data which gets uploaded to the storage provider
+    // with sha256
+    const dataHash = sha256(storageProviderData);
 
     // create tags for bundle to make it easier to find KYVE data
     // on the storage provider itself
@@ -87,13 +93,13 @@ export async function createBundleProposal(this: Node): Promise<void> {
       ["@kyve/core", this.coreVersion],
       [this.runtime.name, this.runtime.version],
       ["Uploader", this.client.account.address],
-      ["FromHeight", fromHeight.toString()],
-      ["ToHeight", (fromHeight + bundleProposal.length).toString()],
-      ["Size", bundleProposal.length.toString()],
+      ["DataSize", dataSize.toString()],
+      ["DataHash", dataHash],
+      ["FromIndex", toIndex.toString()],
+      ["BundleSize", bundleProposal.length.toString()],
       ["FromKey", fromKey],
       ["ToKey", toKey],
-      ["Value", toValue],
-      ["BundleHash", bundleHash],
+      ["BundleSummary", bundleSummary],
     ];
 
     // try to upload the bundle proposal to the storage provider
@@ -121,13 +127,13 @@ export async function createBundleProposal(this: Node): Promise<void> {
       // the network
       await this.submitBundleProposal(
         storageId,
-        storageProviderData.byteLength,
-        fromHeight,
-        fromHeight + bundleProposal.length,
+        dataSize,
+        dataHash,
+        fromIndex,
+        bundleProposal.length,
         fromKey,
         toKey,
-        toValue,
-        bundleHash
+        bundleSummary
       );
     } catch (error) {
       this.logger.warn(
@@ -139,7 +145,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
 
       // if the bundle fails to the uploaded to the storage provider
       // let the node skip the uploader role and continue
-      await this.skipUploaderRole(fromHeight);
+      await this.skipUploaderRole(fromIndex);
     }
   } catch (error) {
     this.logger.error(

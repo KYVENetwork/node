@@ -8,22 +8,22 @@ import { callWithBackoffStrategy, sleep } from "../../utils";
  *
  * @method canPropose
  * @param {Node} this
- * @param {number} createdAt the creation time of the current bundle proposal
+ * @param {number} updatedAt the last update time of the current bundle proposal
  * @return {Promise<boolean>}
  */
 export async function canPropose(
   this: Node,
-  createdAt: number
+  updatedAt: number
 ): Promise<boolean> {
   try {
     const { possible, reason } = await callWithBackoffStrategy(
       async () => {
         await this.syncPoolState();
 
-        // get the height from where the bundle should get created
-        const fromHeight =
-          +this.pool.bundle_proposal!.to_height ||
-          +this.pool.data!.current_height;
+        // get the index from where the bundle should get created
+        const fromIndex =
+          parseInt(this.pool.data!.current_index) +
+          parseInt(this.pool.bundle_proposal!.bundle_size);
 
         // abort if staker is the current uploader
         if (this.pool.bundle_proposal!.uploader !== this.staker) {
@@ -34,7 +34,7 @@ export async function canPropose(
         }
 
         // abort if a new bundle proposal was found
-        if (+this.pool.bundle_proposal!.created_at > createdAt) {
+        if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
           return {
             possible: false,
             reason: "New bundle proposal was found",
@@ -51,7 +51,7 @@ export async function canPropose(
             pool_id: this.poolId.toString(),
             staker: this.staker,
             proposer: this.client.account.address,
-            from_height: fromHeight.toString(),
+            from_index: fromIndex.toString(),
           });
 
           // wait until a new block with an updated block time has been

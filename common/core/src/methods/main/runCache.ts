@@ -13,8 +13,8 @@ import { callWithBackoffStrategy, sleep } from "../../utils";
  * the other method simply looks in the globally available cache
  * and checks if this method already added some items into it.
  *
- * It starts by getting the current pool heights and checking at
- * from which height to which the node has to collect the data items
+ * It starts by getting the current pool index and checking at
+ * from which index to which the node has to collect the data items
  * in order to participate in the current proposal round.
  *
  * After a bundle proposal got finalized the cache gets cleared of
@@ -27,13 +27,6 @@ import { callWithBackoffStrategy, sleep } from "../../utils";
  * @return {Promise<void>}
  */
 export async function runCache(this: Node): Promise<void> {
-  // define current proposal heights required for running the cache
-  let createdAt = 0;
-  let currentHeight = 0;
-  let continuationHeight = 0;
-  let toHeight = 0;
-  let maxRoundHeight = 0;
-
   // get pool state so cache can start working
   await this.syncPoolState();
 
@@ -42,80 +35,69 @@ export async function runCache(this: Node): Promise<void> {
   // rounds by mocking it
   while (this.continueRound()) {
     try {
-      // a smaller to_height means a bundle got dropped or invalidated
-      if (+this.pool.bundle_proposal!.to_height < toHeight) {
+      // if there is no storage id we can assume that the last
+      // bundle has been dropped or invalidated. In that case we
+      // reset the cache
+      if (!this.pool.bundle_proposal!.storage_id) {
         this.logger.debug(`Attempting to clear cache`);
-        await this.cache.drop();
-        this.m.cache_current_items.set(0);
 
+        await this.cache.drop();
+
+        this.m.cache_current_items.set(0);
         this.logger.info(`Cleared cache\n`);
       }
 
       // determine the creation time of the current bundle proposal
       // if the creation time ever increases this means a new bundle
       // proposal is available
-      createdAt = +this.pool.bundle_proposal!.created_at;
+      const updatedAt = parseInt(this.pool.bundle_proposal!.updated_at);
 
-      // determine the current height of the pool. All data items
-      // before the current height can be deleted since they are already
-      // finalized. Data items should always be cached from this height
+      // determine the current index of the pool. All data items
+      // before the current index can be deleted since they are already
+      // finalized. Data items should always be cached from this index
       // and not before
-      currentHeight = +this.pool.data!.current_height;
+      const currentIndex = parseInt(this.pool.data!.current_index);
 
-      // determine the continuation height. If the current height is zero
-      // it means that the pool is in genesis state, thefore the node should
-      // start at height zero. If the current height is set the node should
-      // continue at the next height (+1)
-      continuationHeight = !!currentHeight ? currentHeight + 1 : currentHeight;
+      // determine the target index. Here the target index is the
+      // index the cache should collect data in this particular round.
+      // We start from the current index and first index all the way
+      // to the current bundle proposal. Since the next uploader
+      // creates a bundle starting from the current bundle proposal
+      // we further index to the maximum possible bundle size ahead
+      const targetIndex =
+        currentIndex +
+        parseInt(this.pool.bundle_proposal!.bundle_size) +
+        parseInt(this.pool.data!.max_bundle_size);
 
-      // determine the current height of the proposal. The data items
-      // collected between the current height and the toHeight are
-      // especially important to validating a bundle proposal since
-      // a proposal always starts from the pool height and goes to the
-      // toHeight of a proposal. If there is currently no proposal
-      // take the current pool height
-      toHeight =
-        +this.pool.bundle_proposal!.to_height ||
-        +this.pool.data!.current_height;
-
-      // determine the max round height. Here the max height is the
-      // maximum height the cache should collect data items for the
-      // current round. The max round height is especially important
-      // to the next uploader, since he has to assemble a bundle with
-      // data items coming after the current bundle proposal which spans
-      // from the current pool height to the proposal height
-      maxRoundHeight = +this.pool.data!.max_bundle_size + toHeight;
-
-      // delete all data items which came before the current height
+      // delete all data items which came before the current index
       // because they got finalized and are not needed anymore
       for (
-        let h = currentHeight;
-        h >= Math.max(0, currentHeight - +this.pool.data!.max_bundle_size);
-        h--
+        let i = Math.max(0, currentIndex - 1);
+        i >=
+        Math.max(0, currentIndex - parseInt(this.pool.data!.max_bundle_size));
+        i--
       ) {
         try {
-          await this.cache.del(h.toString());
+          await this.cache.del(i.toString());
           this.m.cache_current_items.dec();
         } catch {
           continue;
         }
       }
 
-      this.m.cache_height_tail.set(continuationHeight);
+      this.m.cache_index_tail.set(Math.max(0, currentIndex - 1));
 
       // determine the start key for the current caching round
       // this key gets increased overtime to temp save the
       // current key while collecting the data items
       let key = this.pool.data!.current_key;
 
-      console.log(`from ${continuationHeight} to ${maxRoundHeight}`);
-
-      // collect all data items from current pool height to
-      // the maxRoundHeight
-      for (let h = continuationHeight; h <= maxRoundHeight; h++) {
+      // collect all data items from current pool index to
+      // the target index
+      for (let i = currentIndex; i <= targetIndex; i++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
-        const itemFound = await this.cache.exists(h.toString());
+        const itemFound = await this.cache.exists(i.toString());
 
         // retrieve the next key from the deterministic runtime
         // specific implementation. If the start key is not defined
@@ -131,7 +113,7 @@ export async function runCache(this: Node): Promise<void> {
             async () => {
               // if a new bundle proposal was created in the meantime
               // skip the current caching and proceed
-              if (+this.pool.bundle_proposal!.created_at > createdAt) {
+              if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
                 return null;
               }
 
@@ -165,10 +147,10 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
-          await this.cache.put(h.toString(), item);
+          await this.cache.put(i.toString(), item);
 
           this.m.cache_current_items.inc();
-          this.m.cache_height_head.set(h);
+          this.m.cache_index_head.set(i);
 
           // add a timeout so that the runtime data source
           // is not overloaded with requests
@@ -182,7 +164,7 @@ export async function runCache(this: Node): Promise<void> {
       // wait until a new bundle proposal is available. We don't need
       // to sync the pool here because the pool state already gets
       // synced in the other main function "runNode" so we only listen
-      await this.waitForCacheContinuation(createdAt);
+      await this.waitForCacheContinuation(updatedAt);
     } catch (error) {
       this.logger.warn(
         ` Unexpected error collecting data items to local cache. Continuing ...`

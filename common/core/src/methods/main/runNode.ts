@@ -44,7 +44,7 @@ export async function runNode(this: Node): Promise<void> {
 
     // temp save proposal creation time to detect if a new proposal is
     // available in the meantime
-    const createdAt = +this.pool.bundle_proposal!.created_at;
+    const updatedAt = +this.pool.bundle_proposal!.updated_at;
 
     // try to claim the uploader role of the current proposal round
     if (await this.claimUploaderRole()) {
@@ -69,9 +69,9 @@ export async function runNode(this: Node): Promise<void> {
 
     // checks if the node is able to vote on the current bundle proposal
     // by calling a special query from chain
-    if (await this.canVote(createdAt)) {
+    if (await this.canVote(updatedAt)) {
       // if the node can vote the node validates the current bundle proposal
-      await this.validateBundleProposal(createdAt);
+      await this.validateBundleProposal(updatedAt);
     }
 
     // wait until the upload interval has passed to continue with the proposal
@@ -81,14 +81,14 @@ export async function runNode(this: Node): Promise<void> {
 
     // checks if the node is able to propose the bundle for the next round
     // by calling a special query from chain
-    if (await this.canPropose(createdAt)) {
+    if (await this.canPropose(updatedAt)) {
       // if node can propose the next bundle a proposal gets assembled,
       // uploaded and submitted to the network
       await this.createBundleProposal();
     }
 
     // wait until next bundle proposal is actually registered, until then idle
-    await this.waitForNextBundleProposal(createdAt);
+    await this.waitForNextBundleProposal(updatedAt);
 
     // end bundle round time for metrics
     endTimeRound();

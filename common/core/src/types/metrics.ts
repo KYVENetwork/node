@@ -88,6 +88,6 @@ export interface IMetrics {
   // CACHE METRICS
 
   cache_current_items: PromGauge;
-  cache_height_tail: PromGauge;
-  cache_height_head: PromGauge;
+  cache_index_tail: PromGauge;
+  cache_index_head: PromGauge;
 }

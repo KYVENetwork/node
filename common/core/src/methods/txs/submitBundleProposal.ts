@@ -9,25 +9,25 @@ import { Node } from "../..";
  * @method submitBundleProposal
  * @param {Node} this
  * @param {string} storageId the storage id of the data stored in storage provider
- * @param {number} byteSize the raw byte size of the data stored in storage provider
- * @param {number} fromHeight the height from where the bundle was created
- * @param {number} toHeight the height to the bundle was created
- * @param {string} fromKey the current key the bundle got create from
+ * @param {number} dataSize the raw byte size of the data stored in storage provider
+ * @param {string} dataHash the sha256 hash of the raw data stored in storage provider
+ * @param {number} fromIndex the index from where the bundle was created
+ * @param {number} bundleSize the size of the bundle
+ * @param {string} fromKey the start key the bundle got created from
  * @param {string} toKey the key of the last data item in the bundle
- * @param {string} toValue the formatted value of the last data item in the bundle
- * @param {string} bundleHash the sha256 hash of the raw data stored in storage provider
+ * @param {string} bundleSummary a summary of the bundle in a short string which gets stored on-chain
  * @return {Promise<boolean>}
  */
 export async function submitBundleProposal(
   this: Node,
   storageId: string,
-  byteSize: number,
-  fromHeight: number,
-  toHeight: number,
+  dataSize: number,
+  dataHash: string,
+  fromIndex: number,
+  bundleSize: number,
   fromKey: string,
   toKey: string,
-  toValue: string,
-  bundleHash: string
+  bundleSummary: string
 ): Promise<boolean> {
   try {
     this.logger.debug(`Attempting to submit bundle proposal`);
@@ -36,13 +36,13 @@ export async function submitBundleProposal(
       staker: this.staker,
       pool_id: this.poolId.toString(),
       storage_id: storageId,
-      byte_size: byteSize.toString(),
-      from_height: fromHeight.toString(),
-      to_height: toHeight.toString(),
+      data_size: dataSize.toString(),
+      data_hash: dataHash,
+      from_index: fromIndex.toString(),
+      bundle_size: bundleSize.toString(),
       from_key: fromKey,
       to_key: toKey,
-      to_value: toValue,
-      bundle_hash: bundleHash,
+      bundle_summary: bundleSummary,
     });
 
     this.logger.debug(`SubmitBundleProposal = ${tx.txHash}`);
@@ -57,8 +57,8 @@ export async function submitBundleProposal(
       this.m.bundles_proposed.inc();
 
       this.m.bundles_amount.inc();
-      this.m.bundles_data_items.set(toHeight - fromHeight);
-      this.m.bundles_byte_size.set(byteSize);
+      this.m.bundles_data_items.set(bundleSize);
+      this.m.bundles_byte_size.set(dataSize);
 
       return true;
     } else {

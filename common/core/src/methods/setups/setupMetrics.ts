@@ -113,12 +113,12 @@ export function setupMetrics(this: Node): void {
     // QueryCanPropose metrics
     this.m.query_can_propose_successful = new prom_client.Counter({
       name: "query_can_propose_successful",
-      help: "The amount of QueryCanPropose /kyve/query/v1beta1/can_propose/{pool_id}/{staker}/{proposer}/{from_height} calls that succeeded.",
+      help: "The amount of QueryCanPropose /kyve/query/v1beta1/can_propose/{pool_id}/{staker}/{proposer}/{from_index} calls that succeeded.",
     });
 
     this.m.query_can_propose_failed = new prom_client.Counter({
       name: "query_can_propose_failed",
-      help: "The amount of QueryCanPropose /kyve/query/v1beta1/can_propose/{pool_id}/{staker}/{proposer}/{from_height} calls that failed.",
+      help: "The amount of QueryCanPropose /kyve/query/v1beta1/can_propose/{pool_id}/{staker}/{proposer}/{from_index} calls that failed.",
     });
 
     // QueryCanVote metrics
@@ -246,14 +246,14 @@ export function setupMetrics(this: Node): void {
       help: "The amount of data items currently in the cache.",
     });
 
-    this.m.cache_height_tail = new prom_client.Gauge({
-      name: "cache_height_tail",
-      help: "The current height of the last data item in the cache.",
+    this.m.cache_index_tail = new prom_client.Gauge({
+      name: "cache_index_tail",
+      help: "The current index of the last data item in the cache.",
     });
 
-    this.m.cache_height_head = new prom_client.Gauge({
-      name: "cache_height_head",
-      help: "The current height of the first data item in the cache.",
+    this.m.cache_index_head = new prom_client.Gauge({
+      name: "cache_index_head",
+      help: "The current index of the first data item in the cache.",
     });
 
     // start local metrics server

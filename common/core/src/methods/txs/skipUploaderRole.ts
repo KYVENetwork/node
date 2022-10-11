@@ -7,7 +7,7 @@ import { Node } from "../..";
  * enough data collected or the storage provider being offline for
  * some reason.
  *
- * The fromHeight of the current bundle proposal is
+ * The fromIndex of the current bundle proposal is
  * included so that the chain can check if the next uploader
  * still wants to skip his role on his specified proposal,
  * because in rare instances while the tx is mining the next
@@ -15,12 +15,12 @@ import { Node } from "../..";
  *
  * @method skipUploaderRole
  * @param {Node} this
- * @param {number} fromHeight
+ * @param {number} fromIndex
  * @return {Promise<boolean>}
  */
 export async function skipUploaderRole(
   this: Node,
-  fromHeight: number
+  fromIndex: number
 ): Promise<boolean> {
   try {
     this.logger.debug(`Attempting to skip uploader role`);
@@ -28,7 +28,7 @@ export async function skipUploaderRole(
     const tx = await this.client.kyve.bundles.v1beta1.skipUploaderRole({
       staker: this.staker,
       pool_id: this.poolId.toString(),
-      from_height: fromHeight.toString(),
+      from_index: fromIndex.toString(),
     });
 
     this.logger.debug(`SkipUploaderRole = ${tx.txHash}`);

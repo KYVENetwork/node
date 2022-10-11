@@ -11,12 +11,12 @@ import { DataItem } from "../../types";
  *
  * @method saveLoadValidationBundle
  * @param {Node} this
- * @param {number} createdAt
+ * @param {number} updatedAt
  * @return {Promise<DataItem[] | undefined>}
  */
 export async function saveLoadValidationBundle(
   this: Node,
-  createdAt: number
+  updatedAt: number
 ): Promise<DataItem[] | undefined> {
   return await callWithBackoffStrategy(
     async () => {
@@ -24,13 +24,13 @@ export async function saveLoadValidationBundle(
 
       const unixNow = new BigNumber(Date.now());
       const unixIntervalEnd = new BigNumber(
-        this.pool.bundle_proposal!.created_at
+        this.pool.bundle_proposal!.updated_at
       )
         .plus(this.pool.data!.upload_interval)
         .multipliedBy(1000);
 
       // check if new proposal is available in the meantime
-      if (+this.pool.bundle_proposal!.created_at > createdAt) {
+      if (+this.pool.bundle_proposal!.updated_at > updatedAt) {
         return;
       }
 
@@ -47,19 +47,20 @@ export async function saveLoadValidationBundle(
         return;
       }
 
-      // load bundle from current pool height to proposed height
-      const currentHeight = +this.pool.data!.current_height;
-      const toHeight = +this.pool.bundle_proposal!.to_height || currentHeight;
+      // load bundle from current pool current index to proposed index
+      const proposalStartIndex = parseInt(this.pool.data!.current_index);
+      const proposalTargetIndex =
+        proposalStartIndex + parseInt(this.pool.bundle_proposal!.bundle_size);
 
       // attempt to load bundle from cache
       const bundle: DataItem[] = [];
 
       // in order to get the same bundle for validation as the one
       // proposed the bundle is loaded with the proposed heights
-      for (let h = currentHeight; h < toHeight; h++) {
+      for (let i = proposalStartIndex; i < proposalTargetIndex; i++) {
         try {
           // try to get the data item from local cache
-          const item = await this.cache.get(h.toString());
+          const item = await this.cache.get(i.toString());
           bundle.push(item);
         } catch {
           // if a request data item can not be found abort and
