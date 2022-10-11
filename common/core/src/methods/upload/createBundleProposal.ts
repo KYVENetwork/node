@@ -123,6 +123,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
         value: toIndex.toString(),
       },
       {
+        name: "ToIndex",
+        value: (toIndex + bundleProposal.length).toString(),
+      },
+      {
         name: "BundleSize",
         value: bundleProposal.length.toString(),
       },
