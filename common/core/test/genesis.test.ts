@@ -4,7 +4,7 @@ import {
   summarizeBundleMock,
   TestRuntime,
   validateBundleMock,
-} from "./mocks/integration";
+} from "./mocks/runtime";
 import { runNode } from "../src/methods/main/runNode";
 import {
   TestStorageProvider,

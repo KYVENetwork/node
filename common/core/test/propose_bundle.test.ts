@@ -4,7 +4,7 @@ import {
   summarizeBundleMock,
   TestRuntime,
   validateBundleMock,
-} from "./mocks/integration";
+} from "./mocks/runtime";
 import { runNode } from "../src/methods/main/runNode";
 import {
   TestStorageProvider,
@@ -40,7 +40,7 @@ TEST CASES - propose bundle tests
 
 */
 
-describe("propose bundle tests", () => {
+describe.skip("propose bundle tests", () => {
   let core: Node;
 
   let loggerInfo: jest.Mock;

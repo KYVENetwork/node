@@ -11,15 +11,15 @@ export const getDataItemMockByKey = jest
 export const validateBundleMock = jest
   .fn()
   .mockImplementation(
-    (core: Node, uploadedBundle: DataItem[], validationBundle: DataItem[]) => {
-      const uploadedBundleHash = sha256(
-        Buffer.from(JSON.stringify(uploadedBundle))
+    (core: Node, proposedBundle: DataItem[], validationBundle: DataItem[]) => {
+      const proposedBundleHash = sha256(
+        Buffer.from(JSON.stringify(proposedBundle))
       );
       const validationBundleHash = sha256(
         Buffer.from(JSON.stringify(validationBundle))
       );
 
-      return uploadedBundleHash === validationBundleHash;
+      return proposedBundleHash === validationBundleHash;
     }
   );
 export const nextKeyMock = jest
@@ -37,9 +37,9 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
   return {
     name: "@kyve/evm",
     version: "0.0.0",
-    getDataItem: getDataItemMockByKey,
-    validate: validateBundleMock,
-    getNextKey: nextKeyMock,
-    formatValue: summarizeBundleMock,
+    getDataItemByKey: getDataItemMockByKey,
+    validateBundle: validateBundleMock,
+    nextKey: nextKeyMock,
+    summarizeBundle: summarizeBundleMock,
   };
 });

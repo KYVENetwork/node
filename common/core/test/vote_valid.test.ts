@@ -4,7 +4,7 @@ import {
   summarizeBundleMock,
   TestRuntime,
   validateBundleMock,
-} from "./mocks/integration";
+} from "./mocks/runtime";
 import { runNode } from "../src/methods/main/runNode";
 import {
   TestStorageProvider,
@@ -256,9 +256,7 @@ describe("vote valid tests", () => {
     // =============================
 
     expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
-      JSON.stringify(bundle)
-    );
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(1);
     expect(validateBundleMock).toHaveBeenLastCalledWith(
@@ -410,9 +408,7 @@ describe("vote valid tests", () => {
     // =============================
 
     expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
-      JSON.stringify(bundle)
-    );
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(1);
     expect(validateBundleMock).toHaveBeenLastCalledWith(
@@ -574,9 +570,7 @@ describe("vote valid tests", () => {
     // =============================
 
     expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
-      JSON.stringify(bundle)
-    );
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(1);
     expect(validateBundleMock).toHaveBeenLastCalledWith(
@@ -721,9 +715,7 @@ describe("vote valid tests", () => {
     // =============================
 
     expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(
-      JSON.stringify(bundle)
-    );
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(1);
     expect(validateBundleMock).toHaveBeenLastCalledWith(

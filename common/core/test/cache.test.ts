@@ -5,7 +5,7 @@ import {
   getDataItemMockByKey,
   TestRuntime,
   validateBundleMock,
-} from "./mocks/integration";
+} from "./mocks/runtime";
 import { TestStorageProvider } from "./mocks/storageProvider";
 import { TestCompression } from "./mocks/compression";
 import { client, lcd, genesis_pool } from "./mocks/helpers";
