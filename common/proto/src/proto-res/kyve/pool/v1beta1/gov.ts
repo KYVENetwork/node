@@ -137,7 +137,10 @@ function createBaseCreatePoolProposal(): CreatePoolProposal {
 }
 
 export const CreatePoolProposal = {
-  encode(message: CreatePoolProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: CreatePoolProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -243,10 +246,16 @@ export const CreatePoolProposal = {
       logo: isSet(object.logo) ? String(object.logo) : "",
       config: isSet(object.config) ? String(object.config) : "",
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
-      upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
-      operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
+      upload_interval: isSet(object.upload_interval)
+        ? String(object.upload_interval)
+        : "0",
+      operating_cost: isSet(object.operating_cost)
+        ? String(object.operating_cost)
+        : "0",
       min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
-      max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
+      max_bundle_size: isSet(object.max_bundle_size)
+        ? String(object.max_bundle_size)
+        : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
     };
@@ -255,22 +264,28 @@ export const CreatePoolProposal = {
   toJSON(message: CreatePoolProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.name !== undefined && (obj.name = message.name);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.logo !== undefined && (obj.logo = message.logo);
     message.config !== undefined && (obj.config = message.config);
     message.start_key !== undefined && (obj.start_key = message.start_key);
-    message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
-    message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
+    message.upload_interval !== undefined &&
+      (obj.upload_interval = message.upload_interval);
+    message.operating_cost !== undefined &&
+      (obj.operating_cost = message.operating_cost);
     message.min_stake !== undefined && (obj.min_stake = message.min_stake);
-    message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
+    message.max_bundle_size !== undefined &&
+      (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CreatePoolProposal>, I>>(object: I): CreatePoolProposal {
+  fromPartial<I extends Exact<DeepPartial<CreatePoolProposal>, I>>(
+    object: I
+  ): CreatePoolProposal {
     const message = createBaseCreatePoolProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -294,7 +309,10 @@ function createBaseUpdatePoolProposal(): UpdatePoolProposal {
 }
 
 export const UpdatePoolProposal = {
-  encode(message: UpdatePoolProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: UpdatePoolProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -349,13 +367,16 @@ export const UpdatePoolProposal = {
   toJSON(message: UpdatePoolProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.id !== undefined && (obj.id = message.id);
     message.payload !== undefined && (obj.payload = message.payload);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UpdatePoolProposal>, I>>(object: I): UpdatePoolProposal {
+  fromPartial<I extends Exact<DeepPartial<UpdatePoolProposal>, I>>(
+    object: I
+  ): UpdatePoolProposal {
     const message = createBaseUpdatePoolProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -370,7 +391,10 @@ function createBasePausePoolProposal(): PausePoolProposal {
 }
 
 export const PausePoolProposal = {
-  encode(message: PausePoolProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PausePoolProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -418,12 +442,15 @@ export const PausePoolProposal = {
   toJSON(message: PausePoolProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PausePoolProposal>, I>>(object: I): PausePoolProposal {
+  fromPartial<I extends Exact<DeepPartial<PausePoolProposal>, I>>(
+    object: I
+  ): PausePoolProposal {
     const message = createBasePausePoolProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -437,7 +464,10 @@ function createBaseUnpausePoolProposal(): UnpausePoolProposal {
 }
 
 export const UnpausePoolProposal = {
-  encode(message: UnpausePoolProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: UnpausePoolProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -485,12 +515,15 @@ export const UnpausePoolProposal = {
   toJSON(message: UnpausePoolProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UnpausePoolProposal>, I>>(object: I): UnpausePoolProposal {
+  fromPartial<I extends Exact<DeepPartial<UnpausePoolProposal>, I>>(
+    object: I
+  ): UnpausePoolProposal {
     const message = createBaseUnpausePoolProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -500,11 +533,22 @@ export const UnpausePoolProposal = {
 };
 
 function createBaseSchedulePoolUpgradeProposal(): SchedulePoolUpgradeProposal {
-  return { title: "", description: "", runtime: "", version: "", scheduled_at: "0", duration: "0", binaries: "" };
+  return {
+    title: "",
+    description: "",
+    runtime: "",
+    version: "",
+    scheduled_at: "0",
+    duration: "0",
+    binaries: "",
+  };
 }
 
 export const SchedulePoolUpgradeProposal = {
-  encode(message: SchedulePoolUpgradeProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SchedulePoolUpgradeProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -529,7 +573,10 @@ export const SchedulePoolUpgradeProposal = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SchedulePoolUpgradeProposal {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): SchedulePoolUpgradeProposal {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSchedulePoolUpgradeProposal();
@@ -571,7 +618,9 @@ export const SchedulePoolUpgradeProposal = {
       description: isSet(object.description) ? String(object.description) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       version: isSet(object.version) ? String(object.version) : "",
-      scheduled_at: isSet(object.scheduled_at) ? String(object.scheduled_at) : "0",
+      scheduled_at: isSet(object.scheduled_at)
+        ? String(object.scheduled_at)
+        : "0",
       duration: isSet(object.duration) ? String(object.duration) : "0",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
     };
@@ -580,16 +629,20 @@ export const SchedulePoolUpgradeProposal = {
   toJSON(message: SchedulePoolUpgradeProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.version !== undefined && (obj.version = message.version);
-    message.scheduled_at !== undefined && (obj.scheduled_at = message.scheduled_at);
+    message.scheduled_at !== undefined &&
+      (obj.scheduled_at = message.scheduled_at);
     message.duration !== undefined && (obj.duration = message.duration);
     message.binaries !== undefined && (obj.binaries = message.binaries);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SchedulePoolUpgradeProposal>, I>>(object: I): SchedulePoolUpgradeProposal {
+  fromPartial<I extends Exact<DeepPartial<SchedulePoolUpgradeProposal>, I>>(
+    object: I
+  ): SchedulePoolUpgradeProposal {
     const message = createBaseSchedulePoolUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -607,7 +660,10 @@ function createBaseCancelPoolUpgradeProposal(): CancelPoolUpgradeProposal {
 }
 
 export const CancelPoolUpgradeProposal = {
-  encode(message: CancelPoolUpgradeProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: CancelPoolUpgradeProposal,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -620,7 +676,10 @@ export const CancelPoolUpgradeProposal = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CancelPoolUpgradeProposal {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): CancelPoolUpgradeProposal {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCancelPoolUpgradeProposal();
@@ -655,12 +714,15 @@ export const CancelPoolUpgradeProposal = {
   toJSON(message: CancelPoolUpgradeProposal): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CancelPoolUpgradeProposal>, I>>(object: I): CancelPoolUpgradeProposal {
+  fromPartial<I extends Exact<DeepPartial<CancelPoolUpgradeProposal>, I>>(
+    object: I
+  ): CancelPoolUpgradeProposal {
     const message = createBaseCancelPoolUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -669,16 +731,32 @@ export const CancelPoolUpgradeProposal = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

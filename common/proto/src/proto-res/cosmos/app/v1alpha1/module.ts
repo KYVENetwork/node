@@ -93,7 +93,10 @@ function createBaseModuleDescriptor(): ModuleDescriptor {
 }
 
 export const ModuleDescriptor = {
-  encode(message: ModuleDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ModuleDescriptor,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.go_import !== "") {
       writer.uint32(10).string(message.go_import);
     }
@@ -117,10 +120,14 @@ export const ModuleDescriptor = {
           message.go_import = reader.string();
           break;
         case 2:
-          message.use_package.push(PackageReference.decode(reader, reader.uint32()));
+          message.use_package.push(
+            PackageReference.decode(reader, reader.uint32())
+          );
           break;
         case 3:
-          message.can_migrate_from.push(MigrateFromInfo.decode(reader, reader.uint32()));
+          message.can_migrate_from.push(
+            MigrateFromInfo.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -146,23 +153,31 @@ export const ModuleDescriptor = {
     const obj: any = {};
     message.go_import !== undefined && (obj.go_import = message.go_import);
     if (message.use_package) {
-      obj.use_package = message.use_package.map((e) => e ? PackageReference.toJSON(e) : undefined);
+      obj.use_package = message.use_package.map((e) =>
+        e ? PackageReference.toJSON(e) : undefined
+      );
     } else {
       obj.use_package = [];
     }
     if (message.can_migrate_from) {
-      obj.can_migrate_from = message.can_migrate_from.map((e) => e ? MigrateFromInfo.toJSON(e) : undefined);
+      obj.can_migrate_from = message.can_migrate_from.map((e) =>
+        e ? MigrateFromInfo.toJSON(e) : undefined
+      );
     } else {
       obj.can_migrate_from = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleDescriptor>, I>>(object: I): ModuleDescriptor {
+  fromPartial<I extends Exact<DeepPartial<ModuleDescriptor>, I>>(
+    object: I
+  ): ModuleDescriptor {
     const message = createBaseModuleDescriptor();
     message.go_import = object.go_import ?? "";
-    message.use_package = object.use_package?.map((e) => PackageReference.fromPartial(e)) || [];
-    message.can_migrate_from = object.can_migrate_from?.map((e) => MigrateFromInfo.fromPartial(e)) || [];
+    message.use_package =
+      object.use_package?.map((e) => PackageReference.fromPartial(e)) || [];
+    message.can_migrate_from =
+      object.can_migrate_from?.map((e) => MigrateFromInfo.fromPartial(e)) || [];
     return message;
   },
 };
@@ -172,7 +187,10 @@ function createBasePackageReference(): PackageReference {
 }
 
 export const PackageReference = {
-  encode(message: PackageReference, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PackageReference,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -213,11 +231,14 @@ export const PackageReference = {
   toJSON(message: PackageReference): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.revision !== undefined && (obj.revision = Math.round(message.revision));
+    message.revision !== undefined &&
+      (obj.revision = Math.round(message.revision));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PackageReference>, I>>(object: I): PackageReference {
+  fromPartial<I extends Exact<DeepPartial<PackageReference>, I>>(
+    object: I
+  ): PackageReference {
     const message = createBasePackageReference();
     message.name = object.name ?? "";
     message.revision = object.revision ?? 0;
@@ -230,7 +251,10 @@ function createBaseMigrateFromInfo(): MigrateFromInfo {
 }
 
 export const MigrateFromInfo = {
-  encode(message: MigrateFromInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MigrateFromInfo,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
     }
@@ -256,7 +280,9 @@ export const MigrateFromInfo = {
   },
 
   fromJSON(object: any): MigrateFromInfo {
-    return { module: isSet(object.module) ? String(object.module) : "" };
+    return {
+      module: isSet(object.module) ? String(object.module) : "",
+    };
   },
 
   toJSON(message: MigrateFromInfo): unknown {
@@ -265,23 +291,41 @@ export const MigrateFromInfo = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MigrateFromInfo>, I>>(object: I): MigrateFromInfo {
+  fromPartial<I extends Exact<DeepPartial<MigrateFromInfo>, I>>(
+    object: I
+  ): MigrateFromInfo {
     const message = createBaseMigrateFromInfo();
     message.module = object.module ?? "";
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

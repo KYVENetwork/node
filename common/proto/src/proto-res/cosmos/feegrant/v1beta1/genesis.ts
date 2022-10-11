@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Grant } from "./feegrant";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.feegrant.v1beta1";
 
@@ -16,7 +16,10 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.allowances) {
       Grant.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -43,34 +46,57 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      allowances: Array.isArray(object?.allowances) ? object.allowances.map((e: any) => Grant.fromJSON(e)) : [],
+      allowances: Array.isArray(object?.allowances)
+        ? object.allowances.map((e: any) => Grant.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.allowances) {
-      obj.allowances = message.allowances.map((e) => e ? Grant.toJSON(e) : undefined);
+      obj.allowances = message.allowances.map((e) =>
+        e ? Grant.toJSON(e) : undefined
+      );
     } else {
       obj.allowances = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
+    object: I
+  ): GenesisState {
     const message = createBaseGenesisState();
-    message.allowances = object.allowances?.map((e) => Grant.fromPartial(e)) || [];
+    message.allowances =
+      object.allowances?.map((e) => Grant.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;

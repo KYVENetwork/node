@@ -93,7 +93,10 @@ function createBaseDelegator(): Delegator {
 }
 
 export const Delegator = {
-  encode(message: Delegator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Delegator,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -141,7 +144,9 @@ export const Delegator = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       k_index: isSet(object.k_index) ? String(object.k_index) : "0",
-      initial_amount: isSet(object.initial_amount) ? String(object.initial_amount) : "0",
+      initial_amount: isSet(object.initial_amount)
+        ? String(object.initial_amount)
+        : "0",
     };
   },
 
@@ -150,11 +155,14 @@ export const Delegator = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.delegator !== undefined && (obj.delegator = message.delegator);
     message.k_index !== undefined && (obj.k_index = message.k_index);
-    message.initial_amount !== undefined && (obj.initial_amount = message.initial_amount);
+    message.initial_amount !== undefined &&
+      (obj.initial_amount = message.initial_amount);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Delegator>, I>>(object: I): Delegator {
+  fromPartial<I extends Exact<DeepPartial<Delegator>, I>>(
+    object: I
+  ): Delegator {
     const message = createBaseDelegator();
     message.staker = object.staker ?? "";
     message.delegator = object.delegator ?? "";
@@ -169,7 +177,10 @@ function createBaseDelegationEntry(): DelegationEntry {
 }
 
 export const DelegationEntry = {
-  encode(message: DelegationEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DelegationEntry,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -222,7 +233,9 @@ export const DelegationEntry = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationEntry>, I>>(object: I): DelegationEntry {
+  fromPartial<I extends Exact<DeepPartial<DelegationEntry>, I>>(
+    object: I
+  ): DelegationEntry {
     const message = createBaseDelegationEntry();
     message.staker = object.staker ?? "";
     message.k_index = object.k_index ?? "0";
@@ -243,7 +256,10 @@ function createBaseDelegationData(): DelegationData {
 }
 
 export const DelegationData = {
-  encode(message: DelegationData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DelegationData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -301,10 +317,18 @@ export const DelegationData = {
   fromJSON(object: any): DelegationData {
     return {
       staker: isSet(object.staker) ? String(object.staker) : "",
-      current_rewards: isSet(object.current_rewards) ? String(object.current_rewards) : "0",
-      total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
-      latest_index_k: isSet(object.latest_index_k) ? String(object.latest_index_k) : "0",
-      delegator_count: isSet(object.delegator_count) ? String(object.delegator_count) : "0",
+      current_rewards: isSet(object.current_rewards)
+        ? String(object.current_rewards)
+        : "0",
+      total_delegation: isSet(object.total_delegation)
+        ? String(object.total_delegation)
+        : "0",
+      latest_index_k: isSet(object.latest_index_k)
+        ? String(object.latest_index_k)
+        : "0",
+      delegator_count: isSet(object.delegator_count)
+        ? String(object.delegator_count)
+        : "0",
       latest_index_was_undelegation: isSet(object.latest_index_was_undelegation)
         ? Boolean(object.latest_index_was_undelegation)
         : false,
@@ -314,23 +338,31 @@ export const DelegationData = {
   toJSON(message: DelegationData): unknown {
     const obj: any = {};
     message.staker !== undefined && (obj.staker = message.staker);
-    message.current_rewards !== undefined && (obj.current_rewards = message.current_rewards);
-    message.total_delegation !== undefined && (obj.total_delegation = message.total_delegation);
-    message.latest_index_k !== undefined && (obj.latest_index_k = message.latest_index_k);
-    message.delegator_count !== undefined && (obj.delegator_count = message.delegator_count);
+    message.current_rewards !== undefined &&
+      (obj.current_rewards = message.current_rewards);
+    message.total_delegation !== undefined &&
+      (obj.total_delegation = message.total_delegation);
+    message.latest_index_k !== undefined &&
+      (obj.latest_index_k = message.latest_index_k);
+    message.delegator_count !== undefined &&
+      (obj.delegator_count = message.delegator_count);
     message.latest_index_was_undelegation !== undefined &&
-      (obj.latest_index_was_undelegation = message.latest_index_was_undelegation);
+      (obj.latest_index_was_undelegation =
+        message.latest_index_was_undelegation);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationData>, I>>(object: I): DelegationData {
+  fromPartial<I extends Exact<DeepPartial<DelegationData>, I>>(
+    object: I
+  ): DelegationData {
     const message = createBaseDelegationData();
     message.staker = object.staker ?? "";
     message.current_rewards = object.current_rewards ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
     message.latest_index_k = object.latest_index_k ?? "0";
     message.delegator_count = object.delegator_count ?? "0";
-    message.latest_index_was_undelegation = object.latest_index_was_undelegation ?? false;
+    message.latest_index_was_undelegation =
+      object.latest_index_was_undelegation ?? false;
     return message;
   },
 };
@@ -340,7 +372,10 @@ function createBaseDelegationSlash(): DelegationSlash {
 }
 
 export const DelegationSlash = {
-  encode(message: DelegationSlash, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DelegationSlash,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -393,7 +428,9 @@ export const DelegationSlash = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationSlash>, I>>(object: I): DelegationSlash {
+  fromPartial<I extends Exact<DeepPartial<DelegationSlash>, I>>(
+    object: I
+  ): DelegationSlash {
     const message = createBaseDelegationSlash();
     message.staker = object.staker ?? "";
     message.k_index = object.k_index ?? "0";
@@ -403,11 +440,20 @@ export const DelegationSlash = {
 };
 
 function createBaseUndelegationQueueEntry(): UndelegationQueueEntry {
-  return { index: "0", staker: "", delegator: "", amount: "0", creation_time: "0" };
+  return {
+    index: "0",
+    staker: "",
+    delegator: "",
+    amount: "0",
+    creation_time: "0",
+  };
 }
 
 export const UndelegationQueueEntry = {
-  encode(message: UndelegationQueueEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: UndelegationQueueEntry,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -426,7 +472,10 @@ export const UndelegationQueueEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): UndelegationQueueEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): UndelegationQueueEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUndelegationQueueEntry();
@@ -462,7 +511,9 @@ export const UndelegationQueueEntry = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      creation_time: isSet(object.creation_time) ? String(object.creation_time) : "0",
+      creation_time: isSet(object.creation_time)
+        ? String(object.creation_time)
+        : "0",
     };
   },
 
@@ -472,11 +523,14 @@ export const UndelegationQueueEntry = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.delegator !== undefined && (obj.delegator = message.delegator);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.creation_time !== undefined && (obj.creation_time = message.creation_time);
+    message.creation_time !== undefined &&
+      (obj.creation_time = message.creation_time);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UndelegationQueueEntry>, I>>(object: I): UndelegationQueueEntry {
+  fromPartial<I extends Exact<DeepPartial<UndelegationQueueEntry>, I>>(
+    object: I
+  ): UndelegationQueueEntry {
     const message = createBaseUndelegationQueueEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -492,7 +546,10 @@ function createBaseQueueState(): QueueState {
 }
 
 export const QueueState = {
-  encode(message: QueueState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueueState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.low_index !== "0") {
       writer.uint32(8).uint64(message.low_index);
     }
@@ -537,7 +594,9 @@ export const QueueState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(object: I): QueueState {
+  fromPartial<I extends Exact<DeepPartial<QueueState>, I>>(
+    object: I
+  ): QueueState {
     const message = createBaseQueueState();
     message.low_index = object.low_index ?? "0";
     message.high_index = object.high_index ?? "0";
@@ -550,7 +609,10 @@ function createBaseRedelegationCooldown(): RedelegationCooldown {
 }
 
 export const RedelegationCooldown = {
-  encode(message: RedelegationCooldown, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RedelegationCooldown,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -560,7 +622,10 @@ export const RedelegationCooldown = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RedelegationCooldown {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): RedelegationCooldown {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationCooldown();
@@ -584,18 +649,23 @@ export const RedelegationCooldown = {
   fromJSON(object: any): RedelegationCooldown {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
+      creation_date: isSet(object.creation_date)
+        ? String(object.creation_date)
+        : "0",
     };
   },
 
   toJSON(message: RedelegationCooldown): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined &&
+      (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<RedelegationCooldown>, I>>(object: I): RedelegationCooldown {
+  fromPartial<I extends Exact<DeepPartial<RedelegationCooldown>, I>>(
+    object: I
+  ): RedelegationCooldown {
     const message = createBaseRedelegationCooldown();
     message.address = object.address ?? "";
     message.creation_date = object.creation_date ?? "0";
@@ -603,16 +673,32 @@ export const RedelegationCooldown = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

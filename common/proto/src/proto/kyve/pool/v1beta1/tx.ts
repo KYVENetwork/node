@@ -15,8 +15,7 @@ export interface MsgFundPool {
 }
 
 /** MsgFundPoolResponse defines the Msg/DefundPool response type. */
-export interface MsgFundPoolResponse {
-}
+export interface MsgFundPoolResponse {}
 
 /** MsgDefundPool defines a SDK message for defunding a pool. */
 export interface MsgDefundPool {
@@ -29,8 +28,7 @@ export interface MsgDefundPool {
 }
 
 /** MsgDefundPoolResponse defines the Msg/DefundPool response type. */
-export interface MsgDefundPoolResponse {
-}
+export interface MsgDefundPoolResponse {}
 
 /** MsgCreatePool defines a SDK message for creating a new pool. */
 export interface MsgCreatePool {
@@ -61,8 +59,7 @@ export interface MsgCreatePool {
 }
 
 /** MsgCreatePoolResponse defines the Msg/CreatePool response type. */
-export interface MsgCreatePoolResponse {
-}
+export interface MsgCreatePoolResponse {}
 
 /** MsgUpdatePool defines a SDK message for updating an existing pool. */
 export interface MsgUpdatePool {
@@ -75,8 +72,7 @@ export interface MsgUpdatePool {
 }
 
 /** MsgUpdatePoolResponse defines the Msg/UpdatePool response type. */
-export interface MsgUpdatePoolResponse {
-}
+export interface MsgUpdatePoolResponse {}
 
 /** MsgPausePool defines a SDK message for pausing an existing pool. */
 export interface MsgPausePool {
@@ -87,8 +83,7 @@ export interface MsgPausePool {
 }
 
 /** MsgPausePoolResponse defines the Msg/PausePool response type. */
-export interface MsgPausePoolResponse {
-}
+export interface MsgPausePoolResponse {}
 
 /** MsgUnpausePool defines a SDK message for unpausing an existing pool. */
 export interface MsgUnpausePool {
@@ -99,8 +94,7 @@ export interface MsgUnpausePool {
 }
 
 /** MsgUnpausePoolResponse defines the Msg/UnpausePool response type. */
-export interface MsgUnpausePoolResponse {
-}
+export interface MsgUnpausePoolResponse {}
 
 /** MsgScheduleRuntimeUpgrade defines a SDK message for scheduling a runtime upgrade. */
 export interface MsgScheduleRuntimeUpgrade {
@@ -119,8 +113,7 @@ export interface MsgScheduleRuntimeUpgrade {
 }
 
 /** MsgScheduleRuntimeUpgradeResponse defines the Msg/ScheduleRuntimeUpgrade response type. */
-export interface MsgScheduleRuntimeUpgradeResponse {
-}
+export interface MsgScheduleRuntimeUpgradeResponse {}
 
 /** MsgCancelRuntimeUpgrade defines a SDK message for cancelling a runtime upgrade. */
 export interface MsgCancelRuntimeUpgrade {
@@ -131,8 +124,7 @@ export interface MsgCancelRuntimeUpgrade {
 }
 
 /** MsgCancelRuntimeUpgradeResponse defines the Msg/CancelRuntimeUpgrade response type. */
-export interface MsgCancelRuntimeUpgradeResponse {
-}
+export interface MsgCancelRuntimeUpgradeResponse {}
 
 /** MsgResetPool defines a SDK message for resetting an existing pool. */
 export interface MsgResetPool {
@@ -145,15 +137,17 @@ export interface MsgResetPool {
 }
 
 /** MsgResetPoolResponse defines the Msg/ResetPool response type. */
-export interface MsgResetPoolResponse {
-}
+export interface MsgResetPoolResponse {}
 
 function createBaseMsgFundPool(): MsgFundPool {
   return { creator: "", id: "0", amount: "0" };
 }
 
 export const MsgFundPool = {
-  encode(message: MsgFundPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgFundPool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -206,7 +200,9 @@ export const MsgFundPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgFundPool>, I>>(object: I): MsgFundPool {
+  fromPartial<I extends Exact<DeepPartial<MsgFundPool>, I>>(
+    object: I
+  ): MsgFundPool {
     const message = createBaseMsgFundPool();
     message.creator = object.creator ?? "";
     message.id = object.id ?? "0";
@@ -220,7 +216,10 @@ function createBaseMsgFundPoolResponse(): MsgFundPoolResponse {
 }
 
 export const MsgFundPoolResponse = {
-  encode(_: MsgFundPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgFundPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
@@ -248,7 +247,9 @@ export const MsgFundPoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgFundPoolResponse>, I>>(_: I): MsgFundPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFundPoolResponse>, I>>(
+    _: I
+  ): MsgFundPoolResponse {
     const message = createBaseMsgFundPoolResponse();
     return message;
   },
@@ -259,7 +260,10 @@ function createBaseMsgDefundPool(): MsgDefundPool {
 }
 
 export const MsgDefundPool = {
-  encode(message: MsgDefundPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgDefundPool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -312,7 +316,9 @@ export const MsgDefundPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDefundPool>, I>>(object: I): MsgDefundPool {
+  fromPartial<I extends Exact<DeepPartial<MsgDefundPool>, I>>(
+    object: I
+  ): MsgDefundPool {
     const message = createBaseMsgDefundPool();
     message.creator = object.creator ?? "";
     message.id = object.id ?? "0";
@@ -326,11 +332,17 @@ function createBaseMsgDefundPoolResponse(): MsgDefundPoolResponse {
 }
 
 export const MsgDefundPoolResponse = {
-  encode(_: MsgDefundPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgDefundPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDefundPoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgDefundPoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDefundPoolResponse();
@@ -354,7 +366,9 @@ export const MsgDefundPoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgDefundPoolResponse>, I>>(_: I): MsgDefundPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgDefundPoolResponse>, I>>(
+    _: I
+  ): MsgDefundPoolResponse {
     const message = createBaseMsgDefundPoolResponse();
     return message;
   },
@@ -378,7 +392,10 @@ function createBaseMsgCreatePool(): MsgCreatePool {
 }
 
 export const MsgCreatePool = {
-  encode(message: MsgCreatePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreatePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -477,10 +494,16 @@ export const MsgCreatePool = {
       logo: isSet(object.logo) ? String(object.logo) : "",
       config: isSet(object.config) ? String(object.config) : "",
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
-      upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
-      operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
+      upload_interval: isSet(object.upload_interval)
+        ? String(object.upload_interval)
+        : "0",
+      operating_cost: isSet(object.operating_cost)
+        ? String(object.operating_cost)
+        : "0",
       min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
-      max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
+      max_bundle_size: isSet(object.max_bundle_size)
+        ? String(object.max_bundle_size)
+        : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
     };
@@ -494,16 +517,21 @@ export const MsgCreatePool = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.config !== undefined && (obj.config = message.config);
     message.start_key !== undefined && (obj.start_key = message.start_key);
-    message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
-    message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
+    message.upload_interval !== undefined &&
+      (obj.upload_interval = message.upload_interval);
+    message.operating_cost !== undefined &&
+      (obj.operating_cost = message.operating_cost);
     message.min_stake !== undefined && (obj.min_stake = message.min_stake);
-    message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
+    message.max_bundle_size !== undefined &&
+      (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreatePool>, I>>(object: I): MsgCreatePool {
+  fromPartial<I extends Exact<DeepPartial<MsgCreatePool>, I>>(
+    object: I
+  ): MsgCreatePool {
     const message = createBaseMsgCreatePool();
     message.authority = object.authority ?? "";
     message.name = object.name ?? "";
@@ -526,11 +554,17 @@ function createBaseMsgCreatePoolResponse(): MsgCreatePoolResponse {
 }
 
 export const MsgCreatePoolResponse = {
-  encode(_: MsgCreatePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreatePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreatePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePoolResponse();
@@ -554,7 +588,9 @@ export const MsgCreatePoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreatePoolResponse>, I>>(_: I): MsgCreatePoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreatePoolResponse>, I>>(
+    _: I
+  ): MsgCreatePoolResponse {
     const message = createBaseMsgCreatePoolResponse();
     return message;
   },
@@ -565,7 +601,10 @@ function createBaseMsgUpdatePool(): MsgUpdatePool {
 }
 
 export const MsgUpdatePool = {
-  encode(message: MsgUpdatePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdatePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -618,7 +657,9 @@ export const MsgUpdatePool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdatePool>, I>>(object: I): MsgUpdatePool {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePool>, I>>(
+    object: I
+  ): MsgUpdatePool {
     const message = createBaseMsgUpdatePool();
     message.authority = object.authority ?? "";
     message.id = object.id ?? "0";
@@ -632,11 +673,17 @@ function createBaseMsgUpdatePoolResponse(): MsgUpdatePoolResponse {
 }
 
 export const MsgUpdatePoolResponse = {
-  encode(_: MsgUpdatePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdatePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdatePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdatePoolResponse();
@@ -660,7 +707,9 @@ export const MsgUpdatePoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdatePoolResponse>, I>>(_: I): MsgUpdatePoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePoolResponse>, I>>(
+    _: I
+  ): MsgUpdatePoolResponse {
     const message = createBaseMsgUpdatePoolResponse();
     return message;
   },
@@ -671,7 +720,10 @@ function createBaseMsgPausePool(): MsgPausePool {
 }
 
 export const MsgPausePool = {
-  encode(message: MsgPausePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgPausePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -716,7 +768,9 @@ export const MsgPausePool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgPausePool>, I>>(object: I): MsgPausePool {
+  fromPartial<I extends Exact<DeepPartial<MsgPausePool>, I>>(
+    object: I
+  ): MsgPausePool {
     const message = createBaseMsgPausePool();
     message.authority = object.authority ?? "";
     message.id = object.id ?? "0";
@@ -729,11 +783,17 @@ function createBaseMsgPausePoolResponse(): MsgPausePoolResponse {
 }
 
 export const MsgPausePoolResponse = {
-  encode(_: MsgPausePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgPausePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPausePoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgPausePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPausePoolResponse();
@@ -757,7 +817,9 @@ export const MsgPausePoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgPausePoolResponse>, I>>(_: I): MsgPausePoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgPausePoolResponse>, I>>(
+    _: I
+  ): MsgPausePoolResponse {
     const message = createBaseMsgPausePoolResponse();
     return message;
   },
@@ -768,7 +830,10 @@ function createBaseMsgUnpausePool(): MsgUnpausePool {
 }
 
 export const MsgUnpausePool = {
-  encode(message: MsgUnpausePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUnpausePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -813,7 +878,9 @@ export const MsgUnpausePool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUnpausePool>, I>>(object: I): MsgUnpausePool {
+  fromPartial<I extends Exact<DeepPartial<MsgUnpausePool>, I>>(
+    object: I
+  ): MsgUnpausePool {
     const message = createBaseMsgUnpausePool();
     message.authority = object.authority ?? "";
     message.id = object.id ?? "0";
@@ -826,11 +893,17 @@ function createBaseMsgUnpausePoolResponse(): MsgUnpausePoolResponse {
 }
 
 export const MsgUnpausePoolResponse = {
-  encode(_: MsgUnpausePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUnpausePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnpausePoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUnpausePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnpausePoolResponse();
@@ -854,18 +927,30 @@ export const MsgUnpausePoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUnpausePoolResponse>, I>>(_: I): MsgUnpausePoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUnpausePoolResponse>, I>>(
+    _: I
+  ): MsgUnpausePoolResponse {
     const message = createBaseMsgUnpausePoolResponse();
     return message;
   },
 };
 
 function createBaseMsgScheduleRuntimeUpgrade(): MsgScheduleRuntimeUpgrade {
-  return { authority: "", runtime: "", version: "", scheduled_at: "0", duration: "0", binaries: "" };
+  return {
+    authority: "",
+    runtime: "",
+    version: "",
+    scheduled_at: "0",
+    duration: "0",
+    binaries: "",
+  };
 }
 
 export const MsgScheduleRuntimeUpgrade = {
-  encode(message: MsgScheduleRuntimeUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgScheduleRuntimeUpgrade,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -887,7 +972,10 @@ export const MsgScheduleRuntimeUpgrade = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgScheduleRuntimeUpgrade {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgScheduleRuntimeUpgrade {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgScheduleRuntimeUpgrade();
@@ -925,7 +1013,9 @@ export const MsgScheduleRuntimeUpgrade = {
       authority: isSet(object.authority) ? String(object.authority) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       version: isSet(object.version) ? String(object.version) : "",
-      scheduled_at: isSet(object.scheduled_at) ? String(object.scheduled_at) : "0",
+      scheduled_at: isSet(object.scheduled_at)
+        ? String(object.scheduled_at)
+        : "0",
       duration: isSet(object.duration) ? String(object.duration) : "0",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
     };
@@ -936,13 +1026,16 @@ export const MsgScheduleRuntimeUpgrade = {
     message.authority !== undefined && (obj.authority = message.authority);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.version !== undefined && (obj.version = message.version);
-    message.scheduled_at !== undefined && (obj.scheduled_at = message.scheduled_at);
+    message.scheduled_at !== undefined &&
+      (obj.scheduled_at = message.scheduled_at);
     message.duration !== undefined && (obj.duration = message.duration);
     message.binaries !== undefined && (obj.binaries = message.binaries);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgScheduleRuntimeUpgrade>, I>>(object: I): MsgScheduleRuntimeUpgrade {
+  fromPartial<I extends Exact<DeepPartial<MsgScheduleRuntimeUpgrade>, I>>(
+    object: I
+  ): MsgScheduleRuntimeUpgrade {
     const message = createBaseMsgScheduleRuntimeUpgrade();
     message.authority = object.authority ?? "";
     message.runtime = object.runtime ?? "";
@@ -959,11 +1052,17 @@ function createBaseMsgScheduleRuntimeUpgradeResponse(): MsgScheduleRuntimeUpgrad
 }
 
 export const MsgScheduleRuntimeUpgradeResponse = {
-  encode(_: MsgScheduleRuntimeUpgradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgScheduleRuntimeUpgradeResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgScheduleRuntimeUpgradeResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgScheduleRuntimeUpgradeResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgScheduleRuntimeUpgradeResponse();
@@ -987,9 +1086,9 @@ export const MsgScheduleRuntimeUpgradeResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgScheduleRuntimeUpgradeResponse>, I>>(
-    _: I,
-  ): MsgScheduleRuntimeUpgradeResponse {
+  fromPartial<
+    I extends Exact<DeepPartial<MsgScheduleRuntimeUpgradeResponse>, I>
+  >(_: I): MsgScheduleRuntimeUpgradeResponse {
     const message = createBaseMsgScheduleRuntimeUpgradeResponse();
     return message;
   },
@@ -1000,7 +1099,10 @@ function createBaseMsgCancelRuntimeUpgrade(): MsgCancelRuntimeUpgrade {
 }
 
 export const MsgCancelRuntimeUpgrade = {
-  encode(message: MsgCancelRuntimeUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCancelRuntimeUpgrade,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -1010,7 +1112,10 @@ export const MsgCancelRuntimeUpgrade = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelRuntimeUpgrade {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCancelRuntimeUpgrade {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelRuntimeUpgrade();
@@ -1045,7 +1150,9 @@ export const MsgCancelRuntimeUpgrade = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCancelRuntimeUpgrade>, I>>(object: I): MsgCancelRuntimeUpgrade {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelRuntimeUpgrade>, I>>(
+    object: I
+  ): MsgCancelRuntimeUpgrade {
     const message = createBaseMsgCancelRuntimeUpgrade();
     message.authority = object.authority ?? "";
     message.runtime = object.runtime ?? "";
@@ -1058,11 +1165,17 @@ function createBaseMsgCancelRuntimeUpgradeResponse(): MsgCancelRuntimeUpgradeRes
 }
 
 export const MsgCancelRuntimeUpgradeResponse = {
-  encode(_: MsgCancelRuntimeUpgradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCancelRuntimeUpgradeResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelRuntimeUpgradeResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCancelRuntimeUpgradeResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelRuntimeUpgradeResponse();
@@ -1086,7 +1199,9 @@ export const MsgCancelRuntimeUpgradeResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCancelRuntimeUpgradeResponse>, I>>(_: I): MsgCancelRuntimeUpgradeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelRuntimeUpgradeResponse>, I>>(
+    _: I
+  ): MsgCancelRuntimeUpgradeResponse {
     const message = createBaseMsgCancelRuntimeUpgradeResponse();
     return message;
   },
@@ -1097,7 +1212,10 @@ function createBaseMsgResetPool(): MsgResetPool {
 }
 
 export const MsgResetPool = {
-  encode(message: MsgResetPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgResetPool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -1150,7 +1268,9 @@ export const MsgResetPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgResetPool>, I>>(object: I): MsgResetPool {
+  fromPartial<I extends Exact<DeepPartial<MsgResetPool>, I>>(
+    object: I
+  ): MsgResetPool {
     const message = createBaseMsgResetPool();
     message.authority = object.authority ?? "";
     message.id = object.id ?? "0";
@@ -1164,11 +1284,17 @@ function createBaseMsgResetPoolResponse(): MsgResetPoolResponse {
 }
 
 export const MsgResetPoolResponse = {
-  encode(_: MsgResetPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgResetPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgResetPoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgResetPoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgResetPoolResponse();
@@ -1192,7 +1318,9 @@ export const MsgResetPoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgResetPoolResponse>, I>>(_: I): MsgResetPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgResetPoolResponse>, I>>(
+    _: I
+  ): MsgResetPoolResponse {
     const message = createBaseMsgResetPoolResponse();
     return message;
   },
@@ -1228,12 +1356,16 @@ export interface Msg {
    * ScheduleRuntimeUpgrade defines a governance operation for scheduling a runtime upgrade.
    * The authority is hard-coded to the x/gov module account.
    */
-  ScheduleRuntimeUpgrade(request: MsgScheduleRuntimeUpgrade): Promise<MsgScheduleRuntimeUpgradeResponse>;
+  ScheduleRuntimeUpgrade(
+    request: MsgScheduleRuntimeUpgrade
+  ): Promise<MsgScheduleRuntimeUpgradeResponse>;
   /**
    * CancelRuntimeUpgrade defines a governance operation for cancelling a runtime upgrade.
    * The authority is hard-coded to the x/gov module account.
    */
-  CancelRuntimeUpgrade(request: MsgCancelRuntimeUpgrade): Promise<MsgCancelRuntimeUpgradeResponse>;
+  CancelRuntimeUpgrade(
+    request: MsgCancelRuntimeUpgrade
+  ): Promise<MsgCancelRuntimeUpgradeResponse>;
   /**
    * ResetPool defines a governance operation for resetting an existing pool.
    * The authority is hard-coded to the x/gov module account.
@@ -1258,72 +1390,146 @@ export class MsgClientImpl implements Msg {
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse> {
     const data = MsgFundPool.encode(request).finish();
     const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "FundPool", data);
-    return promise.then((data) => MsgFundPoolResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      MsgFundPoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   DefundPool(request: MsgDefundPool): Promise<MsgDefundPoolResponse> {
     const data = MsgDefundPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "DefundPool", data);
-    return promise.then((data) => MsgDefundPoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "DefundPool",
+      data
+    );
+    return promise.then((data) =>
+      MsgDefundPoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
     const data = MsgCreatePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "CreatePool", data);
-    return promise.then((data) => MsgCreatePoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "CreatePool",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreatePoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   UpdatePool(request: MsgUpdatePool): Promise<MsgUpdatePoolResponse> {
     const data = MsgUpdatePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "UpdatePool", data);
-    return promise.then((data) => MsgUpdatePoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "UpdatePool",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdatePoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   PausePool(request: MsgPausePool): Promise<MsgPausePoolResponse> {
     const data = MsgPausePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "PausePool", data);
-    return promise.then((data) => MsgPausePoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "PausePool",
+      data
+    );
+    return promise.then((data) =>
+      MsgPausePoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   UnpausePool(request: MsgUnpausePool): Promise<MsgUnpausePoolResponse> {
     const data = MsgUnpausePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "UnpausePool", data);
-    return promise.then((data) => MsgUnpausePoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "UnpausePool",
+      data
+    );
+    return promise.then((data) =>
+      MsgUnpausePoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  ScheduleRuntimeUpgrade(request: MsgScheduleRuntimeUpgrade): Promise<MsgScheduleRuntimeUpgradeResponse> {
+  ScheduleRuntimeUpgrade(
+    request: MsgScheduleRuntimeUpgrade
+  ): Promise<MsgScheduleRuntimeUpgradeResponse> {
     const data = MsgScheduleRuntimeUpgrade.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "ScheduleRuntimeUpgrade", data);
-    return promise.then((data) => MsgScheduleRuntimeUpgradeResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "ScheduleRuntimeUpgrade",
+      data
+    );
+    return promise.then((data) =>
+      MsgScheduleRuntimeUpgradeResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  CancelRuntimeUpgrade(request: MsgCancelRuntimeUpgrade): Promise<MsgCancelRuntimeUpgradeResponse> {
+  CancelRuntimeUpgrade(
+    request: MsgCancelRuntimeUpgrade
+  ): Promise<MsgCancelRuntimeUpgradeResponse> {
     const data = MsgCancelRuntimeUpgrade.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "CancelRuntimeUpgrade", data);
-    return promise.then((data) => MsgCancelRuntimeUpgradeResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "CancelRuntimeUpgrade",
+      data
+    );
+    return promise.then((data) =>
+      MsgCancelRuntimeUpgradeResponse.decode(new _m0.Reader(data))
+    );
   }
 
   ResetPool(request: MsgResetPool): Promise<MsgResetPoolResponse> {
     const data = MsgResetPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "ResetPool", data);
-    return promise.then((data) => MsgResetPoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.pool.v1beta1.Msg",
+      "ResetPool",
+      data
+    );
+    return promise.then((data) =>
+      MsgResetPoolResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

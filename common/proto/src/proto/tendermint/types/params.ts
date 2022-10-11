@@ -1,7 +1,7 @@
 /* eslint-disable */
+import { Duration } from "../../google/protobuf/duration";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Duration } from "../../google/protobuf/duration";
 
 export const protobufPackage = "tendermint.types";
 
@@ -86,19 +86,33 @@ export interface HashedParams {
 }
 
 function createBaseConsensusParams(): ConsensusParams {
-  return { block: undefined, evidence: undefined, validator: undefined, version: undefined };
+  return {
+    block: undefined,
+    evidence: undefined,
+    validator: undefined,
+    version: undefined,
+  };
 }
 
 export const ConsensusParams = {
-  encode(message: ConsensusParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ConsensusParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.block !== undefined) {
       BlockParams.encode(message.block, writer.uint32(10).fork()).ldelim();
     }
     if (message.evidence !== undefined) {
-      EvidenceParams.encode(message.evidence, writer.uint32(18).fork()).ldelim();
+      EvidenceParams.encode(
+        message.evidence,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.validator !== undefined) {
-      ValidatorParams.encode(message.validator, writer.uint32(26).fork()).ldelim();
+      ValidatorParams.encode(
+        message.validator,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     if (message.version !== undefined) {
       VersionParams.encode(message.version, writer.uint32(34).fork()).ldelim();
@@ -135,39 +149,62 @@ export const ConsensusParams = {
 
   fromJSON(object: any): ConsensusParams {
     return {
-      block: isSet(object.block) ? BlockParams.fromJSON(object.block) : undefined,
-      evidence: isSet(object.evidence) ? EvidenceParams.fromJSON(object.evidence) : undefined,
-      validator: isSet(object.validator) ? ValidatorParams.fromJSON(object.validator) : undefined,
-      version: isSet(object.version) ? VersionParams.fromJSON(object.version) : undefined,
+      block: isSet(object.block)
+        ? BlockParams.fromJSON(object.block)
+        : undefined,
+      evidence: isSet(object.evidence)
+        ? EvidenceParams.fromJSON(object.evidence)
+        : undefined,
+      validator: isSet(object.validator)
+        ? ValidatorParams.fromJSON(object.validator)
+        : undefined,
+      version: isSet(object.version)
+        ? VersionParams.fromJSON(object.version)
+        : undefined,
     };
   },
 
   toJSON(message: ConsensusParams): unknown {
     const obj: any = {};
-    message.block !== undefined && (obj.block = message.block ? BlockParams.toJSON(message.block) : undefined);
+    message.block !== undefined &&
+      (obj.block = message.block
+        ? BlockParams.toJSON(message.block)
+        : undefined);
     message.evidence !== undefined &&
-      (obj.evidence = message.evidence ? EvidenceParams.toJSON(message.evidence) : undefined);
+      (obj.evidence = message.evidence
+        ? EvidenceParams.toJSON(message.evidence)
+        : undefined);
     message.validator !== undefined &&
-      (obj.validator = message.validator ? ValidatorParams.toJSON(message.validator) : undefined);
+      (obj.validator = message.validator
+        ? ValidatorParams.toJSON(message.validator)
+        : undefined);
     message.version !== undefined &&
-      (obj.version = message.version ? VersionParams.toJSON(message.version) : undefined);
+      (obj.version = message.version
+        ? VersionParams.toJSON(message.version)
+        : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ConsensusParams>, I>>(object: I): ConsensusParams {
+  fromPartial<I extends Exact<DeepPartial<ConsensusParams>, I>>(
+    object: I
+  ): ConsensusParams {
     const message = createBaseConsensusParams();
-    message.block = (object.block !== undefined && object.block !== null)
-      ? BlockParams.fromPartial(object.block)
-      : undefined;
-    message.evidence = (object.evidence !== undefined && object.evidence !== null)
-      ? EvidenceParams.fromPartial(object.evidence)
-      : undefined;
-    message.validator = (object.validator !== undefined && object.validator !== null)
-      ? ValidatorParams.fromPartial(object.validator)
-      : undefined;
-    message.version = (object.version !== undefined && object.version !== null)
-      ? VersionParams.fromPartial(object.version)
-      : undefined;
+    message.block =
+      object.block !== undefined && object.block !== null
+        ? BlockParams.fromPartial(object.block)
+        : undefined;
+    message.evidence =
+      object.evidence !== undefined && object.evidence !== null
+        ? EvidenceParams.fromPartial(object.evidence)
+        : undefined;
+    message.validator =
+      object.validator !== undefined && object.validator !== null
+        ? ValidatorParams.fromPartial(object.validator)
+        : undefined;
+    message.version =
+      object.version !== undefined && object.version !== null
+        ? VersionParams.fromPartial(object.version)
+        : undefined;
     return message;
   },
 };
@@ -177,7 +214,10 @@ function createBaseBlockParams(): BlockParams {
 }
 
 export const BlockParams = {
-  encode(message: BlockParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: BlockParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.max_bytes !== "0") {
       writer.uint32(8).int64(message.max_bytes);
     }
@@ -218,7 +258,9 @@ export const BlockParams = {
     return {
       max_bytes: isSet(object.max_bytes) ? String(object.max_bytes) : "0",
       max_gas: isSet(object.max_gas) ? String(object.max_gas) : "0",
-      time_iota_ms: isSet(object.time_iota_ms) ? String(object.time_iota_ms) : "0",
+      time_iota_ms: isSet(object.time_iota_ms)
+        ? String(object.time_iota_ms)
+        : "0",
     };
   },
 
@@ -226,11 +268,14 @@ export const BlockParams = {
     const obj: any = {};
     message.max_bytes !== undefined && (obj.max_bytes = message.max_bytes);
     message.max_gas !== undefined && (obj.max_gas = message.max_gas);
-    message.time_iota_ms !== undefined && (obj.time_iota_ms = message.time_iota_ms);
+    message.time_iota_ms !== undefined &&
+      (obj.time_iota_ms = message.time_iota_ms);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BlockParams>, I>>(object: I): BlockParams {
+  fromPartial<I extends Exact<DeepPartial<BlockParams>, I>>(
+    object: I
+  ): BlockParams {
     const message = createBaseBlockParams();
     message.max_bytes = object.max_bytes ?? "0";
     message.max_gas = object.max_gas ?? "0";
@@ -240,16 +285,26 @@ export const BlockParams = {
 };
 
 function createBaseEvidenceParams(): EvidenceParams {
-  return { max_age_num_blocks: "0", max_age_duration: undefined, max_bytes: "0" };
+  return {
+    max_age_num_blocks: "0",
+    max_age_duration: undefined,
+    max_bytes: "0",
+  };
 }
 
 export const EvidenceParams = {
-  encode(message: EvidenceParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EvidenceParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.max_age_num_blocks !== "0") {
       writer.uint32(8).int64(message.max_age_num_blocks);
     }
     if (message.max_age_duration !== undefined) {
-      Duration.encode(message.max_age_duration, writer.uint32(18).fork()).ldelim();
+      Duration.encode(
+        message.max_age_duration,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.max_bytes !== "0") {
       writer.uint32(24).int64(message.max_bytes);
@@ -283,27 +338,37 @@ export const EvidenceParams = {
 
   fromJSON(object: any): EvidenceParams {
     return {
-      max_age_num_blocks: isSet(object.max_age_num_blocks) ? String(object.max_age_num_blocks) : "0",
-      max_age_duration: isSet(object.max_age_duration) ? Duration.fromJSON(object.max_age_duration) : undefined,
+      max_age_num_blocks: isSet(object.max_age_num_blocks)
+        ? String(object.max_age_num_blocks)
+        : "0",
+      max_age_duration: isSet(object.max_age_duration)
+        ? Duration.fromJSON(object.max_age_duration)
+        : undefined,
       max_bytes: isSet(object.max_bytes) ? String(object.max_bytes) : "0",
     };
   },
 
   toJSON(message: EvidenceParams): unknown {
     const obj: any = {};
-    message.max_age_num_blocks !== undefined && (obj.max_age_num_blocks = message.max_age_num_blocks);
+    message.max_age_num_blocks !== undefined &&
+      (obj.max_age_num_blocks = message.max_age_num_blocks);
     message.max_age_duration !== undefined &&
-      (obj.max_age_duration = message.max_age_duration ? Duration.toJSON(message.max_age_duration) : undefined);
+      (obj.max_age_duration = message.max_age_duration
+        ? Duration.toJSON(message.max_age_duration)
+        : undefined);
     message.max_bytes !== undefined && (obj.max_bytes = message.max_bytes);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EvidenceParams>, I>>(object: I): EvidenceParams {
+  fromPartial<I extends Exact<DeepPartial<EvidenceParams>, I>>(
+    object: I
+  ): EvidenceParams {
     const message = createBaseEvidenceParams();
     message.max_age_num_blocks = object.max_age_num_blocks ?? "0";
-    message.max_age_duration = (object.max_age_duration !== undefined && object.max_age_duration !== null)
-      ? Duration.fromPartial(object.max_age_duration)
-      : undefined;
+    message.max_age_duration =
+      object.max_age_duration !== undefined && object.max_age_duration !== null
+        ? Duration.fromPartial(object.max_age_duration)
+        : undefined;
     message.max_bytes = object.max_bytes ?? "0";
     return message;
   },
@@ -314,7 +379,10 @@ function createBaseValidatorParams(): ValidatorParams {
 }
 
 export const ValidatorParams = {
-  encode(message: ValidatorParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ValidatorParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.pub_key_types) {
       writer.uint32(10).string(v!);
     }
@@ -341,7 +409,9 @@ export const ValidatorParams = {
 
   fromJSON(object: any): ValidatorParams {
     return {
-      pub_key_types: Array.isArray(object?.pub_key_types) ? object.pub_key_types.map((e: any) => String(e)) : [],
+      pub_key_types: Array.isArray(object?.pub_key_types)
+        ? object.pub_key_types.map((e: any) => String(e))
+        : [],
     };
   },
 
@@ -355,7 +425,9 @@ export const ValidatorParams = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ValidatorParams>, I>>(object: I): ValidatorParams {
+  fromPartial<I extends Exact<DeepPartial<ValidatorParams>, I>>(
+    object: I
+  ): ValidatorParams {
     const message = createBaseValidatorParams();
     message.pub_key_types = object.pub_key_types?.map((e) => e) || [];
     return message;
@@ -367,7 +439,10 @@ function createBaseVersionParams(): VersionParams {
 }
 
 export const VersionParams = {
-  encode(message: VersionParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: VersionParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.app_version !== "0") {
       writer.uint32(8).uint64(message.app_version);
     }
@@ -393,16 +468,21 @@ export const VersionParams = {
   },
 
   fromJSON(object: any): VersionParams {
-    return { app_version: isSet(object.app_version) ? String(object.app_version) : "0" };
+    return {
+      app_version: isSet(object.app_version) ? String(object.app_version) : "0",
+    };
   },
 
   toJSON(message: VersionParams): unknown {
     const obj: any = {};
-    message.app_version !== undefined && (obj.app_version = message.app_version);
+    message.app_version !== undefined &&
+      (obj.app_version = message.app_version);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<VersionParams>, I>>(object: I): VersionParams {
+  fromPartial<I extends Exact<DeepPartial<VersionParams>, I>>(
+    object: I
+  ): VersionParams {
     const message = createBaseVersionParams();
     message.app_version = object.app_version ?? "0";
     return message;
@@ -414,7 +494,10 @@ function createBaseHashedParams(): HashedParams {
 }
 
 export const HashedParams = {
-  encode(message: HashedParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: HashedParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.block_max_bytes !== "0") {
       writer.uint32(8).int64(message.block_max_bytes);
     }
@@ -447,19 +530,27 @@ export const HashedParams = {
 
   fromJSON(object: any): HashedParams {
     return {
-      block_max_bytes: isSet(object.block_max_bytes) ? String(object.block_max_bytes) : "0",
-      block_max_gas: isSet(object.block_max_gas) ? String(object.block_max_gas) : "0",
+      block_max_bytes: isSet(object.block_max_bytes)
+        ? String(object.block_max_bytes)
+        : "0",
+      block_max_gas: isSet(object.block_max_gas)
+        ? String(object.block_max_gas)
+        : "0",
     };
   },
 
   toJSON(message: HashedParams): unknown {
     const obj: any = {};
-    message.block_max_bytes !== undefined && (obj.block_max_bytes = message.block_max_bytes);
-    message.block_max_gas !== undefined && (obj.block_max_gas = message.block_max_gas);
+    message.block_max_bytes !== undefined &&
+      (obj.block_max_bytes = message.block_max_bytes);
+    message.block_max_gas !== undefined &&
+      (obj.block_max_gas = message.block_max_gas);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<HashedParams>, I>>(object: I): HashedParams {
+  fromPartial<I extends Exact<DeepPartial<HashedParams>, I>>(
+    object: I
+  ): HashedParams {
     const message = createBaseHashedParams();
     message.block_max_bytes = object.block_max_bytes ?? "0";
     message.block_max_gas = object.block_max_gas ?? "0";
@@ -467,16 +558,32 @@ export const HashedParams = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

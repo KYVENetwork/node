@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Any } from "../../../google/protobuf/any";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.app.v1alpha1";
 
@@ -45,7 +45,10 @@ function createBaseConfig(): Config {
 }
 
 export const Config = {
-  encode(message: Config, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Config,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.modules) {
       ModuleConfig.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -71,13 +74,19 @@ export const Config = {
   },
 
   fromJSON(object: any): Config {
-    return { modules: Array.isArray(object?.modules) ? object.modules.map((e: any) => ModuleConfig.fromJSON(e)) : [] };
+    return {
+      modules: Array.isArray(object?.modules)
+        ? object.modules.map((e: any) => ModuleConfig.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Config): unknown {
     const obj: any = {};
     if (message.modules) {
-      obj.modules = message.modules.map((e) => e ? ModuleConfig.toJSON(e) : undefined);
+      obj.modules = message.modules.map((e) =>
+        e ? ModuleConfig.toJSON(e) : undefined
+      );
     } else {
       obj.modules = [];
     }
@@ -86,7 +95,8 @@ export const Config = {
 
   fromPartial<I extends Exact<DeepPartial<Config>, I>>(object: I): Config {
     const message = createBaseConfig();
-    message.modules = object.modules?.map((e) => ModuleConfig.fromPartial(e)) || [];
+    message.modules =
+      object.modules?.map((e) => ModuleConfig.fromPartial(e)) || [];
     return message;
   },
 };
@@ -96,7 +106,10 @@ function createBaseModuleConfig(): ModuleConfig {
 }
 
 export const ModuleConfig = {
-  encode(message: ModuleConfig, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ModuleConfig,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -137,30 +150,50 @@ export const ModuleConfig = {
   toJSON(message: ModuleConfig): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.config !== undefined && (obj.config = message.config ? Any.toJSON(message.config) : undefined);
+    message.config !== undefined &&
+      (obj.config = message.config ? Any.toJSON(message.config) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleConfig>, I>>(object: I): ModuleConfig {
+  fromPartial<I extends Exact<DeepPartial<ModuleConfig>, I>>(
+    object: I
+  ): ModuleConfig {
     const message = createBaseModuleConfig();
     message.name = object.name ?? "";
-    message.config = (object.config !== undefined && object.config !== null)
-      ? Any.fromPartial(object.config)
-      : undefined;
+    message.config =
+      object.config !== undefined && object.config !== null
+        ? Any.fromPartial(object.config)
+        : undefined;
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

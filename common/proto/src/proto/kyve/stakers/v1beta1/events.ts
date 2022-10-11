@@ -1,7 +1,7 @@
 /* eslint-disable */
+import { SlashType, slashTypeFromJSON, slashTypeToJSON } from "./stakers";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { SlashType, slashTypeFromJSON, slashTypeToJSON } from "./stakers";
 
 export const protobufPackage = "kyve.stakers.v1beta1";
 
@@ -70,7 +70,10 @@ function createBaseEventCreateStaker(): EventCreateStaker {
 }
 
 export const EventCreateStaker = {
-  encode(message: EventCreateStaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventCreateStaker,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -115,7 +118,9 @@ export const EventCreateStaker = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventCreateStaker>, I>>(object: I): EventCreateStaker {
+  fromPartial<I extends Exact<DeepPartial<EventCreateStaker>, I>>(
+    object: I
+  ): EventCreateStaker {
     const message = createBaseEventCreateStaker();
     message.address = object.address ?? "";
     message.amount = object.amount ?? "0";
@@ -128,7 +133,10 @@ function createBaseEventUpdateMetadata(): EventUpdateMetadata {
 }
 
 export const EventUpdateMetadata = {
-  encode(message: EventUpdateMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventUpdateMetadata,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -189,7 +197,9 @@ export const EventUpdateMetadata = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventUpdateMetadata>, I>>(object: I): EventUpdateMetadata {
+  fromPartial<I extends Exact<DeepPartial<EventUpdateMetadata>, I>>(
+    object: I
+  ): EventUpdateMetadata {
     const message = createBaseEventUpdateMetadata();
     message.address = object.address ?? "";
     message.moniker = object.moniker ?? "";
@@ -204,7 +214,10 @@ function createBaseEventSlash(): EventSlash {
 }
 
 export const EventSlash = {
-  encode(message: EventSlash, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventSlash,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -252,7 +265,9 @@ export const EventSlash = {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       address: isSet(object.address) ? String(object.address) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      slash_type: isSet(object.slash_type) ? slashTypeFromJSON(object.slash_type) : 0,
+      slash_type: isSet(object.slash_type)
+        ? slashTypeFromJSON(object.slash_type)
+        : 0,
     };
   },
 
@@ -261,11 +276,14 @@ export const EventSlash = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.address !== undefined && (obj.address = message.address);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.slash_type !== undefined && (obj.slash_type = slashTypeToJSON(message.slash_type));
+    message.slash_type !== undefined &&
+      (obj.slash_type = slashTypeToJSON(message.slash_type));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventSlash>, I>>(object: I): EventSlash {
+  fromPartial<I extends Exact<DeepPartial<EventSlash>, I>>(
+    object: I
+  ): EventSlash {
     const message = createBaseEventSlash();
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
@@ -280,7 +298,10 @@ function createBaseEventUpdateCommission(): EventUpdateCommission {
 }
 
 export const EventUpdateCommission = {
-  encode(message: EventUpdateCommission, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventUpdateCommission,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -290,7 +311,10 @@ export const EventUpdateCommission = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventUpdateCommission {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): EventUpdateCommission {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventUpdateCommission();
@@ -325,7 +349,9 @@ export const EventUpdateCommission = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventUpdateCommission>, I>>(object: I): EventUpdateCommission {
+  fromPartial<I extends Exact<DeepPartial<EventUpdateCommission>, I>>(
+    object: I
+  ): EventUpdateCommission {
     const message = createBaseEventUpdateCommission();
     message.address = object.address ?? "";
     message.commission = object.commission ?? "";
@@ -338,7 +364,10 @@ function createBaseEventJoinPool(): EventJoinPool {
 }
 
 export const EventJoinPool = {
-  encode(message: EventJoinPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventJoinPool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -399,7 +428,9 @@ export const EventJoinPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventJoinPool>, I>>(object: I): EventJoinPool {
+  fromPartial<I extends Exact<DeepPartial<EventJoinPool>, I>>(
+    object: I
+  ): EventJoinPool {
     const message = createBaseEventJoinPool();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -414,7 +445,10 @@ function createBaseEventLeavePool(): EventLeavePool {
 }
 
 export const EventLeavePool = {
-  encode(message: EventLeavePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventLeavePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -459,7 +493,9 @@ export const EventLeavePool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventLeavePool>, I>>(object: I): EventLeavePool {
+  fromPartial<I extends Exact<DeepPartial<EventLeavePool>, I>>(
+    object: I
+  ): EventLeavePool {
     const message = createBaseEventLeavePool();
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
@@ -467,16 +503,32 @@ export const EventLeavePool = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

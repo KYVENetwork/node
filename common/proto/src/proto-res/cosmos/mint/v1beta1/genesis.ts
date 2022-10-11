@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Minter, Params } from "./mint";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.mint.v1beta1";
 
@@ -17,7 +17,10 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.minter !== undefined) {
       Minter.encode(message.minter, writer.uint32(10).fork()).ldelim();
     }
@@ -57,33 +60,55 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    message.minter !== undefined && (obj.minter = message.minter ? Minter.toJSON(message.minter) : undefined);
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.minter !== undefined &&
+      (obj.minter = message.minter ? Minter.toJSON(message.minter) : undefined);
+    message.params !== undefined &&
+      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
+    object: I
+  ): GenesisState {
     const message = createBaseGenesisState();
-    message.minter = (object.minter !== undefined && object.minter !== null)
-      ? Minter.fromPartial(object.minter)
-      : undefined;
-    message.params = (object.params !== undefined && object.params !== null)
-      ? Params.fromPartial(object.params)
-      : undefined;
+    message.minter =
+      object.minter !== undefined && object.minter !== null
+        ? Minter.fromPartial(object.minter)
+        : undefined;
+    message.params =
+      object.params !== undefined && object.params !== null
+        ? Params.fromPartial(object.params)
+        : undefined;
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

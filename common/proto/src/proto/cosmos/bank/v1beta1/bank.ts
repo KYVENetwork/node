@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Coin } from "../../base/v1beta1/coin";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.bank.v1beta1";
 
@@ -109,7 +109,10 @@ function createBaseParams(): Params {
 }
 
 export const Params = {
-  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Params,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.send_enabled) {
       SendEnabled.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -127,7 +130,9 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.send_enabled.push(SendEnabled.decode(reader, reader.uint32()));
+          message.send_enabled.push(
+            SendEnabled.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.default_send_enabled = reader.bool();
@@ -145,24 +150,30 @@ export const Params = {
       send_enabled: Array.isArray(object?.send_enabled)
         ? object.send_enabled.map((e: any) => SendEnabled.fromJSON(e))
         : [],
-      default_send_enabled: isSet(object.default_send_enabled) ? Boolean(object.default_send_enabled) : false,
+      default_send_enabled: isSet(object.default_send_enabled)
+        ? Boolean(object.default_send_enabled)
+        : false,
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
     if (message.send_enabled) {
-      obj.send_enabled = message.send_enabled.map((e) => e ? SendEnabled.toJSON(e) : undefined);
+      obj.send_enabled = message.send_enabled.map((e) =>
+        e ? SendEnabled.toJSON(e) : undefined
+      );
     } else {
       obj.send_enabled = [];
     }
-    message.default_send_enabled !== undefined && (obj.default_send_enabled = message.default_send_enabled);
+    message.default_send_enabled !== undefined &&
+      (obj.default_send_enabled = message.default_send_enabled);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
-    message.send_enabled = object.send_enabled?.map((e) => SendEnabled.fromPartial(e)) || [];
+    message.send_enabled =
+      object.send_enabled?.map((e) => SendEnabled.fromPartial(e)) || [];
     message.default_send_enabled = object.default_send_enabled ?? false;
     return message;
   },
@@ -173,7 +184,10 @@ function createBaseSendEnabled(): SendEnabled {
 }
 
 export const SendEnabled = {
-  encode(message: SendEnabled, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SendEnabled,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -218,7 +232,9 @@ export const SendEnabled = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SendEnabled>, I>>(object: I): SendEnabled {
+  fromPartial<I extends Exact<DeepPartial<SendEnabled>, I>>(
+    object: I
+  ): SendEnabled {
     const message = createBaseSendEnabled();
     message.denom = object.denom ?? "";
     message.enabled = object.enabled ?? false;
@@ -265,7 +281,9 @@ export const Input = {
   fromJSON(object: any): Input {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      coins: Array.isArray(object?.coins) ? object.coins.map((e: any) => Coin.fromJSON(e)) : [],
+      coins: Array.isArray(object?.coins)
+        ? object.coins.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
@@ -273,7 +291,7 @@ export const Input = {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     if (message.coins) {
-      obj.coins = message.coins.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.coins = message.coins.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
       obj.coins = [];
     }
@@ -293,7 +311,10 @@ function createBaseOutput(): Output {
 }
 
 export const Output = {
-  encode(message: Output, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Output,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -327,7 +348,9 @@ export const Output = {
   fromJSON(object: any): Output {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      coins: Array.isArray(object?.coins) ? object.coins.map((e: any) => Coin.fromJSON(e)) : [],
+      coins: Array.isArray(object?.coins)
+        ? object.coins.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
@@ -335,7 +358,7 @@ export const Output = {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     if (message.coins) {
-      obj.coins = message.coins.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.coins = message.coins.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
       obj.coins = [];
     }
@@ -355,7 +378,10 @@ function createBaseSupply(): Supply {
 }
 
 export const Supply = {
-  encode(message: Supply, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Supply,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.total) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -381,13 +407,17 @@ export const Supply = {
   },
 
   fromJSON(object: any): Supply {
-    return { total: Array.isArray(object?.total) ? object.total.map((e: any) => Coin.fromJSON(e)) : [] };
+    return {
+      total: Array.isArray(object?.total)
+        ? object.total.map((e: any) => Coin.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Supply): unknown {
     const obj: any = {};
     if (message.total) {
-      obj.total = message.total.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.total = message.total.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
       obj.total = [];
     }
@@ -406,7 +436,10 @@ function createBaseDenomUnit(): DenomUnit {
 }
 
 export const DenomUnit = {
-  encode(message: DenomUnit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DenomUnit,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -447,14 +480,17 @@ export const DenomUnit = {
     return {
       denom: isSet(object.denom) ? String(object.denom) : "",
       exponent: isSet(object.exponent) ? Number(object.exponent) : 0,
-      aliases: Array.isArray(object?.aliases) ? object.aliases.map((e: any) => String(e)) : [],
+      aliases: Array.isArray(object?.aliases)
+        ? object.aliases.map((e: any) => String(e))
+        : [],
     };
   },
 
   toJSON(message: DenomUnit): unknown {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
-    message.exponent !== undefined && (obj.exponent = Math.round(message.exponent));
+    message.exponent !== undefined &&
+      (obj.exponent = Math.round(message.exponent));
     if (message.aliases) {
       obj.aliases = message.aliases.map((e) => e);
     } else {
@@ -463,7 +499,9 @@ export const DenomUnit = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DenomUnit>, I>>(object: I): DenomUnit {
+  fromPartial<I extends Exact<DeepPartial<DenomUnit>, I>>(
+    object: I
+  ): DenomUnit {
     const message = createBaseDenomUnit();
     message.denom = object.denom ?? "";
     message.exponent = object.exponent ?? 0;
@@ -473,11 +511,23 @@ export const DenomUnit = {
 };
 
 function createBaseMetadata(): Metadata {
-  return { description: "", denom_units: [], base: "", display: "", name: "", symbol: "", uri: "", uri_hash: "" };
+  return {
+    description: "",
+    denom_units: [],
+    base: "",
+    display: "",
+    name: "",
+    symbol: "",
+    uri: "",
+    uri_hash: "",
+  };
 }
 
 export const Metadata = {
-  encode(message: Metadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Metadata,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.description !== "") {
       writer.uint32(10).string(message.description);
     }
@@ -547,7 +597,9 @@ export const Metadata = {
   fromJSON(object: any): Metadata {
     return {
       description: isSet(object.description) ? String(object.description) : "",
-      denom_units: Array.isArray(object?.denom_units) ? object.denom_units.map((e: any) => DenomUnit.fromJSON(e)) : [],
+      denom_units: Array.isArray(object?.denom_units)
+        ? object.denom_units.map((e: any) => DenomUnit.fromJSON(e))
+        : [],
       base: isSet(object.base) ? String(object.base) : "",
       display: isSet(object.display) ? String(object.display) : "",
       name: isSet(object.name) ? String(object.name) : "",
@@ -559,9 +611,12 @@ export const Metadata = {
 
   toJSON(message: Metadata): unknown {
     const obj: any = {};
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.denom_units) {
-      obj.denom_units = message.denom_units.map((e) => e ? DenomUnit.toJSON(e) : undefined);
+      obj.denom_units = message.denom_units.map((e) =>
+        e ? DenomUnit.toJSON(e) : undefined
+      );
     } else {
       obj.denom_units = [];
     }
@@ -577,7 +632,8 @@ export const Metadata = {
   fromPartial<I extends Exact<DeepPartial<Metadata>, I>>(object: I): Metadata {
     const message = createBaseMetadata();
     message.description = object.description ?? "";
-    message.denom_units = object.denom_units?.map((e) => DenomUnit.fromPartial(e)) || [];
+    message.denom_units =
+      object.denom_units?.map((e) => DenomUnit.fromPartial(e)) || [];
     message.base = object.base ?? "";
     message.display = object.display ?? "";
     message.name = object.name ?? "";
@@ -588,16 +644,32 @@ export const Metadata = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

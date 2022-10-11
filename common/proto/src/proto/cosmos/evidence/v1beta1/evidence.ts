@@ -1,7 +1,7 @@
 /* eslint-disable */
+import { Timestamp } from "../../../google/protobuf/timestamp";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Timestamp } from "../../../google/protobuf/timestamp";
 
 export const protobufPackage = "cosmos.evidence.v1beta1";
 
@@ -21,12 +21,18 @@ function createBaseEquivocation(): Equivocation {
 }
 
 export const Equivocation = {
-  encode(message: Equivocation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Equivocation,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.height !== "0") {
       writer.uint32(8).int64(message.height);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(
+        toTimestamp(message.time),
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     if (message.power !== "0") {
       writer.uint32(24).int64(message.power);
@@ -48,7 +54,9 @@ export const Equivocation = {
           message.height = longToString(reader.int64() as Long);
           break;
         case 2:
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.time = fromTimestamp(
+            Timestamp.decode(reader, reader.uint32())
+          );
           break;
         case 3:
           message.power = longToString(reader.int64() as Long);
@@ -69,7 +77,9 @@ export const Equivocation = {
       height: isSet(object.height) ? String(object.height) : "0",
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
       power: isSet(object.power) ? String(object.power) : "0",
-      consensus_address: isSet(object.consensus_address) ? String(object.consensus_address) : "",
+      consensus_address: isSet(object.consensus_address)
+        ? String(object.consensus_address)
+        : "",
     };
   },
 
@@ -78,11 +88,14 @@ export const Equivocation = {
     message.height !== undefined && (obj.height = message.height);
     message.time !== undefined && (obj.time = message.time.toISOString());
     message.power !== undefined && (obj.power = message.power);
-    message.consensus_address !== undefined && (obj.consensus_address = message.consensus_address);
+    message.consensus_address !== undefined &&
+      (obj.consensus_address = message.consensus_address);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Equivocation>, I>>(object: I): Equivocation {
+  fromPartial<I extends Exact<DeepPartial<Equivocation>, I>>(
+    object: I
+  ): Equivocation {
     const message = createBaseEquivocation();
     message.height = object.height ?? "0";
     message.time = object.time ?? undefined;
@@ -92,16 +105,32 @@ export const Equivocation = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = Math.trunc(date.getTime() / 1_000).toString();

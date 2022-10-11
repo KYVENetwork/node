@@ -16,15 +16,17 @@ export interface MsgSend {
 }
 
 /** MsgSendResponse defines the Msg/Send response type. */
-export interface MsgSendResponse {
-}
+export interface MsgSendResponse {}
 
 function createBaseMsgSend(): MsgSend {
   return { class_id: "", id: "", sender: "", receiver: "" };
 }
 
 export const MsgSend = {
-  encode(message: MsgSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgSend,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.class_id !== "") {
       writer.uint32(10).string(message.class_id);
     }
@@ -100,7 +102,10 @@ function createBaseMsgSendResponse(): MsgSendResponse {
 }
 
 export const MsgSendResponse = {
-  encode(_: MsgSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgSendResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
@@ -128,7 +133,9 @@ export const MsgSendResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(_: I): MsgSendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(
+    _: I
+  ): MsgSendResponse {
     const message = createBaseMsgSendResponse();
     return message;
   },
@@ -154,19 +161,39 @@ export class MsgClientImpl implements Msg {
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

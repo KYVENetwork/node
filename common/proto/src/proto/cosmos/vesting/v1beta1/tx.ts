@@ -1,8 +1,8 @@
 /* eslint-disable */
 import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { Coin } from "../../base/v1beta1/coin";
 import { Period } from "./vesting";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.vesting.v1beta1";
 
@@ -19,8 +19,7 @@ export interface MsgCreateVestingAccount {
 }
 
 /** MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount response type. */
-export interface MsgCreateVestingAccountResponse {
-}
+export interface MsgCreateVestingAccountResponse {}
 
 /**
  * MsgCreatePermanentLockedAccount defines a message that enables creating a permanent
@@ -33,8 +32,7 @@ export interface MsgCreatePermanentLockedAccount {
 }
 
 /** MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type. */
-export interface MsgCreatePermanentLockedAccountResponse {
-}
+export interface MsgCreatePermanentLockedAccountResponse {}
 
 /**
  * MsgCreateVestingAccount defines a message that enables creating a vesting
@@ -51,15 +49,23 @@ export interface MsgCreatePeriodicVestingAccount {
  * MsgCreateVestingAccountResponse defines the Msg/CreatePeriodicVestingAccount
  * response type.
  */
-export interface MsgCreatePeriodicVestingAccountResponse {
-}
+export interface MsgCreatePeriodicVestingAccountResponse {}
 
 function createBaseMsgCreateVestingAccount(): MsgCreateVestingAccount {
-  return { from_address: "", to_address: "", amount: [], end_time: "0", delayed: false };
+  return {
+    from_address: "",
+    to_address: "",
+    amount: [],
+    end_time: "0",
+    delayed: false,
+  };
 }
 
 export const MsgCreateVestingAccount = {
-  encode(message: MsgCreateVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreateVestingAccount,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.from_address !== "") {
       writer.uint32(10).string(message.from_address);
     }
@@ -78,7 +84,10 @@ export const MsgCreateVestingAccount = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateVestingAccount {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreateVestingAccount {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateVestingAccount();
@@ -110,9 +119,13 @@ export const MsgCreateVestingAccount = {
 
   fromJSON(object: any): MsgCreateVestingAccount {
     return {
-      from_address: isSet(object.from_address) ? String(object.from_address) : "",
+      from_address: isSet(object.from_address)
+        ? String(object.from_address)
+        : "",
       to_address: isSet(object.to_address) ? String(object.to_address) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
       end_time: isSet(object.end_time) ? String(object.end_time) : "0",
       delayed: isSet(object.delayed) ? Boolean(object.delayed) : false,
     };
@@ -120,10 +133,11 @@ export const MsgCreateVestingAccount = {
 
   toJSON(message: MsgCreateVestingAccount): unknown {
     const obj: any = {};
-    message.from_address !== undefined && (obj.from_address = message.from_address);
+    message.from_address !== undefined &&
+      (obj.from_address = message.from_address);
     message.to_address !== undefined && (obj.to_address = message.to_address);
     if (message.amount) {
-      obj.amount = message.amount.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.amount = message.amount.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
       obj.amount = [];
     }
@@ -132,7 +146,9 @@ export const MsgCreateVestingAccount = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateVestingAccount>, I>>(object: I): MsgCreateVestingAccount {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateVestingAccount>, I>>(
+    object: I
+  ): MsgCreateVestingAccount {
     const message = createBaseMsgCreateVestingAccount();
     message.from_address = object.from_address ?? "";
     message.to_address = object.to_address ?? "";
@@ -148,11 +164,17 @@ function createBaseMsgCreateVestingAccountResponse(): MsgCreateVestingAccountRes
 }
 
 export const MsgCreateVestingAccountResponse = {
-  encode(_: MsgCreateVestingAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreateVestingAccountResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateVestingAccountResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreateVestingAccountResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateVestingAccountResponse();
@@ -176,7 +198,9 @@ export const MsgCreateVestingAccountResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateVestingAccountResponse>, I>>(_: I): MsgCreateVestingAccountResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateVestingAccountResponse>, I>>(
+    _: I
+  ): MsgCreateVestingAccountResponse {
     const message = createBaseMsgCreateVestingAccountResponse();
     return message;
   },
@@ -187,7 +211,10 @@ function createBaseMsgCreatePermanentLockedAccount(): MsgCreatePermanentLockedAc
 }
 
 export const MsgCreatePermanentLockedAccount = {
-  encode(message: MsgCreatePermanentLockedAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreatePermanentLockedAccount,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.from_address !== "") {
       writer.uint32(10).string(message.from_address);
     }
@@ -200,7 +227,10 @@ export const MsgCreatePermanentLockedAccount = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePermanentLockedAccount {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreatePermanentLockedAccount {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePermanentLockedAccount();
@@ -226,18 +256,23 @@ export const MsgCreatePermanentLockedAccount = {
 
   fromJSON(object: any): MsgCreatePermanentLockedAccount {
     return {
-      from_address: isSet(object.from_address) ? String(object.from_address) : "",
+      from_address: isSet(object.from_address)
+        ? String(object.from_address)
+        : "",
       to_address: isSet(object.to_address) ? String(object.to_address) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: MsgCreatePermanentLockedAccount): unknown {
     const obj: any = {};
-    message.from_address !== undefined && (obj.from_address = message.from_address);
+    message.from_address !== undefined &&
+      (obj.from_address = message.from_address);
     message.to_address !== undefined && (obj.to_address = message.to_address);
     if (message.amount) {
-      obj.amount = message.amount.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.amount = message.amount.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
       obj.amount = [];
     }
@@ -245,7 +280,7 @@ export const MsgCreatePermanentLockedAccount = {
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgCreatePermanentLockedAccount>, I>>(
-    object: I,
+    object: I
   ): MsgCreatePermanentLockedAccount {
     const message = createBaseMsgCreatePermanentLockedAccount();
     message.from_address = object.from_address ?? "";
@@ -260,11 +295,17 @@ function createBaseMsgCreatePermanentLockedAccountResponse(): MsgCreatePermanent
 }
 
 export const MsgCreatePermanentLockedAccountResponse = {
-  encode(_: MsgCreatePermanentLockedAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreatePermanentLockedAccountResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePermanentLockedAccountResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreatePermanentLockedAccountResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePermanentLockedAccountResponse();
@@ -288,20 +329,28 @@ export const MsgCreatePermanentLockedAccountResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreatePermanentLockedAccountResponse>, I>>(
-    _: I,
-  ): MsgCreatePermanentLockedAccountResponse {
+  fromPartial<
+    I extends Exact<DeepPartial<MsgCreatePermanentLockedAccountResponse>, I>
+  >(_: I): MsgCreatePermanentLockedAccountResponse {
     const message = createBaseMsgCreatePermanentLockedAccountResponse();
     return message;
   },
 };
 
 function createBaseMsgCreatePeriodicVestingAccount(): MsgCreatePeriodicVestingAccount {
-  return { from_address: "", to_address: "", start_time: "0", vesting_periods: [] };
+  return {
+    from_address: "",
+    to_address: "",
+    start_time: "0",
+    vesting_periods: [],
+  };
 }
 
 export const MsgCreatePeriodicVestingAccount = {
-  encode(message: MsgCreatePeriodicVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreatePeriodicVestingAccount,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.from_address !== "") {
       writer.uint32(10).string(message.from_address);
     }
@@ -317,7 +366,10 @@ export const MsgCreatePeriodicVestingAccount = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePeriodicVestingAccount {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreatePeriodicVestingAccount {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePeriodicVestingAccount();
@@ -346,7 +398,9 @@ export const MsgCreatePeriodicVestingAccount = {
 
   fromJSON(object: any): MsgCreatePeriodicVestingAccount {
     return {
-      from_address: isSet(object.from_address) ? String(object.from_address) : "",
+      from_address: isSet(object.from_address)
+        ? String(object.from_address)
+        : "",
       to_address: isSet(object.to_address) ? String(object.to_address) : "",
       start_time: isSet(object.start_time) ? String(object.start_time) : "0",
       vesting_periods: Array.isArray(object?.vesting_periods)
@@ -357,11 +411,14 @@ export const MsgCreatePeriodicVestingAccount = {
 
   toJSON(message: MsgCreatePeriodicVestingAccount): unknown {
     const obj: any = {};
-    message.from_address !== undefined && (obj.from_address = message.from_address);
+    message.from_address !== undefined &&
+      (obj.from_address = message.from_address);
     message.to_address !== undefined && (obj.to_address = message.to_address);
     message.start_time !== undefined && (obj.start_time = message.start_time);
     if (message.vesting_periods) {
-      obj.vesting_periods = message.vesting_periods.map((e) => e ? Period.toJSON(e) : undefined);
+      obj.vesting_periods = message.vesting_periods.map((e) =>
+        e ? Period.toJSON(e) : undefined
+      );
     } else {
       obj.vesting_periods = [];
     }
@@ -369,13 +426,14 @@ export const MsgCreatePeriodicVestingAccount = {
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgCreatePeriodicVestingAccount>, I>>(
-    object: I,
+    object: I
   ): MsgCreatePeriodicVestingAccount {
     const message = createBaseMsgCreatePeriodicVestingAccount();
     message.from_address = object.from_address ?? "";
     message.to_address = object.to_address ?? "";
     message.start_time = object.start_time ?? "0";
-    message.vesting_periods = object.vesting_periods?.map((e) => Period.fromPartial(e)) || [];
+    message.vesting_periods =
+      object.vesting_periods?.map((e) => Period.fromPartial(e)) || [];
     return message;
   },
 };
@@ -385,11 +443,17 @@ function createBaseMsgCreatePeriodicVestingAccountResponse(): MsgCreatePeriodicV
 }
 
 export const MsgCreatePeriodicVestingAccountResponse = {
-  encode(_: MsgCreatePeriodicVestingAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreatePeriodicVestingAccountResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePeriodicVestingAccountResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreatePeriodicVestingAccountResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreatePeriodicVestingAccountResponse();
@@ -413,9 +477,9 @@ export const MsgCreatePeriodicVestingAccountResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreatePeriodicVestingAccountResponse>, I>>(
-    _: I,
-  ): MsgCreatePeriodicVestingAccountResponse {
+  fromPartial<
+    I extends Exact<DeepPartial<MsgCreatePeriodicVestingAccountResponse>, I>
+  >(_: I): MsgCreatePeriodicVestingAccountResponse {
     const message = createBaseMsgCreatePeriodicVestingAccountResponse();
     return message;
   },
@@ -427,20 +491,22 @@ export interface Msg {
    * CreateVestingAccount defines a method that enables creating a vesting
    * account.
    */
-  CreateVestingAccount(request: MsgCreateVestingAccount): Promise<MsgCreateVestingAccountResponse>;
+  CreateVestingAccount(
+    request: MsgCreateVestingAccount
+  ): Promise<MsgCreateVestingAccountResponse>;
   /**
    * CreatePermanentLockedAccount defines a method that enables creating a permanent
    * locked account.
    */
   CreatePermanentLockedAccount(
-    request: MsgCreatePermanentLockedAccount,
+    request: MsgCreatePermanentLockedAccount
   ): Promise<MsgCreatePermanentLockedAccountResponse>;
   /**
    * CreatePeriodicVestingAccount defines a method that enables creating a
    * periodic vesting account.
    */
   CreatePeriodicVestingAccount(
-    request: MsgCreatePeriodicVestingAccount,
+    request: MsgCreatePeriodicVestingAccount
   ): Promise<MsgCreatePeriodicVestingAccountResponse>;
 }
 
@@ -449,46 +515,88 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.CreateVestingAccount = this.CreateVestingAccount.bind(this);
-    this.CreatePermanentLockedAccount = this.CreatePermanentLockedAccount.bind(this);
-    this.CreatePeriodicVestingAccount = this.CreatePeriodicVestingAccount.bind(this);
+    this.CreatePermanentLockedAccount =
+      this.CreatePermanentLockedAccount.bind(this);
+    this.CreatePeriodicVestingAccount =
+      this.CreatePeriodicVestingAccount.bind(this);
   }
-  CreateVestingAccount(request: MsgCreateVestingAccount): Promise<MsgCreateVestingAccountResponse> {
+  CreateVestingAccount(
+    request: MsgCreateVestingAccount
+  ): Promise<MsgCreateVestingAccountResponse> {
     const data = MsgCreateVestingAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreateVestingAccount", data);
-    return promise.then((data) => MsgCreateVestingAccountResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "cosmos.vesting.v1beta1.Msg",
+      "CreateVestingAccount",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateVestingAccountResponse.decode(new _m0.Reader(data))
+    );
   }
 
   CreatePermanentLockedAccount(
-    request: MsgCreatePermanentLockedAccount,
+    request: MsgCreatePermanentLockedAccount
   ): Promise<MsgCreatePermanentLockedAccountResponse> {
     const data = MsgCreatePermanentLockedAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreatePermanentLockedAccount", data);
-    return promise.then((data) => MsgCreatePermanentLockedAccountResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "cosmos.vesting.v1beta1.Msg",
+      "CreatePermanentLockedAccount",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreatePermanentLockedAccountResponse.decode(new _m0.Reader(data))
+    );
   }
 
   CreatePeriodicVestingAccount(
-    request: MsgCreatePeriodicVestingAccount,
+    request: MsgCreatePeriodicVestingAccount
   ): Promise<MsgCreatePeriodicVestingAccountResponse> {
     const data = MsgCreatePeriodicVestingAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreatePeriodicVestingAccount", data);
-    return promise.then((data) => MsgCreatePeriodicVestingAccountResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "cosmos.vesting.v1beta1.Msg",
+      "CreatePeriodicVestingAccount",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreatePeriodicVestingAccountResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

@@ -55,6 +55,7 @@ export const protobufPackage = "google.protobuf";
  *     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
  *         .setNanos((int) ((millis % 1000) * 1000000)).build();
  *
+ *
  * Example 5: Compute Timestamp from current time in Python.
  *
  *     timestamp = Timestamp()
@@ -108,7 +109,10 @@ function createBaseTimestamp(): Timestamp {
 }
 
 export const Timestamp = {
-  encode(message: Timestamp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Timestamp,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.seconds !== "0") {
       writer.uint32(8).int64(message.seconds);
     }
@@ -153,7 +157,9 @@ export const Timestamp = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Timestamp>, I>>(object: I): Timestamp {
+  fromPartial<I extends Exact<DeepPartial<Timestamp>, I>>(
+    object: I
+  ): Timestamp {
     const message = createBaseTimestamp();
     message.seconds = object.seconds ?? "0";
     message.nanos = object.nanos ?? 0;
@@ -161,16 +167,32 @@ export const Timestamp = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

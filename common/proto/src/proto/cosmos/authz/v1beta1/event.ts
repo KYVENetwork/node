@@ -30,7 +30,10 @@ function createBaseEventGrant(): EventGrant {
 }
 
 export const EventGrant = {
-  encode(message: EventGrant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventGrant,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.msg_type_url !== "") {
       writer.uint32(18).string(message.msg_type_url);
     }
@@ -69,7 +72,9 @@ export const EventGrant = {
 
   fromJSON(object: any): EventGrant {
     return {
-      msg_type_url: isSet(object.msg_type_url) ? String(object.msg_type_url) : "",
+      msg_type_url: isSet(object.msg_type_url)
+        ? String(object.msg_type_url)
+        : "",
       granter: isSet(object.granter) ? String(object.granter) : "",
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
     };
@@ -77,13 +82,16 @@ export const EventGrant = {
 
   toJSON(message: EventGrant): unknown {
     const obj: any = {};
-    message.msg_type_url !== undefined && (obj.msg_type_url = message.msg_type_url);
+    message.msg_type_url !== undefined &&
+      (obj.msg_type_url = message.msg_type_url);
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventGrant>, I>>(object: I): EventGrant {
+  fromPartial<I extends Exact<DeepPartial<EventGrant>, I>>(
+    object: I
+  ): EventGrant {
     const message = createBaseEventGrant();
     message.msg_type_url = object.msg_type_url ?? "";
     message.granter = object.granter ?? "";
@@ -97,7 +105,10 @@ function createBaseEventRevoke(): EventRevoke {
 }
 
 export const EventRevoke = {
-  encode(message: EventRevoke, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EventRevoke,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.msg_type_url !== "") {
       writer.uint32(18).string(message.msg_type_url);
     }
@@ -136,7 +147,9 @@ export const EventRevoke = {
 
   fromJSON(object: any): EventRevoke {
     return {
-      msg_type_url: isSet(object.msg_type_url) ? String(object.msg_type_url) : "",
+      msg_type_url: isSet(object.msg_type_url)
+        ? String(object.msg_type_url)
+        : "",
       granter: isSet(object.granter) ? String(object.granter) : "",
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
     };
@@ -144,13 +157,16 @@ export const EventRevoke = {
 
   toJSON(message: EventRevoke): unknown {
     const obj: any = {};
-    message.msg_type_url !== undefined && (obj.msg_type_url = message.msg_type_url);
+    message.msg_type_url !== undefined &&
+      (obj.msg_type_url = message.msg_type_url);
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventRevoke>, I>>(object: I): EventRevoke {
+  fromPartial<I extends Exact<DeepPartial<EventRevoke>, I>>(
+    object: I
+  ): EventRevoke {
     const message = createBaseEventRevoke();
     message.msg_type_url = object.msg_type_url ?? "";
     message.granter = object.granter ?? "";
@@ -159,16 +175,32 @@ export const EventRevoke = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

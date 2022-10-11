@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Any } from "../../../google/protobuf/any";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.nft.v1beta1";
 
@@ -37,7 +37,15 @@ export interface NFT {
 }
 
 function createBaseClass(): Class {
-  return { id: "", name: "", symbol: "", description: "", uri: "", uri_hash: "", data: undefined };
+  return {
+    id: "",
+    name: "",
+    symbol: "",
+    description: "",
+    uri: "",
+    uri_hash: "",
+    data: undefined,
+  };
 }
 
 export const Class = {
@@ -119,10 +127,12 @@ export const Class = {
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
     message.symbol !== undefined && (obj.symbol = message.symbol);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.uri !== undefined && (obj.uri = message.uri);
     message.uri_hash !== undefined && (obj.uri_hash = message.uri_hash);
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 
@@ -134,7 +144,10 @@ export const Class = {
     message.description = object.description ?? "";
     message.uri = object.uri ?? "";
     message.uri_hash = object.uri_hash ?? "";
-    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
     return message;
   },
 };
@@ -209,7 +222,8 @@ export const NFT = {
     message.id !== undefined && (obj.id = message.id);
     message.uri !== undefined && (obj.uri = message.uri);
     message.uri_hash !== undefined && (obj.uri_hash = message.uri_hash);
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 
@@ -219,21 +233,40 @@ export const NFT = {
     message.id = object.id ?? "";
     message.uri = object.uri ?? "";
     message.uri_hash = object.uri_hash ?? "";
-    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

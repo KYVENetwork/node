@@ -1,15 +1,15 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
-import {
-  DelegationData,
-  DelegationEntry,
-  DelegationSlash,
-  Delegator,
-  QueueState,
-  RedelegationCooldown,
-  UndelegationQueueEntry,
-} from "./delegation";
 import { Params } from "./params";
+import {
+  QueueState,
+  Delegator,
+  DelegationEntry,
+  DelegationData,
+  DelegationSlash,
+  UndelegationQueueEntry,
+  RedelegationCooldown,
+} from "./delegation";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.delegation.v1beta1";
 
@@ -47,7 +47,10 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
@@ -67,7 +70,10 @@ export const GenesisState = {
       UndelegationQueueEntry.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.queue_state_undelegation !== undefined) {
-      QueueState.encode(message.queue_state_undelegation, writer.uint32(58).fork()).ldelim();
+      QueueState.encode(
+        message.queue_state_undelegation,
+        writer.uint32(58).fork()
+      ).ldelim();
     }
     for (const v of message.redelegation_cooldown_list) {
       RedelegationCooldown.encode(v!, writer.uint32(66).fork()).ldelim();
@@ -86,25 +92,40 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32());
           break;
         case 2:
-          message.delegator_list.push(Delegator.decode(reader, reader.uint32()));
+          message.delegator_list.push(
+            Delegator.decode(reader, reader.uint32())
+          );
           break;
         case 3:
-          message.delegation_entry_list.push(DelegationEntry.decode(reader, reader.uint32()));
+          message.delegation_entry_list.push(
+            DelegationEntry.decode(reader, reader.uint32())
+          );
           break;
         case 4:
-          message.delegation_data_list.push(DelegationData.decode(reader, reader.uint32()));
+          message.delegation_data_list.push(
+            DelegationData.decode(reader, reader.uint32())
+          );
           break;
         case 5:
-          message.delegation_slash_list.push(DelegationSlash.decode(reader, reader.uint32()));
+          message.delegation_slash_list.push(
+            DelegationSlash.decode(reader, reader.uint32())
+          );
           break;
         case 6:
-          message.undelegation_queue_entry_list.push(UndelegationQueueEntry.decode(reader, reader.uint32()));
+          message.undelegation_queue_entry_list.push(
+            UndelegationQueueEntry.decode(reader, reader.uint32())
+          );
           break;
         case 7:
-          message.queue_state_undelegation = QueueState.decode(reader, reader.uint32());
+          message.queue_state_undelegation = QueueState.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 8:
-          message.redelegation_cooldown_list.push(RedelegationCooldown.decode(reader, reader.uint32()));
+          message.redelegation_cooldown_list.push(
+            RedelegationCooldown.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -121,62 +142,87 @@ export const GenesisState = {
         ? object.delegator_list.map((e: any) => Delegator.fromJSON(e))
         : [],
       delegation_entry_list: Array.isArray(object?.delegation_entry_list)
-        ? object.delegation_entry_list.map((e: any) => DelegationEntry.fromJSON(e))
+        ? object.delegation_entry_list.map((e: any) =>
+            DelegationEntry.fromJSON(e)
+          )
         : [],
       delegation_data_list: Array.isArray(object?.delegation_data_list)
-        ? object.delegation_data_list.map((e: any) => DelegationData.fromJSON(e))
+        ? object.delegation_data_list.map((e: any) =>
+            DelegationData.fromJSON(e)
+          )
         : [],
       delegation_slash_list: Array.isArray(object?.delegation_slash_list)
-        ? object.delegation_slash_list.map((e: any) => DelegationSlash.fromJSON(e))
+        ? object.delegation_slash_list.map((e: any) =>
+            DelegationSlash.fromJSON(e)
+          )
         : [],
-      undelegation_queue_entry_list: Array.isArray(object?.undelegation_queue_entry_list)
-        ? object.undelegation_queue_entry_list.map((e: any) => UndelegationQueueEntry.fromJSON(e))
+      undelegation_queue_entry_list: Array.isArray(
+        object?.undelegation_queue_entry_list
+      )
+        ? object.undelegation_queue_entry_list.map((e: any) =>
+            UndelegationQueueEntry.fromJSON(e)
+          )
         : [],
       queue_state_undelegation: isSet(object.queue_state_undelegation)
         ? QueueState.fromJSON(object.queue_state_undelegation)
         : undefined,
-      redelegation_cooldown_list: Array.isArray(object?.redelegation_cooldown_list)
-        ? object.redelegation_cooldown_list.map((e: any) => RedelegationCooldown.fromJSON(e))
+      redelegation_cooldown_list: Array.isArray(
+        object?.redelegation_cooldown_list
+      )
+        ? object.redelegation_cooldown_list.map((e: any) =>
+            RedelegationCooldown.fromJSON(e)
+          )
         : [],
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.params !== undefined &&
+      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     if (message.delegator_list) {
-      obj.delegator_list = message.delegator_list.map((e) => e ? Delegator.toJSON(e) : undefined);
+      obj.delegator_list = message.delegator_list.map((e) =>
+        e ? Delegator.toJSON(e) : undefined
+      );
     } else {
       obj.delegator_list = [];
     }
     if (message.delegation_entry_list) {
-      obj.delegation_entry_list = message.delegation_entry_list.map((e) => e ? DelegationEntry.toJSON(e) : undefined);
+      obj.delegation_entry_list = message.delegation_entry_list.map((e) =>
+        e ? DelegationEntry.toJSON(e) : undefined
+      );
     } else {
       obj.delegation_entry_list = [];
     }
     if (message.delegation_data_list) {
-      obj.delegation_data_list = message.delegation_data_list.map((e) => e ? DelegationData.toJSON(e) : undefined);
+      obj.delegation_data_list = message.delegation_data_list.map((e) =>
+        e ? DelegationData.toJSON(e) : undefined
+      );
     } else {
       obj.delegation_data_list = [];
     }
     if (message.delegation_slash_list) {
-      obj.delegation_slash_list = message.delegation_slash_list.map((e) => e ? DelegationSlash.toJSON(e) : undefined);
+      obj.delegation_slash_list = message.delegation_slash_list.map((e) =>
+        e ? DelegationSlash.toJSON(e) : undefined
+      );
     } else {
       obj.delegation_slash_list = [];
     }
     if (message.undelegation_queue_entry_list) {
-      obj.undelegation_queue_entry_list = message.undelegation_queue_entry_list.map((e) =>
-        e ? UndelegationQueueEntry.toJSON(e) : undefined
-      );
+      obj.undelegation_queue_entry_list =
+        message.undelegation_queue_entry_list.map((e) =>
+          e ? UndelegationQueueEntry.toJSON(e) : undefined
+        );
     } else {
       obj.undelegation_queue_entry_list = [];
     }
-    message.queue_state_undelegation !== undefined && (obj.queue_state_undelegation = message.queue_state_undelegation
-      ? QueueState.toJSON(message.queue_state_undelegation)
-      : undefined);
+    message.queue_state_undelegation !== undefined &&
+      (obj.queue_state_undelegation = message.queue_state_undelegation
+        ? QueueState.toJSON(message.queue_state_undelegation)
+        : undefined);
     if (message.redelegation_cooldown_list) {
-      obj.redelegation_cooldown_list = message.redelegation_cooldown_list.map((e) =>
-        e ? RedelegationCooldown.toJSON(e) : undefined
+      obj.redelegation_cooldown_list = message.redelegation_cooldown_list.map(
+        (e) => (e ? RedelegationCooldown.toJSON(e) : undefined)
       );
     } else {
       obj.redelegation_cooldown_list = [];
@@ -184,37 +230,70 @@ export const GenesisState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
+    object: I
+  ): GenesisState {
     const message = createBaseGenesisState();
-    message.params = (object.params !== undefined && object.params !== null)
-      ? Params.fromPartial(object.params)
-      : undefined;
-    message.delegator_list = object.delegator_list?.map((e) => Delegator.fromPartial(e)) || [];
-    message.delegation_entry_list = object.delegation_entry_list?.map((e) => DelegationEntry.fromPartial(e)) || [];
-    message.delegation_data_list = object.delegation_data_list?.map((e) => DelegationData.fromPartial(e)) || [];
-    message.delegation_slash_list = object.delegation_slash_list?.map((e) => DelegationSlash.fromPartial(e)) || [];
+    message.params =
+      object.params !== undefined && object.params !== null
+        ? Params.fromPartial(object.params)
+        : undefined;
+    message.delegator_list =
+      object.delegator_list?.map((e) => Delegator.fromPartial(e)) || [];
+    message.delegation_entry_list =
+      object.delegation_entry_list?.map((e) =>
+        DelegationEntry.fromPartial(e)
+      ) || [];
+    message.delegation_data_list =
+      object.delegation_data_list?.map((e) => DelegationData.fromPartial(e)) ||
+      [];
+    message.delegation_slash_list =
+      object.delegation_slash_list?.map((e) =>
+        DelegationSlash.fromPartial(e)
+      ) || [];
     message.undelegation_queue_entry_list =
-      object.undelegation_queue_entry_list?.map((e) => UndelegationQueueEntry.fromPartial(e)) || [];
+      object.undelegation_queue_entry_list?.map((e) =>
+        UndelegationQueueEntry.fromPartial(e)
+      ) || [];
     message.queue_state_undelegation =
-      (object.queue_state_undelegation !== undefined && object.queue_state_undelegation !== null)
+      object.queue_state_undelegation !== undefined &&
+      object.queue_state_undelegation !== null
         ? QueueState.fromPartial(object.queue_state_undelegation)
         : undefined;
     message.redelegation_cooldown_list =
-      object.redelegation_cooldown_list?.map((e) => RedelegationCooldown.fromPartial(e)) || [];
+      object.redelegation_cooldown_list?.map((e) =>
+        RedelegationCooldown.fromPartial(e)
+      ) || [];
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

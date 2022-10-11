@@ -1,6 +1,6 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import { Coin } from "../../base/v1beta1/coin";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.bank.v1beta1";
 
@@ -19,7 +19,10 @@ function createBaseSendAuthorization(): SendAuthorization {
 }
 
 export const SendAuthorization = {
-  encode(message: SendAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SendAuthorization,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.spend_limit) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -46,34 +49,57 @@ export const SendAuthorization = {
 
   fromJSON(object: any): SendAuthorization {
     return {
-      spend_limit: Array.isArray(object?.spend_limit) ? object.spend_limit.map((e: any) => Coin.fromJSON(e)) : [],
+      spend_limit: Array.isArray(object?.spend_limit)
+        ? object.spend_limit.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: SendAuthorization): unknown {
     const obj: any = {};
     if (message.spend_limit) {
-      obj.spend_limit = message.spend_limit.map((e) => e ? Coin.toJSON(e) : undefined);
+      obj.spend_limit = message.spend_limit.map((e) =>
+        e ? Coin.toJSON(e) : undefined
+      );
     } else {
       obj.spend_limit = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SendAuthorization>, I>>(object: I): SendAuthorization {
+  fromPartial<I extends Exact<DeepPartial<SendAuthorization>, I>>(
+    object: I
+  ): SendAuthorization {
     const message = createBaseSendAuthorization();
-    message.spend_limit = object.spend_limit?.map((e) => Coin.fromPartial(e)) || [];
+    message.spend_limit =
+      object.spend_limit?.map((e) => Coin.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;

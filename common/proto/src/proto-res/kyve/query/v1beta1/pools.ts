@@ -1,9 +1,18 @@
 /* eslint-disable */
+import {
+  PageRequest,
+  PageResponse,
+} from "../../../cosmos/base/query/v1beta1/pagination";
+import {
+  Pool,
+  PoolStatus,
+  poolStatusToNumber,
+  poolStatusFromJSON,
+  poolStatusToJSON,
+} from "../../pool/v1beta1/pool";
+import { BundleProposal } from "../../bundles/v1beta1/bundles";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
-import { BundleProposal } from "../../bundles/v1beta1/bundles";
-import { Pool, PoolStatus, poolStatusFromJSON, poolStatusToJSON, poolStatusToNumber } from "../../pool/v1beta1/pool";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -62,7 +71,10 @@ function createBaseQueryPoolsRequest(): QueryPoolsRequest {
 }
 
 export const QueryPoolsRequest = {
-  encode(message: QueryPoolsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryPoolsRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -107,7 +119,9 @@ export const QueryPoolsRequest = {
 
   fromJSON(object: any): QueryPoolsRequest {
     return {
-      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
       search: isSet(object.search) ? String(object.search) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
@@ -117,18 +131,23 @@ export const QueryPoolsRequest = {
   toJSON(message: QueryPoolsRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
     message.search !== undefined && (obj.search = message.search);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.paused !== undefined && (obj.paused = message.paused);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPoolsRequest>, I>>(object: I): QueryPoolsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryPoolsRequest>, I>>(
+    object: I
+  ): QueryPoolsRequest {
     const message = createBaseQueryPoolsRequest();
-    message.pagination = (object.pagination !== undefined && object.pagination !== null)
-      ? PageRequest.fromPartial(object.pagination)
-      : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     message.search = object.search ?? "";
     message.runtime = object.runtime ?? "";
     message.paused = object.paused ?? false;
@@ -141,12 +160,18 @@ function createBaseQueryPoolsResponse(): QueryPoolsResponse {
 }
 
 export const QueryPoolsResponse = {
-  encode(message: QueryPoolsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryPoolsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.pools) {
       PoolResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -174,29 +199,40 @@ export const QueryPoolsResponse = {
 
   fromJSON(object: any): QueryPoolsResponse {
     return {
-      pools: Array.isArray(object?.pools) ? object.pools.map((e: any) => PoolResponse.fromJSON(e)) : [],
-      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+      pools: Array.isArray(object?.pools)
+        ? object.pools.map((e: any) => PoolResponse.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
     };
   },
 
   toJSON(message: QueryPoolsResponse): unknown {
     const obj: any = {};
     if (message.pools) {
-      obj.pools = message.pools.map((e) => e ? PoolResponse.toJSON(e) : undefined);
+      obj.pools = message.pools.map((e) =>
+        e ? PoolResponse.toJSON(e) : undefined
+      );
     } else {
       obj.pools = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPoolsResponse>, I>>(object: I): QueryPoolsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryPoolsResponse>, I>>(
+    object: I
+  ): QueryPoolsResponse {
     const message = createBaseQueryPoolsResponse();
     message.pools = object.pools?.map((e) => PoolResponse.fromPartial(e)) || [];
-    message.pagination = (object.pagination !== undefined && object.pagination !== null)
-      ? PageResponse.fromPartial(object.pagination)
-      : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
@@ -214,7 +250,10 @@ function createBasePoolResponse(): PoolResponse {
 }
 
 export const PoolResponse = {
-  encode(message: PoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -222,7 +261,10 @@ export const PoolResponse = {
       Pool.encode(message.data, writer.uint32(18).fork()).ldelim();
     }
     if (message.bundle_proposal !== undefined) {
-      BundleProposal.encode(message.bundle_proposal, writer.uint32(26).fork()).ldelim();
+      BundleProposal.encode(
+        message.bundle_proposal,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     for (const v of message.stakers) {
       writer.uint32(34).string(v!);
@@ -253,7 +295,10 @@ export const PoolResponse = {
           message.data = Pool.decode(reader, reader.uint32());
           break;
         case 3:
-          message.bundle_proposal = BundleProposal.decode(reader, reader.uint32());
+          message.bundle_proposal = BundleProposal.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 4:
           message.stakers.push(reader.string());
@@ -279,38 +324,60 @@ export const PoolResponse = {
     return {
       id: isSet(object.id) ? String(object.id) : "0",
       data: isSet(object.data) ? Pool.fromJSON(object.data) : undefined,
-      bundle_proposal: isSet(object.bundle_proposal) ? BundleProposal.fromJSON(object.bundle_proposal) : undefined,
-      stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => String(e)) : [],
-      total_self_delegation: isSet(object.total_self_delegation) ? String(object.total_self_delegation) : "0",
-      total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
-      status: isSet(object.status) ? poolStatusFromJSON(object.status) : PoolStatus.POOL_STATUS_UNSPECIFIED,
+      bundle_proposal: isSet(object.bundle_proposal)
+        ? BundleProposal.fromJSON(object.bundle_proposal)
+        : undefined,
+      stakers: Array.isArray(object?.stakers)
+        ? object.stakers.map((e: any) => String(e))
+        : [],
+      total_self_delegation: isSet(object.total_self_delegation)
+        ? String(object.total_self_delegation)
+        : "0",
+      total_delegation: isSet(object.total_delegation)
+        ? String(object.total_delegation)
+        : "0",
+      status: isSet(object.status)
+        ? poolStatusFromJSON(object.status)
+        : PoolStatus.POOL_STATUS_UNSPECIFIED,
     };
   },
 
   toJSON(message: PoolResponse): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.data !== undefined && (obj.data = message.data ? Pool.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Pool.toJSON(message.data) : undefined);
     message.bundle_proposal !== undefined &&
-      (obj.bundle_proposal = message.bundle_proposal ? BundleProposal.toJSON(message.bundle_proposal) : undefined);
+      (obj.bundle_proposal = message.bundle_proposal
+        ? BundleProposal.toJSON(message.bundle_proposal)
+        : undefined);
     if (message.stakers) {
       obj.stakers = message.stakers.map((e) => e);
     } else {
       obj.stakers = [];
     }
-    message.total_self_delegation !== undefined && (obj.total_self_delegation = message.total_self_delegation);
-    message.total_delegation !== undefined && (obj.total_delegation = message.total_delegation);
-    message.status !== undefined && (obj.status = poolStatusToJSON(message.status));
+    message.total_self_delegation !== undefined &&
+      (obj.total_self_delegation = message.total_self_delegation);
+    message.total_delegation !== undefined &&
+      (obj.total_delegation = message.total_delegation);
+    message.status !== undefined &&
+      (obj.status = poolStatusToJSON(message.status));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PoolResponse>, I>>(object: I): PoolResponse {
+  fromPartial<I extends Exact<DeepPartial<PoolResponse>, I>>(
+    object: I
+  ): PoolResponse {
     const message = createBasePoolResponse();
     message.id = object.id ?? "0";
-    message.data = (object.data !== undefined && object.data !== null) ? Pool.fromPartial(object.data) : undefined;
-    message.bundle_proposal = (object.bundle_proposal !== undefined && object.bundle_proposal !== null)
-      ? BundleProposal.fromPartial(object.bundle_proposal)
-      : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Pool.fromPartial(object.data)
+        : undefined;
+    message.bundle_proposal =
+      object.bundle_proposal !== undefined && object.bundle_proposal !== null
+        ? BundleProposal.fromPartial(object.bundle_proposal)
+        : undefined;
     message.stakers = object.stakers?.map((e) => e) || [];
     message.total_self_delegation = object.total_self_delegation ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
@@ -324,7 +391,10 @@ function createBaseQueryPoolRequest(): QueryPoolRequest {
 }
 
 export const QueryPoolRequest = {
-  encode(message: QueryPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryPoolRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -350,7 +420,9 @@ export const QueryPoolRequest = {
   },
 
   fromJSON(object: any): QueryPoolRequest {
-    return { id: isSet(object.id) ? String(object.id) : "0" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "0",
+    };
   },
 
   toJSON(message: QueryPoolRequest): unknown {
@@ -359,7 +431,9 @@ export const QueryPoolRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPoolRequest>, I>>(object: I): QueryPoolRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryPoolRequest>, I>>(
+    object: I
+  ): QueryPoolRequest {
     const message = createBaseQueryPoolRequest();
     message.id = object.id ?? "0";
     return message;
@@ -371,7 +445,10 @@ function createBaseQueryPoolResponse(): QueryPoolResponse {
 }
 
 export const QueryPoolResponse = {
-  encode(message: QueryPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.pool !== undefined) {
       PoolResponse.encode(message.pool, writer.uint32(10).fork()).ldelim();
     }
@@ -397,20 +474,26 @@ export const QueryPoolResponse = {
   },
 
   fromJSON(object: any): QueryPoolResponse {
-    return { pool: isSet(object.pool) ? PoolResponse.fromJSON(object.pool) : undefined };
+    return {
+      pool: isSet(object.pool) ? PoolResponse.fromJSON(object.pool) : undefined,
+    };
   },
 
   toJSON(message: QueryPoolResponse): unknown {
     const obj: any = {};
-    message.pool !== undefined && (obj.pool = message.pool ? PoolResponse.toJSON(message.pool) : undefined);
+    message.pool !== undefined &&
+      (obj.pool = message.pool ? PoolResponse.toJSON(message.pool) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPoolResponse>, I>>(object: I): QueryPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryPoolResponse>, I>>(
+    object: I
+  ): QueryPoolResponse {
     const message = createBaseQueryPoolResponse();
-    message.pool = (object.pool !== undefined && object.pool !== null)
-      ? PoolResponse.fromPartial(object.pool)
-      : undefined;
+    message.pool =
+      object.pool !== undefined && object.pool !== null
+        ? PoolResponse.fromPartial(object.pool)
+        : undefined;
     return message;
   },
 };
@@ -432,31 +515,63 @@ export class QueryPoolClientImpl implements QueryPool {
   }
   Pools(request: QueryPoolsRequest): Promise<QueryPoolsResponse> {
     const data = QueryPoolsRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryPool", "Pools", data);
-    return promise.then((data) => QueryPoolsResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.query.v1beta1.QueryPool",
+      "Pools",
+      data
+    );
+    return promise.then((data) =>
+      QueryPoolsResponse.decode(new _m0.Reader(data))
+    );
   }
 
   Pool(request: QueryPoolRequest): Promise<QueryPoolResponse> {
     const data = QueryPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryPool", "Pool", data);
-    return promise.then((data) => QueryPoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.query.v1beta1.QueryPool",
+      "Pool",
+      data
+    );
+    return promise.then((data) =>
+      QueryPoolResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

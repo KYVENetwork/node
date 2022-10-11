@@ -125,9 +125,15 @@ function createBaseModuleSchemaDescriptor(): ModuleSchemaDescriptor {
 }
 
 export const ModuleSchemaDescriptor = {
-  encode(message: ModuleSchemaDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ModuleSchemaDescriptor,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.schema_file) {
-      ModuleSchemaDescriptor_FileEntry.encode(v!, writer.uint32(10).fork()).ldelim();
+      ModuleSchemaDescriptor_FileEntry.encode(
+        v!,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.prefix.length !== 0) {
       writer.uint32(18).bytes(message.prefix);
@@ -135,7 +141,10 @@ export const ModuleSchemaDescriptor = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ModuleSchemaDescriptor {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ModuleSchemaDescriptor {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleSchemaDescriptor();
@@ -143,7 +152,9 @@ export const ModuleSchemaDescriptor = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.schema_file.push(ModuleSchemaDescriptor_FileEntry.decode(reader, reader.uint32()));
+          message.schema_file.push(
+            ModuleSchemaDescriptor_FileEntry.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.prefix = reader.bytes();
@@ -159,27 +170,40 @@ export const ModuleSchemaDescriptor = {
   fromJSON(object: any): ModuleSchemaDescriptor {
     return {
       schema_file: Array.isArray(object?.schema_file)
-        ? object.schema_file.map((e: any) => ModuleSchemaDescriptor_FileEntry.fromJSON(e))
+        ? object.schema_file.map((e: any) =>
+            ModuleSchemaDescriptor_FileEntry.fromJSON(e)
+          )
         : [],
-      prefix: isSet(object.prefix) ? bytesFromBase64(object.prefix) : new Uint8Array(),
+      prefix: isSet(object.prefix)
+        ? bytesFromBase64(object.prefix)
+        : new Uint8Array(),
     };
   },
 
   toJSON(message: ModuleSchemaDescriptor): unknown {
     const obj: any = {};
     if (message.schema_file) {
-      obj.schema_file = message.schema_file.map((e) => e ? ModuleSchemaDescriptor_FileEntry.toJSON(e) : undefined);
+      obj.schema_file = message.schema_file.map((e) =>
+        e ? ModuleSchemaDescriptor_FileEntry.toJSON(e) : undefined
+      );
     } else {
       obj.schema_file = [];
     }
     message.prefix !== undefined &&
-      (obj.prefix = base64FromBytes(message.prefix !== undefined ? message.prefix : new Uint8Array()));
+      (obj.prefix = base64FromBytes(
+        message.prefix !== undefined ? message.prefix : new Uint8Array()
+      ));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleSchemaDescriptor>, I>>(object: I): ModuleSchemaDescriptor {
+  fromPartial<I extends Exact<DeepPartial<ModuleSchemaDescriptor>, I>>(
+    object: I
+  ): ModuleSchemaDescriptor {
     const message = createBaseModuleSchemaDescriptor();
-    message.schema_file = object.schema_file?.map((e) => ModuleSchemaDescriptor_FileEntry.fromPartial(e)) || [];
+    message.schema_file =
+      object.schema_file?.map((e) =>
+        ModuleSchemaDescriptor_FileEntry.fromPartial(e)
+      ) || [];
     message.prefix = object.prefix ?? new Uint8Array();
     return message;
   },
@@ -190,7 +214,10 @@ function createBaseModuleSchemaDescriptor_FileEntry(): ModuleSchemaDescriptor_Fi
 }
 
 export const ModuleSchemaDescriptor_FileEntry = {
-  encode(message: ModuleSchemaDescriptor_FileEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ModuleSchemaDescriptor_FileEntry,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -203,7 +230,10 @@ export const ModuleSchemaDescriptor_FileEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ModuleSchemaDescriptor_FileEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ModuleSchemaDescriptor_FileEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleSchemaDescriptor_FileEntry();
@@ -230,22 +260,28 @@ export const ModuleSchemaDescriptor_FileEntry = {
   fromJSON(object: any): ModuleSchemaDescriptor_FileEntry {
     return {
       id: isSet(object.id) ? Number(object.id) : 0,
-      proto_file_name: isSet(object.proto_file_name) ? String(object.proto_file_name) : "",
-      storage_type: isSet(object.storage_type) ? storageTypeFromJSON(object.storage_type) : 0,
+      proto_file_name: isSet(object.proto_file_name)
+        ? String(object.proto_file_name)
+        : "",
+      storage_type: isSet(object.storage_type)
+        ? storageTypeFromJSON(object.storage_type)
+        : 0,
     };
   },
 
   toJSON(message: ModuleSchemaDescriptor_FileEntry): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = Math.round(message.id));
-    message.proto_file_name !== undefined && (obj.proto_file_name = message.proto_file_name);
-    message.storage_type !== undefined && (obj.storage_type = storageTypeToJSON(message.storage_type));
+    message.proto_file_name !== undefined &&
+      (obj.proto_file_name = message.proto_file_name);
+    message.storage_type !== undefined &&
+      (obj.storage_type = storageTypeToJSON(message.storage_type));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleSchemaDescriptor_FileEntry>, I>>(
-    object: I,
-  ): ModuleSchemaDescriptor_FileEntry {
+  fromPartial<
+    I extends Exact<DeepPartial<ModuleSchemaDescriptor_FileEntry>, I>
+  >(object: I): ModuleSchemaDescriptor_FileEntry {
     const message = createBaseModuleSchemaDescriptor_FileEntry();
     message.id = object.id ?? 0;
     message.proto_file_name = object.proto_file_name ?? "";
@@ -258,56 +294,62 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
   throw "Unable to locate global object";
 })();
 
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
   }
+  return arr;
 }
 
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
+  return btoa(bin.join(""));
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

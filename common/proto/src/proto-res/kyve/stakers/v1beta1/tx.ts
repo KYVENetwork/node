@@ -13,8 +13,7 @@ export interface MsgCreateStaker {
 }
 
 /** MsgStakePoolResponse defines the Msg/StakePool response type. */
-export interface MsgCreateStakerResponse {
-}
+export interface MsgCreateStakerResponse {}
 
 /** MsgUpdateMetadata defines a SDK message for claiming the uploader role. */
 export interface MsgUpdateMetadata {
@@ -29,8 +28,7 @@ export interface MsgUpdateMetadata {
 }
 
 /** MsgUpdateMetadataResponse defines the Msg/MsgUpdateMetadata response type. */
-export interface MsgUpdateMetadataResponse {
-}
+export interface MsgUpdateMetadataResponse {}
 
 /** MsgUpdateCommission ... */
 export interface MsgUpdateCommission {
@@ -41,8 +39,7 @@ export interface MsgUpdateCommission {
 }
 
 /** MsgUpdateCommissionResponse ... */
-export interface MsgUpdateCommissionResponse {
-}
+export interface MsgUpdateCommissionResponse {}
 
 /** MsgJoinPool ... */
 export interface MsgJoinPool {
@@ -57,8 +54,7 @@ export interface MsgJoinPool {
 }
 
 /** MsgJoinPoolResponse ... */
-export interface MsgJoinPoolResponse {
-}
+export interface MsgJoinPoolResponse {}
 
 /** MsgLeavePool ... */
 export interface MsgLeavePool {
@@ -69,8 +65,7 @@ export interface MsgLeavePool {
 }
 
 /** MsgReactivateStakerResponse ... */
-export interface MsgLeavePoolResponse {
-}
+export interface MsgLeavePoolResponse {}
 
 /** MsgUpdateParams defines a SDK message for updating the module parameters. */
 export interface MsgUpdateParams {
@@ -81,15 +76,17 @@ export interface MsgUpdateParams {
 }
 
 /** MsgUpdateParamsResponse defines the Msg/UpdateParams response type. */
-export interface MsgUpdateParamsResponse {
-}
+export interface MsgUpdateParamsResponse {}
 
 function createBaseMsgCreateStaker(): MsgCreateStaker {
   return { creator: "", amount: "0" };
 }
 
 export const MsgCreateStaker = {
-  encode(message: MsgCreateStaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreateStaker,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -134,7 +131,9 @@ export const MsgCreateStaker = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateStaker>, I>>(object: I): MsgCreateStaker {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateStaker>, I>>(
+    object: I
+  ): MsgCreateStaker {
     const message = createBaseMsgCreateStaker();
     message.creator = object.creator ?? "";
     message.amount = object.amount ?? "0";
@@ -147,11 +146,17 @@ function createBaseMsgCreateStakerResponse(): MsgCreateStakerResponse {
 }
 
 export const MsgCreateStakerResponse = {
-  encode(_: MsgCreateStakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreateStakerResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateStakerResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreateStakerResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateStakerResponse();
@@ -175,7 +180,9 @@ export const MsgCreateStakerResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateStakerResponse>, I>>(_: I): MsgCreateStakerResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateStakerResponse>, I>>(
+    _: I
+  ): MsgCreateStakerResponse {
     const message = createBaseMsgCreateStakerResponse();
     return message;
   },
@@ -186,7 +193,10 @@ function createBaseMsgUpdateMetadata(): MsgUpdateMetadata {
 }
 
 export const MsgUpdateMetadata = {
-  encode(message: MsgUpdateMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdateMetadata,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -247,7 +257,9 @@ export const MsgUpdateMetadata = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateMetadata>, I>>(object: I): MsgUpdateMetadata {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateMetadata>, I>>(
+    object: I
+  ): MsgUpdateMetadata {
     const message = createBaseMsgUpdateMetadata();
     message.creator = object.creator ?? "";
     message.moniker = object.moniker ?? "";
@@ -262,11 +274,17 @@ function createBaseMsgUpdateMetadataResponse(): MsgUpdateMetadataResponse {
 }
 
 export const MsgUpdateMetadataResponse = {
-  encode(_: MsgUpdateMetadataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdateMetadataResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateMetadataResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateMetadataResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateMetadataResponse();
@@ -290,7 +308,9 @@ export const MsgUpdateMetadataResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateMetadataResponse>, I>>(_: I): MsgUpdateMetadataResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateMetadataResponse>, I>>(
+    _: I
+  ): MsgUpdateMetadataResponse {
     const message = createBaseMsgUpdateMetadataResponse();
     return message;
   },
@@ -301,7 +321,10 @@ function createBaseMsgUpdateCommission(): MsgUpdateCommission {
 }
 
 export const MsgUpdateCommission = {
-  encode(message: MsgUpdateCommission, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdateCommission,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -346,7 +369,9 @@ export const MsgUpdateCommission = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateCommission>, I>>(object: I): MsgUpdateCommission {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateCommission>, I>>(
+    object: I
+  ): MsgUpdateCommission {
     const message = createBaseMsgUpdateCommission();
     message.creator = object.creator ?? "";
     message.commission = object.commission ?? "";
@@ -359,11 +384,17 @@ function createBaseMsgUpdateCommissionResponse(): MsgUpdateCommissionResponse {
 }
 
 export const MsgUpdateCommissionResponse = {
-  encode(_: MsgUpdateCommissionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdateCommissionResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCommissionResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateCommissionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateCommissionResponse();
@@ -387,7 +418,9 @@ export const MsgUpdateCommissionResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateCommissionResponse>, I>>(_: I): MsgUpdateCommissionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateCommissionResponse>, I>>(
+    _: I
+  ): MsgUpdateCommissionResponse {
     const message = createBaseMsgUpdateCommissionResponse();
     return message;
   },
@@ -398,7 +431,10 @@ function createBaseMsgJoinPool(): MsgJoinPool {
 }
 
 export const MsgJoinPool = {
-  encode(message: MsgJoinPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgJoinPool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -459,7 +495,9 @@ export const MsgJoinPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgJoinPool>, I>>(object: I): MsgJoinPool {
+  fromPartial<I extends Exact<DeepPartial<MsgJoinPool>, I>>(
+    object: I
+  ): MsgJoinPool {
     const message = createBaseMsgJoinPool();
     message.creator = object.creator ?? "";
     message.pool_id = object.pool_id ?? "0";
@@ -474,7 +512,10 @@ function createBaseMsgJoinPoolResponse(): MsgJoinPoolResponse {
 }
 
 export const MsgJoinPoolResponse = {
-  encode(_: MsgJoinPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgJoinPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
@@ -502,7 +543,9 @@ export const MsgJoinPoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgJoinPoolResponse>, I>>(_: I): MsgJoinPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgJoinPoolResponse>, I>>(
+    _: I
+  ): MsgJoinPoolResponse {
     const message = createBaseMsgJoinPoolResponse();
     return message;
   },
@@ -513,7 +556,10 @@ function createBaseMsgLeavePool(): MsgLeavePool {
 }
 
 export const MsgLeavePool = {
-  encode(message: MsgLeavePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgLeavePool,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -558,7 +604,9 @@ export const MsgLeavePool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgLeavePool>, I>>(object: I): MsgLeavePool {
+  fromPartial<I extends Exact<DeepPartial<MsgLeavePool>, I>>(
+    object: I
+  ): MsgLeavePool {
     const message = createBaseMsgLeavePool();
     message.creator = object.creator ?? "";
     message.pool_id = object.pool_id ?? "0";
@@ -571,11 +619,17 @@ function createBaseMsgLeavePoolResponse(): MsgLeavePoolResponse {
 }
 
 export const MsgLeavePoolResponse = {
-  encode(_: MsgLeavePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgLeavePoolResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgLeavePoolResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgLeavePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgLeavePoolResponse();
@@ -599,7 +653,9 @@ export const MsgLeavePoolResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgLeavePoolResponse>, I>>(_: I): MsgLeavePoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgLeavePoolResponse>, I>>(
+    _: I
+  ): MsgLeavePoolResponse {
     const message = createBaseMsgLeavePoolResponse();
     return message;
   },
@@ -610,7 +666,10 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 
 export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdateParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -655,7 +714,9 @@ export const MsgUpdateParams = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
+    object: I
+  ): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
     message.payload = object.payload ?? "";
@@ -668,11 +729,17 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 
 export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdateParamsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateParamsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -696,7 +763,9 @@ export const MsgUpdateParamsResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
+    _: I
+  ): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
@@ -707,9 +776,13 @@ export interface Msg {
   /** CreateStaker ... */
   CreateStaker(request: MsgCreateStaker): Promise<MsgCreateStakerResponse>;
   /** UpdateMetadata ... */
-  UpdateMetadata(request: MsgUpdateMetadata): Promise<MsgUpdateMetadataResponse>;
+  UpdateMetadata(
+    request: MsgUpdateMetadata
+  ): Promise<MsgUpdateMetadataResponse>;
   /** UpdateCommission ... */
-  UpdateCommission(request: MsgUpdateCommission): Promise<MsgUpdateCommissionResponse>;
+  UpdateCommission(
+    request: MsgUpdateCommission
+  ): Promise<MsgUpdateCommissionResponse>;
   /** JoinPool ... */
   JoinPool(request: MsgJoinPool): Promise<MsgJoinPoolResponse>;
   /** LeavePool ... */
@@ -734,55 +807,115 @@ export class MsgClientImpl implements Msg {
   }
   CreateStaker(request: MsgCreateStaker): Promise<MsgCreateStakerResponse> {
     const data = MsgCreateStaker.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "CreateStaker", data);
-    return promise.then((data) => MsgCreateStakerResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "CreateStaker",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateStakerResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  UpdateMetadata(request: MsgUpdateMetadata): Promise<MsgUpdateMetadataResponse> {
+  UpdateMetadata(
+    request: MsgUpdateMetadata
+  ): Promise<MsgUpdateMetadataResponse> {
     const data = MsgUpdateMetadata.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateMetadata", data);
-    return promise.then((data) => MsgUpdateMetadataResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "UpdateMetadata",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateMetadataResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  UpdateCommission(request: MsgUpdateCommission): Promise<MsgUpdateCommissionResponse> {
+  UpdateCommission(
+    request: MsgUpdateCommission
+  ): Promise<MsgUpdateCommissionResponse> {
     const data = MsgUpdateCommission.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateCommission", data);
-    return promise.then((data) => MsgUpdateCommissionResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "UpdateCommission",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateCommissionResponse.decode(new _m0.Reader(data))
+    );
   }
 
   JoinPool(request: MsgJoinPool): Promise<MsgJoinPoolResponse> {
     const data = MsgJoinPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "JoinPool", data);
-    return promise.then((data) => MsgJoinPoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "JoinPool",
+      data
+    );
+    return promise.then((data) =>
+      MsgJoinPoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   LeavePool(request: MsgLeavePool): Promise<MsgLeavePoolResponse> {
     const data = MsgLeavePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "LeavePool", data);
-    return promise.then((data) => MsgLeavePoolResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "LeavePool",
+      data
+    );
+    return promise.then((data) =>
+      MsgLeavePoolResponse.decode(new _m0.Reader(data))
+    );
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateParams", data);
-    return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+    const promise = this.rpc.request(
+      "kyve.stakers.v1beta1.Msg",
+      "UpdateParams",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateParamsResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
 
 function longToString(long: Long) {
   return long.toString();

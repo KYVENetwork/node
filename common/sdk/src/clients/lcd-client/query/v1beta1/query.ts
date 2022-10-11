@@ -174,7 +174,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async canPropose(
     params: kyveQueryBundles.QueryCanProposeRequest
   ): Promise<kyveQueryBundles.QueryCanProposeResponse> {
-    const endpoint = `/kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_height}`;
+    const endpoint = `/kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_index}`;
     return await this.request(endpoint);
   }
   async canVote(
