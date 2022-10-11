@@ -104,7 +104,7 @@ export async function runCache(this: Node): Promise<void> {
         // the pool is in genesis state and therefore the pool
         // specific start key should be used
         const nextKey = !!key
-          ? await this.runtime.getNextKey(key)
+          ? await this.runtime.nextKey(key)
           : this.pool.data!.start_key;
 
         if (!itemFound) {
@@ -118,7 +118,7 @@ export async function runCache(this: Node): Promise<void> {
               }
 
               // collect data item from runtime source
-              const item = await this.runtime.getDataItem(this, nextKey);
+              const item = await this.runtime.getDataItemByKey(this, nextKey);
 
               this.m.runtime_get_data_item_successful.inc();
 

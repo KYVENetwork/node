@@ -10,12 +10,12 @@ import { REFRESH_TIME, sleep } from "../../utils";
  *
  * @method waitForNextBundleProposal
  * @param {Node} this
- * @param {number} createdAt
+ * @param {number} updatedAt
  * @return {Promise<void>}
  */
 export async function waitForNextBundleProposal(
   this: Node,
-  createdAt: number
+  updatedAt: number
 ): Promise<void> {
   try {
     this.logger.info("Waiting for new bundle to be proposed");
@@ -25,7 +25,7 @@ export async function waitForNextBundleProposal(
       this.m.bundles_wait_for_next_round_time.startTimer();
 
     // continue if the creation time of the bundle proposal increased
-    while (+this.pool.bundle_proposal!.created_at <= createdAt) {
+    while (+this.pool.bundle_proposal!.updated_at <= updatedAt) {
       await this.syncPoolState();
 
       // if pool got not active in the meantime abort

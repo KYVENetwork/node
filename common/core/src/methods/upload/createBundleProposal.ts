@@ -67,8 +67,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // get the last value of the bundle proposal and format
     // it so it can be included in the bundle proposal and
     // saved on chain
-    const bundleSummary =
-      (await this.runtime.formatValue(bundleProposal.at(-1)?.value)) ?? "";
+    const bundleSummary = await this.runtime.summarizeBundle(bundleProposal);
 
     // if data was found on the cache proceed with compressing the
     // bundle for the upload to the storage provider

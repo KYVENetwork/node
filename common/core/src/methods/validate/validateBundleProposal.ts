@@ -115,9 +115,9 @@ export async function validateBundleProposal(
     // vote invalid if bundle summary does not match with proposed summary
     if (
       this.pool.bundle_proposal!.bundle_summary !==
-      (await this.runtime.formatValue(validationBundle.at(-1)?.value))
+      (await this.runtime.summarizeBundle(validationBundle))
     ) {
-      this.logger.info(`Found different value on proposed bundle value`);
+      this.logger.info(`Found different value on proposed bundle summary`);
 
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
@@ -127,7 +127,7 @@ export async function validateBundleProposal(
     }
 
     // perform custom runtime bundle validation
-    const valid = await this.runtime.validate(
+    const valid = await this.runtime.validateBundle(
       this,
       standardizeJSON(proposedBundle),
       standardizeJSON(validationBundle)

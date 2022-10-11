@@ -33,25 +33,25 @@ export interface IRuntime {
    *
    * Deterministic behavior is required
    *
-   * @method getDataItem
+   * @method getDataItemByKey
    * @param {Node} core the class of @kyve/core
    * @param {string} key which gets inserted by @kyve/core
    * @return {Promise<DataItem>}
    */
-  getDataItem(core: Node, key: string): Promise<DataItem>;
+  getDataItemByKey(core: Node, key: string): Promise<DataItem>;
 
   /**
    * Validates a bundle proposal
    *
-   * @method validate
+   * @method validateBundle
    * @param {Node} core the class of @kyve/core
-   * @param {DataItem[]} uploadedBundle is the bundle saved by the uploader on the storage provider
+   * @param {DataItem[]} proposedBundle is the bundle saved by the uploader on the storage provider
    * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
    * @return {Promise<boolean>} returns whether the bundle is valid or invalid
    */
-  validate(
+  validateBundle(
     core: Node,
-    uploadedBundle: DataItem[],
+    proposedBundle: DataItem[],
     validationBundle: DataItem[]
   ): Promise<boolean>;
 
@@ -60,23 +60,23 @@ export interface IRuntime {
    *
    * Deterministic behavior is required
    *
-   * @method getNextKey
+   * @method nextKey
    * @param {string} key which gets inserted by @kyve/core
    * @return {Promise<void>}
    */
-  getNextKey(key: string): Promise<string>;
+  nextKey(key: string): Promise<string>;
 
   /**
-   * Gets a formatted value string from a data item which gets saved on chain
-   * to enable oracles to use the data.
+   * Gets a formatted value string from a bundle. This produces a "summary" of
+   * a bundle which gets stored on-chain and therefore needs to be short.
    *
    * String should not be longer than 100 characters, else gas costs might be too expensive.
    *
    * Deterministic behavior is required
    *
-   * @method formatValue
-   * @param {any} value is the last data value in a bundle
+   * @method summarizeBundle
+   * @param {DataItem[]} bundle is the bundle which needs to be summarized
    * @return {Promise<string>} returns a formatted value string
    */
-  formatValue(value: any): Promise<string>;
+  summarizeBundle(bundle: DataItem[]): Promise<string>;
 }

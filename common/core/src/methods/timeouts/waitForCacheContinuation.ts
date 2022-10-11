@@ -13,10 +13,10 @@ import { sleep } from "../../utils";
  */
 export async function waitForCacheContinuation(
   this: Node,
-  createdAt: number
+  updatedAt: number
 ): Promise<void> {
   // continue if a new proposal is available
-  while (createdAt === +this.pool.bundle_proposal!.created_at) {
+  while (updatedAt === +this.pool.bundle_proposal!.updated_at) {
     await sleep(1000);
   }
 }

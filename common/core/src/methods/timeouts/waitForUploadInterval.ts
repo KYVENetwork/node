@@ -18,7 +18,7 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
     let timeRemaining = new BigNumber(0);
 
     const unixNow = new BigNumber(Date.now());
-    const unixIntervalEnd = new BigNumber(this.pool.bundle_proposal!.created_at)
+    const unixIntervalEnd = new BigNumber(this.pool.bundle_proposal!.updated_at)
       .plus(this.pool.data!.upload_interval)
       .multipliedBy(1000);
 
