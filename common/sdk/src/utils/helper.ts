@@ -3,8 +3,9 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { toHex } from "@cosmjs/encoding";
 import { sha256 } from "@cosmjs/crypto";
-import { calculateFee, coins, SigningStargateClient } from "@cosmjs/stargate";
+import { calculateFee, coins, SigningStargateClient, GasPrice } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
+const GAS_PRICE = GasPrice.fromString("2tkyve");
 
 type signTxResponseType = {
   txRawBytes: Uint8Array;
@@ -27,11 +28,7 @@ export class TxPromise {
 }
 async function calcFee(gasEstimation: number, fee: "auto" | number) {
   const multiplier = typeof fee === "number" ? fee : 1.5;
-  // calculateFee(Math.round(gasEstimation * multiplier), "5000000tkyve");
-  return {
-    amount: coins("5000000", "tkyve"),
-    gas: Math.floor(gasEstimation * multiplier).toString(),
-  };
+  return calculateFee(Math.round(gasEstimation * multiplier), GAS_PRICE);
 }
 
 export async function signTx(
