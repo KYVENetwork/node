@@ -28,8 +28,8 @@ TEST CASES - cache tests
 * start caching from a pool which has a bundle proposal ongoing
 * continue caching from a pool which has a bundle proposal ongoing
 * start caching from a pool where last bundle proposal was dropped
-* TODO: start caching from a pool where getNextDataItem fails once
-* TODO: start caching from a pool where getNextDataItem fails multiple times
+* start caching from a pool where getNextDataItem fails once
+* start caching from a pool where getNextDataItem fails multiple times
 * TODO: start caching from a pool where cache methods fail
 
 */
@@ -616,5 +616,183 @@ describe("cache tests", () => {
     expect(delMock).toHaveBeenCalledTimes(0);
 
     expect(dropMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("start caching from a pool where getNextDataItem fails multiple times", async () => {
+    // ARRANGE
+    getDataItemMockByKey
+      .mockImplementationOnce((core: Node, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      )
+      .mockRejectedValueOnce(new Error("network error"))
+      .mockImplementationOnce((core: Node, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      )
+      .mockRejectedValueOnce(new Error("network error"))
+      .mockImplementation((core: Node, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      );
+
+    existsMock
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(true)
+      .mockResolvedValue(false);
+
+    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_key: "99",
+          current_index: "100",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "test_storage_id",
+          uploader: "test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "test_bundle_hash",
+          bundle_size: "3",
+          from_key: "100",
+          to_key: "102",
+          bundle_summary: "test_summary",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    // ACT
+    await runCache.call(core);
+
+    // ASSERT
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 2
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      1,
+      core,
+      (0 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      2,
+      core,
+      (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      3,
+      core,
+      (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      4,
+      core,
+      (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      5,
+      core,
+      (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      6,
+      core,
+      (3 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      7,
+      core,
+      (4 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      8,
+      core,
+      (5 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+    );
+
+    // ...
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(nextKeyMock).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 3
+    );
+
+    // here we subtract the key - 1 because we start using the
+    // current key
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
+      expect(nextKeyMock).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + 100 - 1).toString()
+      );
+    }
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(putMock).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = await core["runtime"].getDataItemByKey(
+        core,
+        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+      );
+      expect(putMock).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        item
+      );
+    }
+
+    expect(getMock).toHaveBeenCalledTimes(0);
+
+    expect(existsMock).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 3
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
+      expect(existsMock).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
+      );
+    }
+
+    expect(delMock).toHaveBeenCalledTimes(100);
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(dropMock).toHaveBeenCalledTimes(0);
   });
 });
