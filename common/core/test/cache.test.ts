@@ -30,7 +30,7 @@ TEST CASES - cache tests
 * start caching from a pool where last bundle proposal was dropped
 * start caching from a pool where getNextDataItem fails once
 * start caching from a pool where getNextDataItem fails multiple times
-* TODO: start caching from a pool where cache methods fail
+* start caching from a pool where cache methods fail
 
 */
 
@@ -794,5 +794,77 @@ describe("cache tests", () => {
     }
 
     expect(dropMock).toHaveBeenCalledTimes(0);
+  });
+
+  test("start caching from a pool where cache methods fail", async () => {
+    // ARRANGE
+    putMock.mockRejectedValue(new Error("io error"));
+
+    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_key: "99",
+          current_index: "100",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "test_storage_id",
+          uploader: "test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "test_bundle_hash",
+          bundle_size: "50",
+          from_key: "100",
+          to_key: "149",
+          bundle_summary: "test_summary",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    // ACT
+    await runCache.call(core);
+
+    // ASSERT
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(getDataItemMockByKey).toHaveBeenCalledTimes(1);
+
+    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(1, core, "100");
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    expect(nextKeyMock).toHaveBeenCalledTimes(1);
+
+    expect(nextKeyMock).toHaveBeenNthCalledWith(1, "99");
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(putMock).toHaveBeenCalledTimes(1);
+
+    expect(getMock).toHaveBeenCalledTimes(0);
+
+    expect(existsMock).toHaveBeenCalledTimes(1);
+
+    expect(existsMock).toHaveBeenNthCalledWith(1, "100");
+
+    expect(delMock).toHaveBeenCalledTimes(100);
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(dropMock).toHaveBeenCalledTimes(1);
   });
 });
