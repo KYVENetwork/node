@@ -18,7 +18,6 @@ import { BundleTag, DataItem } from "../../types";
  */
 export async function createBundleProposal(this: Node): Promise<void> {
   try {
-    console.log("createBundleProposal");
     this.logger.info(`Loading bundle from cache to create a bundle proposal`);
 
     // create bundle proposal from the current bundle proposal index
@@ -53,6 +52,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // so that this node does not receive an upload slash
     if (!bundleProposal.length) {
       await this.skipUploaderRole(fromIndex);
+      return;
     }
 
     // get the first key of the bundle proposal which gets

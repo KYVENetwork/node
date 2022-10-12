@@ -281,7 +281,7 @@ describe("genesis tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("propose genesis bundle with no data bundle", async () => {
+  test("propose genesis bundle with no data bundle", async () => {
     // ARRANGE
     const syncPoolStateMock = jest
       .fn()
@@ -366,7 +366,7 @@ describe("genesis tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(1);
-    expect(cacheGetMock).toHaveBeenLastCalledWith(1, 0);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
