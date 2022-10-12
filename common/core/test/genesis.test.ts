@@ -129,7 +129,7 @@ describe("genesis tests", () => {
     register.clear();
   });
 
-  test.skip("propose genesis bundle with valid data bundle", async () => {
+  test("propose genesis bundle with valid data bundle", async () => {
     // ARRANGE
     const syncPoolStateMock = jest
       .fn()
@@ -169,7 +169,8 @@ describe("genesis tests", () => {
       .mockResolvedValueOnce({
         key: "test_key_2",
         value: "test_value_2",
-      });
+      })
+      .mockRejectedValue(new Error("not found"));
 
     core["cache"].get = cacheGetMock;
 
@@ -205,8 +206,8 @@ describe("genesis tests", () => {
       storage_id: "test_storage_id",
       data_size: Buffer.from(JSON.stringify(bundle)).byteLength.toString(),
       data_hash: sha256(Buffer.from(JSON.stringify(bundle))),
-      fromIndex: "0",
-      bundleSize: "2",
+      from_index: "0",
+      bundle_size: "2",
       from_key: "test_key_1",
       to_key: "test_key_2",
       bundle_summary: JSON.stringify(bundle),
@@ -244,9 +245,10 @@ describe("genesis tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "1");
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
+    expect(cacheGetMock).toHaveBeenCalledTimes(3);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "2");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -263,7 +265,9 @@ describe("genesis tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(0);
 
@@ -390,7 +394,7 @@ describe("genesis tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("be too late to claim uploader role and instead validate", async () => {
+  test("be too late to claim uploader role and instead validate", async () => {
     // ARRANGE
     const claimUploaderRoleMock = jest.fn().mockResolvedValue({
       txHash: "test_hash",
@@ -412,8 +416,8 @@ describe("genesis tests", () => {
 
     const bundleBytes = bundleToBytes(bundle);
     const compressedBundle = bundleBytes; // no compression
-    const byteSize = compressedBundle.byteLength.toString();
-    const bundleHash = sha256(bundleBytes);
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
 
     const syncPoolStateMock = jest
       .fn()
@@ -430,12 +434,13 @@ describe("genesis tests", () => {
             storage_id: "another_test_storage_id",
             uploader: "another_test_staker",
             next_uploader: "another_test_staker",
-            byte_size: byteSize,
-            to_height: "2",
+            data_size: dataSize,
+            data_hash: dataHash,
+            bundle_size: "2",
+            from_key: "test_key_1",
             to_key: "test_key_2",
-            to_value: "test_value_2",
-            bundle_hash: bundleHash,
-            created_at: "0",
+            bundle_summary: JSON.stringify(bundle),
+            updated_at: "0",
             voters_valid: ["another_test_staker"],
           },
         } as any;
@@ -521,8 +526,8 @@ describe("genesis tests", () => {
     // =======================
 
     expect(cacheGetMock).toHaveBeenCalledTimes(2);
-    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "1");
-    expect(cacheGetMock).toHaveBeenNthCalledWith(2, 2);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -538,7 +543,7 @@ describe("genesis tests", () => {
     // =============================
 
     expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith("test_value_2");
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
 
     expect(validateBundleMock).toHaveBeenCalledTimes(1);
     expect(validateBundleMock).toHaveBeenLastCalledWith(

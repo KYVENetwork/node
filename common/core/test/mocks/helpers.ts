@@ -53,6 +53,9 @@ export const client = () =>
       algo: "ed25519",
       pubkey: new Uint8Array(),
     },
+    nativeClient: {
+      getChainId: jest.fn().mockResolvedValue("kyve-local-test"),
+    },
   } as any);
 
 export const lcd = () =>

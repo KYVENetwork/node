@@ -18,6 +18,7 @@ import { BundleTag, DataItem } from "../../types";
  */
 export async function createBundleProposal(this: Node): Promise<void> {
   try {
+    console.log("createBundleProposal");
     this.logger.info(`Loading bundle from cache to create a bundle proposal`);
 
     // create bundle proposal from the current bundle proposal index
@@ -194,5 +195,6 @@ export async function createBundleProposal(this: Node): Promise<void> {
       `Unexpected error creating bundle proposal. Skipping proposal ...`
     );
     this.logger.debug(error);
+    console.log("error", error);
   }
 }

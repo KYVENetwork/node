@@ -26,7 +26,7 @@ export async function canPropose(
           parseInt(this.pool.bundle_proposal!.bundle_size);
 
         // abort if staker is the current uploader
-        if (this.pool.bundle_proposal!.uploader !== this.staker) {
+        if (this.pool.bundle_proposal!.next_uploader !== this.staker) {
           return {
             possible: false,
             reason: "Node is not next uploader of this bundle proposal",
