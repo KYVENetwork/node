@@ -1,7 +1,7 @@
 import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
-import { DENOM } from "../../../../../constants";
+import {DENOM, Network} from "../../../../../constants";
 import { cosmos as cosmosProto } from "@kyve/proto";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 import { cosmos } from "@keplr-wallet/cosmos";
@@ -21,10 +21,12 @@ import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
 export default class KyveGovMsg {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
+  private network: Network;
 
-  constructor(client: SigningStargateClient, account: AccountData) {
+  constructor(client: SigningStargateClient, network: Network, account: AccountData) {
     this.account = account;
     this.nativeClient = client;
+    this.network = network
   }
 
   private createGovTx(
@@ -59,7 +61,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network,this.account.address, tx, options)
     );
   }
 
@@ -79,7 +81,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -99,7 +101,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -119,7 +121,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -139,7 +141,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -159,7 +161,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -179,7 +181,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -199,7 +201,7 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -237,7 +239,7 @@ export default class KyveGovMsg {
 
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 }

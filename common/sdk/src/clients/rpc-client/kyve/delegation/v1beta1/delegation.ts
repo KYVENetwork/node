@@ -9,14 +9,17 @@ import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
 import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
 import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
 import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
+import {Network} from "../../../../../constants";
 
 export default class {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
+  private network: Network;
 
-  constructor(client: SigningStargateClient, account: AccountData) {
+  constructor(client: SigningStargateClient, network: Network, account: AccountData) {
     this.account = account;
     this.nativeClient = client;
+    this.network = network;
   }
 
   public async delegate(
@@ -32,7 +35,7 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
   public async withdrawRewards(
@@ -48,7 +51,7 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -65,7 +68,7 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 
@@ -82,7 +85,7 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 }

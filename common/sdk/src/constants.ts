@@ -1,6 +1,7 @@
 import { Bech32Address } from "@keplr-wallet/cosmos";
 import { ChainInfo } from "@keplr-wallet/types";
 import { AddChainParams } from "@cosmostation/extension-client/types/message";
+import {GasPrice} from "@cosmjs/stargate";
 export const KYVE_DECIMALS = 9;
 export const DENOM = "tkyve";
 export const SUPPORTED_WALLETS = {
@@ -35,6 +36,8 @@ export const KYVE_ENDPOINTS: Networks = {
     chainName: "Korellia",
   },
 };
+export const FEE_PARAMS_PATH = 'kyve/fees/v1beta1/params';
+export const DEFAULT_GAS_PRICE = GasPrice.fromString("2tkyve");
 export const PREFIX = "kyve";
 export const KYVE_KEPLR_CONFIG: ChainInfo = {
   rpc: "",

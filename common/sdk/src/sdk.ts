@@ -66,7 +66,7 @@ export class KyveSDK {
     const signedClient = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
       prefix: PREFIX,
     });
-    return getSigningKyveClient(this.network.rpc, signedClient, aminoSigner);
+    return getSigningKyveClient(this.network, signedClient, aminoSigner);
   }
 
   /**
@@ -83,7 +83,7 @@ export class KyveSDK {
       PREFIX
     );
     const aminoSigner = await Secp256k1Wallet.fromKey(formattedKey, PREFIX);
-    return getSigningKyveClient(this.network.rpc, signedClient, aminoSigner);
+    return getSigningKyveClient(this.network, signedClient, aminoSigner);
   }
 
   /**
@@ -111,7 +111,7 @@ export class KyveSDK {
     const keplr = window.keplr;
     const keplrAminoSigner = new KeplrAminoSigner(keplr, this.network);
     const client = await getSigningKyveClient(
-      this.network.rpc,
+      this.network,
       signer,
       keplrAminoSigner,
       walletName
@@ -152,7 +152,7 @@ export class KyveSDK {
       config ? config : {}
     );
     const client = await getSigningKyveClient(
-      this.network.rpc,
+      this.network,
       cosmostationSigner,
       null,
       cosmostationAccount.name
@@ -190,7 +190,7 @@ export class KyveSDK {
     const aminoSigner = await Secp256k1HdWallet.fromMnemonic(signer.mnemonic, {
       prefix: PREFIX,
     });
-    return getSigningKyveClient(this.network.rpc, signer, aminoSigner);
+    return getSigningKyveClient(this.network, signer, aminoSigner);
   }
 
   static async generateMnemonic(): Promise<string> {

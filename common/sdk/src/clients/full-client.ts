@@ -8,9 +8,10 @@ import * as KyveRegistryTx from "../registry/tx.registry";
 import KyveClient from "./rpc-client/client";
 import KyveWebClient from "./rpc-client/web.client";
 import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
+import {Network} from "../constants";
 
 export async function getSigningKyveClient(
-  rpcEndpoint: string,
+  network: Network,
   signer: OfflineSigner,
   aminoSigner: OfflineAminoSigner | null,
   walletName?: undefined,
@@ -18,7 +19,7 @@ export async function getSigningKyveClient(
 ): Promise<KyveClient>;
 
 export async function getSigningKyveClient(
-  rpcEndpoint: string,
+  network: Network,
   signer: OfflineSigner,
   aminoSigner: OfflineAminoSigner | null,
   walletName?: string,
@@ -26,7 +27,7 @@ export async function getSigningKyveClient(
 ): Promise<KyveWebClient>;
 
 export async function getSigningKyveClient(
-  rpcEndpoint: string,
+  network: Network,
   signer: OfflineSigner,
   aminoSigner: OfflineAminoSigner | null,
   walletName?: string
@@ -34,12 +35,12 @@ export async function getSigningKyveClient(
   const registry = new Registry([...KyveRegistryTx.registry]);
   const gasPrice = GasPrice.fromString("0tkyve");
   const client: SigningStargateClient =
-    await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {
+    await SigningStargateClient.connectWithSigner(network.rpc, signer, {
       registry,
       gasPrice,
     });
   const [account] = await signer.getAccounts();
   if (typeof walletName === "string")
-    return new KyveWebClient(client, account, aminoSigner, walletName);
-  return new KyveClient(client, account, aminoSigner);
+    return new KyveWebClient(client, account, network, aminoSigner, walletName);
+  return new KyveClient(client, account, network, aminoSigner);
 }
