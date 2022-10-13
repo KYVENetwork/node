@@ -232,9 +232,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
@@ -370,9 +370,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
@@ -519,9 +519,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
@@ -673,9 +673,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
@@ -825,9 +825,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
@@ -986,9 +986,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
@@ -1128,9 +1128,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
@@ -1285,9 +1285,9 @@ describe("propose bundle tests", () => {
 
     expect(compression.decompress).toHaveBeenCalledTimes(0);
 
-    // =============================
-    // ASSERT INTEGRATION INTERFACES
-    // =============================
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
 
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);

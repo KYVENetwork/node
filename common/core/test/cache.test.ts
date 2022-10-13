@@ -1,24 +1,15 @@
 import { Logger } from "tslog";
 import { Node } from "../src/index";
-import {
-  summarizeBundleMock,
-  getDataItemMockByKey,
-  TestRuntime,
-  validateBundleMock,
-} from "./mocks/runtime";
-import { TestStorageProvider } from "./mocks/storageProvider";
-import { TestCompression } from "./mocks/compression";
-import { client, lcd, genesis_pool } from "./mocks/helpers";
-import { runCache, setupMetrics } from "../src/methods";
+import { runCache } from "../src/methods/main/runCache";
+import { genesis_pool } from "./mocks/helpers";
+import { client } from "./mocksv2/client.mock";
+import { lcd } from "./mocksv2/lcd.mock";
+import { TestStorageProvider } from "./mocksv2/storageProvider.mock";
+import { TestCache } from "./mocksv2/cache.mock";
+import { TestCompression } from "./mocksv2/compression.mock";
+import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
-import {
-  TestCache,
-  putMock,
-  getMock,
-  existsMock,
-  delMock,
-  dropMock,
-} from "./mocks/cache";
+import { TestRuntime } from "./mocksv2/runtime.mock";
 
 /*
 
@@ -37,15 +28,8 @@ TEST CASES - cache tests
 describe("cache tests", () => {
   let core: Node;
 
-  let loggerInfo: jest.Mock;
-  let loggerDebug: jest.Mock;
-  let loggerWarn: jest.Mock;
-  let loggerError: jest.Mock;
-
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
-
-  let nextKeyMock: jest.Mock;
 
   beforeEach(() => {
     core = new Node();
@@ -76,15 +60,16 @@ describe("cache tests", () => {
     // mock logger
     core.logger = new Logger();
 
-    loggerInfo = jest.fn();
-    loggerDebug = jest.fn();
-    loggerWarn = jest.fn();
-    loggerError = jest.fn();
+    core.logger.info = jest.fn();
+    core.logger.debug = jest.fn();
+    core.logger.warn = jest.fn();
+    core.logger.error = jest.fn();
 
-    core.logger.info = loggerInfo;
-    core.logger.debug = loggerDebug;
-    core.logger.warn = loggerWarn;
-    core.logger.error = loggerError;
+    core["poolId"] = 0;
+    core["staker"] = "test_staker";
+
+    core.client = client();
+    core.lcd = lcd();
 
     core["continueRound"] = jest
       .fn()
@@ -93,113 +78,141 @@ describe("cache tests", () => {
 
     core["waitForCacheContinuation"] = jest.fn();
 
-    nextKeyMock = jest.fn().mockImplementation(async (key: string) => {
-      return (parseInt(key) + 1).toString();
-    });
-
-    core["runtime"].nextKey = nextKeyMock;
-
-    core["poolId"] = 0;
-    core["staker"] = "test_staker";
-
-    core.client = client();
-    core.lcd = lcd();
-
     setupMetrics.call(core);
   });
 
   afterEach(() => {
-    // cache mocks
-    putMock.mockClear();
-    getMock.mockClear();
-    existsMock.mockClear();
-    delMock.mockClear();
-    dropMock.mockClear();
-
-    // runtime mocks
-    getDataItemMockByKey.mockClear();
-    validateBundleMock.mockClear();
-    nextKeyMock.mockClear();
-    summarizeBundleMock.mockClear();
-
     // reset prometheus
     register.clear();
   });
 
   test("start caching from a pool which is in genesis state", async () => {
     // ARRANGE
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
+
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cache.put).toHaveBeenCalledTimes(+genesis_pool.data.max_bundle_size);
+
+    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
+      const item = {
+        key: n.toString(),
+        value: `${n}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+    }
+
+    expect(cache.get).toHaveBeenCalledTimes(0);
+
+    expect(cache.exists).toHaveBeenCalledTimes(
+      +genesis_pool.data.max_bundle_size
+    );
+
+    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
+      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(cache.del).toHaveBeenCalledTimes(0);
+
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =========================
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
       +genesis_pool.data.max_bundle_size
     );
 
     for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
-      expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
         n + 1,
         core,
         n.toString()
       );
     }
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
     // is used for the first time
-    expect(nextKeyMock).toHaveBeenCalledTimes(
+    expect(runtime.nextKey).toHaveBeenCalledTimes(
       +genesis_pool.data.max_bundle_size - 1
     );
 
     for (let n = 0; n < +genesis_pool.data.max_bundle_size - 1; n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
-    // =======================
-    // ASSERT CACHE INTERFACES
-    // =======================
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
 
-    expect(putMock).toHaveBeenCalledTimes(+genesis_pool.data.max_bundle_size);
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
 
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
-      const item = await core["runtime"].getDataItemByKey(core, n.toString());
-      expect(putMock).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
-    }
-
-    expect(getMock).toHaveBeenCalledTimes(0);
-
-    expect(existsMock).toHaveBeenCalledTimes(
-      +genesis_pool.data.max_bundle_size
-    );
-
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(n + 1, n.toString());
-    }
-
-    expect(delMock).toHaveBeenCalledTimes(0);
-
-    expect(dropMock).toHaveBeenCalledTimes(1);
+    // TODO: assert timeouts
   });
 
   test("start caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -223,97 +236,148 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
 
     // =========================
-    // ASSERT RUNTIME INTERFACES
+    // ASSERT STORAGE INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 50
-    );
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-        n + 1,
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-    }
-
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
-
-    expect(nextKeyMock).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 50
-    );
-
-    // here we subtract the key - 1 because we start using the
-    // current key
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + parseInt(genesis_pool.data.max_bundle_size) - 1).toString()
-      );
-    }
-
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
 
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(
+    expect(cache.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      const item = await core["runtime"].getDataItemByKey(
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-      expect(putMock).toHaveBeenNthCalledWith(
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
         item
       );
     }
 
-    expect(getMock).toHaveBeenCalledTimes(0);
+    expect(cache.get).toHaveBeenCalledTimes(0);
 
-    expect(existsMock).toHaveBeenCalledTimes(
+    expect(cache.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(
+      expect(cache.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(delMock).toHaveBeenCalledTimes(100);
+    expect(cache.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(dropMock).toHaveBeenCalledTimes(0);
+    expect(cache.drop).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 50
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
+      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+        n + 1,
+        core,
+        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
+      );
+    }
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 50
+    );
+
+    // here we subtract the key - 1 because we start using the
+    // current key
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size) - 1).toString()
+      );
+    }
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
   });
 
   test("continue caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
-    existsMock
+    core["cache"].exists = jest
+      .fn()
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
       .mockResolvedValue(false);
 
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -337,91 +401,141 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
 
     // =========================
-    // ASSERT RUNTIME INTERFACES
+    // ASSERT STORAGE INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
-    );
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-        n + 1,
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
-      );
-    }
-
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
-
-    expect(nextKeyMock).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 3
-    );
-
-    // here we subtract the key - 1 because we start using the
-    // current key
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + 100 - 1).toString()
-      );
-    }
-
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
 
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(
+    expect(cache.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      const item = await core["runtime"].getDataItemByKey(
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
-      );
-      expect(putMock).toHaveBeenNthCalledWith(
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
         item
       );
     }
 
-    expect(getMock).toHaveBeenCalledTimes(0);
+    expect(cache.get).toHaveBeenCalledTimes(0);
 
-    expect(existsMock).toHaveBeenCalledTimes(
+    expect(cache.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(
+      expect(cache.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(delMock).toHaveBeenCalledTimes(100);
+    expect(cache.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(dropMock).toHaveBeenCalledTimes(0);
+    expect(cache.drop).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+        n + 1,
+        core,
+        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
+      );
+    }
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 3
+    );
+
+    // here we subtract the key - 1 because we start using the
+    // current key
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + 100 - 1).toString()
+      );
+    }
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
   });
 
   test("start caching from a pool where last bundle proposal was dropped", async () => {
     // ARRANGE
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -444,91 +558,142 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
 
     // =========================
-    // ASSERT RUNTIME INTERFACES
+    // ASSERT STORAGE INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
-    );
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-        n + 1,
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-    }
-
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
-
-    expect(nextKeyMock).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
-    );
-
-    // here we subtract the key - 1 because we start using the
-    // current key
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + parseInt(genesis_pool.data.max_bundle_size) - 1).toString()
-      );
-    }
-
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
 
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(
+    expect(cache.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      const item = await core["runtime"].getDataItemByKey(
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-      expect(putMock).toHaveBeenNthCalledWith(
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
         item
       );
     }
 
-    expect(getMock).toHaveBeenCalledTimes(0);
+    expect(cache.get).toHaveBeenCalledTimes(0);
 
-    expect(existsMock).toHaveBeenCalledTimes(
+    expect(cache.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(
+      expect(cache.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(delMock).toHaveBeenCalledTimes(100);
+    expect(cache.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(dropMock).toHaveBeenCalledTimes(1);
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+        n + 1,
+        core,
+        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
+      );
+    }
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    // here we subtract the key - 1 because we start using the
+    // current key
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size) - 1).toString()
+      );
+    }
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
   });
 
   test("start caching from a pool where getNextDataItem fails once", async () => {
     // ARRANGE
-    getDataItemMockByKey
+    core["runtime"].getDataItemByKey = jest
+      .fn()
       .mockImplementationOnce((core: Node, key: string) =>
         Promise.resolve({
           key,
@@ -543,7 +708,7 @@ describe("cache tests", () => {
         })
       );
 
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -552,75 +717,129 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
 
     // =========================
-    // ASSERT RUNTIME INTERFACES
+    // ASSERT STORAGE INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(2 + 1);
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-      1,
-      expect.any(Node),
-      "0"
-    );
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-      2,
-      expect.any(Node),
-      "1"
-    );
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
-      3,
-      expect.any(Node),
-      "1"
-    );
-
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
-
-    // we only call getNextKey max_bundle_size - 1 because
-    // the pool is in genesis state and therefore start_key
-    // is used for the first time
-    expect(nextKeyMock).toHaveBeenCalledTimes(2 - 1);
-
-    for (let n = 0; n < 2 - 1; n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(n + 1, n.toString());
-    }
-
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
 
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(2);
+    expect(cache.put).toHaveBeenCalledTimes(2);
 
     for (let n = 0; n < 2; n++) {
-      const item = await core["runtime"].getDataItemByKey(core, n.toString());
-      expect(putMock).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+      const item = {
+        key: n.toString(),
+        value: `${n}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
     }
 
-    expect(getMock).toHaveBeenCalledTimes(0);
+    expect(cache.get).toHaveBeenCalledTimes(0);
 
-    expect(existsMock).toHaveBeenCalledTimes(2);
+    expect(cache.exists).toHaveBeenCalledTimes(2);
 
     for (let n = 0; n < 2; n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(delMock).toHaveBeenCalledTimes(0);
+    expect(cache.del).toHaveBeenCalledTimes(0);
 
-    expect(dropMock).toHaveBeenCalledTimes(1);
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(2 + 1);
+
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      1,
+      expect.any(Node),
+      "0"
+    );
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      2,
+      expect.any(Node),
+      "1"
+    );
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      3,
+      expect.any(Node),
+      "1"
+    );
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    // we only call getNextKey max_bundle_size - 1 because
+    // the pool is in genesis state and therefore start_key
+    // is used for the first time
+    expect(runtime.nextKey).toHaveBeenCalledTimes(2 - 1);
+
+    for (let n = 0; n < 2 - 1; n++) {
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
   });
 
   test("start caching from a pool where getNextDataItem fails multiple times", async () => {
     // ARRANGE
-    getDataItemMockByKey
+    core["runtime"].getDataItemByKey = jest
+      .fn()
       .mockImplementationOnce((core: Node, key: string) =>
         Promise.resolve({
           key,
@@ -642,13 +861,14 @@ describe("cache tests", () => {
         })
       );
 
-    existsMock
+    core["cache"].exists = jest
+      .fn()
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
       .mockResolvedValue(false);
 
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -672,64 +892,146 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
+
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cache.put).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+      };
+      expect(cache.put).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        item
+      );
+    }
+
+    expect(cache.get).toHaveBeenCalledTimes(0);
+
+    expect(cache.exists).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 3
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
+      expect(cache.exists).toHaveBeenNthCalledWith(
+        n + 1,
+        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
+      );
+    }
+
+    expect(cache.del).toHaveBeenCalledTimes(100);
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(cache.drop).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =========================
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 2
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       1,
       core,
       (0 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       2,
       core,
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       3,
       core,
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       4,
       core,
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       5,
       core,
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       6,
       core,
       (3 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       7,
       core,
       (4 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
       8,
       core,
       (5 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
@@ -737,70 +1039,38 @@ describe("cache tests", () => {
 
     // ...
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(nextKeyMock).toHaveBeenCalledTimes(
+    expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
     );
 
     // here we subtract the key - 1 because we start using the
     // current key
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(nextKeyMock).toHaveBeenNthCalledWith(
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(
         n + 1,
         (n + 100 - 1).toString()
       );
     }
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
-    // =======================
-    // ASSERT CACHE INTERFACES
-    // =======================
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
 
-    expect(putMock).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
-    );
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      const item = await core["runtime"].getDataItemByKey(
-        core,
-        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
-      );
-      expect(putMock).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
-        item
-      );
-    }
-
-    expect(getMock).toHaveBeenCalledTimes(0);
-
-    expect(existsMock).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 3
-    );
-
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(existsMock).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-    }
-
-    expect(delMock).toHaveBeenCalledTimes(100);
-
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
-    }
-
-    expect(dropMock).toHaveBeenCalledTimes(0);
+    // TODO: assert timeouts
   });
 
   test("start caching from a pool where cache methods fail", async () => {
     // ARRANGE
-    putMock.mockRejectedValue(new Error("io error"));
+    core["cache"].put = jest.fn().mockRejectedValue(new Error("io error"));
 
-    const syncPoolStateMock = jest.fn().mockImplementationOnce(() => {
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
         ...genesis_pool,
         data: {
@@ -824,47 +1094,97 @@ describe("cache tests", () => {
         },
       } as any;
     });
-    core["syncPoolState"] = syncPoolStateMock;
 
     // ACT
     await runCache.call(core);
 
     // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
 
     // =========================
-    // ASSERT RUNTIME INTERFACES
+    // ASSERT STORAGE INTERFACES
     // =========================
 
-    expect(getDataItemMockByKey).toHaveBeenCalledTimes(1);
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
 
-    expect(getDataItemMockByKey).toHaveBeenNthCalledWith(1, core, "100");
-
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
-
-    expect(nextKeyMock).toHaveBeenCalledTimes(1);
-
-    expect(nextKeyMock).toHaveBeenNthCalledWith(1, "99");
-
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
 
     // =======================
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(putMock).toHaveBeenCalledTimes(1);
+    expect(cache.put).toHaveBeenCalledTimes(1);
 
-    expect(getMock).toHaveBeenCalledTimes(0);
+    expect(cache.get).toHaveBeenCalledTimes(0);
 
-    expect(existsMock).toHaveBeenCalledTimes(1);
+    expect(cache.exists).toHaveBeenCalledTimes(1);
 
-    expect(existsMock).toHaveBeenNthCalledWith(1, "100");
+    expect(cache.exists).toHaveBeenNthCalledWith(1, "100");
 
-    expect(delMock).toHaveBeenCalledTimes(100);
+    expect(cache.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(delMock).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(dropMock).toHaveBeenCalledTimes(1);
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(1);
+
+    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(1, core, "100");
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(1);
+
+    expect(runtime.nextKey).toHaveBeenNthCalledWith(1, "99");
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(0);
+
+    // TODO: assert timeouts
   });
 });
