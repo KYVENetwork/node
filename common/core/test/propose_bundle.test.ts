@@ -1,23 +1,15 @@
 import { Logger } from "tslog";
 import { Node, sha256 } from "../src/index";
-import {
-  summarizeBundleMock,
-  TestRuntime,
-  validateBundleMock,
-} from "./mocks/runtime";
 import { runNode } from "../src/methods/main/runNode";
-import {
-  TestCompression,
-  compressMock,
-  decompressMock,
-} from "./mocks/compression";
 import { genesis_pool } from "./mocks/helpers";
 import { client } from "./mocksv2/client.mock";
 import { lcd } from "./mocksv2/lcd.mock";
 import { TestStorageProvider } from "./mocksv2/storageProvider.mock";
 import { TestCache } from "./mocksv2/cache.mock";
+import { TestCompression } from "./mocksv2/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
+import { TestRuntime } from "./mocksv2/runtime.mock";
 
 /*
 
@@ -36,11 +28,6 @@ TEST CASES - propose bundle tests
 
 describe("propose bundle tests", () => {
   let core: Node;
-
-  let loggerInfo: jest.Mock;
-  let loggerDebug: jest.Mock;
-  let loggerWarn: jest.Mock;
-  let loggerError: jest.Mock;
 
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
@@ -74,15 +61,10 @@ describe("propose bundle tests", () => {
     // mock logger
     core.logger = new Logger();
 
-    loggerInfo = jest.fn();
-    loggerDebug = jest.fn();
-    loggerWarn = jest.fn();
-    loggerError = jest.fn();
-
-    core.logger.info = loggerInfo;
-    core.logger.debug = loggerDebug;
-    core.logger.warn = loggerWarn;
-    core.logger.error = loggerError;
+    core.logger.info = jest.fn();
+    core.logger.debug = jest.fn();
+    core.logger.warn = jest.fn();
+    core.logger.error = jest.fn();
 
     core["poolId"] = 0;
     core["staker"] = "test_staker";
@@ -90,18 +72,17 @@ describe("propose bundle tests", () => {
     core.client = client();
     core.lcd = lcd();
 
+    core["waitForNextBundleProposal"] = jest.fn();
+
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
     setupMetrics.call(core);
   });
 
   afterEach(() => {
-    // compression mocks
-    compressMock.mockClear();
-    decompressMock.mockClear();
-
-    // integration mocks
-    summarizeBundleMock.mockClear();
-    validateBundleMock.mockClear();
-
     // reset prometheus
     register.clear();
   });
@@ -162,14 +143,6 @@ describe("propose bundle tests", () => {
     await core["cache"].put("104", bundle[2]);
     await core["cache"].put("105", bundle[3]);
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -178,6 +151,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -250,29 +225,33 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(
+    expect(compression.compress).toHaveBeenCalledTimes(1);
+    expect(compression.compress).toHaveBeenLastCalledWith(
       Buffer.from(JSON.stringify(bundle))
     );
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
 
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
@@ -320,14 +299,6 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -337,6 +308,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -394,24 +367,28 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(0);
+    expect(compression.compress).toHaveBeenCalledTimes(0);
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
@@ -461,14 +438,6 @@ describe("propose bundle tests", () => {
     await core["cache"].put("100", bundle[0]);
     await core["cache"].put("101", bundle[1]);
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -478,6 +447,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -542,29 +513,33 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(
+    expect(compression.compress).toHaveBeenCalledTimes(1);
+    expect(compression.compress).toHaveBeenLastCalledWith(
       Buffer.from(JSON.stringify(bundle))
     );
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
 
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
@@ -619,14 +594,6 @@ describe("propose bundle tests", () => {
     await core["cache"].put("102", bundle[0]);
     await core["cache"].put("103", bundle[1]);
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -636,6 +603,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -699,29 +668,33 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(
+    expect(compression.compress).toHaveBeenCalledTimes(1);
+    expect(compression.compress).toHaveBeenLastCalledWith(
       Buffer.from(JSON.stringify(bundle))
     );
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
 
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
@@ -774,14 +747,6 @@ describe("propose bundle tests", () => {
     await core["cache"].put("102", bundle[0]);
     await core["cache"].put("103", bundle[1]);
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -791,6 +756,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -854,29 +821,33 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(
+    expect(compression.compress).toHaveBeenCalledTimes(1);
+    expect(compression.compress).toHaveBeenLastCalledWith(
       Buffer.from(JSON.stringify(bundle))
     );
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
 
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
@@ -931,14 +902,6 @@ describe("propose bundle tests", () => {
     await core["cache"].put("102", bundle[0]);
     await core["cache"].put("103", bundle[1]);
 
-    const waitForNextBundleProposalMock = jest.fn();
-    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
-
-    core["continueRound"] = jest
-      .fn()
-      .mockReturnValueOnce(true)
-      .mockReturnValue(false);
-
     // ACT
     await runNode.call(core);
 
@@ -948,6 +911,8 @@ describe("propose bundle tests", () => {
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
     const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
 
     // ========================
     // ASSERT CLIENT INTERFACES
@@ -1018,29 +983,33 @@ describe("propose bundle tests", () => {
     // ASSERT COMPRESSION INTERFACES
     // =============================
 
-    expect(compressMock).toHaveBeenCalledTimes(1);
-    expect(compressMock).toHaveBeenLastCalledWith(
+    expect(compression.compress).toHaveBeenCalledTimes(1);
+    expect(compression.compress).toHaveBeenLastCalledWith(
       Buffer.from(JSON.stringify(bundle))
     );
 
-    expect(decompressMock).toHaveBeenCalledTimes(0);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
 
-    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
     // ========================
 
     // assert that only one round ran
-    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
 
     // TODO: assert timeouts
   });
