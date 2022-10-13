@@ -38,6 +38,11 @@ TEST CASES - propose bundle tests
 * propose bundle with data
 * propose bundle with no data
 * propose bundle after last bundle has been dropped
+* TODO: propose bundle where saveBundle fails
+* TODO: propose bundle but saveBundle does not return a storage id
+* TODO: propose bundle where submitBundleProposal fails
+* TODO: propose bundle where skipUploaderRole fails
+* TODO: propose bundle where saveBundle and skipUploaderRole fails
 
 */
 

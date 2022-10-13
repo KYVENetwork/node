@@ -47,6 +47,7 @@ TEST CASES - vote abstain tests
 * try to vote abstain after validator has already voted abstain
 * try to vote abstain after validator has already voted valid
 * try to vote abstain after validator has already voted invalid
+* TODO: try to vote abstain where voteBundleProposal fails
 
 */
 

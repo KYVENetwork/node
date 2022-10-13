@@ -159,6 +159,11 @@ export async function createBundleProposal(this: Node): Promise<void> {
         tags
       );
 
+      // throw error if storage provider returns an empty storage id
+      if (!storageId) {
+        throw new Error("Storage Provider returned empty storageId");
+      }
+
       this.m.storage_provider_save_successful.inc();
 
       this.logger.info(
@@ -195,6 +200,5 @@ export async function createBundleProposal(this: Node): Promise<void> {
       `Unexpected error creating bundle proposal. Skipping proposal ...`
     );
     this.logger.debug(error);
-    console.log("error", error);
   }
 }

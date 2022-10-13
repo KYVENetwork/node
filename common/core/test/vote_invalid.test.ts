@@ -47,6 +47,7 @@ TEST CASES - invalid votes tests
 * try to vote invalid after validator has voted valid before
 * vote invalid but local bundle could not be loaded in the first try
 * vote invalid but bundle from storage provider could not be loaded in the first try
+* TODO: try to vote invalid where voteBundleProposal fails
 
 */
 

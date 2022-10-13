@@ -42,6 +42,7 @@ TEST CASES - vote valid tests
 * try to vote valid after validator has voted abstain bebore
 * try to vote valid after validator has voted invalid before
 * try to vote valid after validator has voted valid before
+* TODO: try to vote valid where voteBundleProposal fails
 
 */
 
