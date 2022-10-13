@@ -38,9 +38,9 @@ TEST CASES - propose bundle tests
 * propose bundle with data
 * propose bundle with no data
 * propose bundle after last bundle has been dropped
-* TODO: propose bundle where saveBundle fails
-* TODO: propose bundle but saveBundle does not return a storage id
-* TODO: propose bundle where submitBundleProposal fails
+* propose bundle where saveBundle fails
+* propose bundle but saveBundle does not return a storage id
+* propose bundle where submitBundleProposal fails
 * TODO: propose bundle where skipUploaderRole fails
 * TODO: propose bundle where saveBundle and skipUploaderRole fails
 
@@ -132,7 +132,7 @@ describe("propose bundle tests", () => {
     register.clear();
   });
 
-  test("propose genesis bundle with valid data bundle", async () => {
+  test("propose bundle with data", async () => {
     // ARRANGE
     canVoteMock.mockResolvedValue({
       possible: false,
@@ -560,6 +560,501 @@ describe("propose bundle tests", () => {
     expect(cacheGetMock).toHaveBeenNthCalledWith(1, "100");
     expect(cacheGetMock).toHaveBeenNthCalledWith(2, "101");
     expect(cacheGetMock).toHaveBeenNthCalledWith(3, "102");
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(1);
+    expect(compressMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle))
+    );
+
+    expect(decompressMock).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("propose bundle where saveBundle fails", async () => {
+    // ARRANGE
+    canVoteMock.mockResolvedValue({
+      possible: false,
+      reason: "Already voted",
+    });
+
+    saveBundleMock.mockRejectedValue(new Error("failed to save bundle"));
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_index: "100",
+          current_key: "99",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "previous_test_bundle_hash",
+          bundle_size: "2",
+          from_key: "100",
+          to_key: "101",
+          bundle_summary: "previous_test_value",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const bundle = [
+      {
+        key: "test_key_1",
+        value: "test_value_1",
+      },
+      {
+        key: "test_key_2",
+        value: "test_value_2",
+      },
+    ];
+
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      })
+      .mockRejectedValue(new Error("not found"));
+
+    core["cache"].get = cacheGetMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(1);
+    expect(skipUploaderRoleMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      from_index: "102",
+    });
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(1);
+    expect(canProposeMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      proposer: "test_valaddress",
+      from_index: "102",
+    });
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(1);
+    expect(saveBundleMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle)),
+      expect.any(Array)
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cacheGetMock).toHaveBeenCalledTimes(3);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "104");
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(1);
+    expect(compressMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle))
+    );
+
+    expect(decompressMock).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("propose bundle but saveBundle does not return a storage id", async () => {
+    // ARRANGE
+    canVoteMock.mockResolvedValue({
+      possible: false,
+      reason: "Already voted",
+    });
+
+    saveBundleMock.mockResolvedValue("");
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_index: "100",
+          current_key: "99",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "previous_test_bundle_hash",
+          bundle_size: "2",
+          from_key: "100",
+          to_key: "101",
+          bundle_summary: "previous_test_value",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const bundle = [
+      {
+        key: "test_key_1",
+        value: "test_value_1",
+      },
+      {
+        key: "test_key_2",
+        value: "test_value_2",
+      },
+    ];
+
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      })
+      .mockRejectedValue(new Error("not found"));
+
+    core["cache"].get = cacheGetMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(1);
+    expect(skipUploaderRoleMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      from_index: "102",
+    });
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(1);
+    expect(canProposeMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      proposer: "test_valaddress",
+      from_index: "102",
+    });
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(1);
+    expect(saveBundleMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle)),
+      expect.any(Array)
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cacheGetMock).toHaveBeenCalledTimes(3);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "104");
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compressMock).toHaveBeenCalledTimes(1);
+    expect(compressMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle))
+    );
+
+    expect(decompressMock).toHaveBeenCalledTimes(0);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(summarizeBundleMock).toHaveBeenCalledTimes(1);
+
+    expect(summarizeBundleMock).toHaveBeenLastCalledWith(bundle);
+
+    expect(validateBundleMock).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(waitForNextBundleProposalMock).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("propose bundle where submitBundleProposal fails", async () => {
+    // ARRANGE
+    canVoteMock.mockResolvedValue({
+      possible: false,
+      reason: "Already voted",
+    });
+
+    submitBundleProposalMock.mockRejectedValue(new Error());
+
+    saveBundleMock.mockResolvedValue("test_storage_id");
+
+    const syncPoolStateMock = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_index: "100",
+          current_key: "99",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "previous_test_bundle_hash",
+          bundle_size: "2",
+          from_key: "100",
+          to_key: "101",
+          bundle_summary: "previous_test_value",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+    core["syncPoolState"] = syncPoolStateMock;
+
+    const bundle = [
+      {
+        key: "test_key_1",
+        value: "test_value_1",
+      },
+      {
+        key: "test_key_2",
+        value: "test_value_2",
+      },
+    ];
+
+    const cacheGetMock = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      })
+      .mockRejectedValue(new Error("not found"));
+
+    core["cache"].get = cacheGetMock;
+
+    const waitForNextBundleProposalMock = jest.fn();
+    core["waitForNextBundleProposal"] = waitForNextBundleProposalMock;
+
+    core["continueRound"] = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValue(false);
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(claimUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    expect(voteBundleProposalMock).toHaveBeenCalledTimes(0);
+
+    expect(submitBundleProposalMock).toHaveBeenCalledTimes(1);
+    expect(submitBundleProposalMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "test_storage_id",
+      data_size: Buffer.from(JSON.stringify(bundle)).byteLength.toString(),
+      data_hash: sha256(Buffer.from(JSON.stringify(bundle))),
+      from_index: "102",
+      bundle_size: "2",
+      from_key: "test_key_1",
+      to_key: "test_key_2",
+      bundle_summary: JSON.stringify(bundle),
+    });
+
+    expect(skipUploaderRoleMock).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(canVoteMock).toHaveBeenCalledTimes(1);
+    expect(canVoteMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(canProposeMock).toHaveBeenCalledTimes(1);
+    expect(canProposeMock).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      proposer: "test_valaddress",
+      from_index: "102",
+    });
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(saveBundleMock).toHaveBeenCalledTimes(1);
+    expect(saveBundleMock).toHaveBeenLastCalledWith(
+      Buffer.from(JSON.stringify(bundle)),
+      expect.any(Array)
+    );
+
+    expect(retrieveBundleMock).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cacheGetMock).toHaveBeenCalledTimes(3);
+    expect(cacheGetMock).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheGetMock).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
