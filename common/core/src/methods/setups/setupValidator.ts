@@ -58,7 +58,7 @@ export async function setupValidator(this: Node): Promise<void> {
     await this.cache.drop();
 
     this.m.cache_current_items.set(0);
-    this.logger.info(`Cleared cache\n`);
+    this.logger.info(`Cleared cache`);
   } catch (err) {
     this.logger.fatal(`Failed to setup validator. Exiting ...`);
     this.logger.fatal(standardizeJSON(err));

@@ -42,18 +42,18 @@ export async function skipUploaderRole(
     this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
-      this.logger.info(`Successfully skipped uploader role\n`);
+      this.logger.info(`Successfully skipped uploader role`);
       this.m.tx_skip_uploader_role_successful.inc();
 
       return true;
     } else {
-      this.logger.info(`Could not skip uploader role. Continuing ...\n`);
+      this.logger.info(`Could not skip uploader role. Continuing ...`);
       this.m.tx_skip_uploader_role_unsuccessful.inc();
 
       return false;
     }
   } catch (err) {
-    this.logger.error("Failed to skip uploader role. Continuing ...\n");
+    this.logger.error("Failed to skip uploader role. Continuing ...");
     this.logger.error(standardizeJSON(err));
     this.m.tx_skip_uploader_role_failed.inc();
 

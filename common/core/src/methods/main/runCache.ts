@@ -43,7 +43,7 @@ export async function runCache(this: Node): Promise<void> {
         await this.cache.drop();
 
         this.m.cache_current_items.set(0);
-        this.logger.info(`Cleared cache\n`);
+        this.logger.info(`Cleared cache`);
       }
 
       // determine the creation time of the current bundle proposal
@@ -201,12 +201,12 @@ export async function runCache(this: Node): Promise<void> {
         await this.cache.drop();
 
         this.m.cache_current_items.set(0);
-        this.logger.info(`Cleared cache\n`);
+        this.logger.info(`Cleared cache`);
       } catch (dropError) {
         this.logger.error(
           `Unexpected error dropping local cache. Continuing ...`
         );
-        this.logger.error(dropError);
+        this.logger.error(standardizeJSON(dropError));
       }
     }
   }

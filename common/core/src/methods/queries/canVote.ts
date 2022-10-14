@@ -72,10 +72,10 @@ export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
     this.m.query_can_vote_successful.inc();
 
     if (canVote.possible) {
-      this.logger.info(`Node is able to vote on bundle proposal\n`);
+      this.logger.info(`Node is able to vote on bundle proposal`);
       return true;
     } else {
-      this.logger.info(`Skipping vote. Reason: ${canVote.reason}\n`);
+      this.logger.info(`Skipping vote. Reason: ${canVote.reason}`);
       return false;
     }
   } catch (err) {

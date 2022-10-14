@@ -58,7 +58,7 @@ export async function submitBundleProposal(
 
     if (receipt.code === 0) {
       this.logger.info(
-        `Successfully submitted bundle proposal with Storage Id "${storageId}"\n`
+        `Successfully submitted bundle proposal with Storage Id "${storageId}"`
       );
       this.m.tx_submit_bundle_proposal_successful.inc();
       this.m.bundles_proposed.inc();
@@ -69,13 +69,13 @@ export async function submitBundleProposal(
 
       return true;
     } else {
-      this.logger.info(`Could not submit bundle proposal. Continuing ...\n`);
+      this.logger.info(`Could not submit bundle proposal. Continuing ...`);
       this.m.tx_submit_bundle_proposal_unsuccessful.inc();
 
       return false;
     }
   } catch (err) {
-    this.logger.error(`Failed to submit bundle proposal. Continuing ...\n`);
+    this.logger.error(`Failed to submit bundle proposal. Continuing ...`);
     this.logger.error(standardizeJSON(err));
     this.m.tx_submit_bundle_proposal_failed.inc();
 

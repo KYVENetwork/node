@@ -176,7 +176,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
       this.m.storage_provider_save_successful.inc();
 
       this.logger.info(
-        `Saved bundle on StorageProvider:${this.storageProvider.name} with storage id "${storageId}"\n`
+        `Saved bundle on StorageProvider:${this.storageProvider.name} with storage id "${storageId}"`
       );
 
       // if the bundle was successfully uploaded to the storage provider

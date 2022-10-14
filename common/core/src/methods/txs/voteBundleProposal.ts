@@ -52,7 +52,7 @@ export async function voteBundleProposal(
     this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
-      this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"\n`);
+      this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"`);
       this.m.tx_vote_bundle_proposal_successful.inc();
 
       if (vote === 1) {
@@ -65,13 +65,13 @@ export async function voteBundleProposal(
 
       return true;
     } else {
-      this.logger.info(`Could not vote on proposal. Continuing ...\n`);
+      this.logger.info(`Could not vote on proposal. Continuing ...`);
       this.m.tx_vote_bundle_proposal_unsuccessful.inc();
 
       return false;
     }
   } catch (err) {
-    this.logger.error(`Failed to vote on bundle proposal. Continuing ...\n`);
+    this.logger.error(`Failed to vote on bundle proposal. Continuing ...`);
     this.logger.error(standardizeJSON(err));
     this.m.tx_vote_bundle_proposal_failed.inc();
 

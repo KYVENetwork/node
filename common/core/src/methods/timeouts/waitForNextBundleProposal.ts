@@ -39,7 +39,7 @@ export async function waitForNextBundleProposal(
     endTimeNextBundleProposal();
 
     this.logger.info(
-      `Found new bundle proposal. Starting new bundle proposal round\n`
+      `Found new bundle proposal. Starting new bundle proposal round`
     );
   } catch (err) {
     this.logger.error(
