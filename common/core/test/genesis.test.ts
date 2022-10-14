@@ -85,7 +85,7 @@ describe("genesis tests", () => {
 
   test("propose genesis bundle with valid data bundle", async () => {
     // ARRANGE
-    const syncPoolStateMock = jest
+    core["syncPoolState"] = jest
       .fn()
       .mockImplementationOnce(() => {
         core.pool = {
@@ -101,7 +101,6 @@ describe("genesis tests", () => {
           },
         } as any;
       });
-    core["syncPoolState"] = syncPoolStateMock;
 
     const bundle = [
       {
@@ -224,7 +223,7 @@ describe("genesis tests", () => {
 
   test("propose genesis bundle with no data bundle", async () => {
     // ARRANGE
-    const syncPoolStateMock = jest
+    core["syncPoolState"] = jest
       .fn()
       .mockImplementationOnce(() => {
         core.pool = {
@@ -240,7 +239,6 @@ describe("genesis tests", () => {
           },
         } as any;
       });
-    core["syncPoolState"] = syncPoolStateMock;
 
     const cacheGetMock = jest.fn().mockRejectedValue(new Error("not found"));
 
@@ -360,7 +358,7 @@ describe("genesis tests", () => {
     const dataSize = compressedBundle.byteLength.toString();
     const dataHash = sha256(bundleBytes);
 
-    const syncPoolStateMock = jest
+    core["syncPoolState"] = jest
       .fn()
       .mockImplementationOnce(() => {
         core.pool = {
@@ -386,9 +384,8 @@ describe("genesis tests", () => {
           },
         } as any;
       });
-    core["syncPoolState"] = syncPoolStateMock;
 
-    const cacheGetMock = jest
+    core["cache"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -398,8 +395,6 @@ describe("genesis tests", () => {
         key: "test_key_2",
         value: "test_value_2",
       });
-
-    core["cache"].get = cacheGetMock;
 
     // ACT
     await runNode.call(core);
