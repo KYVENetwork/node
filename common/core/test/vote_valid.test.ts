@@ -22,7 +22,7 @@ TEST CASES - vote valid tests
 * try to vote valid after validator has voted abstain bebore
 * try to vote valid after validator has voted invalid before
 * try to vote valid after validator has voted valid before
-* TODO: try to vote valid where voteBundleProposal fails
+* try to vote valid where voteBundleProposal fails
 
 */
 
@@ -910,6 +910,149 @@ describe("vote valid tests", () => {
     expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForNextBundleProposal"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("try to vote valid where voteBundleProposal fails", async () => {
+    // ARRANGE
+    const bundle = [
+      { key: "test_key_1", value: "test_value_1" },
+      { key: "test_key_2", value: "test_value_2" },
+    ];
+
+    const bundleBytes = bundleToBytes(bundle);
+    const compressedBundle = bundleBytes; // no compression
+    const dataSize = compressedBundle.byteLength.toString();
+    const dataHash = sha256(bundleBytes);
+
+    core["client"].kyve.bundles.v1beta1.voteBundleProposal = jest
+      .fn()
+      .mockRejectedValue(new Error());
+
+    core["syncPoolState"] = jest.fn().mockImplementation(() => {
+      core.pool = {
+        ...genesis_pool,
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "another_test_storage_id",
+          uploader: "another_test_staker",
+          next_uploader: "another_test_staker",
+          data_size: dataSize,
+          data_hash: dataHash,
+          bundle_size: "2",
+          from_key: "test_key_1",
+          to_key: "test_key_2",
+          bundle_summary: JSON.stringify(bundle),
+          updated_at: "0",
+          voters_valid: ["another_test_staker"],
+        },
+      } as any;
+    });
+
+    core["cache"].get = jest
+      .fn()
+      .mockResolvedValueOnce({
+        key: "test_key_1",
+        value: "test_value_1",
+      })
+      .mockResolvedValueOnce({
+        key: "test_key_2",
+        value: "test_value_2",
+      });
+
+    // ACT
+    await runNode.call(core);
+
+    // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(1);
+    expect(txs.voteBundleProposal).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      storage_id: "another_test_storage_id",
+      vote: VoteType.VOTE_TYPE_YES,
+    });
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(1);
+    expect(queries.canVote).toHaveBeenLastCalledWith({
+      staker: "test_staker",
+      pool_id: "0",
+      voter: "test_valaddress",
+      storage_id: "another_test_storage_id",
+    });
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
+
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(1);
+    expect(storageProvider.retrieveBundle).toHaveBeenLastCalledWith(
+      "another_test_storage_id",
+      (120 - 20) * 1000
+    );
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cache.get).toHaveBeenCalledTimes(2);
+    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cache.get).toHaveBeenNthCalledWith(2, "1");
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(1);
+    expect(compression.decompress).toHaveBeenLastCalledWith(compressedBundle);
+
+    // =============================
+    // ASSERT INTEGRATION INTERFACES
+    // =============================
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+      expect.anything(),
+      standardizeJSON(bundle),
+      standardizeJSON(bundle)
+    );
 
     // ========================
     // ASSERT NODEJS INTERFACES
