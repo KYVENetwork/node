@@ -13,6 +13,11 @@ import BigNumber from "bignumber.js";
  */
 export async function getBalances(this: Node): Promise<void> {
   try {
+    this.logger.debug(`this.client.nativeClient.getBalance(
+      ${this.staker},
+      ${DENOM}
+    )\n`);
+
     const stakerBalanceRaw = await this.client.nativeClient.getBalance(
       this.staker,
       DENOM
@@ -22,12 +27,17 @@ export async function getBalances(this: Node): Promise<void> {
       .toNumber();
 
     this.m.balance_staker.set(stakerBalance);
-  } catch (error) {
-    this.logger.info(`Failed to get staker balance ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to get $KYVE balance of staker`);
+    this.logger.error(err);
   }
 
   try {
+    this.logger.debug(`this.client.nativeClient.getBalance(
+      ${this.client.account.address},
+      ${DENOM}
+    )\n`);
+
     const valaccountBalanceRaw = await this.client.nativeClient.getBalance(
       this.client.account.address,
       DENOM
@@ -37,12 +47,14 @@ export async function getBalances(this: Node): Promise<void> {
       .toNumber();
 
     this.m.balance_valaccount.set(valaccountBalance);
-  } catch (error) {
-    this.logger.info(`Failed to get valaccount balance ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to get $KYVE balance of valaccount`);
+    this.logger.error(err);
   }
 
   try {
+    this.logger.debug(`this.storageProvider.getBalance()\n`);
+
     const storageProviderBalanceRaw = await this.storageProvider.getBalance();
     const storageProviderBalance = new BigNumber(storageProviderBalanceRaw)
       .dividedBy(
@@ -51,8 +63,8 @@ export async function getBalances(this: Node): Promise<void> {
       .toNumber();
 
     this.m.balance_storage_provider.set(storageProviderBalance);
-  } catch (error) {
-    this.logger.info(`Failed to get storage provider balance ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to get balance of storage provider`);
+    this.logger.error(err);
   }
 }

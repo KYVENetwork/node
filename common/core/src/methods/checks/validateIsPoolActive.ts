@@ -10,6 +10,8 @@ import { PoolStatus } from "@kyve/proto/dist/proto-res/kyve/pool/v1beta1/pool";
  * @return {boolean}
  */
 export function validateIsPoolActive(this: Node): boolean {
+  this.logger.debug(`Validating if pool is active: ${this.pool.status}`);
+
   switch (this.pool.status as PoolStatus) {
     case PoolStatus.POOL_STATUS_ACTIVE:
       return false;

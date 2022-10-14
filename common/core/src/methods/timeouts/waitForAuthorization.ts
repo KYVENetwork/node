@@ -18,9 +18,10 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     const canValidate = await callWithBackoffStrategy(
       async () => {
         this.logger.debug(
-          `this.lcd.kyve.query.v1beta1.canValidate({pool_id:${this.poolId.toString()},valaddress:${
-            this.client.account.address
-          }})`
+          `this.lcd.kyve.query.v1beta1.canValidate({
+            pool_id: ${this.poolId.toString()},
+            valaddress: ${this.client.account.address},
+          })\n`
         );
 
         return await this.lcd.kyve.query.v1beta1.canValidate({
@@ -70,9 +71,10 @@ export async function waitForAuthorization(this: Node): Promise<void> {
       const canValidate = await callWithBackoffStrategy(
         async () => {
           this.logger.debug(
-            `this.lcd.kyve.query.v1beta1.canValidate({pool_id:${this.poolId.toString()},valaddress:${
-              this.client.account.address
-            }})`
+            `this.lcd.kyve.query.v1beta1.canValidate({
+              pool_id: ${this.poolId.toString()},
+              valaddress: ${this.client.account.address},
+            })\n`
           );
 
           return await this.lcd.kyve.query.v1beta1.canValidate({

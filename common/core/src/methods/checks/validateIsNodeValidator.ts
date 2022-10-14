@@ -11,20 +11,23 @@ import { Node } from "../..";
  */
 export function validateIsNodeValidator(this: Node): void {
   try {
+    this.logger.debug(
+      `Validating if node operator is included in pool stakers`
+    );
+
     if (!this.pool.stakers.includes(this.staker)) {
-      this.logger.error(`Node is not in the active validator set! Exiting ...`);
+      this.logger.fatal(`Node is not in the active validator set! Exiting ...`);
       process.exit(1);
     }
 
     this.logger.info(
       `Node running as validator on pool "${this.pool.data!.name}"`
     );
-    this.logger.debug(`Successfully validated node stake\n`);
-  } catch (error) {
-    this.logger.error(
+  } catch (err) {
+    this.logger.fatal(
       `Error while validating if node is a validator. Exiting ...`
     );
-    this.logger.debug(error);
+    this.logger.fatal(err);
 
     process.exit(1);
   }

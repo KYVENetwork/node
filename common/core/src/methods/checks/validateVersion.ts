@@ -10,9 +10,13 @@ import { Node } from "../..";
  */
 export function validateVersion(this: Node): void {
   try {
+    this.logger.debug(
+      `Comparing pool runtime version with protocol node runtime version`
+    );
+
     if (this.pool.data!.protocol!.version !== this.runtime.version) {
-      this.logger.error(`Running an invalid version. Exiting ...`);
-      this.logger.error(
+      this.logger.fatal(`Running an invalid version. Exiting ...`);
+      this.logger.fatal(
         `Found Runtime version = ${this.runtime.version} required = ${
           this.pool.data!.protocol!.version
         }`
@@ -23,10 +27,9 @@ export function validateVersion(this: Node): void {
     this.logger.info(
       `Node running on runtime version = ${this.runtime.version}`
     );
-    this.logger.debug(`Successfully validated pool runtime version\n`);
-  } catch (error) {
-    this.logger.error(`Error while validating runtime version. Exiting ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.fatal(`Error while validating runtime version. Exiting ...`);
+    this.logger.fatal(err);
 
     process.exit(1);
   }

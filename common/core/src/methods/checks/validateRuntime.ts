@@ -10,21 +10,22 @@ import { Node } from "../..";
  */
 export function validateRuntime(this: Node): void {
   try {
+    this.logger.debug(`Comparing pool runtime with protocol node runtime`);
+
     if (this.pool.data!.runtime !== this.runtime.name) {
-      this.logger.error(
+      this.logger.fatal(
         `Specified pool does not match the integration runtime! Exiting ...`
       );
-      this.logger.error(
+      this.logger.fatal(
         `Found = ${this.runtime.name} required = ${this.pool.data!.runtime}`
       );
       process.exit(1);
     }
 
     this.logger.info(`Node running on runtime = ${this.runtime.name}`);
-    this.logger.debug(`Successfully validated pool runtime\n`);
-  } catch (error) {
-    this.logger.error(`Error while validating runtime. Exiting ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.fatal(`Error while validating runtime. Exiting ...`);
+    this.logger.fatal(err);
 
     process.exit(1);
   }
