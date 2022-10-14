@@ -71,7 +71,7 @@ export async function voteBundleProposal(
       return false;
     }
   } catch (error) {
-    this.logger.error("Failed to vote on bundle proposal. Continuing ...\n");
+    this.logger.error(`Failed to vote on bundle proposal. Continuing ...\n`);
     this.logger.error(error);
     this.m.tx_vote_bundle_proposal_failed.inc();
 

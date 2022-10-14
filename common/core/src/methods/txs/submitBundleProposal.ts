@@ -1,3 +1,4 @@
+import { isErrored } from "stream";
 import { Node } from "../..";
 
 /**
@@ -30,7 +31,11 @@ export async function submitBundleProposal(
   bundleSummary: string
 ): Promise<boolean> {
   try {
-    this.logger.debug(`Attempting to submit bundle proposal`);
+    this.logger.debug(
+      `this.client.kyve.bundles.v1beta1.submitBundleProposal({staker: ${
+        this.staker
+      },pool_id: ${this.poolId.toString()},storage_id: ${storageId},data_size: ${dataSize.toString()},data_hash: ${dataHash},from_index: ${fromIndex.toString()},bundle_size: ${bundleSize.toString()},from_key: ${fromKey},to_key: ${toKey},bundle_summary: ${bundleSummary}})`
+    );
 
     const tx = await this.client.kyve.bundles.v1beta1.submitBundleProposal({
       staker: this.staker,
@@ -48,6 +53,8 @@ export async function submitBundleProposal(
     this.logger.debug(`SubmitBundleProposal = ${tx.txHash}`);
 
     const receipt = await tx.execute();
+
+    this.logger.debug(JSON.stringify(receipt));
 
     if (receipt.code === 0) {
       this.logger.info(
@@ -67,9 +74,9 @@ export async function submitBundleProposal(
 
       return false;
     }
-  } catch (error) {
-    this.logger.warn(" Failed to submit bundle proposal. Continuing ...\n");
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to submit bundle proposal. Continuing ...\n`);
+    this.logger.error(err);
     this.m.tx_submit_bundle_proposal_failed.inc();
 
     return false;

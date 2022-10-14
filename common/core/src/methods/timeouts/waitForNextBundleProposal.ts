@@ -38,11 +38,13 @@ export async function waitForNextBundleProposal(
 
     endTimeNextBundleProposal();
 
-    this.logger.info(`Found new bundle proposal. Starting new round ...\n`);
-  } catch (error) {
-    this.logger.error(`Failed to wait for next bundle proposal. Exiting ...`);
-    this.logger.debug(error);
-
-    process.exit(1);
+    this.logger.info(
+      `Found new bundle proposal. Starting new bundle proposal round\n`
+    );
+  } catch (err) {
+    this.logger.error(
+      `Failed to wait for next bundle proposal. Continuing ...`
+    );
+    this.logger.error(err);
   }
 }

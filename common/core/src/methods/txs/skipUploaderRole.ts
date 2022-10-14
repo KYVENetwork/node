@@ -23,7 +23,11 @@ export async function skipUploaderRole(
   fromIndex: number
 ): Promise<boolean> {
   try {
-    this.logger.debug(`Attempting to skip uploader role`);
+    this.logger.debug(
+      `this.client.kyve.bundles.v1beta1.skipUploaderRole({staker: ${
+        this.staker
+      },pool_id: ${this.poolId.toString()},from_index: ${fromIndex.toString()}})`
+    );
 
     const tx = await this.client.kyve.bundles.v1beta1.skipUploaderRole({
       staker: this.staker,
@@ -34,6 +38,8 @@ export async function skipUploaderRole(
     this.logger.debug(`SkipUploaderRole = ${tx.txHash}`);
 
     const receipt = await tx.execute();
+
+    this.logger.debug(JSON.stringify(receipt));
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully skipped uploader role\n`);
@@ -46,9 +52,9 @@ export async function skipUploaderRole(
 
       return false;
     }
-  } catch (error) {
-    this.logger.warn(" Failed to skip uploader role. Continuing ...\n");
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error("Failed to skip uploader role. Continuing ...\n");
+    this.logger.error(err);
     this.m.tx_skip_uploader_role_failed.inc();
 
     return false;

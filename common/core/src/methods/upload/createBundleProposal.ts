@@ -39,6 +39,8 @@ export async function createBundleProposal(this: Node): Promise<void> {
     for (let i = fromIndex; i < toIndex; i++) {
       try {
         // try to get the data item from local cache
+        this.logger.debug(`this.cache.get(${i.toString()})`);
+
         const item = await this.cache.get(i.toString());
         bundleProposal.push(item);
       } catch {
@@ -68,10 +70,12 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // get the last value of the bundle proposal and format
     // it so it can be included in the bundle proposal and
     // saved on chain
+    this.logger.debug(`this.runtime.summarizeBundle($BUNDLE_PROPOSAL)`);
     const bundleSummary = await this.runtime.summarizeBundle(bundleProposal);
 
     // if data was found on the cache proceed with compressing the
     // bundle for the upload to the storage provider
+    this.logger.debug(`this.compression.compress($RAW_BUNDLE_PROPOSAL)`);
     const storageProviderData = await this.compression.compress(
       bundleToBytes(bundleProposal)
     );
@@ -149,11 +153,13 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // if the upload fails the node should immediately skip the
     // uploader role to prevent upload slashes
     try {
-      this.logger.debug(`Attempting to save bundle on storage provider`);
-
       // upload the bundle proposal to the storage provider
       // and get a storage id. With that other participants in the
       // network can retrieve the data again and validate it
+      this.logger.debug(
+        `this.storageProvider.saveBundle($STORAGE_PROVIDER_DATA,$TAGS)`
+      );
+
       const storageId = await this.storageProvider.saveBundle(
         storageProviderData,
         tags
@@ -183,11 +189,11 @@ export async function createBundleProposal(this: Node): Promise<void> {
         toKey,
         bundleSummary
       );
-    } catch (error) {
-      this.logger.warn(
-        ` Failed to save bundle on StorageProvider:${this.storageProvider.name}`
+    } catch (err) {
+      this.logger.info(
+        `Saving bundle proposal on StorageProvider:${this.storageProvider.name} was unsucessful`
       );
-      this.logger.debug(error);
+      this.logger.debug(err);
 
       this.m.storage_provider_save_failed.inc();
 
@@ -195,10 +201,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
       // let the node skip the uploader role and continue
       await this.skipUploaderRole(fromIndex);
     }
-  } catch (error) {
+  } catch (err) {
     this.logger.error(
       `Unexpected error creating bundle proposal. Skipping proposal ...`
     );
-    this.logger.debug(error);
+    this.logger.error(err);
   }
 }

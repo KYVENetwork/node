@@ -43,10 +43,8 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
     endTimeRemaining();
 
     this.logger.debug(`Reached upload interval of current bundle proposal`);
-  } catch (error) {
-    this.logger.error(`Failed to wait for upload interval. Exiting ...`);
-    this.logger.debug(error);
-
-    process.exit(1);
+  } catch (err) {
+    this.logger.error(`Failed to wait for upload interval. Continuing ...`);
+    this.logger.error(err);
   }
 }
