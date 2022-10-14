@@ -61,7 +61,9 @@ export async function saveBundleDownload(
       );
 
       this.logger.debug(
-        `Attempting to download bundle from StorageProvider:${this.storageProvider.name} with a download timeout of ${downloadTimeoutSec}s`
+        `this.storageProvider.retrieveBundle(${
+          this.pool.bundle_proposal!.storage_id
+        },${downloadTimeoutSec * 1000})`
       );
 
       const storageProviderResult = await this.storageProvider.retrieveBundle(
@@ -80,13 +82,15 @@ export async function saveBundleDownload(
       return storageProviderResult;
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-    async (error: any, ctx) => {
-      this.logger.debug(
-        `Failed to retrieve bundle from StorageProvider:${
+    async (err: any, ctx) => {
+      this.logger.info(
+        `Retrieving bundle from StorageProvider:${
           this.storageProvider.name
-        }. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(2)}s ...\n`
+        } was unsuccessful. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(
+          2
+        )}s ...`
       );
-      this.logger.debug(error);
+      this.logger.debug(err);
 
       this.m.storage_provider_retrieve_failed.inc();
 

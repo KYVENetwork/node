@@ -60,6 +60,8 @@ export async function saveLoadValidationBundle(
       for (let i = proposalStartIndex; i < proposalTargetIndex; i++) {
         try {
           // try to get the data item from local cache
+          this.logger.debug(`this.cache.get(${i.toString()})`);
+
           const item = await this.cache.get(i.toString());
           bundle.push(item);
         } catch {
@@ -78,13 +80,15 @@ export async function saveLoadValidationBundle(
       return bundle;
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-    async (error: any, ctx) => {
-      this.logger.debug(
-        `Failed to load validation bundle from Cache:${
+    async (err: any, ctx) => {
+      this.logger.info(
+        `Loading validation bundle from Cache:${
           this.cache.name
-        }. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(2)}s ...\n`
+        } was unsuccessful. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(
+          2
+        )}s ...`
       );
-      this.logger.debug(error);
+      this.logger.debug(err);
 
       // vote abstain if validation bundle could not be loaded from cache.
       // With voting abstain the network knows that the node

@@ -127,7 +127,7 @@ export async function runCache(this: Node): Promise<void> {
 
               // collect data item from runtime source
               this.logger.debug(
-                `this.runtime.getDataItemByKey(this,${nextKey})`
+                `this.runtime.getDataItemByKey($THIS,${nextKey})`
               );
 
               const item = await this.runtime.getDataItemByKey(this, nextKey);
@@ -159,7 +159,7 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
-          this.logger.debug(`this.cache.put(${i.toString()},item)`);
+          this.logger.debug(`this.cache.put(${i.toString()},$ITEM)`);
           await this.cache.put(i.toString(), item);
 
           this.m.cache_current_items.inc();

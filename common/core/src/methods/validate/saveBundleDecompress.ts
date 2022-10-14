@@ -16,6 +16,8 @@ export async function saveBundleDecompress(
   rawStorageData: Buffer
 ): Promise<DataItem[]> {
   try {
+    this.logger.debug(`this.compression.decompress($RAW_STORAGE_DATA)`);
+
     const storageBundle = bytesToBundle(
       await this.compression.decompress(rawStorageData)
     );
@@ -25,10 +27,11 @@ export async function saveBundleDecompress(
     );
 
     return storageBundle;
-  } catch (error) {
-    this.logger.info(
-      `Could not decompress bundle with compression type Compression:${this.compression.name}`
+  } catch (err) {
+    this.logger.error(
+      `Could not decompress bundle with compression type Compression:${this.compression.name}. Continuing ...`
     );
+    this.logger.error(err);
 
     return [];
   }

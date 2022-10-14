@@ -32,7 +32,11 @@ export async function voteBundleProposal(
       throw Error(`Invalid vote: ${vote}`);
     }
 
-    this.logger.debug(`Attempting to vote ${voteMessage} on bundle proposal`);
+    this.logger.debug(
+      `this.client.kyve.bundles.v1beta1.voteBundleProposal({staker: ${
+        this.staker
+      },pool_id: ${this.poolId.toString()},storage_id: ${storageId},vote: ${vote}})`
+    );
 
     const tx = await this.client.kyve.bundles.v1beta1.voteBundleProposal({
       staker: this.staker,
@@ -44,6 +48,8 @@ export async function voteBundleProposal(
     this.logger.debug(`VoteProposal = ${tx.txHash}`);
 
     const receipt = await tx.execute();
+
+    this.logger.debug(JSON.stringify(receipt));
 
     if (receipt.code === 0) {
       this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"\n`);
@@ -65,8 +71,8 @@ export async function voteBundleProposal(
       return false;
     }
   } catch (error) {
-    this.logger.warn(" Failed to vote. Continuing ...\n");
-    this.logger.debug(error);
+    this.logger.error("Failed to vote on bundle proposal. Continuing ...\n");
+    this.logger.error(error);
     this.m.tx_vote_bundle_proposal_failed.inc();
 
     return false;
