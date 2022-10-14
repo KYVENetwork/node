@@ -39,13 +39,15 @@ export function setupLogger(this: Node): void {
       }
 
       // format log message
-      let format = `${log.date.toISOString()} ${log.logLevel.toUpperCase()}`;
+      let format = `${log.date.toISOString()} ${log.logLevel.toUpperCase()}\t[${
+        log.fileName
+      }:${log.lineNumber}]`;
 
       for (let arg of log.argumentsArray) {
         if (typeof arg === "string") {
-          format += `\t${arg}`;
+          format += ` ${arg}`;
         } else {
-          format += `\t${JSON.stringify(arg)}`;
+          format += ` ${JSON.stringify(arg)}`;
         }
       }
 
@@ -56,8 +58,7 @@ export function setupLogger(this: Node): void {
     // hide verbose logging information
     const logger = new Logger({
       displayFilePath: "hidden",
-      displayFunctionName: false,
-      name: "CORE",
+      displayFunctionName: this.debug,
     });
 
     logger.setSettings({
