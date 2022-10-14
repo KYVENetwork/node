@@ -81,7 +81,7 @@ export class Node {
   protected valaccount!: string;
   protected storagePriv!: string;
   protected network!: string;
-  protected verbose!: boolean;
+  protected debug!: boolean;
   protected metrics!: boolean;
   protected metricsPort!: number;
   protected home!: string;
@@ -232,7 +232,11 @@ export class Node {
         "The network of the KYVE chain",
         parseNetwork
       )
-      .option("--verbose", "Run the validator node in verbose logging mode")
+      .option("--debug", "Run the validator node in debug mode")
+      .option(
+        "--verbose",
+        "[DEPRECATED] Run the validator node in verbose logging mode"
+      )
       .option(
         "--metrics",
         "Start a prometheus metrics server on http://localhost:8080/metrics"
@@ -273,7 +277,7 @@ export class Node {
     this.valaccount = options.valaccount;
     this.storagePriv = options.storagePriv;
     this.network = options.network;
-    this.verbose = options.verbose;
+    this.debug = options.debug;
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
     this.home = options.home;

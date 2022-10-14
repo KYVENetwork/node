@@ -60,7 +60,7 @@ export function setupLogger(this: Node): void {
     });
 
     logger.setSettings({
-      minLevel: this.verbose ? undefined : "info",
+      minLevel: this.debug ? undefined : "info",
     });
 
     logger.attachTransport({
