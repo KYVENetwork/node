@@ -17,6 +17,12 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     // was already authorized to run
     const canValidate = await callWithBackoffStrategy(
       async () => {
+        this.logger.debug(
+          `method: this.lcd.kyve.query.v1beta1.canValidate, pool_id: ${this.poolId.toString()}, valaddress: ${
+            this.client.account.address
+          }`
+        );
+
         return await this.lcd.kyve.query.v1beta1.canValidate({
           pool_id: this.poolId.toString(),
           valaddress: this.client.account.address,
@@ -24,12 +30,12 @@ export async function waitForAuthorization(this: Node): Promise<void> {
       },
       { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
       (error: any, ctx) => {
-        this.logger.debug(
-          `Failed to request canValidate. Retrying in ${(
+        this.logger.info(
+          `Requesting query canValidate was unsuccessful. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(error?.response ?? error);
+        this.logger.debug(error);
         this.m.query_can_validate_failed.inc();
       }
     );
@@ -63,6 +69,12 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     while (true) {
       const canValidate = await callWithBackoffStrategy(
         async () => {
+          this.logger.debug(
+            `method: this.lcd.kyve.query.v1beta1.canValidate, pool_id: ${this.poolId.toString()}, valaddress: ${
+              this.client.account.address
+            }`
+          );
+
           return await this.lcd.kyve.query.v1beta1.canValidate({
             pool_id: this.poolId.toString(),
             valaddress: this.client.account.address,
@@ -71,11 +83,11 @@ export async function waitForAuthorization(this: Node): Promise<void> {
         { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
         (error: any, ctx) => {
           this.logger.info(
-            `Failed to fetch canValidate. Retrying in ${(
+            `Requesting query canValidate was unsuccessful. Retrying in ${(
               ctx.nextTimeoutInMs / 1000
             ).toFixed(2)}s ...`
           );
-          this.logger.debug(error?.response ?? error);
+          this.logger.debug(error);
           this.m.query_can_validate_failed.inc();
         }
       );
@@ -90,8 +102,8 @@ export async function waitForAuthorization(this: Node): Promise<void> {
       }
     }
   } catch (error) {
-    this.logger.error(`Failed to authorize valaccount. Exiting ...`);
-    this.logger.debug(error);
+    this.logger.fatal(`Failed to authorize valaccount. Exiting ...`);
+    this.logger.fatal(error);
 
     process.exit(1);
   }

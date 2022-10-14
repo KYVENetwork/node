@@ -19,9 +19,13 @@ export async function setupValidator(this: Node): Promise<void> {
   try {
     // generate deterministic valname based on network, pool id,
     // runtime, runtime version and valaddress
+    this.logger.debug(`Creating seed for valname generation`);
+
     const r = new Prando(
       `${this.network}-${this.poolId}-${this.runtime.name}-${this.runtime.version}-${this.client.account.address}`
     );
+
+    this.logger.debug(`Generate valname with seed`);
 
     this.name = uniqueNamesGenerator({
       dictionaries: [adjectives, colors, animals],
@@ -57,8 +61,8 @@ export async function setupValidator(this: Node): Promise<void> {
 
     this.logger.info(`Cleared cache\n`);
   } catch (error) {
-    this.logger.error(`Failed to setup validator. Exiting ...`);
-    this.logger.debug(error);
+    this.logger.fatal(`Failed to setup validator. Exiting ...`);
+    this.logger.fatal(error);
 
     process.exit(1);
   }

@@ -8,7 +8,7 @@ import {
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  setupModules,
+  setupReactors,
   setupMetrics,
   setupSDK,
   setupValidator,
@@ -87,7 +87,7 @@ export class Node {
 
   // setups
   protected setupLogger = setupLogger;
-  protected setupModules = setupModules;
+  protected setupReactors = setupReactors;
   protected setupMetrics = setupMetrics;
   protected setupSDK = setupSDK;
   protected setupValidator = setupValidator;
@@ -280,7 +280,7 @@ export class Node {
 
     // perform setups
     this.setupLogger();
-    this.setupModules();
+    this.setupReactors();
     this.setupMetrics();
 
     // perform async setups

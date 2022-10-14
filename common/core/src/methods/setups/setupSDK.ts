@@ -12,13 +12,19 @@ import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
  */
 export async function setupSDK(this: Node): Promise<void> {
   try {
+    this.logger.debug(`Initializing KyveSDK with network ${this.network}`);
+
     this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
 
+    this.logger.debug(`Initializing KyveClient from valaccount mnemonic`);
+
     this.client = await this.sdk.fromMnemonic(this.valaccount);
+
+    this.logger.debug(`Initializing KyveLCD from sdk`);
     this.lcd = this.sdk.createLCDClient();
   } catch (error) {
-    this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
-    this.logger.debug(error);
+    this.logger.fatal(`Failed to init KYVE SDK. Exiting ...`);
+    this.logger.fatal(error);
 
     process.exit(1);
   }

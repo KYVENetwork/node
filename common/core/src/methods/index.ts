@@ -1,6 +1,6 @@
 // setups
 export * from "./setups/setupLogger";
-export * from "./setups/setupModules";
+export * from "./setups/setupReactors";
 export * from "./setups/setupMetrics";
 export * from "./setups/setupSDK";
 export * from "./setups/setupValidator";
