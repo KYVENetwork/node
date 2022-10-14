@@ -1,15 +1,15 @@
 import { Logger } from "tslog";
 import { Node } from "../src/index";
 import { runCache } from "../src/methods/main/runCache";
-import { genesis_pool } from "./mocks/helpers";
-import { client } from "./mocksv2/client.mock";
-import { lcd } from "./mocksv2/lcd.mock";
-import { TestStorageProvider } from "./mocksv2/storageProvider.mock";
-import { TestCache } from "./mocksv2/cache.mock";
-import { TestCompression } from "./mocksv2/compression.mock";
+import { genesis_pool } from "./mocks/constants";
+import { client } from "./mocks/client.mock";
+import { lcd } from "./mocks/lcd.mock";
+import { TestStorageProvider } from "./mocks/storageProvider.mock";
+import { TestCache } from "./mocks/cache.mock";
+import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
-import { TestRuntime } from "./mocksv2/runtime.mock";
+import { TestRuntime } from "./mocks/runtime.mock";
 
 /*
 
