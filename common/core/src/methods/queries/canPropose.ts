@@ -16,7 +16,7 @@ export async function canPropose(
   updatedAt: number
 ): Promise<boolean> {
   try {
-    const { possible, reason } = await callWithBackoffStrategy(
+    const canPropose = await callWithBackoffStrategy(
       async () => {
         await this.syncPoolState();
 
@@ -47,6 +47,14 @@ export async function canPropose(
         // means we have to wait for the next block in the blockchain
         // because the chain time only updates on every new block
         while (true) {
+          this.logger.debug(
+            `this.lcd.kyve.query.v1beta1.canPropose({pool_id: ${this.poolId.toString()},staker: ${
+              this.staker
+            },proposer: ${
+              this.client.account.address
+            },from_index: ${fromIndex.toString()}})`
+          );
+
           const canPropose = await this.lcd.kyve.query.v1beta1.canPropose({
             pool_id: this.poolId.toString(),
             staker: this.staker,
@@ -68,30 +76,31 @@ export async function canPropose(
         }
       },
       { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-      async (error: any, ctx) => {
-        this.logger.debug(
-          `Failed to request canPropose. Retrying in ${(
+      async (err: any, ctx) => {
+        this.logger.info(
+          `Requesting query canPropose was unsuccessful. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(error?.response ?? error);
+        this.logger.debug(err);
         this.m.query_can_propose_failed.inc();
       }
     );
 
+    this.logger.debug(JSON.stringify(canPropose));
     this.m.query_can_propose_successful.inc();
 
-    if (possible) {
+    if (canPropose.possible) {
       this.logger.info(`Node is able to propose a new bundle proposal\n`);
       return true;
     } else {
-      this.logger.info(`Skipping proposal. Reason: ${reason}\n`);
+      this.logger.info(`Skipping proposal. Reason: ${canPropose.reason}\n`);
       return false;
     }
-  } catch (error) {
-    this.logger.error(`Failed to call canPropose. Exiting ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to call canPropose`);
+    this.logger.error(err);
 
-    process.exit(1);
+    return false;
   }
 }

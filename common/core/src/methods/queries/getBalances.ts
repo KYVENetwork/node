@@ -13,15 +13,17 @@ import BigNumber from "bignumber.js";
  */
 export async function getBalances(this: Node): Promise<void> {
   try {
-    this.logger.debug(`this.client.nativeClient.getBalance(
-      ${this.staker},
-      ${DENOM}
-    )\n`);
+    this.logger.debug(
+      `this.client.nativeClient.getBalance(${this.staker},${DENOM})`
+    );
 
     const stakerBalanceRaw = await this.client.nativeClient.getBalance(
       this.staker,
       DENOM
     );
+
+    this.logger.debug(JSON.stringify(stakerBalanceRaw));
+
     const stakerBalance = new BigNumber(stakerBalanceRaw.amount)
       .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
@@ -33,15 +35,17 @@ export async function getBalances(this: Node): Promise<void> {
   }
 
   try {
-    this.logger.debug(`this.client.nativeClient.getBalance(
-      ${this.client.account.address},
-      ${DENOM}
-    )\n`);
+    this.logger.debug(
+      `this.client.nativeClient.getBalance(${this.client.account.address},${DENOM})`
+    );
 
     const valaccountBalanceRaw = await this.client.nativeClient.getBalance(
       this.client.account.address,
       DENOM
     );
+
+    this.logger.debug(JSON.stringify(valaccountBalanceRaw));
+
     const valaccountBalance = new BigNumber(valaccountBalanceRaw.amount)
       .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))
       .toNumber();
@@ -53,9 +57,12 @@ export async function getBalances(this: Node): Promise<void> {
   }
 
   try {
-    this.logger.debug(`this.storageProvider.getBalance()\n`);
+    this.logger.debug(`this.storageProvider.getBalance()`);
 
     const storageProviderBalanceRaw = await this.storageProvider.getBalance();
+
+    this.logger.debug(JSON.stringify(storageProviderBalanceRaw));
+
     const storageProviderBalance = new BigNumber(storageProviderBalanceRaw)
       .dividedBy(
         new BigNumber(10).exponentiatedBy(this.storageProvider.decimals)

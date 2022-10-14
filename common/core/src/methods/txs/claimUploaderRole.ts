@@ -18,7 +18,11 @@ export async function claimUploaderRole(this: Node): Promise<boolean> {
       return false;
     }
 
-    this.logger.debug(`Attempting to claim uploader role`);
+    this.logger.debug(
+      `this.client.kyve.bundles.v1beta1.claimUploaderRole({staker: ${
+        this.staker
+      },pool_id: ${this.poolId.toString()}})`
+    );
 
     const tx = await this.client.kyve.bundles.v1beta1.claimUploaderRole({
       staker: this.staker,
@@ -28,6 +32,8 @@ export async function claimUploaderRole(this: Node): Promise<boolean> {
     this.logger.debug(`ClaimUploaderRole = ${tx.txHash}`);
 
     const receipt = await tx.execute();
+
+    this.logger.debug(JSON.stringify(receipt));
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully claimed uploader role\n`);
@@ -40,9 +46,9 @@ export async function claimUploaderRole(this: Node): Promise<boolean> {
 
       return false;
     }
-  } catch (error) {
-    this.logger.warn(" Failed to claim uploader role. Continuing ...\n");
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error("Failed to claim uploader role. Continuing ...\n");
+    this.logger.error(err);
     this.m.tx_claim_uploader_role_failed.inc();
 
     return false;

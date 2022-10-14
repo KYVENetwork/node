@@ -13,7 +13,7 @@ import { callWithBackoffStrategy } from "../../utils";
  */
 export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
   try {
-    const { possible, reason } = await callWithBackoffStrategy(
+    const canVote = await callWithBackoffStrategy(
       async () => {
         await this.syncPoolState();
 
@@ -41,6 +41,14 @@ export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
           };
         }
 
+        this.logger.debug(
+          `this.lcd.kyve.query.v1beta1.canVote({pool_id: ${this.poolId.toString()},staker: ${
+            this.staker
+          },voter: ${this.client.account.address},storage_id: ${
+            this.pool.bundle_proposal!.storage_id
+          }})`
+        );
+
         return await this.lcd.kyve.query.v1beta1.canVote({
           pool_id: this.poolId.toString(),
           staker: this.staker,
@@ -49,30 +57,31 @@ export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
         });
       },
       { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-      async (error: any, ctx) => {
-        this.logger.debug(
-          `Failed to request canVote. Retrying in ${(
+      async (err: any, ctx) => {
+        this.logger.info(
+          `Requesting query canVote was unsuccessful. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(error?.response ?? error);
+        this.logger.debug(err);
         this.m.query_can_vote_failed.inc();
       }
     );
 
+    this.logger.debug(JSON.stringify(canVote));
     this.m.query_can_vote_successful.inc();
 
-    if (possible) {
+    if (canVote.possible) {
       this.logger.info(`Node is able to vote on bundle proposal\n`);
       return true;
     } else {
-      this.logger.info(`Skipping vote. Reason: ${reason}\n`);
+      this.logger.info(`Skipping vote. Reason: ${canVote.reason}\n`);
       return false;
     }
-  } catch (error) {
-    this.logger.error(`Failed to call canVote. Exiting ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.error(`Failed to call canVote`);
+    this.logger.error(err);
 
-    process.exit(1);
+    return false;
   }
 }

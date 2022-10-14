@@ -18,10 +18,9 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     const canValidate = await callWithBackoffStrategy(
       async () => {
         this.logger.debug(
-          `this.lcd.kyve.query.v1beta1.canValidate({
-            pool_id: ${this.poolId.toString()},
-            valaddress: ${this.client.account.address},
-          })\n`
+          `this.lcd.kyve.query.v1beta1.canValidate({pool_id: ${this.poolId.toString()},valaddress: ${
+            this.client.account.address
+          }})`
         );
 
         return await this.lcd.kyve.query.v1beta1.canValidate({
@@ -41,6 +40,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
       }
     );
 
+    this.logger.debug(JSON.stringify(canValidate));
     this.m.query_can_validate_successful.inc();
 
     // assign validator staker address if staker has authorized this valaccount
@@ -71,10 +71,9 @@ export async function waitForAuthorization(this: Node): Promise<void> {
       const canValidate = await callWithBackoffStrategy(
         async () => {
           this.logger.debug(
-            `this.lcd.kyve.query.v1beta1.canValidate({
-              pool_id: ${this.poolId.toString()},
-              valaddress: ${this.client.account.address},
-            })\n`
+            `this.lcd.kyve.query.v1beta1.canValidate({pool_id: ${this.poolId.toString()},valaddress: ${
+              this.client.account.address
+            }})`
           );
 
           return await this.lcd.kyve.query.v1beta1.canValidate({
@@ -94,6 +93,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
         }
       );
 
+      this.logger.debug(JSON.stringify(canValidate));
       this.m.query_can_validate_successful.inc();
 
       if (canValidate.possible) {

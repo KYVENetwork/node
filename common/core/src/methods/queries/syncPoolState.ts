@@ -16,9 +16,7 @@ export async function syncPoolState(this: Node): Promise<void> {
   await callWithBackoffStrategy(
     async () => {
       this.logger.debug(
-        `this.lcd.kyve.query.v1beta1.pool({
-          id: ${this.poolId.toString()},
-        })\n`
+        `this.lcd.kyve.query.v1beta1.pool({id: ${this.poolId.toString()}})`
       );
 
       const { pool } = await this.lcd.kyve.query.v1beta1.pool({
