@@ -1,7 +1,7 @@
 import ArweaveClient from "arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import axios from "axios";
-import { BundleTag, IStorageProvider } from "../types";
+import { BundleTag, IStorageProvider } from "../../types";
 
 export class Arweave implements IStorageProvider {
   public name = "Arweave";

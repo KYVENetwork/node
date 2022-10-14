@@ -316,10 +316,10 @@ export * from "./types";
 export * from "./utils";
 
 // export storage providers
-export * from "./storage";
+export * from "./reactors/storageProviders";
 
 // export compression types
-export * from "./compression";
+export * from "./reactors/compression";
 
 // export caches
-export * from "./cache";
+export * from "./reactors/cache";

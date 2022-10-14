@@ -57,6 +57,7 @@ export function setupLogger(this: Node): void {
     const logger = new Logger({
       displayFilePath: "hidden",
       displayFunctionName: false,
+      name: "CORE",
     });
 
     logger.setSettings({

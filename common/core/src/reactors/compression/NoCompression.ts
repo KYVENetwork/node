@@ -1,4 +1,4 @@
-import { DataItem, ICompression } from "../types";
+import { DataItem, ICompression } from "../../types";
 
 export class NoCompression implements ICompression {
   public name = "NoCompression";
