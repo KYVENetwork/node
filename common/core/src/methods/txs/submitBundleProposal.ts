@@ -1,5 +1,5 @@
 import { isErrored } from "stream";
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 
 /**
  * submitBundleProposal submits a bundle proposal to the
@@ -54,7 +54,7 @@ export async function submitBundleProposal(
 
     const receipt = await tx.execute();
 
-    this.logger.debug(JSON.stringify(receipt));
+    this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
       this.logger.info(
@@ -76,7 +76,7 @@ export async function submitBundleProposal(
     }
   } catch (err) {
     this.logger.error(`Failed to submit bundle proposal. Continuing ...\n`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
     this.m.tx_submit_bundle_proposal_failed.inc();
 
     return false;

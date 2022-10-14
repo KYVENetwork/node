@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 
 /**
  * skipUploaderRole is called by the current next uploader of the
@@ -39,7 +39,7 @@ export async function skipUploaderRole(
 
     const receipt = await tx.execute();
 
-    this.logger.debug(JSON.stringify(receipt));
+    this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
       this.logger.info(`Successfully skipped uploader role\n`);
@@ -54,7 +54,7 @@ export async function skipUploaderRole(
     }
   } catch (err) {
     this.logger.error("Failed to skip uploader role. Continuing ...\n");
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
     this.m.tx_skip_uploader_role_failed.inc();
 
     return false;

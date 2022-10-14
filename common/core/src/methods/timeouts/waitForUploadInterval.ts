@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { sleep } from "../../utils";
+import { sleep, standardizeJSON } from "../../utils";
 import BigNumber from "bignumber.js";
 
 /**
@@ -45,6 +45,6 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
     this.logger.debug(`Reached upload interval of current bundle proposal`);
   } catch (err) {
     this.logger.error(`Failed to wait for upload interval. Continuing ...`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 }

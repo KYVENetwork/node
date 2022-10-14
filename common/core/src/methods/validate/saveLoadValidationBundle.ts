@@ -1,6 +1,6 @@
 import { Node } from "../..";
 import BigNumber from "bignumber.js";
-import { callWithBackoffStrategy, VOTE } from "../../utils";
+import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
 import { DataItem } from "../../types";
 
 /**
@@ -57,11 +57,14 @@ export async function saveLoadValidationBundle(
 
       // in order to get the same bundle for validation as the one
       // proposed the bundle is loaded with the proposed heights
+      this.logger.debug(
+        `Loading bundle from index ${proposalStartIndex} to index ${proposalTargetIndex}`
+      );
+
       for (let i = proposalStartIndex; i < proposalTargetIndex; i++) {
         try {
           // try to get the data item from local cache
           this.logger.debug(`this.cache.get(${i.toString()})`);
-
           const item = await this.cache.get(i.toString());
           bundle.push(item);
         } catch {
@@ -88,7 +91,7 @@ export async function saveLoadValidationBundle(
           2
         )}s ...`
       );
-      this.logger.debug(err);
+      this.logger.debug(standardizeJSON(err));
 
       // vote abstain if validation bundle could not be loaded from cache.
       // With voting abstain the network knows that the node

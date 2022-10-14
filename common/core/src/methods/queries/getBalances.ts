@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 import { DENOM, KYVE_DECIMALS } from "@kyve/sdk/dist/constants";
 import BigNumber from "bignumber.js";
 
@@ -31,7 +31,7 @@ export async function getBalances(this: Node): Promise<void> {
     this.m.balance_staker.set(stakerBalance);
   } catch (err) {
     this.logger.error(`Failed to get $KYVE balance of staker`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 
   try {
@@ -53,7 +53,7 @@ export async function getBalances(this: Node): Promise<void> {
     this.m.balance_valaccount.set(valaccountBalance);
   } catch (err) {
     this.logger.error(`Failed to get $KYVE balance of valaccount`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 
   try {
@@ -72,6 +72,6 @@ export async function getBalances(this: Node): Promise<void> {
     this.m.balance_storage_provider.set(storageProviderBalance);
   } catch (err) {
     this.logger.error(`Failed to get balance of storage provider`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 }

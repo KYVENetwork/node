@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 
 /**
  * validateRuntime checks if the runtime of the pool matches with the runtime of
@@ -25,7 +25,7 @@ export function validateRuntime(this: Node): void {
     this.logger.info(`Node running on runtime = ${this.runtime.name}`);
   } catch (err) {
     this.logger.fatal(`Error while validating runtime. Exiting ...`);
-    this.logger.fatal(err);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

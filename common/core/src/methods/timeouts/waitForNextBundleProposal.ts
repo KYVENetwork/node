@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { REFRESH_TIME, sleep } from "../../utils";
+import { REFRESH_TIME, sleep, standardizeJSON } from "../../utils";
 
 /**
  * waitForNextBundleProposal waits until the the next bundle proposal has
@@ -45,6 +45,6 @@ export async function waitForNextBundleProposal(
     this.logger.error(
       `Failed to wait for next bundle proposal. Continuing ...`
     );
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 }

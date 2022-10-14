@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 import { appendFileSync, existsSync, mkdirSync } from "fs";
 import { ILogObject, Logger } from "tslog";
 import path from "path";
@@ -13,19 +13,47 @@ import path from "path";
  */
 export function setupLogger(this: Node): void {
   try {
+    // if "logs" folder under target path does not exist create it
     if (!existsSync(path.join(this.home, "logs"))) {
       mkdirSync(path.join(this.home, "logs"), { recursive: true });
     }
 
+    // name the log file after the time the node got started
     const logFile = `${new Date().toISOString()}.log`;
 
     const logToTransport = (log: ILogObject) => {
-      appendFileSync(
-        path.join(this.home, `logs`, logFile),
-        JSON.stringify(log) + "\n"
-      );
+      const message = log.argumentsArray[0];
+
+      if (typeof message === "string") {
+        // don't save cache logs because this would bloat
+        // the local storage
+        if (message.startsWith("this.cache")) {
+          return;
+        }
+
+        // don't save runtime logs because this would bloat
+        // the local storage
+        if (message.startsWith("this.runtime")) {
+          return;
+        }
+      }
+
+      // format log message
+      let format = `${log.date.toISOString()} ${log.logLevel.toUpperCase()}`;
+
+      for (let arg of log.argumentsArray) {
+        if (typeof arg === "string") {
+          format += `\t${arg}`;
+        } else {
+          format += `\t${JSON.stringify(arg)}`;
+        }
+      }
+
+      // save logs to specified path target
+      appendFileSync(path.join(this.home, `logs`, logFile), format + "\n");
     };
 
+    // hide verbose logging information
     const logger = new Logger({
       displayFilePath: "hidden",
       displayFunctionName: false,
@@ -46,9 +74,9 @@ export function setupLogger(this: Node): void {
     });
 
     this.logger = logger;
-  } catch (error) {
-    this.logger.error(`Failed to init logger. Exiting ...`);
-    this.logger.debug(error);
+  } catch (err) {
+    this.logger.fatal(`Failed to init logger. Exiting ...`);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

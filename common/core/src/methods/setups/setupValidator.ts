@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 import Prando from "prando";
 import {
   adjectives,
@@ -59,9 +59,9 @@ export async function setupValidator(this: Node): Promise<void> {
 
     this.m.cache_current_items.set(0);
     this.logger.info(`Cleared cache\n`);
-  } catch (error) {
+  } catch (err) {
     this.logger.fatal(`Failed to setup validator. Exiting ...`);
-    this.logger.fatal(error);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy } from "../../utils";
+import { callWithBackoffStrategy, standardizeJSON } from "../../utils";
 
 /**
  * syncPoolState fetches the state of the pool the node is running on.
@@ -26,15 +26,13 @@ export async function syncPoolState(this: Node): Promise<void> {
 
       this.m.query_pool_successful.inc();
 
-      this.logger.debug(`Parsing pool config: ${this.pool.data!.config}`);
-
       try {
         this.poolConfig = JSON.parse(this.pool.data!.config);
       } catch (err) {
         this.logger.error(
           `Failed to parse the pool config: ${this.pool.data?.config}`
         );
-        this.logger.error(err);
+        this.logger.error(standardizeJSON(err));
         this.poolConfig = {};
       }
     },
@@ -45,7 +43,7 @@ export async function syncPoolState(this: Node): Promise<void> {
           ctx.nextTimeoutInMs / 1000
         ).toFixed(2)}s ...`
       );
-      this.logger.debug(err);
+      this.logger.debug(standardizeJSON(err));
 
       this.m.query_pool_failed.inc();
     }

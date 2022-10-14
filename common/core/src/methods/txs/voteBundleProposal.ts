@@ -1,4 +1,4 @@
-import { Node, VOTE } from "../..";
+import { Node, standardizeJSON, VOTE } from "../..";
 
 /**
  * voteBundleProposal submits a vote on the current bundle proposal.
@@ -49,7 +49,7 @@ export async function voteBundleProposal(
 
     const receipt = await tx.execute();
 
-    this.logger.debug(JSON.stringify(receipt));
+    this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
       this.logger.info(`Voted ${voteMessage} on bundle "${storageId}"\n`);
@@ -70,9 +70,9 @@ export async function voteBundleProposal(
 
       return false;
     }
-  } catch (error) {
+  } catch (err) {
     this.logger.error(`Failed to vote on bundle proposal. Continuing ...\n`);
-    this.logger.error(error);
+    this.logger.error(standardizeJSON(err));
     this.m.tx_vote_bundle_proposal_failed.inc();
 
     return false;

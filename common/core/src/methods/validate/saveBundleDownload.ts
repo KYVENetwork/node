@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy, VOTE } from "../../utils";
+import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
 import BigNumber from "bignumber.js";
 
 /**
@@ -90,7 +90,7 @@ export async function saveBundleDownload(
           2
         )}s ...`
       );
-      this.logger.debug(err);
+      this.logger.debug(standardizeJSON(err));
 
       this.m.storage_provider_retrieve_failed.inc();
 

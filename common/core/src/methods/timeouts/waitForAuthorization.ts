@@ -1,5 +1,10 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy, REFRESH_TIME, sleep } from "../../utils";
+import {
+  callWithBackoffStrategy,
+  REFRESH_TIME,
+  sleep,
+  standardizeJSON,
+} from "../../utils";
 
 /**
  * waitForAuthorization ensures that the node starts with a valid validator
@@ -35,7 +40,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(err);
+        this.logger.debug(standardizeJSON(err));
         this.m.query_can_validate_failed.inc();
       }
     );
@@ -88,7 +93,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
               ctx.nextTimeoutInMs / 1000
             ).toFixed(2)}s ...`
           );
-          this.logger.debug(err);
+          this.logger.debug(standardizeJSON(err));
           this.m.query_can_validate_failed.inc();
         }
       );
@@ -105,7 +110,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     }
   } catch (err) {
     this.logger.fatal(`Failed to authorize valaccount. Exiting ...`);
-    this.logger.fatal(err);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

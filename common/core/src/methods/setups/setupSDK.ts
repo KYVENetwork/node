@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 import KyveSDK from "@kyve/sdk";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 
@@ -22,9 +22,9 @@ export async function setupSDK(this: Node): Promise<void> {
 
     this.logger.debug(`Initializing KyveLCD from sdk`);
     this.lcd = this.sdk.createLCDClient();
-  } catch (error) {
+  } catch (err) {
     this.logger.fatal(`Failed to init KYVE SDK. Exiting ...`);
-    this.logger.fatal(error);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

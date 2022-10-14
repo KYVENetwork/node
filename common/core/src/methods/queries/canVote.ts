@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy } from "../../utils";
+import { callWithBackoffStrategy, standardizeJSON } from "../../utils";
 
 /**
  * canVote checks if the node is able to vote on the current
@@ -63,7 +63,7 @@ export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(err);
+        this.logger.debug(standardizeJSON(err));
         this.m.query_can_vote_failed.inc();
       }
     );
@@ -80,7 +80,7 @@ export async function canVote(this: Node, updatedAt: number): Promise<boolean> {
     }
   } catch (err) {
     this.logger.error(`Failed to call canVote`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
 
     return false;
   }

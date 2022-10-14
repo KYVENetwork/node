@@ -57,8 +57,8 @@ export default class EVM implements IRuntime {
         key,
         value,
       };
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 

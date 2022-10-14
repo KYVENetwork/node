@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy, sleep } from "../../utils";
+import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
 
 /**
  * canPropose checks if the node is able to propose the next
@@ -82,7 +82,7 @@ export async function canPropose(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(err);
+        this.logger.debug(standardizeJSON(err));
         this.m.query_can_propose_failed.inc();
       }
     );
@@ -99,7 +99,7 @@ export async function canPropose(
     }
   } catch (err) {
     this.logger.error(`Failed to call canPropose`);
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
 
     return false;
   }

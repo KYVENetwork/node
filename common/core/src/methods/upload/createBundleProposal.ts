@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { bundleToBytes, sha256 } from "../../utils";
+import { bundleToBytes, sha256, standardizeJSON } from "../../utils";
 import { BundleTag, DataItem } from "../../types";
 
 /**
@@ -36,11 +36,14 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // to the proposal index. If we fail before we simply
     // abort and and submit the data collected we have available
     // right now
+    this.logger.debug(
+      `Loading bundle from index ${fromIndex} to index ${toIndex}`
+    );
+
     for (let i = fromIndex; i < toIndex; i++) {
       try {
         // try to get the data item from local cache
         this.logger.debug(`this.cache.get(${i.toString()})`);
-
         const item = await this.cache.get(i.toString());
         bundleProposal.push(item);
       } catch {
@@ -193,7 +196,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
       this.logger.info(
         `Saving bundle proposal on StorageProvider:${this.storageProvider.name} was unsucessful`
       );
-      this.logger.debug(err);
+      this.logger.debug(standardizeJSON(err));
 
       this.m.storage_provider_save_failed.inc();
 
@@ -205,6 +208,6 @@ export async function createBundleProposal(this: Node): Promise<void> {
     this.logger.error(
       `Unexpected error creating bundle proposal. Skipping proposal ...`
     );
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 }

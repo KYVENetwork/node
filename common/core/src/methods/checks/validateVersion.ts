@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 
 /**
  * validateVersion checks if the version of the pool matches with the runtime
@@ -29,7 +29,7 @@ export function validateVersion(this: Node): void {
     );
   } catch (err) {
     this.logger.fatal(`Error while validating runtime version. Exiting ...`);
-    this.logger.fatal(err);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

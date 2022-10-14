@@ -1,4 +1,3 @@
-import { isError } from "util";
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
@@ -175,6 +174,6 @@ export async function validateBundleProposal(
     this.logger.error(
       `Unexpected error validating bundle proposal. Skipping validation ...`
     );
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
   }
 }

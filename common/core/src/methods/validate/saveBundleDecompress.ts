@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { bytesToBundle } from "../../utils";
+import { bytesToBundle, standardizeJSON } from "../../utils";
 import { DataItem } from "../../types";
 
 /**
@@ -31,7 +31,7 @@ export async function saveBundleDecompress(
     this.logger.error(
       `Could not decompress bundle with compression type Compression:${this.compression.name}. Continuing ...`
     );
-    this.logger.error(err);
+    this.logger.error(standardizeJSON(err));
 
     return [];
   }

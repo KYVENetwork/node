@@ -43,6 +43,7 @@ import { Command, OptionValues } from "commander";
 import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
 import { kyve } from "@kyve/proto";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
+import { standardizeJSON } from "./utils";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -292,9 +293,9 @@ export class Node {
     try {
       this.runNode();
       this.runCache();
-    } catch (error) {
+    } catch (err) {
       this.logger.fatal(`Unexpected runtime error. Exiting ...`);
-      this.logger.fatal(error);
+      this.logger.fatal(standardizeJSON(err));
 
       process.exit(1);
     }

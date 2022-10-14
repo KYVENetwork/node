@@ -1,4 +1,4 @@
-import { Node } from "../..";
+import { Node, standardizeJSON } from "../..";
 import path from "path";
 
 /**
@@ -50,9 +50,9 @@ export function setupReactors(this: Node): void {
 
     // init cache with work dir
     this.cache = this.cache.init(path.join(this.home, "cache"));
-  } catch (error) {
+  } catch (err) {
     this.logger.fatal(`Failed to setup reactors. Exiting ...`);
-    this.logger.fatal(error);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }

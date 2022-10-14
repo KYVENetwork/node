@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { callWithBackoffStrategy, sleep } from "../../utils";
+import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
 
 /**
  * runCache is the other main execution thread for collecting data items
@@ -70,6 +70,13 @@ export async function runCache(this: Node): Promise<void> {
 
       // delete all data items which came before the current index
       // because they got finalized and are not needed anymore
+      this.logger.debug(
+        `Deleting data from index ${Math.max(
+          0,
+          currentIndex - parseInt(this.pool.data!.max_bundle_size)
+        )} to index ${currentIndex}`
+      );
+
       for (
         let i = Math.max(
           0,
@@ -97,6 +104,10 @@ export async function runCache(this: Node): Promise<void> {
 
       // collect all data items from current pool index to
       // the target index
+      this.logger.debug(
+        `Caching from index ${currentIndex} to index ${targetIndex}`
+      );
+
       for (let i = currentIndex; i < targetIndex; i++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
@@ -146,7 +157,7 @@ export async function runCache(this: Node): Promise<void> {
                   ctx.nextTimeoutInMs / 1000
                 ).toFixed(2)}s ...`
               );
-              this.logger.debug(err);
+              this.logger.debug(standardizeJSON(err));
 
               this.m.runtime_get_data_item_failed.inc();
             }
@@ -182,7 +193,7 @@ export async function runCache(this: Node): Promise<void> {
       this.logger.error(
         `Unexpected error collecting data items to local cache. Continuing ...`
       );
-      this.logger.error(err);
+      this.logger.error(standardizeJSON(err));
 
       try {
         // drop cache if an unexpected error occurs during caching

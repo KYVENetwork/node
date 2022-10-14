@@ -1,4 +1,4 @@
-import { IMetrics, Node } from "../..";
+import { IMetrics, Node, standardizeJSON } from "../..";
 import http from "http";
 import url from "url";
 import prom_client, { register } from "prom-client";
@@ -380,9 +380,9 @@ export function setupMetrics(this: Node): void {
         })
         .listen(this.metricsPort, "0.0.0.0");
     }
-  } catch (error) {
+  } catch (err) {
     this.logger.fatal(`Failed to setup metrics. Exiting ...`);
-    this.logger.fatal(error);
+    this.logger.fatal(standardizeJSON(err));
 
     process.exit(1);
   }
