@@ -29,13 +29,13 @@ export async function waitForAuthorization(this: Node): Promise<void> {
         });
       },
       { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-      (error: any, ctx) => {
+      (err: any, ctx) => {
         this.logger.info(
           `Requesting query canValidate was unsuccessful. Retrying in ${(
             ctx.nextTimeoutInMs / 1000
           ).toFixed(2)}s ...`
         );
-        this.logger.debug(error);
+        this.logger.debug(err);
         this.m.query_can_validate_failed.inc();
       }
     );
@@ -81,13 +81,13 @@ export async function waitForAuthorization(this: Node): Promise<void> {
           });
         },
         { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-        (error: any, ctx) => {
+        (err: any, ctx) => {
           this.logger.info(
             `Requesting query canValidate was unsuccessful. Retrying in ${(
               ctx.nextTimeoutInMs / 1000
             ).toFixed(2)}s ...`
           );
-          this.logger.debug(error);
+          this.logger.debug(err);
           this.m.query_can_validate_failed.inc();
         }
       );
@@ -101,9 +101,9 @@ export async function waitForAuthorization(this: Node): Promise<void> {
         await sleep(REFRESH_TIME);
       }
     }
-  } catch (error) {
+  } catch (err) {
     this.logger.fatal(`Failed to authorize valaccount. Exiting ...`);
-    this.logger.fatal(error);
+    this.logger.fatal(err);
 
     process.exit(1);
   }

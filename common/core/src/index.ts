@@ -293,8 +293,8 @@ export class Node {
       this.runNode();
       this.runCache();
     } catch (error) {
-      this.logger.error(`Unexpected runtime error. Exiting ...`);
-      this.logger.debug(error);
+      this.logger.fatal(`Unexpected runtime error. Exiting ...`);
+      this.logger.fatal(error);
 
       process.exit(1);
     }

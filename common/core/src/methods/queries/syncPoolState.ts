@@ -15,6 +15,10 @@ import { callWithBackoffStrategy } from "../../utils";
 export async function syncPoolState(this: Node): Promise<void> {
   await callWithBackoffStrategy(
     async () => {
+      this.logger.debug(
+        `this.lcd.kyve.query.v1beta1.pool({id:${this.poolId.toString()}})`
+      );
+
       const { pool } = await this.lcd.kyve.query.v1beta1.pool({
         id: this.poolId.toString(),
       });
@@ -22,24 +26,27 @@ export async function syncPoolState(this: Node): Promise<void> {
 
       this.m.query_pool_successful.inc();
 
+      this.logger.debug(`Parsing pool config: ${this.pool.data!.config}`);
+
       try {
         this.poolConfig = JSON.parse(this.pool.data!.config);
-      } catch (error) {
-        this.logger.debug(
+      } catch (err) {
+        this.logger.error(
           `Failed to parse the pool config: ${this.pool.data?.config}`
         );
+        this.logger.error(err);
         this.poolConfig = {};
       }
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
-    (error: any, ctx) => {
-      this.logger.debug(
-        `Failed to sync pool state. Retrying in ${(
+    (err: any, ctx) => {
+      this.logger.info(
+        `Requesting query pool was unsuccessful. Retrying in ${(
           ctx.nextTimeoutInMs / 1000
         ).toFixed(2)}s ...`
       );
+      this.logger.debug(err);
 
-      this.logger.debug(error?.response ?? error);
       this.m.query_pool_failed.inc();
     }
   );

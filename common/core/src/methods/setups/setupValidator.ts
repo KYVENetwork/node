@@ -54,11 +54,10 @@ export async function setupValidator(this: Node): Promise<void> {
     this.logger.info(`${this.runtime.name} \t = v${this.runtime.version}\n`);
 
     // clear node cache before startup
-    this.logger.debug(`Attempting to clear cache`);
-
+    this.logger.debug(`this.cache.drop()`);
     await this.cache.drop();
-    this.m.cache_current_items.set(0);
 
+    this.m.cache_current_items.set(0);
     this.logger.info(`Cleared cache\n`);
   } catch (error) {
     this.logger.fatal(`Failed to setup validator. Exiting ...`);

@@ -39,8 +39,7 @@ export async function runCache(this: Node): Promise<void> {
       // bundle has been dropped or invalidated. In that case we
       // reset the cache
       if (!this.pool.bundle_proposal!.storage_id) {
-        this.logger.debug(`Attempting to clear cache`);
-
+        this.logger.debug(`this.cache.drop()`);
         await this.cache.drop();
 
         this.m.cache_current_items.set(0);
@@ -80,7 +79,9 @@ export async function runCache(this: Node): Promise<void> {
         i++
       ) {
         try {
+          this.logger.debug(`this.cache.del(${i.toString()})`);
           await this.cache.del(i.toString());
+
           this.m.cache_current_items.dec();
         } catch {
           continue;
@@ -99,12 +100,17 @@ export async function runCache(this: Node): Promise<void> {
       for (let i = currentIndex; i < targetIndex; i++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
+        this.logger.debug(`this.cache.exists(${i.toString()})`);
         const itemFound = await this.cache.exists(i.toString());
 
         // retrieve the next key from the deterministic runtime
         // specific implementation. If the start key is not defined
         // the pool is in genesis state and therefore the pool
         // specific start key should be used
+        if (key) {
+          this.logger.debug(`this.runtime.nextKey(${key})`);
+        }
+
         const nextKey = !!key
           ? await this.runtime.nextKey(key)
           : this.pool.data!.start_key;
@@ -120,6 +126,10 @@ export async function runCache(this: Node): Promise<void> {
               }
 
               // collect data item from runtime source
+              this.logger.debug(
+                `this.runtime.getDataItemByKey(this,${nextKey})`
+              );
+
               const item = await this.runtime.getDataItemByKey(this, nextKey);
 
               this.m.runtime_get_data_item_successful.inc();
@@ -130,13 +140,13 @@ export async function runCache(this: Node): Promise<void> {
               limitTimeoutMs: 5 * 60 * 1000,
               increaseByMs: 10 * 1000,
             },
-            (error, ctx) => {
-              this.logger.debug(
-                `Failed to get data item with key ${nextKey}. Retrying in ${(
+            (err, ctx) => {
+              this.logger.info(
+                `Requesting getDataItemByKey from runtime was unsuccessful. Retrying in ${(
                   ctx.nextTimeoutInMs / 1000
                 ).toFixed(2)}s ...`
               );
-              this.logger.debug(error);
+              this.logger.debug(err);
 
               this.m.runtime_get_data_item_failed.inc();
             }
@@ -149,6 +159,7 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
+          this.logger.debug(`this.cache.put(${i.toString()},item)`);
           await this.cache.put(i.toString(), item);
 
           this.m.cache_current_items.inc();
@@ -167,22 +178,22 @@ export async function runCache(this: Node): Promise<void> {
       // to sync the pool here because the pool state already gets
       // synced in the other main function "runNode" so we only listen
       await this.waitForCacheContinuation(updatedAt);
-    } catch (error) {
-      this.logger.warn(
-        ` Unexpected error collecting data items to local cache. Continuing ...`
+    } catch (err) {
+      this.logger.error(
+        `Unexpected error collecting data items to local cache. Continuing ...`
       );
-      this.logger.error(error);
+      this.logger.error(err);
 
       try {
         // drop cache if an unexpected error occurs during caching
-        this.logger.debug(`Attempting to clear cache`);
+        this.logger.debug(`this.cache.drop()`);
         await this.cache.drop();
-        this.m.cache_current_items.set(0);
 
+        this.m.cache_current_items.set(0);
         this.logger.info(`Cleared cache\n`);
       } catch (dropError) {
-        this.logger.warn(
-          ` Unexpected error dropping local cache. Continuing ...`
+        this.logger.error(
+          `Unexpected error dropping local cache. Continuing ...`
         );
         this.logger.error(dropError);
       }
