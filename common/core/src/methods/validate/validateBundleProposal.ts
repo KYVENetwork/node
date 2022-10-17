@@ -19,9 +19,7 @@ export async function validateBundleProposal(
 ): Promise<void> {
   try {
     this.logger.info(
-      `Validating bundle with storage id "${
-        this.pool.bundle_proposal!.storage_id
-      }"`
+      `Validating bundle proposal = ${this.pool.bundle_proposal!.storage_id}`
     );
 
     // retrieve the data of the bundle proposal in a save way
@@ -36,6 +34,8 @@ export async function validateBundleProposal(
 
     // vote invalid if data size does not match with proposed data size
     this.logger.debug(`Validating bundle proposal by data size`);
+    this.logger.debug(`Proposed = ${this.pool.bundle_proposal!.data_size}`);
+    this.logger.debug(`Actual   = ${storageProviderResult.byteLength}`);
 
     if (
       parseInt(this.pool.bundle_proposal!.data_size) !==
@@ -52,8 +52,14 @@ export async function validateBundleProposal(
       return;
     }
 
+    this.logger.info(
+      `Found matching data size = ${this.pool.bundle_proposal!.data_size} Bytes`
+    );
+
     // vote invalid if data hash does not match with proposed data hash
     this.logger.debug(`Validating bundle proposal by data hash`);
+    this.logger.debug(`Proposed = ${this.pool.bundle_proposal!.data_hash}`);
+    this.logger.debug(`Actual   = ${sha256(storageProviderResult)}`);
 
     if (
       this.pool.bundle_proposal!.data_hash !== sha256(storageProviderResult)
@@ -69,6 +75,10 @@ export async function validateBundleProposal(
       return;
     }
 
+    this.logger.info(
+      `Found matching data hash = ${this.pool.bundle_proposal!.data_hash}`
+    );
+
     // decompress the bundle with the specified compression type
     // and convert the bytes into a JSON format
     const proposedBundle = await this.saveBundleDecompress(
@@ -79,8 +89,12 @@ export async function validateBundleProposal(
     // data from storage provider
     this.logger.debug(`Validating bundle proposal by data included`);
 
-    if (!proposedBundle.length) {
-      this.logger.info(`Found no valid data bundle on storage provider`);
+    if (
+      parseInt(this.pool.bundle_proposal!.bundle_size) !== proposedBundle.length
+    ) {
+      this.logger.info(
+        `Found different bundle size on bundle downloaded from storage provider`
+      );
 
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
@@ -88,6 +102,10 @@ export async function validateBundleProposal(
       );
       return;
     }
+
+    this.logger.info(
+      `Found matching bundle size = ${this.pool.bundle_proposal!.bundle_size}`
+    );
 
     const validationBundle = await this.saveLoadValidationBundle(updatedAt);
 
@@ -99,6 +117,8 @@ export async function validateBundleProposal(
 
     // vote invalid if bundle key does not match with proposed from key
     this.logger.debug(`Validating bundle proposal by bundle from_key`);
+    this.logger.debug(`Proposed = ${this.pool.bundle_proposal!.from_key}`);
+    this.logger.debug(`Actual   = ${validationBundle.at(0)?.key}`);
 
     if (this.pool.bundle_proposal!.from_key !== validationBundle.at(0)?.key) {
       this.logger.info(`Found different value on proposed bundle from_key`);
@@ -110,8 +130,14 @@ export async function validateBundleProposal(
       return;
     }
 
+    this.logger.info(
+      `Found matching from key = ${this.pool.bundle_proposal!.from_key}`
+    );
+
     // vote invalid if bundle key does not match with proposed to key
     this.logger.debug(`Validating bundle proposal by bundle to_key`);
+    this.logger.debug(`Proposed = ${this.pool.bundle_proposal!.to_key}`);
+    this.logger.debug(`Actual   = ${validationBundle.at(-1)?.key}`);
 
     if (this.pool.bundle_proposal!.to_key !== validationBundle.at(-1)?.key) {
       this.logger.info(`Found different value on proposed bundle to_key`);
@@ -123,14 +149,22 @@ export async function validateBundleProposal(
       return;
     }
 
+    this.logger.info(
+      `Found matching to key = ${this.pool.bundle_proposal!.to_key}`
+    );
+
     // vote invalid if bundle summary does not match with proposed summary
     this.logger.debug(`Validating bundle proposal by bundle summary`);
     this.logger.debug(`this.runtime.summarizeBundle($VALIDATION_BUNDLE)`);
 
-    if (
-      this.pool.bundle_proposal!.bundle_summary !==
-      (await this.runtime.summarizeBundle(validationBundle))
-    ) {
+    const bundleSummary = await this.runtime.summarizeBundle(validationBundle);
+
+    this.logger.debug(
+      `Proposed = ${this.pool.bundle_proposal!.bundle_summary}`
+    );
+    this.logger.debug(`Actual   = ${bundleSummary}`);
+
+    if (this.pool.bundle_proposal!.bundle_summary !== bundleSummary) {
       this.logger.info(`Found different value on proposed bundle summary`);
 
       await this.voteBundleProposal(
@@ -139,6 +173,12 @@ export async function validateBundleProposal(
       );
       return;
     }
+
+    this.logger.info(
+      `Found matching bundle summary = ${
+        this.pool.bundle_proposal!.bundle_summary
+      }`
+    );
 
     // perform custom runtime bundle validation
     this.logger.debug(
@@ -155,11 +195,15 @@ export async function validateBundleProposal(
     );
 
     if (valid) {
+      this.logger.info(`Found valid bundle by runtime validation`);
+
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
         VOTE.VALID
       );
     } else {
+      this.logger.info(`Found invalid bundle by runtime validation`);
+
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
         VOTE.INVALID

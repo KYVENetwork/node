@@ -91,7 +91,7 @@ export async function canPropose(
     this.m.query_can_propose_successful.inc();
 
     if (canPropose.possible) {
-      this.logger.info(`Node is able to propose a new bundle proposal`);
+      this.logger.info(`Can propose next bundle proposal`);
       return true;
     } else {
       this.logger.info(`Skipping proposal. Reason: ${canPropose.reason}`);

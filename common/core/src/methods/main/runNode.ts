@@ -55,13 +55,13 @@ export async function runNode(this: Node): Promise<void> {
     // log out the role of this node in this particular round
     if (this.pool.bundle_proposal!.next_uploader === this.staker) {
       this.logger.info(
-        `Starting bundle proposal round ${
+        `Participating in bundle proposal round ${
           this.pool.data!.total_bundles
         } as UPLOADER`
       );
     } else {
       this.logger.info(
-        `Starting bundle proposal round ${
+        `Participating in bundle proposal round ${
           this.pool.data!.total_bundles
         } as VALIDATOR`
       );

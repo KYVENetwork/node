@@ -23,13 +23,13 @@ export async function saveBundleDecompress(
     );
 
     this.logger.info(
-      `Successfully decompressed bundle with compression type Compression:${this.compression.name}`
+      `Successfully decompressed bundle with Compression:${this.compression.name}`
     );
 
     return storageBundle;
   } catch (err) {
     this.logger.error(
-      `Could not decompress bundle with compression type Compression:${this.compression.name}. Continuing ...`
+      `Could not decompress bundle with Compression:${this.compression.name}. Continuing ...`
     );
     this.logger.error(standardizeJSON(err));
 

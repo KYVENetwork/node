@@ -57,9 +57,6 @@ export async function submitBundleProposal(
     this.logger.debug(JSON.stringify({ ...receipt, rawLog: null, data: null }));
 
     if (receipt.code === 0) {
-      this.logger.info(
-        `Successfully submitted bundle proposal with Storage Id "${storageId}"`
-      );
       this.m.tx_submit_bundle_proposal_successful.inc();
       this.m.bundles_proposed.inc();
 

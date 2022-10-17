@@ -18,7 +18,9 @@ import { BundleTag, DataItem } from "../../types";
  */
 export async function createBundleProposal(this: Node): Promise<void> {
   try {
-    this.logger.info(`Loading bundle from cache to create a bundle proposal`);
+    this.logger.info(
+      `Creating a new bundle proposal for the next bundle proposal round`
+    );
 
     // create bundle proposal from the current bundle proposal index
     const fromIndex =
@@ -56,9 +58,13 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // if no data was found on the cache skip the uploader role
     // so that this node does not receive an upload slash
     if (!bundleProposal.length) {
+      this.logger.info(`No data was found on local cache from required range`);
+
       await this.skipUploaderRole(fromIndex);
       return;
     }
+
+    this.logger.info(`Data was found on local cache from required range`);
 
     // get the first key of the bundle proposal which gets
     // included in the bundle proposal and saved on chain
@@ -81,6 +87,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
     this.logger.debug(`this.compression.compress($RAW_BUNDLE_PROPOSAL)`);
     const storageProviderData = await this.compression.compress(
       bundleToBytes(bundleProposal)
+    );
+
+    this.logger.info(
+      `Successfully compressed bundle with Compression:${this.compression.name}`
     );
 
     // hash the raw data which gets uploaded to the storage provider
@@ -176,7 +186,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
       this.m.storage_provider_save_successful.inc();
 
       this.logger.info(
-        `Saved bundle on StorageProvider:${this.storageProvider.name} with storage id "${storageId}"`
+        `Successfully saved bundle on StorageProvider:${this.storageProvider.name}`
       );
 
       // if the bundle was successfully uploaded to the storage provider
@@ -192,6 +202,8 @@ export async function createBundleProposal(this: Node): Promise<void> {
         toKey,
         bundleSummary
       );
+
+      this.logger.info(`Successfully submitted BundleProposal:${storageId}`);
     } catch (err) {
       this.logger.info(
         `Saving bundle proposal on StorageProvider:${this.storageProvider.name} was unsucessful`

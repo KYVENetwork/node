@@ -74,7 +74,7 @@ export async function saveBundleDownload(
       this.m.storage_provider_retrieve_successful.inc();
 
       this.logger.info(
-        `Successfully downloaded bundle of id ${
+        `Successfully downloaded bundle with id ${
           this.pool.bundle_proposal!.storage_id
         } from StorageProvider:${this.storageProvider.name}`
       );

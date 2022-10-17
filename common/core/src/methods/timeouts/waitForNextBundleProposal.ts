@@ -18,7 +18,7 @@ export async function waitForNextBundleProposal(
   updatedAt: number
 ): Promise<void> {
   try {
-    this.logger.info("Waiting for new bundle to be proposed");
+    this.logger.info("Waiting for next bundle proposal");
 
     // track waiting time for metrics
     const endTimeNextBundleProposal =
@@ -38,9 +38,7 @@ export async function waitForNextBundleProposal(
 
     endTimeNextBundleProposal();
 
-    this.logger.info(
-      `Found new bundle proposal. Starting new bundle proposal round`
-    );
+    this.logger.info(`Found new bundle proposal`);
   } catch (err) {
     this.logger.error(
       `Failed to wait for next bundle proposal. Continuing ...`

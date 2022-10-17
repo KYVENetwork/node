@@ -27,7 +27,7 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
       timeRemaining = unixIntervalEnd.minus(unixNow);
     }
 
-    this.logger.debug(
+    this.logger.info(
       `Waiting for remaining upload interval = ${timeRemaining
         .dividedBy(1000)
         .toFixed(2)}s ...`
@@ -42,7 +42,7 @@ export async function waitForUploadInterval(this: Node): Promise<void> {
 
     endTimeRemaining();
 
-    this.logger.debug(`Reached upload interval of current bundle proposal`);
+    this.logger.info(`Reached upload interval of current bundle proposal`);
   } catch (err) {
     this.logger.error(`Failed to wait for upload interval. Continuing ...`);
     this.logger.error(standardizeJSON(err));

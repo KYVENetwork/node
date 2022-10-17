@@ -21,7 +21,7 @@ export function validateIsNodeValidator(this: Node): void {
     }
 
     this.logger.info(
-      `Node running as validator on pool "${this.pool.data!.name}"`
+      `Node running as validator in storage pool = ${this.pool.data!.name}`
     );
   } catch (err) {
     this.logger.fatal(
