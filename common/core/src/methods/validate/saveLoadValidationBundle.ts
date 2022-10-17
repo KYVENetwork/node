@@ -64,8 +64,8 @@ export async function saveLoadValidationBundle(
       for (let i = proposalStartIndex; i < proposalTargetIndex; i++) {
         try {
           // try to get the data item from local cache
-          this.logger.debug(`this.cache.get(${i.toString()})`);
-          const item = await this.cache.get(i.toString());
+          this.logger.debug(`this.cacheProvider.get(${i.toString()})`);
+          const item = await this.cacheProvider.get(i.toString());
           bundle.push(item);
         } catch {
           // if a request data item can not be found abort and
@@ -77,7 +77,7 @@ export async function saveLoadValidationBundle(
       }
 
       this.logger.info(
-        `Successfully loaded validation bundle from Cache:${this.cache.name}`
+        `Successfully loaded validation bundle from CacheProvider:${this.cacheProvider.name}`
       );
 
       return bundle;
@@ -85,8 +85,8 @@ export async function saveLoadValidationBundle(
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     async (err: any, ctx) => {
       this.logger.info(
-        `Loading validation bundle from Cache:${
-          this.cache.name
+        `Loading validation bundle from CacheProvider:${
+          this.cacheProvider.name
         } was unsuccessful. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(
           2
         )}s ...`

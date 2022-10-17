@@ -1,10 +1,10 @@
 import { DataItem } from "../../src";
 
-export const TestCache = jest.fn().mockImplementation(() => {
+export const TestCacheProvider = jest.fn().mockImplementation(() => {
   let cache: any = {};
 
   return {
-    name: "TestCache",
+    name: "TestCacheProvider",
     put: jest.fn().mockImplementation(async (key: string, value: DataItem) => {
       cache[key] = value;
     }),

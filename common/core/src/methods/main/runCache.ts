@@ -39,8 +39,8 @@ export async function runCache(this: Node): Promise<void> {
       // bundle has been dropped or invalidated. In that case we
       // reset the cache
       if (!this.pool.bundle_proposal!.storage_id) {
-        this.logger.debug(`this.cache.drop()`);
-        await this.cache.drop();
+        this.logger.debug(`this.cacheProvider.drop()`);
+        await this.cacheProvider.drop();
 
         this.m.cache_current_items.set(0);
       }
@@ -85,8 +85,8 @@ export async function runCache(this: Node): Promise<void> {
         i++
       ) {
         try {
-          this.logger.debug(`this.cache.del(${i.toString()})`);
-          await this.cache.del(i.toString());
+          this.logger.debug(`this.cacheProvider.del(${i.toString()})`);
+          await this.cacheProvider.del(i.toString());
 
           this.m.cache_current_items.dec();
         } catch {
@@ -110,8 +110,8 @@ export async function runCache(this: Node): Promise<void> {
       for (let i = currentIndex; i < targetIndex; i++) {
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
-        this.logger.debug(`this.cache.exists(${i.toString()})`);
-        const itemFound = await this.cache.exists(i.toString());
+        this.logger.debug(`this.cacheProvider.exists(${i.toString()})`);
+        const itemFound = await this.cacheProvider.exists(i.toString());
 
         // retrieve the next key from the deterministic runtime
         // specific implementation. If the start key is not defined
@@ -178,8 +178,8 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // add this data item to the cache
-          this.logger.debug(`this.cache.put(${i.toString()},$ITEM)`);
-          await this.cache.put(i.toString(), item);
+          this.logger.debug(`this.cacheProvider.put(${i.toString()},$ITEM)`);
+          await this.cacheProvider.put(i.toString(), item);
 
           this.m.cache_current_items.inc();
           this.m.cache_index_head.set(i);
@@ -205,8 +205,8 @@ export async function runCache(this: Node): Promise<void> {
 
       try {
         // drop cache if an unexpected error occurs during caching
-        this.logger.debug(`this.cache.drop()`);
-        await this.cache.drop();
+        this.logger.debug(`this.cacheProvider.drop()`);
+        await this.cacheProvider.drop();
 
         this.m.cache_current_items.set(0);
       } catch (dropError) {

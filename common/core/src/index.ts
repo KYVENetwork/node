@@ -1,7 +1,7 @@
 import {
   IRuntime,
   IStorageProvider,
-  ICache,
+  ICacheProvider,
   ICompression,
   IMetrics,
 } from "./types";
@@ -40,13 +40,17 @@ import {
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
-import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
+import {
+  parseNetwork,
+  parsePoolId,
+  parseMnemonic,
+  parseCache,
+} from "./commander";
 import { kyve } from "@kyve/proto";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 import { standardizeJSON } from "./utils";
 import * as storageProvider from "./reactors/storageProviders";
 import * as compression from "./reactors/compression";
-import * as cache from "./reactors/cache";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -55,11 +59,11 @@ import * as cache from "./reactors/cache";
  * @constructor
  */
 export class Node {
-  // module attributes
+  // reactor attributes
   protected runtime!: IRuntime;
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
-  protected cache!: ICache;
+  protected cacheProvider!: ICacheProvider;
 
   // sdk attributes
   public sdk!: KyveSDK;
@@ -84,6 +88,7 @@ export class Node {
   protected valaccount!: string;
   protected storagePriv!: string;
   protected network!: string;
+  protected cache!: string;
   protected debug!: boolean;
   protected metrics!: boolean;
   protected metricsPort!: number;
@@ -152,9 +157,6 @@ export class Node {
 
     // default compression is Gzip
     this.compression = new compression.Gzip();
-
-    // default cache is JsonFile
-    this.cache = new cache.JsonFile();
   }
 
   /**
@@ -183,20 +185,6 @@ export class Node {
    */
   public useCompression(compression: ICompression): this {
     this.compression = compression;
-    return this;
-  }
-
-  /**
-   * Override the default cache for the protocol node.
-   * The Cache is responsible for caching data before its validated and stored on the Storage Provider.
-   *
-   * @method useCache
-   * @param {ICache} cache which implements the interface ICache
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public useCache(cache: ICache): this {
-    this.cache = cache;
     return this;
   }
 
@@ -233,6 +221,12 @@ export class Node {
         "--network <local|alpha|beta|korellia>",
         "The network of the KYVE chain",
         parseNetwork
+      )
+      .option(
+        "--cache <memory|jsonfile>",
+        "The cache this node should use",
+        parseCache,
+        "jsonfile"
       )
       .option("--debug", "Run the validator node in debug mode")
       .option(
@@ -279,6 +273,7 @@ export class Node {
     this.valaccount = options.valaccount;
     this.storagePriv = options.storagePriv;
     this.network = options.network;
+    this.cache = options.cache;
     this.debug = options.debug;
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
@@ -322,6 +317,3 @@ export * as storageProvider from "./reactors/storageProviders";
 
 // export compression types
 export * as compression from "./reactors/compression";
-
-// export caches
-export * as cache from "./reactors/cache";

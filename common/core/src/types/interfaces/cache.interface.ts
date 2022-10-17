@@ -8,7 +8,7 @@ import { DataItem } from "..";
  *
  * @interface ICache
  */
-export interface ICache {
+export interface ICacheProvider {
   /**
    * Name of the cache. This should be unique for every cache.
    *

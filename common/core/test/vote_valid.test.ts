@@ -5,7 +5,7 @@ import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
 import { TestStorageProvider } from "./mocks/storageProvider.mock";
-import { TestCache } from "./mocks/cache.mock";
+import { TestCacheProvider } from "./mocks/cache.mock";
 import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
@@ -36,9 +36,9 @@ describe("vote valid tests", () => {
     core = new Node(new TestRuntime());
 
     core.useStorageProvider(new TestStorageProvider());
-    core.useStorageProvider(new TestStorageProvider());
     core.useCompression(new TestCompression());
-    core.useCache(new TestCache());
+
+    core["cacheProvider"] = new TestCacheProvider();
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -119,7 +119,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -137,7 +137,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -189,9 +189,9 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(2);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -258,7 +258,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockRejectedValueOnce(new Error("not found"))
       .mockResolvedValueOnce({
@@ -277,7 +277,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -335,10 +335,10 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "1");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -405,7 +405,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -428,7 +428,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -492,9 +492,9 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(2);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -562,7 +562,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -580,7 +580,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -632,9 +632,9 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(2);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -708,7 +708,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -726,7 +726,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -768,7 +768,7 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -833,7 +833,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -851,7 +851,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -893,7 +893,7 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -957,7 +957,7 @@ describe("vote valid tests", () => {
       } as any;
     });
 
-    core["cache"].get = jest
+    core["cacheProvider"].get = jest
       .fn()
       .mockResolvedValueOnce({
         key: "test_key_1",
@@ -975,7 +975,7 @@ describe("vote valid tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1027,9 +1027,9 @@ describe("vote valid tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(2);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "0");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "1");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "0");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "1");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

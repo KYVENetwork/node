@@ -5,7 +5,7 @@ import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
 import { TestStorageProvider } from "./mocks/storageProvider.mock";
-import { TestCache } from "./mocks/cache.mock";
+import { TestCacheProvider } from "./mocks/cache.mock";
 import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
@@ -38,7 +38,8 @@ describe("cache tests", () => {
 
     core.useStorageProvider(new TestStorageProvider());
     core.useCompression(new TestCompression());
-    core.useCache(new TestCache());
+
+    core["cacheProvider"] = new TestCacheProvider();
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -102,7 +103,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -138,7 +139,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(
+    expect(cacheProvider.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
@@ -147,22 +148,26 @@ describe("cache tests", () => {
         key: n.toString(),
         value: `${n}-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
+        n + 1,
+        n.toString(),
+        item
+      );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(0);
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -259,7 +264,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -295,7 +300,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(
+    expect(cacheProvider.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
@@ -306,33 +311,33 @@ describe("cache tests", () => {
           n + parseInt(genesis_pool.data.max_bundle_size)
         }-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
         item
       );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -399,7 +404,7 @@ describe("cache tests", () => {
 
   test("continue caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
-    core["cache"].exists = jest
+    core["cacheProvider"].exists = jest
       .fn()
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
@@ -438,7 +443,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -474,7 +479,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(
+    expect(cacheProvider.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
@@ -485,33 +490,33 @@ describe("cache tests", () => {
           n + parseInt(genesis_pool.data.max_bundle_size) + 3
         }-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
         item
       );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -609,7 +614,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -645,7 +650,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(
+    expect(cacheProvider.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
@@ -656,33 +661,33 @@ describe("cache tests", () => {
           n + parseInt(genesis_pool.data.max_bundle_size)
         }-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
         item
       );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -782,7 +787,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -818,27 +823,31 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.put).toHaveBeenCalledTimes(2);
 
     for (let n = 0; n < 2; n++) {
       const item = {
         key: n.toString(),
         value: `${n}-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
+        n + 1,
+        n.toString(),
+        item
+      );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(2);
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(2);
 
     for (let n = 0; n < 2; n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(0);
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -928,7 +937,7 @@ describe("cache tests", () => {
         })
       );
 
-    core["cache"].exists = jest
+    core["cacheProvider"].exists = jest
       .fn()
       .mockResolvedValueOnce(true)
       .mockResolvedValueOnce(true)
@@ -967,7 +976,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1003,7 +1012,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(
+    expect(cacheProvider.put).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
@@ -1014,33 +1023,33 @@ describe("cache tests", () => {
           n + parseInt(genesis_pool.data.max_bundle_size) + 3
         }-value-transform`,
       };
-      expect(cache.put).toHaveBeenNthCalledWith(
+      expect(cacheProvider.put).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
         item
       );
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(
         n + 1,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1188,7 +1197,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1224,7 +1233,7 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(5);
+    expect(cacheProvider.put).toHaveBeenCalledTimes(5);
 
     for (let n = 0; n < 5; n++) {
       if (n === 2) {
@@ -1232,27 +1241,35 @@ describe("cache tests", () => {
           key: n.toString(),
           value: `${n}-value`,
         };
-        expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+        expect(cacheProvider.put).toHaveBeenNthCalledWith(
+          n + 1,
+          n.toString(),
+          item
+        );
       } else {
         const item = {
           key: n.toString(),
           value: `${n}-value-transform`,
         };
-        expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+        expect(cacheProvider.put).toHaveBeenNthCalledWith(
+          n + 1,
+          n.toString(),
+          item
+        );
       }
     }
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(5);
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(5);
 
     for (let n = 0; n < 5; n++) {
-      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.del).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(0);
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1345,7 +1362,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1381,21 +1398,21 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.put).toHaveBeenCalledTimes(0);
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(1);
 
-    expect(cache.exists).toHaveBeenNthCalledWith(1, "100");
+    expect(cacheProvider.exists).toHaveBeenNthCalledWith(1, "100");
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1433,7 +1450,9 @@ describe("cache tests", () => {
 
   test("start caching from a pool where cache methods fail", async () => {
     // ARRANGE
-    core["cache"].put = jest.fn().mockRejectedValue(new Error("io error"));
+    core["cacheProvider"].put = jest
+      .fn()
+      .mockRejectedValue(new Error("io error"));
 
     core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
       core.pool = {
@@ -1467,7 +1486,7 @@ describe("cache tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1503,21 +1522,21 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.put).toHaveBeenCalledTimes(1);
 
-    expect(cache.get).toHaveBeenCalledTimes(0);
+    expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
-    expect(cache.exists).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.exists).toHaveBeenCalledTimes(1);
 
-    expect(cache.exists).toHaveBeenNthCalledWith(1, "100");
+    expect(cacheProvider.exists).toHaveBeenNthCalledWith(1, "100");
 
-    expect(cache.del).toHaveBeenCalledTimes(100);
+    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(cache.drop).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.drop).toHaveBeenCalledTimes(1);
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

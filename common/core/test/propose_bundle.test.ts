@@ -5,7 +5,7 @@ import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
 import { TestStorageProvider } from "./mocks/storageProvider.mock";
-import { TestCache } from "./mocks/cache.mock";
+import { TestCacheProvider } from "./mocks/cache.mock";
 import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
@@ -38,9 +38,9 @@ describe("propose bundle tests", () => {
     core = new Node(new TestRuntime());
 
     core.useStorageProvider(new TestStorageProvider());
-    core.useStorageProvider(new TestStorageProvider());
     core.useCompression(new TestCompression());
-    core.useCache(new TestCache());
+
+    core["cacheProvider"] = new TestCacheProvider();
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -140,10 +140,10 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
-    await core["cache"].put("104", bundle[2]);
-    await core["cache"].put("105", bundle[3]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
+    await core["cacheProvider"].put("104", bundle[2]);
+    await core["cacheProvider"].put("105", bundle[3]);
 
     // ACT
     await runNode.call(core);
@@ -152,7 +152,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -216,12 +216,12 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(5);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
-    expect(cache.get).toHaveBeenNthCalledWith(4, "105");
-    expect(cache.get).toHaveBeenNthCalledWith(5, "106");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(5);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(4, "105");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(5, "106");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -308,7 +308,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -361,8 +361,8 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(1);
-    expect(cache.get).toHaveBeenLastCalledWith("102");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.get).toHaveBeenLastCalledWith("102");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -436,8 +436,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("100", bundle[0]);
-    await core["cache"].put("101", bundle[1]);
+    await core["cacheProvider"].put("100", bundle[0]);
+    await core["cacheProvider"].put("101", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -447,7 +447,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -505,10 +505,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "100");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "101");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "102");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "100");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "101");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "102");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -591,8 +591,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -602,7 +602,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -659,10 +659,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -743,8 +743,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -754,7 +754,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -811,10 +811,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -897,8 +897,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -908,7 +908,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -972,10 +972,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1066,7 +1066,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1119,8 +1119,8 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(1);
-    expect(cache.get).toHaveBeenLastCalledWith("102");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(1);
+    expect(cacheProvider.get).toHaveBeenLastCalledWith("102");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1203,8 +1203,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -1214,7 +1214,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1271,10 +1271,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1355,8 +1355,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -1366,7 +1366,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1419,10 +1419,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES
@@ -1500,8 +1500,8 @@ describe("propose bundle tests", () => {
       },
     ];
 
-    await core["cache"].put("102", bundle[0]);
-    await core["cache"].put("103", bundle[1]);
+    await core["cacheProvider"].put("102", bundle[0]);
+    await core["cacheProvider"].put("103", bundle[1]);
 
     // ACT
     await runNode.call(core);
@@ -1511,7 +1511,7 @@ describe("propose bundle tests", () => {
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
     const storageProvider = core["storageProvider"];
-    const cache = core["cache"];
+    const cacheProvider = core["cacheProvider"];
     const compression = core["compression"];
     const runtime = core["runtime"];
 
@@ -1564,10 +1564,10 @@ describe("propose bundle tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.get).toHaveBeenCalledTimes(3);
-    expect(cache.get).toHaveBeenNthCalledWith(1, "102");
-    expect(cache.get).toHaveBeenNthCalledWith(2, "103");
-    expect(cache.get).toHaveBeenNthCalledWith(3, "104");
+    expect(cacheProvider.get).toHaveBeenCalledTimes(3);
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(1, "102");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(2, "103");
+    expect(cacheProvider.get).toHaveBeenNthCalledWith(3, "104");
 
     // =============================
     // ASSERT COMPRESSION INTERFACES

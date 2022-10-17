@@ -1,10 +1,10 @@
 import { readFile, writeFile } from "jsonfile";
 import { existsSync, mkdirSync, promises as fs } from "fs";
 import fse from "fs-extra";
-import { DataItem, ICache } from "../../types";
+import { DataItem, ICacheProvider } from "../../types";
 
-export class JsonFile implements ICache {
-  public name = "JsonFile";
+export class JsonFileCache implements ICacheProvider {
+  public name = "JsonFileCache";
   public path!: string;
 
   init(path: string): this {

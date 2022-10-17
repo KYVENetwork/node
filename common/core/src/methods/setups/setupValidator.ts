@@ -51,7 +51,7 @@ export async function setupValidator(this: Node): Promise<void> {
     this.logger.info(`Runtime \t\t = ${this.runtime.name}`);
     this.logger.info(`Storage \t\t = ${this.storageProvider.name}`);
     this.logger.info(`Compression \t = ${this.compression.name}`);
-    this.logger.info(`Cache \t\t = ${this.cache.name}\n`);
+    this.logger.info(`Cache \t\t = ${this.cacheProvider.name}\n`);
 
     this.logger.info(`Network \t\t = ${this.network}`);
     this.logger.info(`@kyve/core \t = v${this.coreVersion}`);
@@ -59,7 +59,7 @@ export async function setupValidator(this: Node): Promise<void> {
 
     // clear node cache before startup
     this.logger.debug(`this.cache.drop()`);
-    await this.cache.drop();
+    await this.cacheProvider.drop();
 
     this.m.cache_current_items.set(0);
   } catch (err) {
