@@ -2,11 +2,11 @@ import { DataItem, IRuntime, Node, sha256 } from '@kyve/core';
 import { name, version } from '../package.json';
 import { providers } from 'ethers';
 
-export default class EVM implements IRuntime {
+export default class Evm implements IRuntime {
   public name = name;
   public version = version;
 
-  public async getDataItemByKey(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(core: Node, key: string): Promise<DataItem> {
     try {
       // set network settings if available
       let network;
@@ -36,11 +36,6 @@ export default class EVM implements IRuntime {
       // throw if data item is not available
       if (!value) throw new Error();
 
-      // Delete the number of confirmations from a transaction to keep data deterministic.
-      value.transactions.forEach(
-        (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
-      );
-
       return {
         key,
         value,
@@ -48,6 +43,15 @@ export default class EVM implements IRuntime {
     } catch (err) {
       throw err;
     }
+  }
+
+  async transformDataItem(item: DataItem) {
+    // Delete the number of confirmations from a transaction to keep data deterministic.
+    const value = item.value.transactions.forEach(
+      (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
+    );
+
+    return { ...item, value };
   }
 
   async validateBundle(
@@ -62,19 +66,15 @@ export default class EVM implements IRuntime {
       Buffer.from(JSON.stringify(validationBundle))
     );
 
-    core.logger.debug(`Validating bundle proposal by hash`);
-    core.logger.debug(`Uploaded:     ${proposedBundleHash}`);
-    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
-
     return proposedBundleHash === validationBundleHash;
   }
 
-  public async nextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1).toString();
+  async summarizeBundle(bundle: DataItem[]): Promise<string> {
+    return bundle.at(-1)?.value?.hash ?? '';
   }
 
-  public async summarizeBundle(bundle: DataItem[]): Promise<string> {
-    return bundle.at(-1)?.value?.hash ?? '';
+  async nextKey(key: string): Promise<string> {
+    return (parseInt(key) + 1).toString();
   }
 
   private async generateCoinbaseCloudHeaders(core: Node): Promise<any> {

@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, promises as fs } from "fs";
 import fse from "fs-extra";
 import { DataItem, ICache } from "../../types";
 
-export class JsonFileCache implements ICache {
-  public name = "JsonFileCache";
+export class JsonFile implements ICache {
+  public name = "JsonFile";
   public path!: string;
 
   init(path: string): this {

@@ -127,7 +127,7 @@ export async function runCache(this: Node): Promise<void> {
 
         if (!itemFound) {
           // if item does not exist in cache yet collect it
-          const item = await callWithBackoffStrategy(
+          let item = await callWithBackoffStrategy(
             async () => {
               // if a new bundle proposal was created in the meantime
               // skip the current caching and proceed
@@ -136,11 +136,9 @@ export async function runCache(this: Node): Promise<void> {
               }
 
               // collect data item from runtime source
-              this.logger.debug(
-                `this.runtime.getDataItemByKey($THIS,${nextKey})`
-              );
+              this.logger.debug(`this.runtime.getDataItem($THIS,${nextKey})`);
 
-              const item = await this.runtime.getDataItemByKey(this, nextKey);
+              const item = await this.runtime.getDataItem(this, nextKey);
 
               this.m.runtime_get_data_item_successful.inc();
 
@@ -152,7 +150,7 @@ export async function runCache(this: Node): Promise<void> {
             },
             (err, ctx) => {
               this.logger.info(
-                `Requesting getDataItemByKey from runtime was unsuccessful. Retrying in ${(
+                `Requesting getDataItem from runtime was unsuccessful. Retrying in ${(
                   ctx.nextTimeoutInMs / 1000
                 ).toFixed(2)}s ...`
               );
@@ -167,6 +165,10 @@ export async function runCache(this: Node): Promise<void> {
           if (!item) {
             break;
           }
+
+          // transform data item
+          this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
+          item = await this.runtime.transformDataItem(item);
 
           // add this data item to the cache
           this.logger.debug(`this.cache.put(${i.toString()},$ITEM)`);

@@ -1,10 +1,6 @@
-import { Node, Arweave, Gzip, JsonFileCache } from '@kyve/core';
-
+import { Node } from '@kyve/core';
 import Cosmos from './runtime';
 
-new Node()
-  .addRuntime(new Cosmos())
-  .addStorageProvider(new Arweave())
-  .addCompression(new Gzip())
-  .addCache(new JsonFileCache())
-  .bootstrap();
+const runtime = new Cosmos();
+
+new Node(runtime).bootstrap();

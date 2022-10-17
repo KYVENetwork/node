@@ -6,7 +6,7 @@ export default class Celo implements IRuntime {
   public name = name;
   public version = version;
 
-  public async getDataItemByKey(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(core: Node, key: string): Promise<DataItem> {
     let block;
 
     try {
@@ -18,6 +18,11 @@ export default class Celo implements IRuntime {
     if (!block) throw new Error();
 
     return { key, value: block };
+  }
+
+  async transformDataItem(item: DataItem) {
+    // don't transform data item
+    return item;
   }
 
   async validateBundle(
@@ -32,18 +37,14 @@ export default class Celo implements IRuntime {
       Buffer.from(JSON.stringify(validationBundle))
     );
 
-    core.logger.debug(`Validating bundle proposal by hash`);
-    core.logger.debug(`Uploaded:     ${proposedBundleHash}`);
-    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
-
     return proposedBundleHash === validationBundleHash;
   }
 
-  public async nextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1).toString();
+  async summarizeBundle(bundle: DataItem[]): Promise<string> {
+    return bundle.at(-1)?.value?.hash ?? '';
   }
 
-  public async summarizeBundle(bundle: DataItem[]): Promise<string> {
-    return bundle.at(-1)?.value?.hash ?? '';
+  async nextKey(key: string): Promise<string> {
+    return (parseInt(key) + 1).toString();
   }
 }

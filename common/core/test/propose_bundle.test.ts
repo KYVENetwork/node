@@ -33,12 +33,12 @@ describe("propose bundle tests", () => {
   let setTimeoutMock: jest.Mock;
 
   beforeEach(() => {
-    core = new Node();
+    core = new Node(new TestRuntime());
 
-    core.addRuntime(new TestRuntime());
-    core.addStorageProvider(new TestStorageProvider());
-    core.addCompression(new TestCompression());
-    core.addCache(new TestCache());
+    core.useStorageProvider(new TestStorageProvider());
+    core.useStorageProvider(new TestStorageProvider());
+    core.useCompression(new TestCompression());
+    core.useCache(new TestCache());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -241,7 +241,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -378,7 +378,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -528,7 +528,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -682,7 +682,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -834,7 +834,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -995,7 +995,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -1136,7 +1136,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 
@@ -1294,7 +1294,7 @@ describe("propose bundle tests", () => {
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(0);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(0);
 

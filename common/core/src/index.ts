@@ -44,6 +44,9 @@ import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
 import { kyve } from "@kyve/proto";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 import { standardizeJSON } from "./utils";
+import * as storageProvider from "./reactors/storageProviders";
+import * as compression from "./reactors/compression";
+import * as cache from "./reactors/cache";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -134,66 +137,65 @@ export class Node {
   protected runCache = runCache;
 
   /**
-   * Set the runtime for the protocol node.
-   * The Runtime implements the custom logic of a pool.
+   * Constructor for the core class. It is required to provide the
+   * runtime class here in order to run the
    *
-   * Required before calling 'run'
-   *
-   * @method addRuntime
+   * @method constructor
    * @param {IRuntime} runtime which implements the interface IRuntime
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
    */
-  public addRuntime(runtime: IRuntime): this {
+  constructor(runtime: IRuntime) {
+    // set provided runtime
     this.runtime = runtime;
-    return this;
+
+    // default storage provider is Arweave
+    this.storageProvider = new storageProvider.Arweave();
+
+    // default compression is Gzip
+    this.compression = new compression.Gzip();
+
+    // default cache is JsonFile
+    this.cache = new cache.JsonFile();
   }
 
   /**
-   * Set the storage provider for the protocol node.
+   * Override the default storage provider for the protocol node.
    * The Storage Provider handles data storage and retrieval for a pool.
    *
-   * Required before calling 'run'
-   *
-   * @method addStorageProvider
+   * @method useStorageProvider
    * @param {IStorageProvider} storageProvider which implements the interface IStorageProvider
    * @return {Promise<this>} returns this for chained commands
    * @chainable
    */
-  public addStorageProvider(storageProvider: IStorageProvider): this {
+  public useStorageProvider(storageProvider: IStorageProvider): this {
     this.storageProvider = storageProvider;
     return this;
   }
 
   /**
-   * Set the compression type for the protocol node.
+   * Override the default compression type for the protocol node.
    * Before saving bundles to the storage provider the node uses this compression
    * to store data more efficiently
    *
-   * Required before calling 'run'
-   *
-   * @method addCompression
+   * @method useCompression
    * @param {ICompression} compression which implements the interface ICompression
    * @return {Promise<this>} returns this for chained commands
    * @chainable
    */
-  public addCompression(compression: ICompression): this {
+  public useCompression(compression: ICompression): this {
     this.compression = compression;
     return this;
   }
 
   /**
-   * Set the cache for the protocol node.
+   * Override the default cache for the protocol node.
    * The Cache is responsible for caching data before its validated and stored on the Storage Provider.
    *
-   * Required before calling 'run'
-   *
-   * @method addCache
+   * @method useCache
    * @param {ICache} cache which implements the interface ICache
    * @return {Promise<this>} returns this for chained commands
    * @chainable
    */
-  public addCache(cache: ICache): this {
+  public useCache(cache: ICache): this {
     this.cache = cache;
     return this;
   }
@@ -316,10 +318,10 @@ export * from "./types";
 export * from "./utils";
 
 // export storage providers
-export * from "./reactors/storageProviders";
+export * as storageProvider from "./reactors/storageProviders";
 
 // export compression types
-export * from "./reactors/compression";
+export * as compression from "./reactors/compression";
 
 // export caches
-export * from "./reactors/cache";
+export * as cache from "./reactors/cache";

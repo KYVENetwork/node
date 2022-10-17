@@ -6,7 +6,7 @@ export default class Bitcoin implements IRuntime {
   public name = name;
   public version = version;
 
-  public async getDataItemByKey(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(core: Node, key: string): Promise<DataItem> {
     let hash: string;
     let block: any;
 
@@ -31,11 +31,15 @@ export default class Bitcoin implements IRuntime {
         headers
       );
     } catch (err) {
-      console.log(err);
       throw err;
     }
 
     return { key, value: block };
+  }
+
+  async transformDataItem(item: DataItem) {
+    // don't transform data item
+    return item;
   }
 
   async validateBundle(
@@ -50,19 +54,15 @@ export default class Bitcoin implements IRuntime {
       Buffer.from(JSON.stringify(validationBundle))
     );
 
-    core.logger.debug(`Validating bundle proposal by hash`);
-    core.logger.debug(`Uploaded:     ${proposedBundleHash}`);
-    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
-
     return proposedBundleHash === validationBundleHash;
-  }
-
-  public async nextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1).toString();
   }
 
   public async summarizeBundle(bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? "";
+  }
+
+  public async nextKey(key: string): Promise<string> {
+    return (parseInt(key) + 1).toString();
   }
 
   private async generateCoinbaseCloudHeaders(core: Node): Promise<any> {

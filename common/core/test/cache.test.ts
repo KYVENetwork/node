@@ -32,12 +32,11 @@ describe("cache tests", () => {
   let setTimeoutMock: jest.Mock;
 
   beforeEach(() => {
-    core = new Node();
+    core = new Node(new TestRuntime());
 
-    core.addRuntime(new TestRuntime());
-    core.addStorageProvider(new TestStorageProvider());
-    core.addCompression(new TestCompression());
-    core.addCache(new TestCache());
+    core.useStorageProvider(new TestStorageProvider());
+    core.useCompression(new TestCompression());
+    core.useCache(new TestCache());
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -173,12 +172,12 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
       +genesis_pool.data.max_bundle_size
     );
 
     for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
-      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
         n.toString()
@@ -329,12 +328,12 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
@@ -494,12 +493,12 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
@@ -651,12 +650,12 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
@@ -692,7 +691,7 @@ describe("cache tests", () => {
 
   test("start caching from a pool where getNextDataItem fails once", async () => {
     // ARRANGE
-    core["runtime"].getDataItemByKey = jest
+    core["runtime"].getDataItem = jest
       .fn()
       .mockImplementationOnce((core: Node, key: string) =>
         Promise.resolve({
@@ -795,19 +794,19 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(2 + 1);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(2 + 1);
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       1,
       expect.any(Node),
       "0"
     );
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       2,
       expect.any(Node),
       "1"
     );
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       3,
       expect.any(Node),
       "1"
@@ -838,7 +837,7 @@ describe("cache tests", () => {
 
   test("start caching from a pool where getNextDataItem fails multiple times", async () => {
     // ARRANGE
-    core["runtime"].getDataItemByKey = jest
+    core["runtime"].getDataItem = jest
       .fn()
       .mockImplementationOnce((core: Node, key: string) =>
         Promise.resolve({
@@ -985,53 +984,53 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 2
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       1,
       core,
       (0 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       2,
       core,
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       3,
       core,
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       4,
       core,
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       5,
       core,
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       6,
       core,
       (3 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       7,
       core,
       (4 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       8,
       core,
       (5 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
@@ -1166,9 +1165,9 @@ describe("cache tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItemByKey).toHaveBeenCalledTimes(1);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(1);
 
-    expect(runtime.getDataItemByKey).toHaveBeenNthCalledWith(1, core, "100");
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(1, core, "100");
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
