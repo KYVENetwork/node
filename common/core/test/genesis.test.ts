@@ -240,9 +240,7 @@ describe("genesis tests", () => {
         } as any;
       });
 
-    const cacheGetMock = jest.fn().mockRejectedValue(new Error("not found"));
-
-    core["cache"].get = cacheGetMock;
+    core["cache"].get = jest.fn().mockRejectedValue(new Error("not found"));
 
     // ACT
     await runNode.call(core);
@@ -333,14 +331,14 @@ describe("genesis tests", () => {
 
   test("be too late to claim uploader role and instead validate", async () => {
     // ARRANGE
-    const claimUploaderRoleMock = jest.fn().mockResolvedValue({
-      txHash: "test_hash",
-      execute: jest.fn().mockResolvedValue({
-        code: 1,
-      }),
-    });
-
-    core.client.kyve.bundles.v1beta1.claimUploaderRole = claimUploaderRoleMock;
+    core["client"].kyve.bundles.v1beta1.claimUploaderRole = jest
+      .fn()
+      .mockResolvedValue({
+        txHash: "test_hash",
+        execute: jest.fn().mockResolvedValue({
+          code: 1,
+        }),
+      });
 
     const bundle = [
       {

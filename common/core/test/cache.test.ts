@@ -1,5 +1,5 @@
 import { Logger } from "tslog";
-import { Node } from "../src/index";
+import { DataItem, Node } from "../src/index";
 import { runCache } from "../src/methods/main/runCache";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
@@ -21,6 +21,8 @@ TEST CASES - cache tests
 * start caching from a pool where last bundle proposal was dropped
 * start caching from a pool where getNextDataItem fails once
 * start caching from a pool where getNextDataItem fails multiple times
+* start caching from a pool where transformDataItem fails
+* start caching from a pool where nextKey fails
 * start caching from a pool where cache methods fail
 
 */
@@ -136,12 +138,14 @@ describe("cache tests", () => {
     // ASSERT CACHE INTERFACES
     // =======================
 
-    expect(cache.put).toHaveBeenCalledTimes(+genesis_pool.data.max_bundle_size);
+    expect(cache.put).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
 
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       const item = {
         key: n.toString(),
-        value: `${n}-value`,
+        value: `${n}-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
     }
@@ -149,10 +153,10 @@ describe("cache tests", () => {
     expect(cache.get).toHaveBeenCalledTimes(0);
 
     expect(cache.exists).toHaveBeenCalledTimes(
-      +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size)
     );
 
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
@@ -173,15 +177,27 @@ describe("cache tests", () => {
     // =========================
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(
-      +genesis_pool.data.max_bundle_size
+      parseInt(genesis_pool.data.max_bundle_size)
     );
 
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
         n.toString()
       );
+    }
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = {
+        key: n.toString(),
+        value: `${n}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
@@ -190,10 +206,10 @@ describe("cache tests", () => {
     // the pool is in genesis state and therefore start_key
     // is used for the first time
     expect(runtime.nextKey).toHaveBeenCalledTimes(
-      +genesis_pool.data.max_bundle_size - 1
+      parseInt(genesis_pool.data.max_bundle_size) - 1
     );
 
-    for (let n = 0; n < +genesis_pool.data.max_bundle_size - 1; n++) {
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) - 1; n++) {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
@@ -286,7 +302,9 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       const item = {
         key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+        value: `${
+          n + parseInt(genesis_pool.data.max_bundle_size)
+        }-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
@@ -338,6 +356,18 @@ describe("cache tests", () => {
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
+    }
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) + 50
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
@@ -451,7 +481,9 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       const item = {
         key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+        value: `${
+          n + parseInt(genesis_pool.data.max_bundle_size) + 3
+        }-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
@@ -503,6 +535,18 @@ describe("cache tests", () => {
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
       );
+    }
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
@@ -608,7 +652,9 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       const item = {
         key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+        value: `${
+          n + parseInt(genesis_pool.data.max_bundle_size)
+        }-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
@@ -660,6 +706,18 @@ describe("cache tests", () => {
         core,
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
+    }
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
@@ -765,7 +823,7 @@ describe("cache tests", () => {
     for (let n = 0; n < 2; n++) {
       const item = {
         key: n.toString(),
-        value: `${n}-value`,
+        value: `${n}-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
     }
@@ -811,6 +869,16 @@ describe("cache tests", () => {
       expect.any(Node),
       "1"
     );
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(2);
+
+    for (let n = 0; n < 2; n++) {
+      const item = {
+        key: n.toString(),
+        value: `${n}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    }
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
@@ -942,7 +1010,9 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
       const item = {
         key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+        value: `${
+          n + parseInt(genesis_pool.data.max_bundle_size) + 3
+        }-value-transform`,
       };
       expect(cache.put).toHaveBeenNthCalledWith(
         n + 1,
@@ -1038,6 +1108,18 @@ describe("cache tests", () => {
 
     // ...
 
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size)
+    );
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      const item = {
+        key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
+        value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    }
+
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
@@ -1061,6 +1143,290 @@ describe("cache tests", () => {
 
     // assert that only one round ran
     expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("start caching from a pool where transformDataItem fails", async () => {
+    // ARRANGE
+    core["runtime"].transformDataItem = jest
+      .fn()
+      .mockImplementationOnce((item: DataItem) =>
+        Promise.resolve({
+          key: item.key,
+          value: `${item.value}-transform`,
+        })
+      )
+      .mockImplementationOnce((item: DataItem) =>
+        Promise.resolve({
+          key: item.key,
+          value: `${item.value}-transform`,
+        })
+      )
+      .mockRejectedValueOnce(new Error())
+      .mockImplementation((item: DataItem) =>
+        Promise.resolve({
+          key: item.key,
+          value: `${item.value}-transform`,
+        })
+      );
+
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          max_bundle_size: "5",
+        },
+      } as any;
+    });
+
+    // ACT
+    await runCache.call(core);
+
+    // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
+
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cache.put).toHaveBeenCalledTimes(5);
+
+    for (let n = 0; n < 5; n++) {
+      if (n === 2) {
+        const item = {
+          key: n.toString(),
+          value: `${n}-value`,
+        };
+        expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+      } else {
+        const item = {
+          key: n.toString(),
+          value: `${n}-value-transform`,
+        };
+        expect(cache.put).toHaveBeenNthCalledWith(n + 1, n.toString(), item);
+      }
+    }
+
+    expect(cache.get).toHaveBeenCalledTimes(0);
+
+    expect(cache.exists).toHaveBeenCalledTimes(5);
+
+    for (let n = 0; n < 5; n++) {
+      expect(cache.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(cache.del).toHaveBeenCalledTimes(0);
+
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(5);
+
+    for (let n = 0; n < 5; n++) {
+      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+        n + 1,
+        expect.any(Node),
+        n.toString()
+      );
+    }
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(5);
+
+    for (let n = 0; n < 5; n++) {
+      const item = {
+        key: n.toString(),
+        value: `${n}-value`,
+      };
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    }
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    // we only call getNextKey max_bundle_size - 1 because
+    // the pool is in genesis state and therefore start_key
+    // is used for the first time
+    expect(runtime.nextKey).toHaveBeenCalledTimes(5 - 1);
+
+    for (let n = 0; n < 5 - 1; n++) {
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(1);
+
+    // TODO: assert timeouts
+  });
+
+  test("start caching from a pool where nextKey fails", async () => {
+    // ARRANGE
+    core["runtime"].nextKey = jest.fn().mockRejectedValue(new Error());
+
+    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
+      core.pool = {
+        ...genesis_pool,
+        data: {
+          ...genesis_pool.data,
+          current_key: "99",
+          current_index: "100",
+        },
+        bundle_proposal: {
+          ...genesis_pool.bundle_proposal,
+          storage_id: "test_storage_id",
+          uploader: "test_staker",
+          next_uploader: "test_staker",
+          data_size: "123456789",
+          data_hash: "test_bundle_hash",
+          bundle_size: "50",
+          from_key: "100",
+          to_key: "149",
+          bundle_summary: "test_summary",
+          updated_at: "0",
+          voters_valid: ["test_staker"],
+        },
+      } as any;
+    });
+
+    // ACT
+    await runCache.call(core);
+
+    // ASSERT
+    const txs = core["client"].kyve.bundles.v1beta1;
+    const queries = core["lcd"].kyve.query.v1beta1;
+    const storageProvider = core["storageProvider"];
+    const cache = core["cache"];
+    const compression = core["compression"];
+    const runtime = core["runtime"];
+
+    // ========================
+    // ASSERT CLIENT INTERFACES
+    // ========================
+
+    expect(txs.claimUploaderRole).toHaveBeenCalledTimes(0);
+
+    expect(txs.voteBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
+
+    expect(txs.skipUploaderRole).toHaveBeenCalledTimes(0);
+
+    // =====================
+    // ASSERT LCD INTERFACES
+    // =====================
+
+    expect(queries.canVote).toHaveBeenCalledTimes(0);
+
+    expect(queries.canPropose).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT STORAGE INTERFACES
+    // =========================
+
+    expect(storageProvider.saveBundle).toHaveBeenCalledTimes(0);
+
+    expect(storageProvider.retrieveBundle).toHaveBeenCalledTimes(0);
+
+    // =======================
+    // ASSERT CACHE INTERFACES
+    // =======================
+
+    expect(cache.put).toHaveBeenCalledTimes(0);
+
+    expect(cache.get).toHaveBeenCalledTimes(0);
+
+    expect(cache.exists).toHaveBeenCalledTimes(1);
+
+    expect(cache.exists).toHaveBeenNthCalledWith(1, "100");
+
+    expect(cache.del).toHaveBeenCalledTimes(100);
+
+    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+      expect(cache.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(cache.drop).toHaveBeenCalledTimes(1);
+
+    // =============================
+    // ASSERT COMPRESSION INTERFACES
+    // =============================
+
+    expect(compression.compress).toHaveBeenCalledTimes(0);
+
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
+
+    // =========================
+    // ASSERT RUNTIME INTERFACES
+    // =========================
+
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(0);
+
+    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+
+    expect(runtime.nextKey).toHaveBeenCalledTimes(1);
+
+    expect(runtime.nextKey).toHaveBeenNthCalledWith(1, "99");
+
+    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+
+    // ========================
+    // ASSERT NODEJS INTERFACES
+    // ========================
+
+    // assert that only one round ran
+    expect(core["waitForCacheContinuation"]).toHaveBeenCalledTimes(0);
 
     // TODO: assert timeouts
   });
@@ -1168,6 +1534,13 @@ describe("cache tests", () => {
     expect(runtime.getDataItem).toHaveBeenCalledTimes(1);
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(1, core, "100");
+
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(1);
+
+    expect(runtime.transformDataItem).toHaveBeenNthCalledWith(1, {
+      key: "100",
+      value: `100-value`,
+    });
 
     expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
 

@@ -157,7 +157,25 @@ export async function validateBundleProposal(
     this.logger.debug(`Validating bundle proposal by bundle summary`);
     this.logger.debug(`this.runtime.summarizeBundle($VALIDATION_BUNDLE)`);
 
-    const bundleSummary = await this.runtime.summarizeBundle(validationBundle);
+    const bundleSummary = await this.runtime
+      .summarizeBundle(validationBundle)
+      .catch((err) => {
+        this.logger.error(
+          `Unexpected error summarizing bundle with runtime. Voting abstain ...`
+        );
+        this.logger.error(standardizeJSON(err));
+
+        return null;
+      });
+
+    // vote abstain if bundleSummary is null
+    if (bundleSummary === null) {
+      await this.voteBundleProposal(
+        this.pool.bundle_proposal!.storage_id,
+        VOTE.ABSTAIN
+      );
+      return;
+    }
 
     this.logger.debug(
       `Proposed = ${this.pool.bundle_proposal!.bundle_summary}`
@@ -188,11 +206,29 @@ export async function validateBundleProposal(
       `this.runtime.validateBundle($THIS, $PROPOSED_BUNDLE, $VALIDATION_BUNDLE)`
     );
 
-    const valid = await this.runtime.validateBundle(
-      this,
-      standardizeJSON(proposedBundle),
-      standardizeJSON(validationBundle)
-    );
+    const valid = await this.runtime
+      .validateBundle(
+        this,
+        standardizeJSON(proposedBundle),
+        standardizeJSON(validationBundle)
+      )
+      .catch((err) => {
+        this.logger.error(
+          `Unexpected error validating bundle with runtime. Voting abstain ...`
+        );
+        this.logger.error(standardizeJSON(err));
+
+        return null;
+      });
+
+    // vote abstain if validateBundle returns null
+    if (valid === null) {
+      await this.voteBundleProposal(
+        this.pool.bundle_proposal!.storage_id,
+        VOTE.ABSTAIN
+      );
+      return;
+    }
 
     if (valid) {
       this.logger.info(`Found valid bundle by runtime validation`);

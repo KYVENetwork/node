@@ -167,8 +167,15 @@ export async function runCache(this: Node): Promise<void> {
           }
 
           // transform data item
-          this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
-          item = await this.runtime.transformDataItem(item);
+          try {
+            this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
+            item = await this.runtime.transformDataItem(item);
+          } catch (err) {
+            this.logger.error(
+              `Unexpected error transforming data item. Skipping transformation ...`
+            );
+            this.logger.error(standardizeJSON(err));
+          }
 
           // add this data item to the cache
           this.logger.debug(`this.cache.put(${i.toString()},$ITEM)`);

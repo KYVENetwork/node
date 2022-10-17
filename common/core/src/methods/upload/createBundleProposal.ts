@@ -80,14 +80,42 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // it so it can be included in the bundle proposal and
     // saved on chain
     this.logger.debug(`this.runtime.summarizeBundle($BUNDLE_PROPOSAL)`);
-    const bundleSummary = await this.runtime.summarizeBundle(bundleProposal);
+    const bundleSummary = await this.runtime
+      .summarizeBundle(bundleProposal)
+      .catch((err) => {
+        this.logger.error(
+          `Unexpected error summarizing bundle. Skipping Uploader Role ...`
+        );
+        this.logger.error(standardizeJSON(err));
+
+        return null;
+      });
+
+    // skip uploader role if bundleSummary is null
+    if (bundleSummary === null) {
+      await this.skipUploaderRole(fromIndex);
+      return;
+    }
 
     // if data was found on the cache proceed with compressing the
     // bundle for the upload to the storage provider
     this.logger.debug(`this.compression.compress($RAW_BUNDLE_PROPOSAL)`);
-    const storageProviderData = await this.compression.compress(
-      bundleToBytes(bundleProposal)
-    );
+    const storageProviderData = await this.compression
+      .compress(bundleToBytes(bundleProposal))
+      .catch((err) => {
+        this.logger.error(
+          `Unexpected error compressing bundle. Skipping Uploader Role ...`
+        );
+        this.logger.error(standardizeJSON(err));
+
+        return null;
+      });
+
+    // skip uploader role if compression returns null
+    if (storageProviderData === null) {
+      await this.skipUploaderRole(fromIndex);
+      return;
+    }
 
     this.logger.info(
       `Successfully compressed bundle with Compression:${this.compression.name}`
