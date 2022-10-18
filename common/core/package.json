@@ -27,6 +27,7 @@
     "deploy": "yarn build && yarn npm publish"
   },
   "dependencies": {
+    "@bundlr-network/client": "^0.8.9",
     "@cosmjs/proto-signing": "^0.27.1",
     "@cosmjs/stargate": "^0.27.1",
     "@kyve/proto": "1.9.0",
