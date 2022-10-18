@@ -1,6 +1,10 @@
 import { Node, standardizeJSON } from "../..";
 import path from "path";
-import { MemoryCache, JsonFileCache } from "../../reactors/cacheProvider";
+import {
+  LevelDBCache,
+  MemoryCache,
+  JsonFileCache,
+} from "../../reactors/cacheProvider";
 
 /**
  * setupReactors checks if all required reactors are defined and initiates modules
@@ -21,6 +25,8 @@ export function setupReactors(this: Node): void {
       this.cacheProvider = new MemoryCache();
     } else if (this.cache === "jsonfile") {
       this.cacheProvider = new JsonFileCache();
+    } else if (this.cache === "leveldb") {
+      this.cacheProvider = new LevelDBCache();
     }
 
     // init cache with work dir

@@ -223,10 +223,10 @@ export class Node {
         parseNetwork
       )
       .option(
-        "--cache <memory|jsonfile>",
+        "--cache <memory|jsonfile|leveldb>",
         "The cache this node should use",
         parseCache,
-        "jsonfile"
+        "leveldb"
       )
       .option("--debug", "Run the validator node in debug mode")
       .option(

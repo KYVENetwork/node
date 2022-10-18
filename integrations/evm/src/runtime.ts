@@ -47,11 +47,11 @@ export default class Evm implements IRuntime {
 
   async transformDataItem(item: DataItem) {
     // Delete the number of confirmations from a transaction to keep data deterministic.
-    const value = item.value.transactions.forEach(
+    item.value.transactions.forEach(
       (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
     );
 
-    return { ...item, value };
+    return item;
   }
 
   async validateBundle(
