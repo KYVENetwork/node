@@ -1,23 +1,15 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core';
 import { name, version } from '../package.json';
-import { fetchBlock, isHeightOutOfRange } from './utils';
+import { fetchBlock } from './utils';
 
 export default class Cosmos implements IRuntime {
   public name = name;
   public version = version;
 
   async getDataItem(core: Node, key: string): Promise<DataItem> {
-    let block;
-
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
-    try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
-    } catch (err) {
-      if (isHeightOutOfRange(err)) throw new Error();
-
-      throw err;
-    }
+    const block = await fetchBlock(core.poolConfig.rpc, +key, headers);
 
     return { key, value: block };
   }
