@@ -157,6 +157,9 @@ export class Node {
 
     // default compression is Gzip
     this.compression = new compression.Gzip();
+
+    // set @kyve/core version
+    this.coreVersion = coreVersion;
   }
 
   /**
@@ -198,6 +201,15 @@ export class Node {
   public bootstrap(): void {
     // define main program
     const program = new Command();
+
+    // define version command
+    program
+      .command("version")
+      .description("Print runtime and core version")
+      .action(() => {
+        console.log(`${this.runtime.name} ${this.runtime.version}`);
+        console.log(`@kyve/core ${this.coreVersion}`);
+      });
 
     // define start command
     program
@@ -278,7 +290,6 @@ export class Node {
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
     this.home = options.home;
-    this.coreVersion = coreVersion;
 
     // perform setups
     this.setupLogger();
