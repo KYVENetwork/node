@@ -1743,7 +1743,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.group.v1.Query";
     this.rpc = rpc;
     this.GroupInfo = this.GroupInfo.bind(this);
     this.GroupPolicyInfo = this.GroupPolicyInfo.bind(this);
@@ -1761,79 +1763,79 @@ export class QueryClientImpl implements Query {
   }
   GroupInfo(request: QueryGroupInfoRequest): Promise<QueryGroupInfoResponse> {
     const data = QueryGroupInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupInfo", data);
+    const promise = this.rpc.request(this.service, "GroupInfo", data);
     return promise.then((data) => QueryGroupInfoResponse.decode(new _m0.Reader(data)));
   }
 
   GroupPolicyInfo(request: QueryGroupPolicyInfoRequest): Promise<QueryGroupPolicyInfoResponse> {
     const data = QueryGroupPolicyInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPolicyInfo", data);
+    const promise = this.rpc.request(this.service, "GroupPolicyInfo", data);
     return promise.then((data) => QueryGroupPolicyInfoResponse.decode(new _m0.Reader(data)));
   }
 
   GroupMembers(request: QueryGroupMembersRequest): Promise<QueryGroupMembersResponse> {
     const data = QueryGroupMembersRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupMembers", data);
+    const promise = this.rpc.request(this.service, "GroupMembers", data);
     return promise.then((data) => QueryGroupMembersResponse.decode(new _m0.Reader(data)));
   }
 
   GroupsByAdmin(request: QueryGroupsByAdminRequest): Promise<QueryGroupsByAdminResponse> {
     const data = QueryGroupsByAdminRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupsByAdmin", data);
+    const promise = this.rpc.request(this.service, "GroupsByAdmin", data);
     return promise.then((data) => QueryGroupsByAdminResponse.decode(new _m0.Reader(data)));
   }
 
   GroupPoliciesByGroup(request: QueryGroupPoliciesByGroupRequest): Promise<QueryGroupPoliciesByGroupResponse> {
     const data = QueryGroupPoliciesByGroupRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPoliciesByGroup", data);
+    const promise = this.rpc.request(this.service, "GroupPoliciesByGroup", data);
     return promise.then((data) => QueryGroupPoliciesByGroupResponse.decode(new _m0.Reader(data)));
   }
 
   GroupPoliciesByAdmin(request: QueryGroupPoliciesByAdminRequest): Promise<QueryGroupPoliciesByAdminResponse> {
     const data = QueryGroupPoliciesByAdminRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupPoliciesByAdmin", data);
+    const promise = this.rpc.request(this.service, "GroupPoliciesByAdmin", data);
     return promise.then((data) => QueryGroupPoliciesByAdminResponse.decode(new _m0.Reader(data)));
   }
 
   Proposal(request: QueryProposalRequest): Promise<QueryProposalResponse> {
     const data = QueryProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "Proposal", data);
+    const promise = this.rpc.request(this.service, "Proposal", data);
     return promise.then((data) => QueryProposalResponse.decode(new _m0.Reader(data)));
   }
 
   ProposalsByGroupPolicy(request: QueryProposalsByGroupPolicyRequest): Promise<QueryProposalsByGroupPolicyResponse> {
     const data = QueryProposalsByGroupPolicyRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "ProposalsByGroupPolicy", data);
+    const promise = this.rpc.request(this.service, "ProposalsByGroupPolicy", data);
     return promise.then((data) => QueryProposalsByGroupPolicyResponse.decode(new _m0.Reader(data)));
   }
 
   VoteByProposalVoter(request: QueryVoteByProposalVoterRequest): Promise<QueryVoteByProposalVoterResponse> {
     const data = QueryVoteByProposalVoterRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VoteByProposalVoter", data);
+    const promise = this.rpc.request(this.service, "VoteByProposalVoter", data);
     return promise.then((data) => QueryVoteByProposalVoterResponse.decode(new _m0.Reader(data)));
   }
 
   VotesByProposal(request: QueryVotesByProposalRequest): Promise<QueryVotesByProposalResponse> {
     const data = QueryVotesByProposalRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VotesByProposal", data);
+    const promise = this.rpc.request(this.service, "VotesByProposal", data);
     return promise.then((data) => QueryVotesByProposalResponse.decode(new _m0.Reader(data)));
   }
 
   VotesByVoter(request: QueryVotesByVoterRequest): Promise<QueryVotesByVoterResponse> {
     const data = QueryVotesByVoterRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "VotesByVoter", data);
+    const promise = this.rpc.request(this.service, "VotesByVoter", data);
     return promise.then((data) => QueryVotesByVoterResponse.decode(new _m0.Reader(data)));
   }
 
   GroupsByMember(request: QueryGroupsByMemberRequest): Promise<QueryGroupsByMemberResponse> {
     const data = QueryGroupsByMemberRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "GroupsByMember", data);
+    const promise = this.rpc.request(this.service, "GroupsByMember", data);
     return promise.then((data) => QueryGroupsByMemberResponse.decode(new _m0.Reader(data)));
   }
 
   TallyResult(request: QueryTallyResultRequest): Promise<QueryTallyResultResponse> {
     const data = QueryTallyResultRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Query", "TallyResult", data);
+    const promise = this.rpc.request(this.service, "TallyResult", data);
     return promise.then((data) => QueryTallyResultResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -1,1 +1,0 @@
-- test when load bundle fails everytime in validate bundle to exit after the upload interval if node is next uploader

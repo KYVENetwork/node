@@ -104,8 +104,8 @@ export interface QueryCanProposeRequest {
   staker: string;
   /** proposer ... */
   proposer: string;
-  /** from_height ... */
-  from_height: string;
+  /** from_index ... */
+  from_index: string;
 }
 
 /** QueryCanProposeResponse is the response type for the Query/CanPropose RPC method. */
@@ -837,7 +837,7 @@ export const QueryCanValidateResponse = {
 };
 
 function createBaseQueryCanProposeRequest(): QueryCanProposeRequest {
-  return { pool_id: "0", staker: "", proposer: "", from_height: "0" };
+  return { pool_id: "0", staker: "", proposer: "", from_index: "0" };
 }
 
 export const QueryCanProposeRequest = {
@@ -851,8 +851,8 @@ export const QueryCanProposeRequest = {
     if (message.proposer !== "") {
       writer.uint32(26).string(message.proposer);
     }
-    if (message.from_height !== "0") {
-      writer.uint32(32).uint64(message.from_height);
+    if (message.from_index !== "0") {
+      writer.uint32(32).uint64(message.from_index);
     }
     return writer;
   },
@@ -874,7 +874,7 @@ export const QueryCanProposeRequest = {
           message.proposer = reader.string();
           break;
         case 4:
-          message.from_height = longToString(reader.uint64() as Long);
+          message.from_index = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -889,7 +889,7 @@ export const QueryCanProposeRequest = {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       proposer: isSet(object.proposer) ? String(object.proposer) : "",
-      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
+      from_index: isSet(object.from_index) ? String(object.from_index) : "0",
     };
   },
 
@@ -898,7 +898,7 @@ export const QueryCanProposeRequest = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.staker !== undefined && (obj.staker = message.staker);
     message.proposer !== undefined && (obj.proposer = message.proposer);
-    message.from_height !== undefined && (obj.from_height = message.from_height);
+    message.from_index !== undefined && (obj.from_index = message.from_index);
     return obj;
   },
 
@@ -907,7 +907,7 @@ export const QueryCanProposeRequest = {
     message.pool_id = object.pool_id ?? "0";
     message.staker = object.staker ?? "";
     message.proposer = object.proposer ?? "";
-    message.from_height = object.from_height ?? "0";
+    message.from_index = object.from_index ?? "0";
     return message;
   },
 };
@@ -1130,7 +1130,9 @@ export interface QueryBundles {
 
 export class QueryBundlesClientImpl implements QueryBundles {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryBundles";
     this.rpc = rpc;
     this.FinalizedBundles = this.FinalizedBundles.bind(this);
     this.FinalizedBundle = this.FinalizedBundle.bind(this);
@@ -1143,13 +1145,13 @@ export class QueryBundlesClientImpl implements QueryBundles {
   }
   FinalizedBundles(request: QueryFinalizedBundlesRequest): Promise<QueryFinalizedBundlesResponse> {
     const data = QueryFinalizedBundlesRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundles", data);
+    const promise = this.rpc.request(this.service, "FinalizedBundles", data);
     return promise.then((data) => QueryFinalizedBundlesResponse.decode(new _m0.Reader(data)));
   }
 
   FinalizedBundle(request: QueryFinalizedBundleRequest): Promise<QueryFinalizedBundleResponse> {
     const data = QueryFinalizedBundleRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundle", data);
+    const promise = this.rpc.request(this.service, "FinalizedBundle", data);
     return promise.then((data) => QueryFinalizedBundleResponse.decode(new _m0.Reader(data)));
   }
 
@@ -1157,7 +1159,7 @@ export class QueryBundlesClientImpl implements QueryBundles {
     request: QueryFinalizedBundleByStorageIdRequest,
   ): Promise<QueryFinalizedBundleByStorageIdResponse> {
     const data = QueryFinalizedBundleByStorageIdRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundleByStorageId", data);
+    const promise = this.rpc.request(this.service, "FinalizedBundleByStorageId", data);
     return promise.then((data) => QueryFinalizedBundleByStorageIdResponse.decode(new _m0.Reader(data)));
   }
 
@@ -1165,31 +1167,31 @@ export class QueryBundlesClientImpl implements QueryBundles {
     request: QueryFinalizedBundlesByHeightRequest,
   ): Promise<QueryFinalizedBundlesByHeightResponse> {
     const data = QueryFinalizedBundlesByHeightRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "FinalizedBundlesByHeight", data);
+    const promise = this.rpc.request(this.service, "FinalizedBundlesByHeight", data);
     return promise.then((data) => QueryFinalizedBundlesByHeightResponse.decode(new _m0.Reader(data)));
   }
 
   CurrentVoteStatus(request: QueryCurrentVoteStatusRequest): Promise<QueryCurrentVoteStatusResponse> {
     const data = QueryCurrentVoteStatusRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CurrentVoteStatus", data);
+    const promise = this.rpc.request(this.service, "CurrentVoteStatus", data);
     return promise.then((data) => QueryCurrentVoteStatusResponse.decode(new _m0.Reader(data)));
   }
 
   CanValidate(request: QueryCanValidateRequest): Promise<QueryCanValidateResponse> {
     const data = QueryCanValidateRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanValidate", data);
+    const promise = this.rpc.request(this.service, "CanValidate", data);
     return promise.then((data) => QueryCanValidateResponse.decode(new _m0.Reader(data)));
   }
 
   CanPropose(request: QueryCanProposeRequest): Promise<QueryCanProposeResponse> {
     const data = QueryCanProposeRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanPropose", data);
+    const promise = this.rpc.request(this.service, "CanPropose", data);
     return promise.then((data) => QueryCanProposeResponse.decode(new _m0.Reader(data)));
   }
 
   CanVote(request: QueryCanVoteRequest): Promise<QueryCanVoteResponse> {
     const data = QueryCanVoteRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryBundles", "CanVote", data);
+    const promise = this.rpc.request(this.service, "CanVote", data);
     return promise.then((data) => QueryCanVoteResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -1935,7 +1935,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.group.v1.Msg";
     this.rpc = rpc;
     this.CreateGroup = this.CreateGroup.bind(this);
     this.UpdateGroupMembers = this.UpdateGroupMembers.bind(this);
@@ -1954,43 +1956,43 @@ export class MsgClientImpl implements Msg {
   }
   CreateGroup(request: MsgCreateGroup): Promise<MsgCreateGroupResponse> {
     const data = MsgCreateGroup.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroup", data);
+    const promise = this.rpc.request(this.service, "CreateGroup", data);
     return promise.then((data) => MsgCreateGroupResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGroupMembers(request: MsgUpdateGroupMembers): Promise<MsgUpdateGroupMembersResponse> {
     const data = MsgUpdateGroupMembers.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupMembers", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupMembers", data);
     return promise.then((data) => MsgUpdateGroupMembersResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGroupAdmin(request: MsgUpdateGroupAdmin): Promise<MsgUpdateGroupAdminResponse> {
     const data = MsgUpdateGroupAdmin.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupAdmin", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupAdmin", data);
     return promise.then((data) => MsgUpdateGroupAdminResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGroupMetadata(request: MsgUpdateGroupMetadata): Promise<MsgUpdateGroupMetadataResponse> {
     const data = MsgUpdateGroupMetadata.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupMetadata", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupMetadata", data);
     return promise.then((data) => MsgUpdateGroupMetadataResponse.decode(new _m0.Reader(data)));
   }
 
   CreateGroupPolicy(request: MsgCreateGroupPolicy): Promise<MsgCreateGroupPolicyResponse> {
     const data = MsgCreateGroupPolicy.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroupPolicy", data);
+    const promise = this.rpc.request(this.service, "CreateGroupPolicy", data);
     return promise.then((data) => MsgCreateGroupPolicyResponse.decode(new _m0.Reader(data)));
   }
 
   CreateGroupWithPolicy(request: MsgCreateGroupWithPolicy): Promise<MsgCreateGroupWithPolicyResponse> {
     const data = MsgCreateGroupWithPolicy.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroupWithPolicy", data);
+    const promise = this.rpc.request(this.service, "CreateGroupWithPolicy", data);
     return promise.then((data) => MsgCreateGroupWithPolicyResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGroupPolicyAdmin(request: MsgUpdateGroupPolicyAdmin): Promise<MsgUpdateGroupPolicyAdminResponse> {
     const data = MsgUpdateGroupPolicyAdmin.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyAdmin", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupPolicyAdmin", data);
     return promise.then((data) => MsgUpdateGroupPolicyAdminResponse.decode(new _m0.Reader(data)));
   }
 
@@ -1998,43 +2000,43 @@ export class MsgClientImpl implements Msg {
     request: MsgUpdateGroupPolicyDecisionPolicy,
   ): Promise<MsgUpdateGroupPolicyDecisionPolicyResponse> {
     const data = MsgUpdateGroupPolicyDecisionPolicy.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyDecisionPolicy", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupPolicyDecisionPolicy", data);
     return promise.then((data) => MsgUpdateGroupPolicyDecisionPolicyResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGroupPolicyMetadata(request: MsgUpdateGroupPolicyMetadata): Promise<MsgUpdateGroupPolicyMetadataResponse> {
     const data = MsgUpdateGroupPolicyMetadata.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyMetadata", data);
+    const promise = this.rpc.request(this.service, "UpdateGroupPolicyMetadata", data);
     return promise.then((data) => MsgUpdateGroupPolicyMetadataResponse.decode(new _m0.Reader(data)));
   }
 
   SubmitProposal(request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse> {
     const data = MsgSubmitProposal.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "SubmitProposal", data);
+    const promise = this.rpc.request(this.service, "SubmitProposal", data);
     return promise.then((data) => MsgSubmitProposalResponse.decode(new _m0.Reader(data)));
   }
 
   WithdrawProposal(request: MsgWithdrawProposal): Promise<MsgWithdrawProposalResponse> {
     const data = MsgWithdrawProposal.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "WithdrawProposal", data);
+    const promise = this.rpc.request(this.service, "WithdrawProposal", data);
     return promise.then((data) => MsgWithdrawProposalResponse.decode(new _m0.Reader(data)));
   }
 
   Vote(request: MsgVote): Promise<MsgVoteResponse> {
     const data = MsgVote.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "Vote", data);
+    const promise = this.rpc.request(this.service, "Vote", data);
     return promise.then((data) => MsgVoteResponse.decode(new _m0.Reader(data)));
   }
 
   Exec(request: MsgExec): Promise<MsgExecResponse> {
     const data = MsgExec.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "Exec", data);
+    const promise = this.rpc.request(this.service, "Exec", data);
     return promise.then((data) => MsgExecResponse.decode(new _m0.Reader(data)));
   }
 
   LeaveGroup(request: MsgLeaveGroup): Promise<MsgLeaveGroupResponse> {
     const data = MsgLeaveGroup.encode(request).finish();
-    const promise = this.rpc.request("cosmos.group.v1.Msg", "LeaveGroup", data);
+    const promise = this.rpc.request(this.service, "LeaveGroup", data);
     return promise.then((data) => MsgLeaveGroupResponse.decode(new _m0.Reader(data)));
   }
 }

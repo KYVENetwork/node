@@ -430,7 +430,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.feegrant.v1beta1.Query";
     this.rpc = rpc;
     this.Allowance = this.Allowance.bind(this);
     this.Allowances = this.Allowances.bind(this);
@@ -438,19 +440,19 @@ export class QueryClientImpl implements Query {
   }
   Allowance(request: QueryAllowanceRequest): Promise<QueryAllowanceResponse> {
     const data = QueryAllowanceRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Query", "Allowance", data);
+    const promise = this.rpc.request(this.service, "Allowance", data);
     return promise.then((data) => QueryAllowanceResponse.decode(new _m0.Reader(data)));
   }
 
   Allowances(request: QueryAllowancesRequest): Promise<QueryAllowancesResponse> {
     const data = QueryAllowancesRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Query", "Allowances", data);
+    const promise = this.rpc.request(this.service, "Allowances", data);
     return promise.then((data) => QueryAllowancesResponse.decode(new _m0.Reader(data)));
   }
 
   AllowancesByGranter(request: QueryAllowancesByGranterRequest): Promise<QueryAllowancesByGranterResponse> {
     const data = QueryAllowancesByGranterRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Query", "AllowancesByGranter", data);
+    const promise = this.rpc.request(this.service, "AllowancesByGranter", data);
     return promise.then((data) => QueryAllowancesByGranterResponse.decode(new _m0.Reader(data)));
   }
 }

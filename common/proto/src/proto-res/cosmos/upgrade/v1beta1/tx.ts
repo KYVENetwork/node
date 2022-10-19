@@ -244,20 +244,22 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.upgrade.v1beta1.Msg";
     this.rpc = rpc;
     this.SoftwareUpgrade = this.SoftwareUpgrade.bind(this);
     this.CancelUpgrade = this.CancelUpgrade.bind(this);
   }
   SoftwareUpgrade(request: MsgSoftwareUpgrade): Promise<MsgSoftwareUpgradeResponse> {
     const data = MsgSoftwareUpgrade.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "SoftwareUpgrade", data);
+    const promise = this.rpc.request(this.service, "SoftwareUpgrade", data);
     return promise.then((data) => MsgSoftwareUpgradeResponse.decode(new _m0.Reader(data)));
   }
 
   CancelUpgrade(request: MsgCancelUpgrade): Promise<MsgCancelUpgradeResponse> {
     const data = MsgCancelUpgrade.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "CancelUpgrade", data);
+    const promise = this.rpc.request(this.service, "CancelUpgrade", data);
     return promise.then((data) => MsgCancelUpgradeResponse.decode(new _m0.Reader(data)));
   }
 }

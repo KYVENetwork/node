@@ -128,13 +128,15 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.crisis.v1beta1.Msg";
     this.rpc = rpc;
     this.VerifyInvariant = this.VerifyInvariant.bind(this);
   }
   VerifyInvariant(request: MsgVerifyInvariant): Promise<MsgVerifyInvariantResponse> {
     const data = MsgVerifyInvariant.encode(request).finish();
-    const promise = this.rpc.request("cosmos.crisis.v1beta1.Msg", "VerifyInvariant", data);
+    const promise = this.rpc.request(this.service, "VerifyInvariant", data);
     return promise.then((data) => MsgVerifyInvariantResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -404,7 +404,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.authz.v1beta1.Msg";
     this.rpc = rpc;
     this.Grant = this.Grant.bind(this);
     this.Exec = this.Exec.bind(this);
@@ -412,19 +414,19 @@ export class MsgClientImpl implements Msg {
   }
   Grant(request: MsgGrant): Promise<MsgGrantResponse> {
     const data = MsgGrant.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Msg", "Grant", data);
+    const promise = this.rpc.request(this.service, "Grant", data);
     return promise.then((data) => MsgGrantResponse.decode(new _m0.Reader(data)));
   }
 
   Exec(request: MsgExec): Promise<MsgExecResponse> {
     const data = MsgExec.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Msg", "Exec", data);
+    const promise = this.rpc.request(this.service, "Exec", data);
     return promise.then((data) => MsgExecResponse.decode(new _m0.Reader(data)));
   }
 
   Revoke(request: MsgRevoke): Promise<MsgRevokeResponse> {
     const data = MsgRevoke.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Msg", "Revoke", data);
+    const promise = this.rpc.request(this.service, "Revoke", data);
     return promise.then((data) => MsgRevokeResponse.decode(new _m0.Reader(data)));
   }
 }

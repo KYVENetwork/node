@@ -644,7 +644,9 @@ export interface QueryStakers {
 
 export class QueryStakersClientImpl implements QueryStakers {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryStakers";
     this.rpc = rpc;
     this.Stakers = this.Stakers.bind(this);
     this.Staker = this.Staker.bind(this);
@@ -653,25 +655,25 @@ export class QueryStakersClientImpl implements QueryStakers {
   }
   Stakers(request: QueryStakersRequest): Promise<QueryStakersResponse> {
     const data = QueryStakersRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "Stakers", data);
+    const promise = this.rpc.request(this.service, "Stakers", data);
     return promise.then((data) => QueryStakersResponse.decode(new _m0.Reader(data)));
   }
 
   Staker(request: QueryStakerRequest): Promise<QueryStakerResponse> {
     const data = QueryStakerRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "Staker", data);
+    const promise = this.rpc.request(this.service, "Staker", data);
     return promise.then((data) => QueryStakerResponse.decode(new _m0.Reader(data)));
   }
 
   StakersByPool(request: QueryStakersByPoolRequest): Promise<QueryStakersByPoolResponse> {
     const data = QueryStakersByPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "StakersByPool", data);
+    const promise = this.rpc.request(this.service, "StakersByPool", data);
     return promise.then((data) => QueryStakersByPoolResponse.decode(new _m0.Reader(data)));
   }
 
   StakersByPoolCount(request: QueryStakersByPoolCountRequest): Promise<QueryStakersByPoolCountResponse> {
     const data = QueryStakersByPoolCountRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryStakers", "StakersByPoolCount", data);
+    const promise = this.rpc.request(this.service, "StakersByPoolCount", data);
     return promise.then((data) => QueryStakersByPoolCountResponse.decode(new _m0.Reader(data)));
   }
 }

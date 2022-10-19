@@ -11,7 +11,9 @@
   "bin": "./dist/src/index.js",
   "pkg": {
     "scripts": "./dist/src/index.js",
-    "assets": "./node_modules/@kyve/sdk/dist/proto/*",
+    "assets": [
+      "../../node_modules/classic-level/**/*"
+    ],
     "targets": [
       "latest-linux-x64",
       "latest-linux-arm64",
@@ -27,7 +29,7 @@
     "axios": "^0.27.2"
   },
   "devDependencies": {
-    "pkg": "^5.7.0",
+    "pkg": "^5.8.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.7.4"

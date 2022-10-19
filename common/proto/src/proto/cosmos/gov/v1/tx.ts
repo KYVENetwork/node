@@ -671,7 +671,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.gov.v1.Msg";
     this.rpc = rpc;
     this.SubmitProposal = this.SubmitProposal.bind(this);
     this.ExecLegacyContent = this.ExecLegacyContent.bind(this);
@@ -681,31 +683,31 @@ export class MsgClientImpl implements Msg {
   }
   SubmitProposal(request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse> {
     const data = MsgSubmitProposal.encode(request).finish();
-    const promise = this.rpc.request("cosmos.gov.v1.Msg", "SubmitProposal", data);
+    const promise = this.rpc.request(this.service, "SubmitProposal", data);
     return promise.then((data) => MsgSubmitProposalResponse.decode(new _m0.Reader(data)));
   }
 
   ExecLegacyContent(request: MsgExecLegacyContent): Promise<MsgExecLegacyContentResponse> {
     const data = MsgExecLegacyContent.encode(request).finish();
-    const promise = this.rpc.request("cosmos.gov.v1.Msg", "ExecLegacyContent", data);
+    const promise = this.rpc.request(this.service, "ExecLegacyContent", data);
     return promise.then((data) => MsgExecLegacyContentResponse.decode(new _m0.Reader(data)));
   }
 
   Vote(request: MsgVote): Promise<MsgVoteResponse> {
     const data = MsgVote.encode(request).finish();
-    const promise = this.rpc.request("cosmos.gov.v1.Msg", "Vote", data);
+    const promise = this.rpc.request(this.service, "Vote", data);
     return promise.then((data) => MsgVoteResponse.decode(new _m0.Reader(data)));
   }
 
   VoteWeighted(request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse> {
     const data = MsgVoteWeighted.encode(request).finish();
-    const promise = this.rpc.request("cosmos.gov.v1.Msg", "VoteWeighted", data);
+    const promise = this.rpc.request(this.service, "VoteWeighted", data);
     return promise.then((data) => MsgVoteWeightedResponse.decode(new _m0.Reader(data)));
   }
 
   Deposit(request: MsgDeposit): Promise<MsgDepositResponse> {
     const data = MsgDeposit.encode(request).finish();
-    const promise = this.rpc.request("cosmos.gov.v1.Msg", "Deposit", data);
+    const promise = this.rpc.request(this.service, "Deposit", data);
     return promise.then((data) => MsgDepositResponse.decode(new _m0.Reader(data)));
   }
 }

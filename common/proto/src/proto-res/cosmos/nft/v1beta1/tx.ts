@@ -142,13 +142,15 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.nft.v1beta1.Msg";
     this.rpc = rpc;
     this.Send = this.Send.bind(this);
   }
   Send(request: MsgSend): Promise<MsgSendResponse> {
     const data = MsgSend.encode(request).finish();
-    const promise = this.rpc.request("cosmos.nft.v1beta1.Msg", "Send", data);
+    const promise = this.rpc.request(this.service, "Send", data);
     return promise.then((data) => MsgSendResponse.decode(new _m0.Reader(data)));
   }
 }

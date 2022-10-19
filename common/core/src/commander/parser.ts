@@ -41,3 +41,13 @@ export const parseNetwork = (value: string): string => {
 
   return value;
 };
+
+export const parseCache = (value: string): string => {
+  if (!["memory", "jsonfile", "leveldb"].includes(value)) {
+    throw new commander.InvalidArgumentError(
+      "Cache must be either 'memory' or 'jsonfile'."
+    );
+  }
+
+  return value;
+};

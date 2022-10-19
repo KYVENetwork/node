@@ -256,20 +256,22 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.feegrant.v1beta1.Msg";
     this.rpc = rpc;
     this.GrantAllowance = this.GrantAllowance.bind(this);
     this.RevokeAllowance = this.RevokeAllowance.bind(this);
   }
   GrantAllowance(request: MsgGrantAllowance): Promise<MsgGrantAllowanceResponse> {
     const data = MsgGrantAllowance.encode(request).finish();
-    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Msg", "GrantAllowance", data);
+    const promise = this.rpc.request(this.service, "GrantAllowance", data);
     return promise.then((data) => MsgGrantAllowanceResponse.decode(new _m0.Reader(data)));
   }
 
   RevokeAllowance(request: MsgRevokeAllowance): Promise<MsgRevokeAllowanceResponse> {
     const data = MsgRevokeAllowance.encode(request).finish();
-    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Msg", "RevokeAllowance", data);
+    const promise = this.rpc.request(this.service, "RevokeAllowance", data);
     return promise.then((data) => MsgRevokeAllowanceResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -615,7 +615,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.delegation.v1beta1.Msg";
     this.rpc = rpc;
     this.Delegate = this.Delegate.bind(this);
     this.WithdrawRewards = this.WithdrawRewards.bind(this);
@@ -625,31 +627,31 @@ export class MsgClientImpl implements Msg {
   }
   Delegate(request: MsgDelegate): Promise<MsgDelegateResponse> {
     const data = MsgDelegate.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Delegate", data);
+    const promise = this.rpc.request(this.service, "Delegate", data);
     return promise.then((data) => MsgDelegateResponse.decode(new _m0.Reader(data)));
   }
 
   WithdrawRewards(request: MsgWithdrawRewards): Promise<MsgWithdrawRewardsResponse> {
     const data = MsgWithdrawRewards.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "WithdrawRewards", data);
+    const promise = this.rpc.request(this.service, "WithdrawRewards", data);
     return promise.then((data) => MsgWithdrawRewardsResponse.decode(new _m0.Reader(data)));
   }
 
   Undelegate(request: MsgUndelegate): Promise<MsgUndelegateResponse> {
     const data = MsgUndelegate.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Undelegate", data);
+    const promise = this.rpc.request(this.service, "Undelegate", data);
     return promise.then((data) => MsgUndelegateResponse.decode(new _m0.Reader(data)));
   }
 
   Redelegate(request: MsgRedelegate): Promise<MsgRedelegateResponse> {
     const data = MsgRedelegate.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "Redelegate", data);
+    const promise = this.rpc.request(this.service, "Redelegate", data);
     return promise.then((data) => MsgRedelegateResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Msg", "UpdateParams", data);
+    const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }

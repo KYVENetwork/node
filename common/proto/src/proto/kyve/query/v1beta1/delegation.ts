@@ -642,7 +642,9 @@ export interface QueryDelegation {
 
 export class QueryDelegationClientImpl implements QueryDelegation {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryDelegation";
     this.rpc = rpc;
     this.Delegator = this.Delegator.bind(this);
     this.DelegatorsByStaker = this.DelegatorsByStaker.bind(this);
@@ -650,19 +652,19 @@ export class QueryDelegationClientImpl implements QueryDelegation {
   }
   Delegator(request: QueryDelegatorRequest): Promise<QueryDelegatorResponse> {
     const data = QueryDelegatorRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "Delegator", data);
+    const promise = this.rpc.request(this.service, "Delegator", data);
     return promise.then((data) => QueryDelegatorResponse.decode(new _m0.Reader(data)));
   }
 
   DelegatorsByStaker(request: QueryDelegatorsByStakerRequest): Promise<QueryDelegatorsByStakerResponse> {
     const data = QueryDelegatorsByStakerRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "DelegatorsByStaker", data);
+    const promise = this.rpc.request(this.service, "DelegatorsByStaker", data);
     return promise.then((data) => QueryDelegatorsByStakerResponse.decode(new _m0.Reader(data)));
   }
 
   StakersByDelegator(request: QueryStakersByDelegatorRequest): Promise<QueryStakersByDelegatorResponse> {
     const data = QueryStakersByDelegatorRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryDelegation", "StakersByDelegator", data);
+    const promise = this.rpc.request(this.service, "StakersByDelegator", data);
     return promise.then((data) => QueryStakersByDelegatorResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -50,8 +50,8 @@ export interface MsgCreatePool {
   upload_interval: string;
   /** operating_cost ... */
   operating_cost: string;
-  /** min_stake ... */
-  min_stake: string;
+  /** min_delegation ... */
+  min_delegation: string;
   /** max_bundle_size ... */
   max_bundle_size: string;
   /** version ... */
@@ -370,7 +370,7 @@ function createBaseMsgCreatePool(): MsgCreatePool {
     start_key: "",
     upload_interval: "0",
     operating_cost: "0",
-    min_stake: "0",
+    min_delegation: "0",
     max_bundle_size: "0",
     version: "",
     binaries: "",
@@ -403,8 +403,8 @@ export const MsgCreatePool = {
     if (message.operating_cost !== "0") {
       writer.uint32(64).uint64(message.operating_cost);
     }
-    if (message.min_stake !== "0") {
-      writer.uint32(72).uint64(message.min_stake);
+    if (message.min_delegation !== "0") {
+      writer.uint32(72).uint64(message.min_delegation);
     }
     if (message.max_bundle_size !== "0") {
       writer.uint32(80).uint64(message.max_bundle_size);
@@ -450,7 +450,7 @@ export const MsgCreatePool = {
           message.operating_cost = longToString(reader.uint64() as Long);
           break;
         case 9:
-          message.min_stake = longToString(reader.uint64() as Long);
+          message.min_delegation = longToString(reader.uint64() as Long);
           break;
         case 10:
           message.max_bundle_size = longToString(reader.uint64() as Long);
@@ -479,7 +479,7 @@ export const MsgCreatePool = {
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
       upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
       operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
-      min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
+      min_delegation: isSet(object.min_delegation) ? String(object.min_delegation) : "0",
       max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
@@ -496,7 +496,7 @@ export const MsgCreatePool = {
     message.start_key !== undefined && (obj.start_key = message.start_key);
     message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
     message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
-    message.min_stake !== undefined && (obj.min_stake = message.min_stake);
+    message.min_delegation !== undefined && (obj.min_delegation = message.min_delegation);
     message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
@@ -513,7 +513,7 @@ export const MsgCreatePool = {
     message.start_key = object.start_key ?? "";
     message.upload_interval = object.upload_interval ?? "0";
     message.operating_cost = object.operating_cost ?? "0";
-    message.min_stake = object.min_stake ?? "0";
+    message.min_delegation = object.min_delegation ?? "0";
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
@@ -1243,7 +1243,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.pool.v1beta1.Msg";
     this.rpc = rpc;
     this.FundPool = this.FundPool.bind(this);
     this.DefundPool = this.DefundPool.bind(this);
@@ -1257,55 +1259,55 @@ export class MsgClientImpl implements Msg {
   }
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse> {
     const data = MsgFundPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "FundPool", data);
+    const promise = this.rpc.request(this.service, "FundPool", data);
     return promise.then((data) => MsgFundPoolResponse.decode(new _m0.Reader(data)));
   }
 
   DefundPool(request: MsgDefundPool): Promise<MsgDefundPoolResponse> {
     const data = MsgDefundPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "DefundPool", data);
+    const promise = this.rpc.request(this.service, "DefundPool", data);
     return promise.then((data) => MsgDefundPoolResponse.decode(new _m0.Reader(data)));
   }
 
   CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
     const data = MsgCreatePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "CreatePool", data);
+    const promise = this.rpc.request(this.service, "CreatePool", data);
     return promise.then((data) => MsgCreatePoolResponse.decode(new _m0.Reader(data)));
   }
 
   UpdatePool(request: MsgUpdatePool): Promise<MsgUpdatePoolResponse> {
     const data = MsgUpdatePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "UpdatePool", data);
+    const promise = this.rpc.request(this.service, "UpdatePool", data);
     return promise.then((data) => MsgUpdatePoolResponse.decode(new _m0.Reader(data)));
   }
 
   PausePool(request: MsgPausePool): Promise<MsgPausePoolResponse> {
     const data = MsgPausePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "PausePool", data);
+    const promise = this.rpc.request(this.service, "PausePool", data);
     return promise.then((data) => MsgPausePoolResponse.decode(new _m0.Reader(data)));
   }
 
   UnpausePool(request: MsgUnpausePool): Promise<MsgUnpausePoolResponse> {
     const data = MsgUnpausePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "UnpausePool", data);
+    const promise = this.rpc.request(this.service, "UnpausePool", data);
     return promise.then((data) => MsgUnpausePoolResponse.decode(new _m0.Reader(data)));
   }
 
   ScheduleRuntimeUpgrade(request: MsgScheduleRuntimeUpgrade): Promise<MsgScheduleRuntimeUpgradeResponse> {
     const data = MsgScheduleRuntimeUpgrade.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "ScheduleRuntimeUpgrade", data);
+    const promise = this.rpc.request(this.service, "ScheduleRuntimeUpgrade", data);
     return promise.then((data) => MsgScheduleRuntimeUpgradeResponse.decode(new _m0.Reader(data)));
   }
 
   CancelRuntimeUpgrade(request: MsgCancelRuntimeUpgrade): Promise<MsgCancelRuntimeUpgradeResponse> {
     const data = MsgCancelRuntimeUpgrade.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "CancelRuntimeUpgrade", data);
+    const promise = this.rpc.request(this.service, "CancelRuntimeUpgrade", data);
     return promise.then((data) => MsgCancelRuntimeUpgradeResponse.decode(new _m0.Reader(data)));
   }
 
   ResetPool(request: MsgResetPool): Promise<MsgResetPoolResponse> {
     const data = MsgResetPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.pool.v1beta1.Msg", "ResetPool", data);
+    const promise = this.rpc.request(this.service, "ResetPool", data);
     return promise.then((data) => MsgResetPoolResponse.decode(new _m0.Reader(data)));
   }
 }

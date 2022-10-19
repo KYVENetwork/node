@@ -316,20 +316,22 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.params.v1beta1.Query";
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
     this.Subspaces = this.Subspaces.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.params.v1beta1.Query", "Params", data);
+    const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   Subspaces(request: QuerySubspacesRequest): Promise<QuerySubspacesResponse> {
     const data = QuerySubspacesRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.params.v1beta1.Query", "Subspaces", data);
+    const promise = this.rpc.request(this.service, "Subspaces", data);
     return promise.then((data) => QuerySubspacesResponse.decode(new _m0.Reader(data)));
   }
 }

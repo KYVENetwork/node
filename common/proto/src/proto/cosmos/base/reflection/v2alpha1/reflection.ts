@@ -1682,7 +1682,9 @@ export interface ReflectionService {
 
 export class ReflectionServiceClientImpl implements ReflectionService {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.base.reflection.v2alpha1.ReflectionService";
     this.rpc = rpc;
     this.GetAuthnDescriptor = this.GetAuthnDescriptor.bind(this);
     this.GetChainDescriptor = this.GetChainDescriptor.bind(this);
@@ -1693,45 +1695,37 @@ export class ReflectionServiceClientImpl implements ReflectionService {
   }
   GetAuthnDescriptor(request: GetAuthnDescriptorRequest): Promise<GetAuthnDescriptorResponse> {
     const data = GetAuthnDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v2alpha1.ReflectionService", "GetAuthnDescriptor", data);
+    const promise = this.rpc.request(this.service, "GetAuthnDescriptor", data);
     return promise.then((data) => GetAuthnDescriptorResponse.decode(new _m0.Reader(data)));
   }
 
   GetChainDescriptor(request: GetChainDescriptorRequest): Promise<GetChainDescriptorResponse> {
     const data = GetChainDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v2alpha1.ReflectionService", "GetChainDescriptor", data);
+    const promise = this.rpc.request(this.service, "GetChainDescriptor", data);
     return promise.then((data) => GetChainDescriptorResponse.decode(new _m0.Reader(data)));
   }
 
   GetCodecDescriptor(request: GetCodecDescriptorRequest): Promise<GetCodecDescriptorResponse> {
     const data = GetCodecDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v2alpha1.ReflectionService", "GetCodecDescriptor", data);
+    const promise = this.rpc.request(this.service, "GetCodecDescriptor", data);
     return promise.then((data) => GetCodecDescriptorResponse.decode(new _m0.Reader(data)));
   }
 
   GetConfigurationDescriptor(request: GetConfigurationDescriptorRequest): Promise<GetConfigurationDescriptorResponse> {
     const data = GetConfigurationDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "cosmos.base.reflection.v2alpha1.ReflectionService",
-      "GetConfigurationDescriptor",
-      data,
-    );
+    const promise = this.rpc.request(this.service, "GetConfigurationDescriptor", data);
     return promise.then((data) => GetConfigurationDescriptorResponse.decode(new _m0.Reader(data)));
   }
 
   GetQueryServicesDescriptor(request: GetQueryServicesDescriptorRequest): Promise<GetQueryServicesDescriptorResponse> {
     const data = GetQueryServicesDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "cosmos.base.reflection.v2alpha1.ReflectionService",
-      "GetQueryServicesDescriptor",
-      data,
-    );
+    const promise = this.rpc.request(this.service, "GetQueryServicesDescriptor", data);
     return promise.then((data) => GetQueryServicesDescriptorResponse.decode(new _m0.Reader(data)));
   }
 
   GetTxDescriptor(request: GetTxDescriptorRequest): Promise<GetTxDescriptorResponse> {
     const data = GetTxDescriptorRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v2alpha1.ReflectionService", "GetTxDescriptor", data);
+    const promise = this.rpc.request(this.service, "GetTxDescriptor", data);
     return promise.then((data) => GetTxDescriptorResponse.decode(new _m0.Reader(data)));
   }
 }

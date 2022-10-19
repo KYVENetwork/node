@@ -367,7 +367,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.slashing.v1beta1.Query";
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
     this.SigningInfo = this.SigningInfo.bind(this);
@@ -375,19 +377,19 @@ export class QueryClientImpl implements Query {
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.slashing.v1beta1.Query", "Params", data);
+    const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   SigningInfo(request: QuerySigningInfoRequest): Promise<QuerySigningInfoResponse> {
     const data = QuerySigningInfoRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.slashing.v1beta1.Query", "SigningInfo", data);
+    const promise = this.rpc.request(this.service, "SigningInfo", data);
     return promise.then((data) => QuerySigningInfoResponse.decode(new _m0.Reader(data)));
   }
 
   SigningInfos(request: QuerySigningInfosRequest): Promise<QuerySigningInfosResponse> {
     const data = QuerySigningInfosRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.slashing.v1beta1.Query", "SigningInfos", data);
+    const promise = this.rpc.request(this.service, "SigningInfos", data);
     return promise.then((data) => QuerySigningInfosResponse.decode(new _m0.Reader(data)));
   }
 }

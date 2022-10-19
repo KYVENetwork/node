@@ -425,20 +425,22 @@ export interface QueryPool {
 
 export class QueryPoolClientImpl implements QueryPool {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryPool";
     this.rpc = rpc;
     this.Pools = this.Pools.bind(this);
     this.Pool = this.Pool.bind(this);
   }
   Pools(request: QueryPoolsRequest): Promise<QueryPoolsResponse> {
     const data = QueryPoolsRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryPool", "Pools", data);
+    const promise = this.rpc.request(this.service, "Pools", data);
     return promise.then((data) => QueryPoolsResponse.decode(new _m0.Reader(data)));
   }
 
   Pool(request: QueryPoolRequest): Promise<QueryPoolResponse> {
     const data = QueryPoolRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryPool", "Pool", data);
+    const promise = this.rpc.request(this.service, "Pool", data);
     return promise.then((data) => QueryPoolResponse.decode(new _m0.Reader(data)));
   }
 }

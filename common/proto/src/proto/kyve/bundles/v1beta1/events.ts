@@ -28,22 +28,22 @@ export interface EventBundleProposed {
   storage_id: string;
   /** uploader ... */
   uploader: string;
-  /** byte_size ... */
-  byte_size: string;
-  /** from_height ... */
-  from_height: string;
-  /** to_height ... */
-  to_height: string;
+  /** data_size ... */
+  data_size: string;
+  /** from_index ... */
+  from_index: string;
+  /** bundle_size ... */
+  bundle_size: string;
   /** from_key ... */
   from_key: string;
   /** to_key ... */
   to_key: string;
-  /** value ... */
-  value: string;
-  /** bundle_hash ... */
-  bundle_hash: string;
-  /** created_at ... */
-  created_at: string;
+  /** bundle_summary ... */
+  bundle_summary: string;
+  /** data_hash ... */
+  data_hash: string;
+  /** proposed_at ... */
+  proposed_at: string;
 }
 
 /** EventBundleFinalized is an event emitted when a bundle is finalised. */
@@ -70,6 +70,22 @@ export interface EventBundleFinalized {
   reward_delegation: string;
   /** rewardTotal ... */
   reward_total: string;
+  /** finalized_at ... */
+  finalized_at: string;
+  /** uploader ... */
+  uploader: string;
+  /** next_uploader ... */
+  next_uploader: string;
+}
+
+/** EventClaimedUploaderRole is an event emitted when an uploader claims the uploader role */
+export interface EventClaimedUploaderRole {
+  /** pool_id ... */
+  pool_id: string;
+  /** id ... */
+  id: string;
+  /** new_uploader ... */
+  new_uploader: string;
 }
 
 /** EventSkippedUploaderRole is an event emitted when an uploader skips the upload */
@@ -82,6 +98,24 @@ export interface EventSkippedUploaderRole {
   previous_uploader: string;
   /** new_uploader ... */
   new_uploader: string;
+}
+
+/** EventPointIncreased is an event emitted when a staker receives a point */
+export interface EventPointIncreased {
+  /** pool_id ... */
+  pool_id: string;
+  /** staker ... */
+  staker: string;
+  /** current_points ... */
+  current_points: string;
+}
+
+/** EventPointIncreased is an event emitted when a staker receives a point */
+export interface EventPointsReset {
+  /** pool_id ... */
+  pool_id: string;
+  /** staker ... */
+  staker: string;
 }
 
 function createBaseEventBundleVote(): EventBundleVote {
@@ -166,14 +200,14 @@ function createBaseEventBundleProposed(): EventBundleProposed {
     id: "0",
     storage_id: "",
     uploader: "",
-    byte_size: "0",
-    from_height: "0",
-    to_height: "0",
+    data_size: "0",
+    from_index: "0",
+    bundle_size: "0",
     from_key: "",
     to_key: "",
-    value: "",
-    bundle_hash: "",
-    created_at: "0",
+    bundle_summary: "",
+    data_hash: "",
+    proposed_at: "0",
   };
 }
 
@@ -191,14 +225,14 @@ export const EventBundleProposed = {
     if (message.uploader !== "") {
       writer.uint32(34).string(message.uploader);
     }
-    if (message.byte_size !== "0") {
-      writer.uint32(40).uint64(message.byte_size);
+    if (message.data_size !== "0") {
+      writer.uint32(40).uint64(message.data_size);
     }
-    if (message.from_height !== "0") {
-      writer.uint32(48).uint64(message.from_height);
+    if (message.from_index !== "0") {
+      writer.uint32(48).uint64(message.from_index);
     }
-    if (message.to_height !== "0") {
-      writer.uint32(56).uint64(message.to_height);
+    if (message.bundle_size !== "0") {
+      writer.uint32(56).uint64(message.bundle_size);
     }
     if (message.from_key !== "") {
       writer.uint32(66).string(message.from_key);
@@ -206,14 +240,14 @@ export const EventBundleProposed = {
     if (message.to_key !== "") {
       writer.uint32(74).string(message.to_key);
     }
-    if (message.value !== "") {
-      writer.uint32(82).string(message.value);
+    if (message.bundle_summary !== "") {
+      writer.uint32(82).string(message.bundle_summary);
     }
-    if (message.bundle_hash !== "") {
-      writer.uint32(90).string(message.bundle_hash);
+    if (message.data_hash !== "") {
+      writer.uint32(90).string(message.data_hash);
     }
-    if (message.created_at !== "0") {
-      writer.uint32(96).uint64(message.created_at);
+    if (message.proposed_at !== "0") {
+      writer.uint32(96).uint64(message.proposed_at);
     }
     return writer;
   },
@@ -238,13 +272,13 @@ export const EventBundleProposed = {
           message.uploader = reader.string();
           break;
         case 5:
-          message.byte_size = longToString(reader.uint64() as Long);
+          message.data_size = longToString(reader.uint64() as Long);
           break;
         case 6:
-          message.from_height = longToString(reader.uint64() as Long);
+          message.from_index = longToString(reader.uint64() as Long);
           break;
         case 7:
-          message.to_height = longToString(reader.uint64() as Long);
+          message.bundle_size = longToString(reader.uint64() as Long);
           break;
         case 8:
           message.from_key = reader.string();
@@ -253,13 +287,13 @@ export const EventBundleProposed = {
           message.to_key = reader.string();
           break;
         case 10:
-          message.value = reader.string();
+          message.bundle_summary = reader.string();
           break;
         case 11:
-          message.bundle_hash = reader.string();
+          message.data_hash = reader.string();
           break;
         case 12:
-          message.created_at = longToString(reader.uint64() as Long);
+          message.proposed_at = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -275,14 +309,14 @@ export const EventBundleProposed = {
       id: isSet(object.id) ? String(object.id) : "0",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
-      byte_size: isSet(object.byte_size) ? String(object.byte_size) : "0",
-      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
-      to_height: isSet(object.to_height) ? String(object.to_height) : "0",
+      data_size: isSet(object.data_size) ? String(object.data_size) : "0",
+      from_index: isSet(object.from_index) ? String(object.from_index) : "0",
+      bundle_size: isSet(object.bundle_size) ? String(object.bundle_size) : "0",
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      value: isSet(object.value) ? String(object.value) : "",
-      bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
-      created_at: isSet(object.created_at) ? String(object.created_at) : "0",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
+      data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
+      proposed_at: isSet(object.proposed_at) ? String(object.proposed_at) : "0",
     };
   },
 
@@ -292,14 +326,14 @@ export const EventBundleProposed = {
     message.id !== undefined && (obj.id = message.id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.byte_size !== undefined && (obj.byte_size = message.byte_size);
-    message.from_height !== undefined && (obj.from_height = message.from_height);
-    message.to_height !== undefined && (obj.to_height = message.to_height);
+    message.data_size !== undefined && (obj.data_size = message.data_size);
+    message.from_index !== undefined && (obj.from_index = message.from_index);
+    message.bundle_size !== undefined && (obj.bundle_size = message.bundle_size);
     message.from_key !== undefined && (obj.from_key = message.from_key);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.value !== undefined && (obj.value = message.value);
-    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
-    message.created_at !== undefined && (obj.created_at = message.created_at);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
+    message.data_hash !== undefined && (obj.data_hash = message.data_hash);
+    message.proposed_at !== undefined && (obj.proposed_at = message.proposed_at);
     return obj;
   },
 
@@ -309,14 +343,14 @@ export const EventBundleProposed = {
     message.id = object.id ?? "0";
     message.storage_id = object.storage_id ?? "";
     message.uploader = object.uploader ?? "";
-    message.byte_size = object.byte_size ?? "0";
-    message.from_height = object.from_height ?? "0";
-    message.to_height = object.to_height ?? "0";
+    message.data_size = object.data_size ?? "0";
+    message.from_index = object.from_index ?? "0";
+    message.bundle_size = object.bundle_size ?? "0";
     message.from_key = object.from_key ?? "";
     message.to_key = object.to_key ?? "";
-    message.value = object.value ?? "";
-    message.bundle_hash = object.bundle_hash ?? "";
-    message.created_at = object.created_at ?? "0";
+    message.bundle_summary = object.bundle_summary ?? "";
+    message.data_hash = object.data_hash ?? "";
+    message.proposed_at = object.proposed_at ?? "0";
     return message;
   },
 };
@@ -334,6 +368,9 @@ function createBaseEventBundleFinalized(): EventBundleFinalized {
     reward_uploader: "0",
     reward_delegation: "0",
     reward_total: "0",
+    finalized_at: "0",
+    uploader: "",
+    next_uploader: "",
   };
 }
 
@@ -371,6 +408,15 @@ export const EventBundleFinalized = {
     }
     if (message.reward_total !== "0") {
       writer.uint32(88).uint64(message.reward_total);
+    }
+    if (message.finalized_at !== "0") {
+      writer.uint32(96).uint64(message.finalized_at);
+    }
+    if (message.uploader !== "") {
+      writer.uint32(106).string(message.uploader);
+    }
+    if (message.next_uploader !== "") {
+      writer.uint32(114).string(message.next_uploader);
     }
     return writer;
   },
@@ -415,6 +461,15 @@ export const EventBundleFinalized = {
         case 11:
           message.reward_total = longToString(reader.uint64() as Long);
           break;
+        case 12:
+          message.finalized_at = longToString(reader.uint64() as Long);
+          break;
+        case 13:
+          message.uploader = reader.string();
+          break;
+        case 14:
+          message.next_uploader = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -436,6 +491,9 @@ export const EventBundleFinalized = {
       reward_uploader: isSet(object.reward_uploader) ? String(object.reward_uploader) : "0",
       reward_delegation: isSet(object.reward_delegation) ? String(object.reward_delegation) : "0",
       reward_total: isSet(object.reward_total) ? String(object.reward_total) : "0",
+      finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
+      uploader: isSet(object.uploader) ? String(object.uploader) : "",
+      next_uploader: isSet(object.next_uploader) ? String(object.next_uploader) : "",
     };
   },
 
@@ -452,6 +510,9 @@ export const EventBundleFinalized = {
     message.reward_uploader !== undefined && (obj.reward_uploader = message.reward_uploader);
     message.reward_delegation !== undefined && (obj.reward_delegation = message.reward_delegation);
     message.reward_total !== undefined && (obj.reward_total = message.reward_total);
+    message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
+    message.uploader !== undefined && (obj.uploader = message.uploader);
+    message.next_uploader !== undefined && (obj.next_uploader = message.next_uploader);
     return obj;
   },
 
@@ -468,6 +529,76 @@ export const EventBundleFinalized = {
     message.reward_uploader = object.reward_uploader ?? "0";
     message.reward_delegation = object.reward_delegation ?? "0";
     message.reward_total = object.reward_total ?? "0";
+    message.finalized_at = object.finalized_at ?? "0";
+    message.uploader = object.uploader ?? "";
+    message.next_uploader = object.next_uploader ?? "";
+    return message;
+  },
+};
+
+function createBaseEventClaimedUploaderRole(): EventClaimedUploaderRole {
+  return { pool_id: "0", id: "0", new_uploader: "" };
+}
+
+export const EventClaimedUploaderRole = {
+  encode(message: EventClaimedUploaderRole, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.id !== "0") {
+      writer.uint32(16).uint64(message.id);
+    }
+    if (message.new_uploader !== "") {
+      writer.uint32(26).string(message.new_uploader);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventClaimedUploaderRole {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventClaimedUploaderRole();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 2:
+          message.id = longToString(reader.uint64() as Long);
+          break;
+        case 3:
+          message.new_uploader = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventClaimedUploaderRole {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      id: isSet(object.id) ? String(object.id) : "0",
+      new_uploader: isSet(object.new_uploader) ? String(object.new_uploader) : "",
+    };
+  },
+
+  toJSON(message: EventClaimedUploaderRole): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.id !== undefined && (obj.id = message.id);
+    message.new_uploader !== undefined && (obj.new_uploader = message.new_uploader);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventClaimedUploaderRole>, I>>(object: I): EventClaimedUploaderRole {
+    const message = createBaseEventClaimedUploaderRole();
+    message.pool_id = object.pool_id ?? "0";
+    message.id = object.id ?? "0";
+    message.new_uploader = object.new_uploader ?? "";
     return message;
   },
 };
@@ -544,6 +675,131 @@ export const EventSkippedUploaderRole = {
     message.id = object.id ?? "0";
     message.previous_uploader = object.previous_uploader ?? "";
     message.new_uploader = object.new_uploader ?? "";
+    return message;
+  },
+};
+
+function createBaseEventPointIncreased(): EventPointIncreased {
+  return { pool_id: "0", staker: "", current_points: "0" };
+}
+
+export const EventPointIncreased = {
+  encode(message: EventPointIncreased, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.staker !== "") {
+      writer.uint32(26).string(message.staker);
+    }
+    if (message.current_points !== "0") {
+      writer.uint32(32).uint64(message.current_points);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventPointIncreased {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventPointIncreased();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 3:
+          message.staker = reader.string();
+          break;
+        case 4:
+          message.current_points = longToString(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventPointIncreased {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      staker: isSet(object.staker) ? String(object.staker) : "",
+      current_points: isSet(object.current_points) ? String(object.current_points) : "0",
+    };
+  },
+
+  toJSON(message: EventPointIncreased): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.staker !== undefined && (obj.staker = message.staker);
+    message.current_points !== undefined && (obj.current_points = message.current_points);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventPointIncreased>, I>>(object: I): EventPointIncreased {
+    const message = createBaseEventPointIncreased();
+    message.pool_id = object.pool_id ?? "0";
+    message.staker = object.staker ?? "";
+    message.current_points = object.current_points ?? "0";
+    return message;
+  },
+};
+
+function createBaseEventPointsReset(): EventPointsReset {
+  return { pool_id: "0", staker: "" };
+}
+
+export const EventPointsReset = {
+  encode(message: EventPointsReset, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pool_id !== "0") {
+      writer.uint32(8).uint64(message.pool_id);
+    }
+    if (message.staker !== "") {
+      writer.uint32(26).string(message.staker);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventPointsReset {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventPointsReset();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pool_id = longToString(reader.uint64() as Long);
+          break;
+        case 3:
+          message.staker = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventPointsReset {
+    return {
+      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
+      staker: isSet(object.staker) ? String(object.staker) : "",
+    };
+  },
+
+  toJSON(message: EventPointsReset): unknown {
+    const obj: any = {};
+    message.pool_id !== undefined && (obj.pool_id = message.pool_id);
+    message.staker !== undefined && (obj.staker = message.staker);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<EventPointsReset>, I>>(object: I): EventPointsReset {
+    const message = createBaseEventPointsReset();
+    message.pool_id = object.pool_id ?? "0";
+    message.staker = object.staker ?? "";
     return message;
   },
 };

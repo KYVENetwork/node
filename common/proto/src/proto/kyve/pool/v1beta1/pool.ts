@@ -14,8 +14,8 @@ export enum PoolStatus {
   POOL_STATUS_PAUSED = 2,
   /** POOL_STATUS_NO_FUNDS - POOL_STATUS_NO_FUNDS ... */
   POOL_STATUS_NO_FUNDS = 3,
-  /** POOL_STATUS_NOT_ENOUGH_STAKE - POOL_STATUS_NOT_ENOUGH_STAKE ... */
-  POOL_STATUS_NOT_ENOUGH_STAKE = 4,
+  /** POOL_STATUS_NOT_ENOUGH_DELEGATION - POOL_STATUS_NOT_ENOUGH_DELEGATION ... */
+  POOL_STATUS_NOT_ENOUGH_DELEGATION = 4,
   /** POOL_STATUS_UPGRADING - POOL_STATUS_UPGRADING ... */
   POOL_STATUS_UPGRADING = 5,
   UNRECOGNIZED = -1,
@@ -36,8 +36,8 @@ export function poolStatusFromJSON(object: any): PoolStatus {
     case "POOL_STATUS_NO_FUNDS":
       return PoolStatus.POOL_STATUS_NO_FUNDS;
     case 4:
-    case "POOL_STATUS_NOT_ENOUGH_STAKE":
-      return PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE;
+    case "POOL_STATUS_NOT_ENOUGH_DELEGATION":
+      return PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION;
     case 5:
     case "POOL_STATUS_UPGRADING":
       return PoolStatus.POOL_STATUS_UPGRADING;
@@ -58,8 +58,8 @@ export function poolStatusToJSON(object: PoolStatus): string {
       return "POOL_STATUS_PAUSED";
     case PoolStatus.POOL_STATUS_NO_FUNDS:
       return "POOL_STATUS_NO_FUNDS";
-    case PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE:
-      return "POOL_STATUS_NOT_ENOUGH_STAKE";
+    case PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION:
+      return "POOL_STATUS_NOT_ENOUGH_DELEGATION";
     case PoolStatus.POOL_STATUS_UPGRADING:
       return "POOL_STATUS_UPGRADING";
     case PoolStatus.UNRECOGNIZED:
@@ -114,18 +114,18 @@ export interface Pool {
   start_key: string;
   /** current_key ... */
   current_key: string;
-  /** current_value ... */
-  current_value: string;
-  /** current_height ... */
-  current_height: string;
+  /** current_summary ... */
+  current_summary: string;
+  /** current_index ... */
+  current_index: string;
   /** total_bundles ... */
   total_bundles: string;
   /** upload_interval ... */
   upload_interval: string;
   /** operating_cost ... */
   operating_cost: string;
-  /** min_stake ... */
-  min_stake: string;
+  /** min_delegation ... */
+  min_delegation: string;
   /** max_bundle_size ... */
   max_bundle_size: string;
   /** paused ... */
@@ -350,12 +350,12 @@ function createBasePool(): Pool {
     config: "",
     start_key: "",
     current_key: "",
-    current_value: "",
-    current_height: "0",
+    current_summary: "",
+    current_index: "0",
     total_bundles: "0",
     upload_interval: "0",
     operating_cost: "0",
-    min_stake: "0",
+    min_delegation: "0",
     max_bundle_size: "0",
     paused: false,
     funders: [],
@@ -388,11 +388,11 @@ export const Pool = {
     if (message.current_key !== "") {
       writer.uint32(58).string(message.current_key);
     }
-    if (message.current_value !== "") {
-      writer.uint32(66).string(message.current_value);
+    if (message.current_summary !== "") {
+      writer.uint32(66).string(message.current_summary);
     }
-    if (message.current_height !== "0") {
-      writer.uint32(72).uint64(message.current_height);
+    if (message.current_index !== "0") {
+      writer.uint32(72).uint64(message.current_index);
     }
     if (message.total_bundles !== "0") {
       writer.uint32(80).uint64(message.total_bundles);
@@ -403,8 +403,8 @@ export const Pool = {
     if (message.operating_cost !== "0") {
       writer.uint32(96).uint64(message.operating_cost);
     }
-    if (message.min_stake !== "0") {
-      writer.uint32(104).uint64(message.min_stake);
+    if (message.min_delegation !== "0") {
+      writer.uint32(104).uint64(message.min_delegation);
     }
     if (message.max_bundle_size !== "0") {
       writer.uint32(112).uint64(message.max_bundle_size);
@@ -456,10 +456,10 @@ export const Pool = {
           message.current_key = reader.string();
           break;
         case 8:
-          message.current_value = reader.string();
+          message.current_summary = reader.string();
           break;
         case 9:
-          message.current_height = longToString(reader.uint64() as Long);
+          message.current_index = longToString(reader.uint64() as Long);
           break;
         case 10:
           message.total_bundles = longToString(reader.uint64() as Long);
@@ -471,7 +471,7 @@ export const Pool = {
           message.operating_cost = longToString(reader.uint64() as Long);
           break;
         case 13:
-          message.min_stake = longToString(reader.uint64() as Long);
+          message.min_delegation = longToString(reader.uint64() as Long);
           break;
         case 14:
           message.max_bundle_size = longToString(reader.uint64() as Long);
@@ -508,12 +508,12 @@ export const Pool = {
       config: isSet(object.config) ? String(object.config) : "",
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
       current_key: isSet(object.current_key) ? String(object.current_key) : "",
-      current_value: isSet(object.current_value) ? String(object.current_value) : "",
-      current_height: isSet(object.current_height) ? String(object.current_height) : "0",
+      current_summary: isSet(object.current_summary) ? String(object.current_summary) : "",
+      current_index: isSet(object.current_index) ? String(object.current_index) : "0",
       total_bundles: isSet(object.total_bundles) ? String(object.total_bundles) : "0",
       upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
       operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
-      min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
+      min_delegation: isSet(object.min_delegation) ? String(object.min_delegation) : "0",
       max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
       funders: Array.isArray(object?.funders) ? object.funders.map((e: any) => Funder.fromJSON(e)) : [],
@@ -532,12 +532,12 @@ export const Pool = {
     message.config !== undefined && (obj.config = message.config);
     message.start_key !== undefined && (obj.start_key = message.start_key);
     message.current_key !== undefined && (obj.current_key = message.current_key);
-    message.current_value !== undefined && (obj.current_value = message.current_value);
-    message.current_height !== undefined && (obj.current_height = message.current_height);
+    message.current_summary !== undefined && (obj.current_summary = message.current_summary);
+    message.current_index !== undefined && (obj.current_index = message.current_index);
     message.total_bundles !== undefined && (obj.total_bundles = message.total_bundles);
     message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
     message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
-    message.min_stake !== undefined && (obj.min_stake = message.min_stake);
+    message.min_delegation !== undefined && (obj.min_delegation = message.min_delegation);
     message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.paused !== undefined && (obj.paused = message.paused);
     if (message.funders) {
@@ -561,12 +561,12 @@ export const Pool = {
     message.config = object.config ?? "";
     message.start_key = object.start_key ?? "";
     message.current_key = object.current_key ?? "";
-    message.current_value = object.current_value ?? "";
-    message.current_height = object.current_height ?? "0";
+    message.current_summary = object.current_summary ?? "";
+    message.current_index = object.current_index ?? "0";
     message.total_bundles = object.total_bundles ?? "0";
     message.upload_interval = object.upload_interval ?? "0";
     message.operating_cost = object.operating_cost ?? "0";
-    message.min_stake = object.min_stake ?? "0";
+    message.min_delegation = object.min_delegation ?? "0";
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.paused = object.paused ?? false;
     message.funders = object.funders?.map((e) => Funder.fromPartial(e)) || [];

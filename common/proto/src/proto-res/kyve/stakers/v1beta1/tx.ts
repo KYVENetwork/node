@@ -723,7 +723,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.stakers.v1beta1.Msg";
     this.rpc = rpc;
     this.CreateStaker = this.CreateStaker.bind(this);
     this.UpdateMetadata = this.UpdateMetadata.bind(this);
@@ -734,37 +736,37 @@ export class MsgClientImpl implements Msg {
   }
   CreateStaker(request: MsgCreateStaker): Promise<MsgCreateStakerResponse> {
     const data = MsgCreateStaker.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "CreateStaker", data);
+    const promise = this.rpc.request(this.service, "CreateStaker", data);
     return promise.then((data) => MsgCreateStakerResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateMetadata(request: MsgUpdateMetadata): Promise<MsgUpdateMetadataResponse> {
     const data = MsgUpdateMetadata.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateMetadata", data);
+    const promise = this.rpc.request(this.service, "UpdateMetadata", data);
     return promise.then((data) => MsgUpdateMetadataResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateCommission(request: MsgUpdateCommission): Promise<MsgUpdateCommissionResponse> {
     const data = MsgUpdateCommission.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateCommission", data);
+    const promise = this.rpc.request(this.service, "UpdateCommission", data);
     return promise.then((data) => MsgUpdateCommissionResponse.decode(new _m0.Reader(data)));
   }
 
   JoinPool(request: MsgJoinPool): Promise<MsgJoinPoolResponse> {
     const data = MsgJoinPool.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "JoinPool", data);
+    const promise = this.rpc.request(this.service, "JoinPool", data);
     return promise.then((data) => MsgJoinPoolResponse.decode(new _m0.Reader(data)));
   }
 
   LeavePool(request: MsgLeavePool): Promise<MsgLeavePoolResponse> {
     const data = MsgLeavePool.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "LeavePool", data);
+    const promise = this.rpc.request(this.service, "LeavePool", data);
     return promise.then((data) => MsgLeavePoolResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("kyve.stakers.v1beta1.Msg", "UpdateParams", data);
+    const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }

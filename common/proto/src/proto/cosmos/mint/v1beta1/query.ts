@@ -323,7 +323,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.mint.v1beta1.Query";
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
     this.Inflation = this.Inflation.bind(this);
@@ -331,19 +333,19 @@ export class QueryClientImpl implements Query {
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.mint.v1beta1.Query", "Params", data);
+    const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   Inflation(request: QueryInflationRequest): Promise<QueryInflationResponse> {
     const data = QueryInflationRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.mint.v1beta1.Query", "Inflation", data);
+    const promise = this.rpc.request(this.service, "Inflation", data);
     return promise.then((data) => QueryInflationResponse.decode(new _m0.Reader(data)));
   }
 
   AnnualProvisions(request: QueryAnnualProvisionsRequest): Promise<QueryAnnualProvisionsResponse> {
     const data = QueryAnnualProvisionsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.mint.v1beta1.Query", "AnnualProvisions", data);
+    const promise = this.rpc.request(this.service, "AnnualProvisions", data);
     return promise.then((data) => QueryAnnualProvisionsResponse.decode(new _m0.Reader(data)));
   }
 }

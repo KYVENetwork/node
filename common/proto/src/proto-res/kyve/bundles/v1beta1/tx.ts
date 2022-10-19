@@ -80,20 +80,20 @@ export interface MsgSubmitBundleProposal {
   pool_id: string;
   /** storage_id ... */
   storage_id: string;
-  /** byte_size ... */
-  byte_size: string;
-  /** from_height */
-  from_height: string;
-  /** to_height ... */
-  to_height: string;
+  /** data_size ... */
+  data_size: string;
+  /** data_hash ... */
+  data_hash: string;
+  /** from_index ... */
+  from_index: string;
+  /** bundle_size ... */
+  bundle_size: string;
   /** from_key */
   from_key: string;
   /** to_key ... */
   to_key: string;
-  /** to_value ... */
-  to_value: string;
-  /** bundle_hash ... */
-  bundle_hash: string;
+  /** bundle_summary ... */
+  bundle_summary: string;
 }
 
 /** MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type. */
@@ -140,8 +140,8 @@ export interface MsgSkipUploaderRole {
   staker: string;
   /** pool_id ... */
   pool_id: string;
-  /** from_height ... */
-  from_height: string;
+  /** from_index ... */
+  from_index: string;
 }
 
 /** MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type. */
@@ -166,13 +166,13 @@ function createBaseMsgSubmitBundleProposal(): MsgSubmitBundleProposal {
     staker: "",
     pool_id: "0",
     storage_id: "",
-    byte_size: "0",
-    from_height: "0",
-    to_height: "0",
+    data_size: "0",
+    data_hash: "",
+    from_index: "0",
+    bundle_size: "0",
     from_key: "",
     to_key: "",
-    to_value: "",
-    bundle_hash: "",
+    bundle_summary: "",
   };
 }
 
@@ -190,26 +190,26 @@ export const MsgSubmitBundleProposal = {
     if (message.storage_id !== "") {
       writer.uint32(34).string(message.storage_id);
     }
-    if (message.byte_size !== "0") {
-      writer.uint32(40).uint64(message.byte_size);
+    if (message.data_size !== "0") {
+      writer.uint32(40).uint64(message.data_size);
     }
-    if (message.from_height !== "0") {
-      writer.uint32(48).uint64(message.from_height);
+    if (message.data_hash !== "") {
+      writer.uint32(50).string(message.data_hash);
     }
-    if (message.to_height !== "0") {
-      writer.uint32(56).uint64(message.to_height);
+    if (message.from_index !== "0") {
+      writer.uint32(56).uint64(message.from_index);
+    }
+    if (message.bundle_size !== "0") {
+      writer.uint32(64).uint64(message.bundle_size);
     }
     if (message.from_key !== "") {
-      writer.uint32(66).string(message.from_key);
+      writer.uint32(74).string(message.from_key);
     }
     if (message.to_key !== "") {
-      writer.uint32(74).string(message.to_key);
+      writer.uint32(82).string(message.to_key);
     }
-    if (message.to_value !== "") {
-      writer.uint32(82).string(message.to_value);
-    }
-    if (message.bundle_hash !== "") {
-      writer.uint32(90).string(message.bundle_hash);
+    if (message.bundle_summary !== "") {
+      writer.uint32(90).string(message.bundle_summary);
     }
     return writer;
   },
@@ -234,25 +234,25 @@ export const MsgSubmitBundleProposal = {
           message.storage_id = reader.string();
           break;
         case 5:
-          message.byte_size = longToString(reader.uint64() as Long);
+          message.data_size = longToString(reader.uint64() as Long);
           break;
         case 6:
-          message.from_height = longToString(reader.uint64() as Long);
+          message.data_hash = reader.string();
           break;
         case 7:
-          message.to_height = longToString(reader.uint64() as Long);
+          message.from_index = longToString(reader.uint64() as Long);
           break;
         case 8:
-          message.from_key = reader.string();
+          message.bundle_size = longToString(reader.uint64() as Long);
           break;
         case 9:
-          message.to_key = reader.string();
+          message.from_key = reader.string();
           break;
         case 10:
-          message.to_value = reader.string();
+          message.to_key = reader.string();
           break;
         case 11:
-          message.bundle_hash = reader.string();
+          message.bundle_summary = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -268,13 +268,13 @@ export const MsgSubmitBundleProposal = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
-      byte_size: isSet(object.byte_size) ? String(object.byte_size) : "0",
-      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
-      to_height: isSet(object.to_height) ? String(object.to_height) : "0",
+      data_size: isSet(object.data_size) ? String(object.data_size) : "0",
+      data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
+      from_index: isSet(object.from_index) ? String(object.from_index) : "0",
+      bundle_size: isSet(object.bundle_size) ? String(object.bundle_size) : "0",
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      to_value: isSet(object.to_value) ? String(object.to_value) : "",
-      bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
     };
   },
 
@@ -284,13 +284,13 @@ export const MsgSubmitBundleProposal = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
-    message.byte_size !== undefined && (obj.byte_size = message.byte_size);
-    message.from_height !== undefined && (obj.from_height = message.from_height);
-    message.to_height !== undefined && (obj.to_height = message.to_height);
+    message.data_size !== undefined && (obj.data_size = message.data_size);
+    message.data_hash !== undefined && (obj.data_hash = message.data_hash);
+    message.from_index !== undefined && (obj.from_index = message.from_index);
+    message.bundle_size !== undefined && (obj.bundle_size = message.bundle_size);
     message.from_key !== undefined && (obj.from_key = message.from_key);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.to_value !== undefined && (obj.to_value = message.to_value);
-    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     return obj;
   },
 
@@ -300,13 +300,13 @@ export const MsgSubmitBundleProposal = {
     message.staker = object.staker ?? "";
     message.pool_id = object.pool_id ?? "0";
     message.storage_id = object.storage_id ?? "";
-    message.byte_size = object.byte_size ?? "0";
-    message.from_height = object.from_height ?? "0";
-    message.to_height = object.to_height ?? "0";
+    message.data_size = object.data_size ?? "0";
+    message.data_hash = object.data_hash ?? "";
+    message.from_index = object.from_index ?? "0";
+    message.bundle_size = object.bundle_size ?? "0";
     message.from_key = object.from_key ?? "";
     message.to_key = object.to_key ?? "";
-    message.to_value = object.to_value ?? "";
-    message.bundle_hash = object.bundle_hash ?? "";
+    message.bundle_summary = object.bundle_summary ?? "";
     return message;
   },
 };
@@ -581,7 +581,7 @@ export const MsgClaimUploaderRoleResponse = {
 };
 
 function createBaseMsgSkipUploaderRole(): MsgSkipUploaderRole {
-  return { creator: "", staker: "", pool_id: "0", from_height: "0" };
+  return { creator: "", staker: "", pool_id: "0", from_index: "0" };
 }
 
 export const MsgSkipUploaderRole = {
@@ -595,8 +595,8 @@ export const MsgSkipUploaderRole = {
     if (message.pool_id !== "0") {
       writer.uint32(24).uint64(message.pool_id);
     }
-    if (message.from_height !== "0") {
-      writer.uint32(32).uint64(message.from_height);
+    if (message.from_index !== "0") {
+      writer.uint32(32).uint64(message.from_index);
     }
     return writer;
   },
@@ -618,7 +618,7 @@ export const MsgSkipUploaderRole = {
           message.pool_id = longToString(reader.uint64() as Long);
           break;
         case 4:
-          message.from_height = longToString(reader.uint64() as Long);
+          message.from_index = longToString(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -633,7 +633,7 @@ export const MsgSkipUploaderRole = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
+      from_index: isSet(object.from_index) ? String(object.from_index) : "0",
     };
   },
 
@@ -642,7 +642,7 @@ export const MsgSkipUploaderRole = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.from_height !== undefined && (obj.from_height = message.from_height);
+    message.from_index !== undefined && (obj.from_index = message.from_index);
     return obj;
   },
 
@@ -651,7 +651,7 @@ export const MsgSkipUploaderRole = {
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
     message.pool_id = object.pool_id ?? "0";
-    message.from_height = object.from_height ?? "0";
+    message.from_index = object.from_index ?? "0";
     return message;
   },
 };
@@ -811,7 +811,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.bundles.v1beta1.Msg";
     this.rpc = rpc;
     this.SubmitBundleProposal = this.SubmitBundleProposal.bind(this);
     this.VoteBundleProposal = this.VoteBundleProposal.bind(this);
@@ -821,31 +823,31 @@ export class MsgClientImpl implements Msg {
   }
   SubmitBundleProposal(request: MsgSubmitBundleProposal): Promise<MsgSubmitBundleProposalResponse> {
     const data = MsgSubmitBundleProposal.encode(request).finish();
-    const promise = this.rpc.request("kyve.bundles.v1beta1.Msg", "SubmitBundleProposal", data);
+    const promise = this.rpc.request(this.service, "SubmitBundleProposal", data);
     return promise.then((data) => MsgSubmitBundleProposalResponse.decode(new _m0.Reader(data)));
   }
 
   VoteBundleProposal(request: MsgVoteBundleProposal): Promise<MsgVoteBundleProposalResponse> {
     const data = MsgVoteBundleProposal.encode(request).finish();
-    const promise = this.rpc.request("kyve.bundles.v1beta1.Msg", "VoteBundleProposal", data);
+    const promise = this.rpc.request(this.service, "VoteBundleProposal", data);
     return promise.then((data) => MsgVoteBundleProposalResponse.decode(new _m0.Reader(data)));
   }
 
   ClaimUploaderRole(request: MsgClaimUploaderRole): Promise<MsgClaimUploaderRoleResponse> {
     const data = MsgClaimUploaderRole.encode(request).finish();
-    const promise = this.rpc.request("kyve.bundles.v1beta1.Msg", "ClaimUploaderRole", data);
+    const promise = this.rpc.request(this.service, "ClaimUploaderRole", data);
     return promise.then((data) => MsgClaimUploaderRoleResponse.decode(new _m0.Reader(data)));
   }
 
   SkipUploaderRole(request: MsgSkipUploaderRole): Promise<MsgSkipUploaderRoleResponse> {
     const data = MsgSkipUploaderRole.encode(request).finish();
-    const promise = this.rpc.request("kyve.bundles.v1beta1.Msg", "SkipUploaderRole", data);
+    const promise = this.rpc.request(this.service, "SkipUploaderRole", data);
     return promise.then((data) => MsgSkipUploaderRoleResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("kyve.bundles.v1beta1.Msg", "UpdateParams", data);
+    const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }

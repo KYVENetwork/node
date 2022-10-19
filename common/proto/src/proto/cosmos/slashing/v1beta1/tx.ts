@@ -110,13 +110,15 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.slashing.v1beta1.Msg";
     this.rpc = rpc;
     this.Unjail = this.Unjail.bind(this);
   }
   Unjail(request: MsgUnjail): Promise<MsgUnjailResponse> {
     const data = MsgUnjail.encode(request).finish();
-    const promise = this.rpc.request("cosmos.slashing.v1beta1.Msg", "Unjail", data);
+    const promise = this.rpc.request(this.service, "Unjail", data);
     return promise.then((data) => MsgUnjailResponse.decode(new _m0.Reader(data)));
   }
 }

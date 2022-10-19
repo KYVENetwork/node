@@ -27,6 +27,7 @@
     "deploy": "yarn build && yarn npm publish"
   },
   "dependencies": {
+    "@bundlr-network/client": "^0.8.9",
     "@cosmjs/proto-signing": "^0.27.1",
     "@cosmjs/stargate": "^0.27.1",
     "@kyve/proto": "1.9.0",
@@ -35,11 +36,11 @@
     "@types/jsonfile": "^6.0.1",
     "arweave": "^1.10.17",
     "axios": "^0.24.0",
-    "base64url": "^3.0.1",
     "bignumber.js": "^9.0.1",
-    "commander": "^8.3.0",
+    "commander": "^9.4.1",
     "fs-extra": "^10.0.1",
     "jsonfile": "^6.1.0",
+    "level": "^8.0.0",
     "prando": "^6.0.1",
     "prom-client": "^14.1.0",
     "protobufjs": "^6.11.2",

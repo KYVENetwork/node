@@ -261,20 +261,22 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.evidence.v1beta1.Query";
     this.rpc = rpc;
     this.Evidence = this.Evidence.bind(this);
     this.AllEvidence = this.AllEvidence.bind(this);
   }
   Evidence(request: QueryEvidenceRequest): Promise<QueryEvidenceResponse> {
     const data = QueryEvidenceRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.evidence.v1beta1.Query", "Evidence", data);
+    const promise = this.rpc.request(this.service, "Evidence", data);
     return promise.then((data) => QueryEvidenceResponse.decode(new _m0.Reader(data)));
   }
 
   AllEvidence(request: QueryAllEvidenceRequest): Promise<QueryAllEvidenceResponse> {
     const data = QueryAllEvidenceRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.evidence.v1beta1.Query", "AllEvidence", data);
+    const promise = this.rpc.request(this.service, "AllEvidence", data);
     return promise.then((data) => QueryAllEvidenceResponse.decode(new _m0.Reader(data)));
   }
 }

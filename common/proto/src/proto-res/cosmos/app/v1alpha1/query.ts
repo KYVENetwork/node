@@ -110,13 +110,15 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.app.v1alpha1.Query";
     this.rpc = rpc;
     this.Config = this.Config.bind(this);
   }
   Config(request: QueryConfigRequest): Promise<QueryConfigResponse> {
     const data = QueryConfigRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.app.v1alpha1.Query", "Config", data);
+    const promise = this.rpc.request(this.service, "Config", data);
     return promise.then((data) => QueryConfigResponse.decode(new _m0.Reader(data)));
   }
 }

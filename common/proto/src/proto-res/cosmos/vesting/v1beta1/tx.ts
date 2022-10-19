@@ -446,7 +446,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.vesting.v1beta1.Msg";
     this.rpc = rpc;
     this.CreateVestingAccount = this.CreateVestingAccount.bind(this);
     this.CreatePermanentLockedAccount = this.CreatePermanentLockedAccount.bind(this);
@@ -454,7 +456,7 @@ export class MsgClientImpl implements Msg {
   }
   CreateVestingAccount(request: MsgCreateVestingAccount): Promise<MsgCreateVestingAccountResponse> {
     const data = MsgCreateVestingAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreateVestingAccount", data);
+    const promise = this.rpc.request(this.service, "CreateVestingAccount", data);
     return promise.then((data) => MsgCreateVestingAccountResponse.decode(new _m0.Reader(data)));
   }
 
@@ -462,7 +464,7 @@ export class MsgClientImpl implements Msg {
     request: MsgCreatePermanentLockedAccount,
   ): Promise<MsgCreatePermanentLockedAccountResponse> {
     const data = MsgCreatePermanentLockedAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreatePermanentLockedAccount", data);
+    const promise = this.rpc.request(this.service, "CreatePermanentLockedAccount", data);
     return promise.then((data) => MsgCreatePermanentLockedAccountResponse.decode(new _m0.Reader(data)));
   }
 
@@ -470,7 +472,7 @@ export class MsgClientImpl implements Msg {
     request: MsgCreatePeriodicVestingAccount,
   ): Promise<MsgCreatePeriodicVestingAccountResponse> {
     const data = MsgCreatePeriodicVestingAccount.encode(request).finish();
-    const promise = this.rpc.request("cosmos.vesting.v1beta1.Msg", "CreatePeriodicVestingAccount", data);
+    const promise = this.rpc.request(this.service, "CreatePeriodicVestingAccount", data);
     return promise.then((data) => MsgCreatePeriodicVestingAccountResponse.decode(new _m0.Reader(data)));
   }
 }

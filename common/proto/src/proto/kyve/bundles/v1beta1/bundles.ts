@@ -71,24 +71,26 @@ export interface BundleProposal {
   uploader: string;
   /** next_uploader ... */
   next_uploader: string;
-  /** byte_size ... */
-  byte_size: string;
-  /** to_height ... */
-  to_height: string;
+  /** data_size ... */
+  data_size: string;
+  /** bundle_size ... */
+  bundle_size: string;
   /** to_key ... */
   to_key: string;
-  /** to_value ... */
-  to_value: string;
-  /** bundle_hash ... */
-  bundle_hash: string;
-  /** created_at ... */
-  created_at: string;
+  /** bundle_summary ... */
+  bundle_summary: string;
+  /** data_hash ... */
+  data_hash: string;
+  /** updated_at ... */
+  updated_at: string;
   /** voters_valid ... */
   voters_valid: string[];
   /** voters_invalid ... */
   voters_invalid: string[];
   /** voters_abstain ... */
   voters_abstain: string[];
+  /** from_key ... */
+  from_key: string;
 }
 
 /** Proposal ... */
@@ -101,18 +103,20 @@ export interface FinalizedBundle {
   storage_id: string;
   /** uploader ... */
   uploader: string;
-  /** from_height ... */
-  from_height: string;
-  /** to_height ... */
-  to_height: string;
-  /** key ... */
-  key: string;
-  /** value ... */
-  value: string;
+  /** from_index ... */
+  from_index: string;
+  /** to_index ... */
+  to_index: string;
+  /** to_key ... */
+  to_key: string;
+  /** bundle_summary ... */
+  bundle_summary: string;
   /** bundle_hash ... */
-  bundle_hash: string;
+  data_hash: string;
   /** finalized_at ... */
   finalized_at: string;
+  /** from_key ... */
+  from_key: string;
 }
 
 function createBaseBundleProposal(): BundleProposal {
@@ -121,15 +125,16 @@ function createBaseBundleProposal(): BundleProposal {
     storage_id: "",
     uploader: "",
     next_uploader: "",
-    byte_size: "0",
-    to_height: "0",
+    data_size: "0",
+    bundle_size: "0",
     to_key: "",
-    to_value: "",
-    bundle_hash: "",
-    created_at: "0",
+    bundle_summary: "",
+    data_hash: "",
+    updated_at: "0",
     voters_valid: [],
     voters_invalid: [],
     voters_abstain: [],
+    from_key: "",
   };
 }
 
@@ -147,23 +152,23 @@ export const BundleProposal = {
     if (message.next_uploader !== "") {
       writer.uint32(34).string(message.next_uploader);
     }
-    if (message.byte_size !== "0") {
-      writer.uint32(40).uint64(message.byte_size);
+    if (message.data_size !== "0") {
+      writer.uint32(40).uint64(message.data_size);
     }
-    if (message.to_height !== "0") {
-      writer.uint32(48).uint64(message.to_height);
+    if (message.bundle_size !== "0") {
+      writer.uint32(48).uint64(message.bundle_size);
     }
     if (message.to_key !== "") {
       writer.uint32(58).string(message.to_key);
     }
-    if (message.to_value !== "") {
-      writer.uint32(66).string(message.to_value);
+    if (message.bundle_summary !== "") {
+      writer.uint32(66).string(message.bundle_summary);
     }
-    if (message.bundle_hash !== "") {
-      writer.uint32(74).string(message.bundle_hash);
+    if (message.data_hash !== "") {
+      writer.uint32(74).string(message.data_hash);
     }
-    if (message.created_at !== "0") {
-      writer.uint32(80).uint64(message.created_at);
+    if (message.updated_at !== "0") {
+      writer.uint32(80).uint64(message.updated_at);
     }
     for (const v of message.voters_valid) {
       writer.uint32(90).string(v!);
@@ -173,6 +178,9 @@ export const BundleProposal = {
     }
     for (const v of message.voters_abstain) {
       writer.uint32(106).string(v!);
+    }
+    if (message.from_key !== "") {
+      writer.uint32(114).string(message.from_key);
     }
     return writer;
   },
@@ -197,22 +205,22 @@ export const BundleProposal = {
           message.next_uploader = reader.string();
           break;
         case 5:
-          message.byte_size = longToString(reader.uint64() as Long);
+          message.data_size = longToString(reader.uint64() as Long);
           break;
         case 6:
-          message.to_height = longToString(reader.uint64() as Long);
+          message.bundle_size = longToString(reader.uint64() as Long);
           break;
         case 7:
           message.to_key = reader.string();
           break;
         case 8:
-          message.to_value = reader.string();
+          message.bundle_summary = reader.string();
           break;
         case 9:
-          message.bundle_hash = reader.string();
+          message.data_hash = reader.string();
           break;
         case 10:
-          message.created_at = longToString(reader.uint64() as Long);
+          message.updated_at = longToString(reader.uint64() as Long);
           break;
         case 11:
           message.voters_valid.push(reader.string());
@@ -222,6 +230,9 @@ export const BundleProposal = {
           break;
         case 13:
           message.voters_abstain.push(reader.string());
+          break;
+        case 14:
+          message.from_key = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -237,15 +248,16 @@ export const BundleProposal = {
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
       next_uploader: isSet(object.next_uploader) ? String(object.next_uploader) : "",
-      byte_size: isSet(object.byte_size) ? String(object.byte_size) : "0",
-      to_height: isSet(object.to_height) ? String(object.to_height) : "0",
+      data_size: isSet(object.data_size) ? String(object.data_size) : "0",
+      bundle_size: isSet(object.bundle_size) ? String(object.bundle_size) : "0",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      to_value: isSet(object.to_value) ? String(object.to_value) : "",
-      bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
-      created_at: isSet(object.created_at) ? String(object.created_at) : "0",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
+      data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
+      updated_at: isSet(object.updated_at) ? String(object.updated_at) : "0",
       voters_valid: Array.isArray(object?.voters_valid) ? object.voters_valid.map((e: any) => String(e)) : [],
       voters_invalid: Array.isArray(object?.voters_invalid) ? object.voters_invalid.map((e: any) => String(e)) : [],
       voters_abstain: Array.isArray(object?.voters_abstain) ? object.voters_abstain.map((e: any) => String(e)) : [],
+      from_key: isSet(object.from_key) ? String(object.from_key) : "",
     };
   },
 
@@ -255,12 +267,12 @@ export const BundleProposal = {
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
     message.next_uploader !== undefined && (obj.next_uploader = message.next_uploader);
-    message.byte_size !== undefined && (obj.byte_size = message.byte_size);
-    message.to_height !== undefined && (obj.to_height = message.to_height);
+    message.data_size !== undefined && (obj.data_size = message.data_size);
+    message.bundle_size !== undefined && (obj.bundle_size = message.bundle_size);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.to_value !== undefined && (obj.to_value = message.to_value);
-    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
-    message.created_at !== undefined && (obj.created_at = message.created_at);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
+    message.data_hash !== undefined && (obj.data_hash = message.data_hash);
+    message.updated_at !== undefined && (obj.updated_at = message.updated_at);
     if (message.voters_valid) {
       obj.voters_valid = message.voters_valid.map((e) => e);
     } else {
@@ -276,6 +288,7 @@ export const BundleProposal = {
     } else {
       obj.voters_abstain = [];
     }
+    message.from_key !== undefined && (obj.from_key = message.from_key);
     return obj;
   },
 
@@ -285,15 +298,16 @@ export const BundleProposal = {
     message.storage_id = object.storage_id ?? "";
     message.uploader = object.uploader ?? "";
     message.next_uploader = object.next_uploader ?? "";
-    message.byte_size = object.byte_size ?? "0";
-    message.to_height = object.to_height ?? "0";
+    message.data_size = object.data_size ?? "0";
+    message.bundle_size = object.bundle_size ?? "0";
     message.to_key = object.to_key ?? "";
-    message.to_value = object.to_value ?? "";
-    message.bundle_hash = object.bundle_hash ?? "";
-    message.created_at = object.created_at ?? "0";
+    message.bundle_summary = object.bundle_summary ?? "";
+    message.data_hash = object.data_hash ?? "";
+    message.updated_at = object.updated_at ?? "0";
     message.voters_valid = object.voters_valid?.map((e) => e) || [];
     message.voters_invalid = object.voters_invalid?.map((e) => e) || [];
     message.voters_abstain = object.voters_abstain?.map((e) => e) || [];
+    message.from_key = object.from_key ?? "";
     return message;
   },
 };
@@ -304,12 +318,13 @@ function createBaseFinalizedBundle(): FinalizedBundle {
     id: "0",
     storage_id: "",
     uploader: "",
-    from_height: "0",
-    to_height: "0",
-    key: "",
-    value: "",
-    bundle_hash: "",
+    from_index: "0",
+    to_index: "0",
+    to_key: "",
+    bundle_summary: "",
+    data_hash: "",
     finalized_at: "0",
+    from_key: "",
   };
 }
 
@@ -327,23 +342,26 @@ export const FinalizedBundle = {
     if (message.uploader !== "") {
       writer.uint32(34).string(message.uploader);
     }
-    if (message.from_height !== "0") {
-      writer.uint32(40).uint64(message.from_height);
+    if (message.from_index !== "0") {
+      writer.uint32(40).uint64(message.from_index);
     }
-    if (message.to_height !== "0") {
-      writer.uint32(48).uint64(message.to_height);
+    if (message.to_index !== "0") {
+      writer.uint32(48).uint64(message.to_index);
     }
-    if (message.key !== "") {
-      writer.uint32(58).string(message.key);
+    if (message.to_key !== "") {
+      writer.uint32(58).string(message.to_key);
     }
-    if (message.value !== "") {
-      writer.uint32(66).string(message.value);
+    if (message.bundle_summary !== "") {
+      writer.uint32(66).string(message.bundle_summary);
     }
-    if (message.bundle_hash !== "") {
-      writer.uint32(74).string(message.bundle_hash);
+    if (message.data_hash !== "") {
+      writer.uint32(74).string(message.data_hash);
     }
     if (message.finalized_at !== "0") {
       writer.uint32(80).uint64(message.finalized_at);
+    }
+    if (message.from_key !== "") {
+      writer.uint32(90).string(message.from_key);
     }
     return writer;
   },
@@ -368,22 +386,25 @@ export const FinalizedBundle = {
           message.uploader = reader.string();
           break;
         case 5:
-          message.from_height = longToString(reader.uint64() as Long);
+          message.from_index = longToString(reader.uint64() as Long);
           break;
         case 6:
-          message.to_height = longToString(reader.uint64() as Long);
+          message.to_index = longToString(reader.uint64() as Long);
           break;
         case 7:
-          message.key = reader.string();
+          message.to_key = reader.string();
           break;
         case 8:
-          message.value = reader.string();
+          message.bundle_summary = reader.string();
           break;
         case 9:
-          message.bundle_hash = reader.string();
+          message.data_hash = reader.string();
           break;
         case 10:
           message.finalized_at = longToString(reader.uint64() as Long);
+          break;
+        case 11:
+          message.from_key = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -399,12 +420,13 @@ export const FinalizedBundle = {
       id: isSet(object.id) ? String(object.id) : "0",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
-      from_height: isSet(object.from_height) ? String(object.from_height) : "0",
-      to_height: isSet(object.to_height) ? String(object.to_height) : "0",
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : "",
-      bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
+      from_index: isSet(object.from_index) ? String(object.from_index) : "0",
+      to_index: isSet(object.to_index) ? String(object.to_index) : "0",
+      to_key: isSet(object.to_key) ? String(object.to_key) : "",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
+      data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
       finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
+      from_key: isSet(object.from_key) ? String(object.from_key) : "",
     };
   },
 
@@ -414,12 +436,13 @@ export const FinalizedBundle = {
     message.id !== undefined && (obj.id = message.id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.from_height !== undefined && (obj.from_height = message.from_height);
-    message.to_height !== undefined && (obj.to_height = message.to_height);
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
-    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
+    message.from_index !== undefined && (obj.from_index = message.from_index);
+    message.to_index !== undefined && (obj.to_index = message.to_index);
+    message.to_key !== undefined && (obj.to_key = message.to_key);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
+    message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
+    message.from_key !== undefined && (obj.from_key = message.from_key);
     return obj;
   },
 
@@ -429,12 +452,13 @@ export const FinalizedBundle = {
     message.id = object.id ?? "0";
     message.storage_id = object.storage_id ?? "";
     message.uploader = object.uploader ?? "";
-    message.from_height = object.from_height ?? "0";
-    message.to_height = object.to_height ?? "0";
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
-    message.bundle_hash = object.bundle_hash ?? "";
+    message.from_index = object.from_index ?? "0";
+    message.to_index = object.to_index ?? "0";
+    message.to_key = object.to_key ?? "";
+    message.bundle_summary = object.bundle_summary ?? "";
+    message.data_hash = object.data_hash ?? "";
     message.finalized_at = object.finalized_at ?? "0";
+    message.from_key = object.from_key ?? "";
     return message;
   },
 };

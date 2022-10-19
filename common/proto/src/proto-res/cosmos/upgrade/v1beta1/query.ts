@@ -609,7 +609,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.upgrade.v1beta1.Query";
     this.rpc = rpc;
     this.CurrentPlan = this.CurrentPlan.bind(this);
     this.AppliedPlan = this.AppliedPlan.bind(this);
@@ -619,31 +621,31 @@ export class QueryClientImpl implements Query {
   }
   CurrentPlan(request: QueryCurrentPlanRequest): Promise<QueryCurrentPlanResponse> {
     const data = QueryCurrentPlanRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "CurrentPlan", data);
+    const promise = this.rpc.request(this.service, "CurrentPlan", data);
     return promise.then((data) => QueryCurrentPlanResponse.decode(new _m0.Reader(data)));
   }
 
   AppliedPlan(request: QueryAppliedPlanRequest): Promise<QueryAppliedPlanResponse> {
     const data = QueryAppliedPlanRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "AppliedPlan", data);
+    const promise = this.rpc.request(this.service, "AppliedPlan", data);
     return promise.then((data) => QueryAppliedPlanResponse.decode(new _m0.Reader(data)));
   }
 
   UpgradedConsensusState(request: QueryUpgradedConsensusStateRequest): Promise<QueryUpgradedConsensusStateResponse> {
     const data = QueryUpgradedConsensusStateRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "UpgradedConsensusState", data);
+    const promise = this.rpc.request(this.service, "UpgradedConsensusState", data);
     return promise.then((data) => QueryUpgradedConsensusStateResponse.decode(new _m0.Reader(data)));
   }
 
   ModuleVersions(request: QueryModuleVersionsRequest): Promise<QueryModuleVersionsResponse> {
     const data = QueryModuleVersionsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "ModuleVersions", data);
+    const promise = this.rpc.request(this.service, "ModuleVersions", data);
     return promise.then((data) => QueryModuleVersionsResponse.decode(new _m0.Reader(data)));
   }
 
   Authority(request: QueryAuthorityRequest): Promise<QueryAuthorityResponse> {
     const data = QueryAuthorityRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "Authority", data);
+    const promise = this.rpc.request(this.service, "Authority", data);
     return promise.then((data) => QueryAuthorityResponse.decode(new _m0.Reader(data)));
   }
 }

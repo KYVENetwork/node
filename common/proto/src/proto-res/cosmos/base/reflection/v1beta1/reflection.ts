@@ -240,20 +240,22 @@ export interface ReflectionService {
 
 export class ReflectionServiceClientImpl implements ReflectionService {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.base.reflection.v1beta1.ReflectionService";
     this.rpc = rpc;
     this.ListAllInterfaces = this.ListAllInterfaces.bind(this);
     this.ListImplementations = this.ListImplementations.bind(this);
   }
   ListAllInterfaces(request: ListAllInterfacesRequest): Promise<ListAllInterfacesResponse> {
     const data = ListAllInterfacesRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v1beta1.ReflectionService", "ListAllInterfaces", data);
+    const promise = this.rpc.request(this.service, "ListAllInterfaces", data);
     return promise.then((data) => ListAllInterfacesResponse.decode(new _m0.Reader(data)));
   }
 
   ListImplementations(request: ListImplementationsRequest): Promise<ListImplementationsResponse> {
     const data = ListImplementationsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.base.reflection.v1beta1.ReflectionService", "ListImplementations", data);
+    const promise = this.rpc.request(this.service, "ListImplementations", data);
     return promise.then((data) => ListImplementationsResponse.decode(new _m0.Reader(data)));
   }
 }

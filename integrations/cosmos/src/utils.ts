@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { createHash } from 'crypto';
-import { OUT_OF_RANGE, Signature } from './types';
+import { OUT_OF_RANGE } from './types';
 
 export function isHeightOutOfRange(err: any): boolean {
   if (err.isAxiosError) {
@@ -45,26 +45,36 @@ async function fetchTransactions(
   hashes: string[],
   headers: any
 ): Promise<any[]> {
-  const res = [];
+  const res: any[] = [];
 
   for (const hash of hashes) {
-    const { tx_response } = await call<any>(
+    const tx = await call<any>(
       `${endpoint}/cosmos/tx/v1beta1/txs/${hash}`,
       headers
     );
 
-    res.push(tx_response);
+    res.push(tx ? tx.tx_response : null);
   }
 
   return res;
 }
 
-async function call<T>(endpoint: string, headers: any): Promise<T> {
-  const { data } = await axios.get<T>(endpoint, {
-    headers,
-  });
+async function call<T>(endpoint: string, headers: any): Promise<T | null> {
+  try {
+    const { data } = await axios.get<T>(endpoint, {
+      headers,
+    });
 
-  return data;
+    return data;
+  } catch (err: any) {
+    if (isHeightOutOfRange(err)) {
+      throw err;
+    } else if (err.response.status === 400 || err.response.status === 404) {
+      return null;
+    } else {
+      throw err;
+    }
+  }
 }
 
 function parseEncodedTx(input: string): string {

@@ -215,20 +215,22 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.delegation.v1beta1.Query";
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
     this.Slashes = this.Slashes.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Query", "Params", data);
+    const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   Slashes(request: QuerySlashesRequest): Promise<QuerySlashesResponse> {
     const data = QuerySlashesRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.delegation.v1beta1.Query", "Slashes", data);
+    const promise = this.rpc.request(this.service, "Slashes", data);
     return promise.then((data) => QuerySlashesResponse.decode(new _m0.Reader(data)));
   }
 }

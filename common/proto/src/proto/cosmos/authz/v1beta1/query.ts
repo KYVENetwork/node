@@ -471,7 +471,9 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.authz.v1beta1.Query";
     this.rpc = rpc;
     this.Grants = this.Grants.bind(this);
     this.GranterGrants = this.GranterGrants.bind(this);
@@ -479,19 +481,19 @@ export class QueryClientImpl implements Query {
   }
   Grants(request: QueryGrantsRequest): Promise<QueryGrantsResponse> {
     const data = QueryGrantsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Query", "Grants", data);
+    const promise = this.rpc.request(this.service, "Grants", data);
     return promise.then((data) => QueryGrantsResponse.decode(new _m0.Reader(data)));
   }
 
   GranterGrants(request: QueryGranterGrantsRequest): Promise<QueryGranterGrantsResponse> {
     const data = QueryGranterGrantsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Query", "GranterGrants", data);
+    const promise = this.rpc.request(this.service, "GranterGrants", data);
     return promise.then((data) => QueryGranterGrantsResponse.decode(new _m0.Reader(data)));
   }
 
   GranteeGrants(request: QueryGranteeGrantsRequest): Promise<QueryGranteeGrantsResponse> {
     const data = QueryGranteeGrantsRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.authz.v1beta1.Query", "GranteeGrants", data);
+    const promise = this.rpc.request(this.service, "GranteeGrants", data);
     return promise.then((data) => QueryGranteeGrantsResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -1,46 +1,56 @@
 import {
   IRuntime,
   IStorageProvider,
-  ICache,
+  ICacheProvider,
   ICompression,
   IMetrics,
 } from "./types";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  canValidate,
-  generateName,
-  syncPoolState,
+  setupReactors,
+  setupMetrics,
+  setupSDK,
+  setupValidator,
   validateRuntime,
   validateVersion,
-  validateActiveNode,
+  validateIsNodeValidator,
+  validateIsPoolActive,
+  waitForAuthorization,
+  waitForUploadInterval,
+  waitForNextBundleProposal,
+  waitForCacheContinuation,
+  continueRound,
+  claimUploaderRole,
+  skipUploaderRole,
+  voteBundleProposal,
+  submitBundleProposal,
+  syncPoolState,
+  getBalances,
+  canVote,
+  canPropose,
+  saveBundleDownload,
+  saveBundleDecompress,
+  saveLoadValidationBundle,
+  validateBundleProposal,
+  createBundleProposal,
   runNode,
   runCache,
-  asyncSetup,
-  shouldIdle,
-  claimUploaderRole,
-  canVote,
-  validateBundleProposal,
-  voteBundleProposal,
-  loadBundle,
-  remainingUploadInterval,
-  waitForNextBundleProposal,
-  canPropose,
-  submitBundleProposal,
-  skipUploaderRole,
-  uploadBundle,
-  proposeBundle,
-  continueBundleProposalRound,
-  setupMetrics,
-  getBalances,
 } from "./methods";
 import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
-import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
-import { parseNetwork, parsePoolId, parseMnemonic } from "./commander";
+import {
+  parseNetwork,
+  parsePoolId,
+  parseMnemonic,
+  parseCache,
+} from "./commander";
 import { kyve } from "@kyve/proto";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
+import { standardizeJSON } from "./utils";
+import * as storageProvider from "./reactors/storageProviders";
+import * as compression from "./reactors/compression";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -49,18 +59,18 @@ import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
  * @constructor
  */
 export class Node {
-  // register class attributes
+  // reactor attributes
   protected runtime!: IRuntime;
   protected storageProvider!: IStorageProvider;
   protected compression!: ICompression;
-  protected cache!: ICache;
+  protected cacheProvider!: ICacheProvider;
 
-  // register sdk attributes
+  // sdk attributes
   public sdk!: KyveSDK;
   public client!: KyveClient;
   public lcd!: KyveLCDClientType;
 
-  // register attributes
+  // node attributes
   public coreVersion!: string;
   public pool!: PoolResponse;
   public poolConfig!: any;
@@ -69,110 +79,115 @@ export class Node {
   // logger attributes
   public logger!: Logger;
 
-  // metrics
-  public prom!: IMetrics;
+  // metrics attributes
+  public m!: IMetrics;
 
-  // options
+  // node option attributes
   protected poolId!: number;
   protected staker!: string;
   protected valaccount!: string;
   protected storagePriv!: string;
   protected network!: string;
-  protected verbose!: boolean;
+  protected cache!: string;
+  protected debug!: boolean;
   protected metrics!: boolean;
   protected metricsPort!: number;
   protected home!: string;
 
-  // register core methods
-  protected asyncSetup = asyncSetup;
+  // setups
   protected setupLogger = setupLogger;
-  protected canValidate = canValidate;
-  protected generateName = generateName;
-  protected syncPoolState = syncPoolState;
+  protected setupReactors = setupReactors;
+  protected setupMetrics = setupMetrics;
+  protected setupSDK = setupSDK;
+  protected setupValidator = setupValidator;
+
+  // checks
   protected validateRuntime = validateRuntime;
   protected validateVersion = validateVersion;
-  protected validateActiveNode = validateActiveNode;
-  protected shouldIdle = shouldIdle;
-  protected claimUploaderRole = claimUploaderRole;
-  protected loadBundle = loadBundle;
-  protected canVote = canVote;
-  protected validateBundleProposal = validateBundleProposal;
-  protected voteBundleProposal = voteBundleProposal;
-  protected remainingUploadInterval = remainingUploadInterval;
+  protected validateIsNodeValidator = validateIsNodeValidator;
+  protected validateIsPoolActive = validateIsPoolActive;
+
+  // timeouts
+  protected waitForAuthorization = waitForAuthorization;
+  protected waitForUploadInterval = waitForUploadInterval;
   protected waitForNextBundleProposal = waitForNextBundleProposal;
-  protected canPropose = canPropose;
-  protected submitBundleProposal = submitBundleProposal;
+  protected waitForCacheContinuation = waitForCacheContinuation;
+
+  // helpers
+  protected continueRound = continueRound;
+
+  // txs
+  protected claimUploaderRole = claimUploaderRole;
   protected skipUploaderRole = skipUploaderRole;
-  protected uploadBundle = uploadBundle;
-  protected proposeBundle = proposeBundle;
-  protected continueBundleProposalRound = continueBundleProposalRound;
+  protected voteBundleProposal = voteBundleProposal;
+  protected submitBundleProposal = submitBundleProposal;
+
+  // queries
+  protected syncPoolState = syncPoolState;
   protected getBalances = getBalances;
-  protected setupMetrics = setupMetrics;
+  protected canVote = canVote;
+  protected canPropose = canPropose;
+
+  // validate
+  protected saveBundleDownload = saveBundleDownload;
+  protected saveBundleDecompress = saveBundleDecompress;
+  protected saveLoadValidationBundle = saveLoadValidationBundle;
+  protected validateBundleProposal = validateBundleProposal;
+
+  // upload
+  protected createBundleProposal = createBundleProposal;
+
+  // main
   protected runNode = runNode;
   protected runCache = runCache;
 
   /**
-   * Set the runtime for the protocol node.
-   * The Runtime implements the custom logic of a pool.
+   * Constructor for the core class. It is required to provide the
+   * runtime class here in order to run the
    *
-   * Required before calling 'run'
-   *
-   * @method addRuntime
+   * @method constructor
    * @param {IRuntime} runtime which implements the interface IRuntime
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
    */
-  public addRuntime(runtime: IRuntime): this {
+  constructor(runtime: IRuntime) {
+    // set provided runtime
     this.runtime = runtime;
-    return this;
+
+    // default storage provider is Arweave
+    this.storageProvider = new storageProvider.Arweave();
+
+    // default compression is Gzip
+    this.compression = new compression.Gzip();
+
+    // set @kyve/core version
+    this.coreVersion = coreVersion;
   }
 
   /**
-   * Set the storage provider for the protocol node.
+   * Override the default storage provider for the protocol node.
    * The Storage Provider handles data storage and retrieval for a pool.
    *
-   * Required before calling 'run'
-   *
-   * @method addStorageProvider
+   * @method useStorageProvider
    * @param {IStorageProvider} storageProvider which implements the interface IStorageProvider
    * @return {Promise<this>} returns this for chained commands
    * @chainable
    */
-  public addStorageProvider(storageProvider: IStorageProvider): this {
+  public useStorageProvider(storageProvider: IStorageProvider): this {
     this.storageProvider = storageProvider;
     return this;
   }
 
   /**
-   * Set the compression type for the protocol node.
+   * Override the default compression type for the protocol node.
    * Before saving bundles to the storage provider the node uses this compression
    * to store data more efficiently
    *
-   * Required before calling 'run'
-   *
-   * @method addCompression
+   * @method useCompression
    * @param {ICompression} compression which implements the interface ICompression
    * @return {Promise<this>} returns this for chained commands
    * @chainable
    */
-  public addCompression(compression: ICompression): this {
+  public useCompression(compression: ICompression): this {
     this.compression = compression;
-    return this;
-  }
-
-  /**
-   * Set the cache for the protocol node.
-   * The Cache is responsible for caching data before its validated and stored on the Storage Provider.
-   *
-   * Required before calling 'run'
-   *
-   * @method addCache
-   * @param {ICache} cache which implements the interface ICache
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public addCache(cache: ICache): this {
-    this.cache = cache;
     return this;
   }
 
@@ -186,6 +201,15 @@ export class Node {
   public bootstrap(): void {
     // define main program
     const program = new Command();
+
+    // define version command
+    program
+      .command("version")
+      .description("Print runtime and core version")
+      .action(() => {
+        console.log(`${this.runtime.name} ${this.runtime.version}`);
+        console.log(`@kyve/core ${this.coreVersion}`);
+      });
 
     // define start command
     program
@@ -210,7 +234,17 @@ export class Node {
         "The network of the KYVE chain",
         parseNetwork
       )
-      .option("--verbose", "Run the validator node in verbose logging mode")
+      .option(
+        "--cache <memory|jsonfile|leveldb>",
+        "The cache this node should use",
+        parseCache,
+        "leveldb"
+      )
+      .option("--debug", "Run the validator node in debug mode")
+      .option(
+        "--verbose",
+        "[DEPRECATED] Run the validator node in verbose logging mode"
+      )
       .option(
         "--metrics",
         "Start a prometheus metrics server on http://localhost:8080/metrics"
@@ -241,43 +275,39 @@ export class Node {
    * an incorrect runtime or version.
    *
    * @method start
-   * @param {OptionValues} options which contains all relevant node options
+   * @param {OptionValues} options contains all node options defined in bootstrap
    * @return {Promise<void>}
    */
   private async start(options: OptionValues): Promise<void> {
     // assign program options
+    // to node instance
     this.poolId = options.pool;
     this.valaccount = options.valaccount;
     this.storagePriv = options.storagePriv;
     this.network = options.network;
-    this.verbose = options.verbose;
+    this.cache = options.cache;
+    this.debug = options.debug;
     this.metrics = options.metrics;
     this.metricsPort = options.metricsPort;
     this.home = options.home;
 
-    this.coreVersion = coreVersion;
+    // perform setups
+    this.setupLogger();
+    this.setupReactors();
+    this.setupMetrics();
 
-    this.logger = this.setupLogger();
+    // perform async setups
+    await this.setupSDK();
+    await this.setupValidator();
 
+    // start the node process. Node and cache should run at the same time.
+    // Thats why, although they are async they are called synchronously
     try {
-      // assign main attributes
-      this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
-      this.lcd = this.sdk.createLCDClient();
-    } catch (error) {
-      this.logger.error(`Failed to init KYVE SDK. Exiting ...`);
-      this.logger.debug(error);
-
-      process.exit(1);
-    }
-
-    try {
-      await this.asyncSetup();
-
       this.runNode();
       this.runCache();
-    } catch (error) {
-      this.logger.error(`Unexpected runtime error. Exiting ...`);
-      this.logger.debug(error);
+    } catch (err) {
+      this.logger.fatal(`Unexpected runtime error. Exiting ...`);
+      this.logger.fatal(standardizeJSON(err));
 
       process.exit(1);
     }
@@ -294,10 +324,7 @@ export * from "./types";
 export * from "./utils";
 
 // export storage providers
-export * from "./storage";
+export * as storageProvider from "./reactors/storageProviders";
 
 // export compression types
-export * from "./compression";
-
-// export caches
-export * from "./cache";
+export * as compression from "./reactors/compression";

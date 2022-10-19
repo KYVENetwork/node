@@ -57,8 +57,8 @@ export default class EVM implements IRuntime {
         key,
         value,
       };
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -101,16 +101,13 @@ The cache of an integration is responsible for precaching data, making data arch
 After settling on certain modules the integration can just be built together and started. An example from the EVM integration can be found here:
 
 ```ts
-import { Node, Arweave, Gzip, JsonFileCache } from "@kyve/core";
+import { Node } from "@kyve/core";
 
-import EVM from "./runtime";
+import Evm from "./runtime";
 
-new Node()
-  .addRuntime(new EVM())
-  .addStorageProvider(new Arweave())
-  .addCompression(new Gzip())
-  .addCache(new JsonFileCache())
-  .start();
+const runtime = new Evm();
+
+new Node(runtime).start();
 ```
 
 ## Contributing

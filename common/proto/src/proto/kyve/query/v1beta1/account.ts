@@ -815,7 +815,9 @@ export interface QueryAccount {
 
 export class QueryAccountClientImpl implements QueryAccount {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryAccount";
     this.rpc = rpc;
     this.AccountAssets = this.AccountAssets.bind(this);
     this.AccountDelegationUnbondings = this.AccountDelegationUnbondings.bind(this);
@@ -824,7 +826,7 @@ export class QueryAccountClientImpl implements QueryAccount {
   }
   AccountAssets(request: QueryAccountAssetsRequest): Promise<QueryAccountAssetsResponse> {
     const data = QueryAccountAssetsRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryAccount", "AccountAssets", data);
+    const promise = this.rpc.request(this.service, "AccountAssets", data);
     return promise.then((data) => QueryAccountAssetsResponse.decode(new _m0.Reader(data)));
   }
 
@@ -832,19 +834,19 @@ export class QueryAccountClientImpl implements QueryAccount {
     request: QueryAccountDelegationUnbondingsRequest,
   ): Promise<QueryAccountDelegationUnbondingsResponse> {
     const data = QueryAccountDelegationUnbondingsRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryAccount", "AccountDelegationUnbondings", data);
+    const promise = this.rpc.request(this.service, "AccountDelegationUnbondings", data);
     return promise.then((data) => QueryAccountDelegationUnbondingsResponse.decode(new _m0.Reader(data)));
   }
 
   AccountFundedList(request: QueryAccountFundedListRequest): Promise<QueryAccountFundedListResponse> {
     const data = QueryAccountFundedListRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryAccount", "AccountFundedList", data);
+    const promise = this.rpc.request(this.service, "AccountFundedList", data);
     return promise.then((data) => QueryAccountFundedListResponse.decode(new _m0.Reader(data)));
   }
 
   AccountRedelegation(request: QueryAccountRedelegationRequest): Promise<QueryAccountRedelegationResponse> {
     const data = QueryAccountRedelegationRequest.encode(request).finish();
-    const promise = this.rpc.request("kyve.query.v1beta1.QueryAccount", "AccountRedelegation", data);
+    const promise = this.rpc.request(this.service, "AccountRedelegation", data);
     return promise.then((data) => QueryAccountRedelegationResponse.decode(new _m0.Reader(data)));
   }
 }
