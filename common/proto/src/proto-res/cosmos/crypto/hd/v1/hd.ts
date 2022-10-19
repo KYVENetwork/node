@@ -21,20 +21,11 @@ export interface BIP44Params {
 }
 
 function createBaseBIP44Params(): BIP44Params {
-  return {
-    purpose: 0,
-    coin_type: 0,
-    account: 0,
-    change: false,
-    address_index: 0,
-  };
+  return { purpose: 0, coin_type: 0, account: 0, change: false, address_index: 0 };
 }
 
 export const BIP44Params = {
-  encode(
-    message: BIP44Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BIP44Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.purpose !== 0) {
       writer.uint32(8).uint32(message.purpose);
     }
@@ -89,29 +80,21 @@ export const BIP44Params = {
       coin_type: isSet(object.coin_type) ? Number(object.coin_type) : 0,
       account: isSet(object.account) ? Number(object.account) : 0,
       change: isSet(object.change) ? Boolean(object.change) : false,
-      address_index: isSet(object.address_index)
-        ? Number(object.address_index)
-        : 0,
+      address_index: isSet(object.address_index) ? Number(object.address_index) : 0,
     };
   },
 
   toJSON(message: BIP44Params): unknown {
     const obj: any = {};
-    message.purpose !== undefined &&
-      (obj.purpose = Math.round(message.purpose));
-    message.coin_type !== undefined &&
-      (obj.coin_type = Math.round(message.coin_type));
-    message.account !== undefined &&
-      (obj.account = Math.round(message.account));
+    message.purpose !== undefined && (obj.purpose = Math.round(message.purpose));
+    message.coin_type !== undefined && (obj.coin_type = Math.round(message.coin_type));
+    message.account !== undefined && (obj.account = Math.round(message.account));
     message.change !== undefined && (obj.change = message.change);
-    message.address_index !== undefined &&
-      (obj.address_index = Math.round(message.address_index));
+    message.address_index !== undefined && (obj.address_index = Math.round(message.address_index));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BIP44Params>, I>>(
-    object: I
-  ): BIP44Params {
+  fromPartial<I extends Exact<DeepPartial<BIP44Params>, I>>(object: I): BIP44Params {
     const message = createBaseBIP44Params();
     message.purpose = object.purpose ?? 0;
     message.coin_type = object.coin_type ?? 0;
@@ -122,32 +105,16 @@ export const BIP44Params = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

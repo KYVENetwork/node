@@ -25,7 +25,7 @@ export function validateIsPoolActive(this: Node): boolean {
         "Pool is out of funds. Waiting for additional funds. Idling ..."
       );
       return true;
-    case PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE:
+    case PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION:
       this.logger.info(
         "Not enough delegation in pool. Waiting for additional delegation. Idling ..."
       );

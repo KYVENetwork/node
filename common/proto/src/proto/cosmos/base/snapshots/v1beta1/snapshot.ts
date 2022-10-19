@@ -67,20 +67,11 @@ export interface SnapshotSchema {
 }
 
 function createBaseSnapshot(): Snapshot {
-  return {
-    height: "0",
-    format: 0,
-    chunks: 0,
-    hash: new Uint8Array(),
-    metadata: undefined,
-  };
+  return { height: "0", format: 0, chunks: 0, hash: new Uint8Array(), metadata: undefined };
 }
 
 export const Snapshot = {
-  encode(
-    message: Snapshot,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Snapshot, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.height !== "0") {
       writer.uint32(8).uint64(message.height);
     }
@@ -134,12 +125,8 @@ export const Snapshot = {
       height: isSet(object.height) ? String(object.height) : "0",
       format: isSet(object.format) ? Number(object.format) : 0,
       chunks: isSet(object.chunks) ? Number(object.chunks) : 0,
-      hash: isSet(object.hash)
-        ? bytesFromBase64(object.hash)
-        : new Uint8Array(),
-      metadata: isSet(object.metadata)
-        ? Metadata.fromJSON(object.metadata)
-        : undefined,
+      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
     };
   },
 
@@ -149,13 +136,8 @@ export const Snapshot = {
     message.format !== undefined && (obj.format = Math.round(message.format));
     message.chunks !== undefined && (obj.chunks = Math.round(message.chunks));
     message.hash !== undefined &&
-      (obj.hash = base64FromBytes(
-        message.hash !== undefined ? message.hash : new Uint8Array()
-      ));
-    message.metadata !== undefined &&
-      (obj.metadata = message.metadata
-        ? Metadata.toJSON(message.metadata)
-        : undefined);
+      (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.metadata !== undefined && (obj.metadata = message.metadata ? Metadata.toJSON(message.metadata) : undefined);
     return obj;
   },
 
@@ -165,10 +147,9 @@ export const Snapshot = {
     message.format = object.format ?? 0;
     message.chunks = object.chunks ?? 0;
     message.hash = object.hash ?? new Uint8Array();
-    message.metadata =
-      object.metadata !== undefined && object.metadata !== null
-        ? Metadata.fromPartial(object.metadata)
-        : undefined;
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? Metadata.fromPartial(object.metadata)
+      : undefined;
     return message;
   },
 };
@@ -178,10 +159,7 @@ function createBaseMetadata(): Metadata {
 }
 
 export const Metadata = {
-  encode(
-    message: Metadata,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Metadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.chunk_hashes) {
       writer.uint32(10).bytes(v!);
     }
@@ -208,18 +186,14 @@ export const Metadata = {
 
   fromJSON(object: any): Metadata {
     return {
-      chunk_hashes: Array.isArray(object?.chunk_hashes)
-        ? object.chunk_hashes.map((e: any) => bytesFromBase64(e))
-        : [],
+      chunk_hashes: Array.isArray(object?.chunk_hashes) ? object.chunk_hashes.map((e: any) => bytesFromBase64(e)) : [],
     };
   },
 
   toJSON(message: Metadata): unknown {
     const obj: any = {};
     if (message.chunk_hashes) {
-      obj.chunk_hashes = message.chunk_hashes.map((e) =>
-        base64FromBytes(e !== undefined ? e : new Uint8Array())
-      );
+      obj.chunk_hashes = message.chunk_hashes.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
     } else {
       obj.chunk_hashes = [];
     }
@@ -245,30 +219,18 @@ function createBaseSnapshotItem(): SnapshotItem {
 }
 
 export const SnapshotItem = {
-  encode(
-    message: SnapshotItem,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.store !== undefined) {
-      SnapshotStoreItem.encode(
-        message.store,
-        writer.uint32(10).fork()
-      ).ldelim();
+      SnapshotStoreItem.encode(message.store, writer.uint32(10).fork()).ldelim();
     }
     if (message.iavl !== undefined) {
       SnapshotIAVLItem.encode(message.iavl, writer.uint32(18).fork()).ldelim();
     }
     if (message.extension !== undefined) {
-      SnapshotExtensionMeta.encode(
-        message.extension,
-        writer.uint32(26).fork()
-      ).ldelim();
+      SnapshotExtensionMeta.encode(message.extension, writer.uint32(26).fork()).ldelim();
     }
     if (message.extension_payload !== undefined) {
-      SnapshotExtensionPayload.encode(
-        message.extension_payload,
-        writer.uint32(34).fork()
-      ).ldelim();
+      SnapshotExtensionPayload.encode(message.extension_payload, writer.uint32(34).fork()).ldelim();
     }
     if (message.kv !== undefined) {
       SnapshotKVItem.encode(message.kv, writer.uint32(42).fork()).ldelim();
@@ -293,16 +255,10 @@ export const SnapshotItem = {
           message.iavl = SnapshotIAVLItem.decode(reader, reader.uint32());
           break;
         case 3:
-          message.extension = SnapshotExtensionMeta.decode(
-            reader,
-            reader.uint32()
-          );
+          message.extension = SnapshotExtensionMeta.decode(reader, reader.uint32());
           break;
         case 4:
-          message.extension_payload = SnapshotExtensionPayload.decode(
-            reader,
-            reader.uint32()
-          );
+          message.extension_payload = SnapshotExtensionPayload.decode(reader, reader.uint32());
           break;
         case 5:
           message.kv = SnapshotKVItem.decode(reader, reader.uint32());
@@ -320,81 +276,49 @@ export const SnapshotItem = {
 
   fromJSON(object: any): SnapshotItem {
     return {
-      store: isSet(object.store)
-        ? SnapshotStoreItem.fromJSON(object.store)
-        : undefined,
-      iavl: isSet(object.iavl)
-        ? SnapshotIAVLItem.fromJSON(object.iavl)
-        : undefined,
-      extension: isSet(object.extension)
-        ? SnapshotExtensionMeta.fromJSON(object.extension)
-        : undefined,
+      store: isSet(object.store) ? SnapshotStoreItem.fromJSON(object.store) : undefined,
+      iavl: isSet(object.iavl) ? SnapshotIAVLItem.fromJSON(object.iavl) : undefined,
+      extension: isSet(object.extension) ? SnapshotExtensionMeta.fromJSON(object.extension) : undefined,
       extension_payload: isSet(object.extension_payload)
         ? SnapshotExtensionPayload.fromJSON(object.extension_payload)
         : undefined,
       kv: isSet(object.kv) ? SnapshotKVItem.fromJSON(object.kv) : undefined,
-      schema: isSet(object.schema)
-        ? SnapshotSchema.fromJSON(object.schema)
-        : undefined,
+      schema: isSet(object.schema) ? SnapshotSchema.fromJSON(object.schema) : undefined,
     };
   },
 
   toJSON(message: SnapshotItem): unknown {
     const obj: any = {};
-    message.store !== undefined &&
-      (obj.store = message.store
-        ? SnapshotStoreItem.toJSON(message.store)
-        : undefined);
-    message.iavl !== undefined &&
-      (obj.iavl = message.iavl
-        ? SnapshotIAVLItem.toJSON(message.iavl)
-        : undefined);
+    message.store !== undefined && (obj.store = message.store ? SnapshotStoreItem.toJSON(message.store) : undefined);
+    message.iavl !== undefined && (obj.iavl = message.iavl ? SnapshotIAVLItem.toJSON(message.iavl) : undefined);
     message.extension !== undefined &&
-      (obj.extension = message.extension
-        ? SnapshotExtensionMeta.toJSON(message.extension)
-        : undefined);
-    message.extension_payload !== undefined &&
-      (obj.extension_payload = message.extension_payload
-        ? SnapshotExtensionPayload.toJSON(message.extension_payload)
-        : undefined);
-    message.kv !== undefined &&
-      (obj.kv = message.kv ? SnapshotKVItem.toJSON(message.kv) : undefined);
-    message.schema !== undefined &&
-      (obj.schema = message.schema
-        ? SnapshotSchema.toJSON(message.schema)
-        : undefined);
+      (obj.extension = message.extension ? SnapshotExtensionMeta.toJSON(message.extension) : undefined);
+    message.extension_payload !== undefined && (obj.extension_payload = message.extension_payload
+      ? SnapshotExtensionPayload.toJSON(message.extension_payload)
+      : undefined);
+    message.kv !== undefined && (obj.kv = message.kv ? SnapshotKVItem.toJSON(message.kv) : undefined);
+    message.schema !== undefined && (obj.schema = message.schema ? SnapshotSchema.toJSON(message.schema) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotItem>, I>>(
-    object: I
-  ): SnapshotItem {
+  fromPartial<I extends Exact<DeepPartial<SnapshotItem>, I>>(object: I): SnapshotItem {
     const message = createBaseSnapshotItem();
-    message.store =
-      object.store !== undefined && object.store !== null
-        ? SnapshotStoreItem.fromPartial(object.store)
-        : undefined;
-    message.iavl =
-      object.iavl !== undefined && object.iavl !== null
-        ? SnapshotIAVLItem.fromPartial(object.iavl)
-        : undefined;
-    message.extension =
-      object.extension !== undefined && object.extension !== null
-        ? SnapshotExtensionMeta.fromPartial(object.extension)
-        : undefined;
-    message.extension_payload =
-      object.extension_payload !== undefined &&
-      object.extension_payload !== null
-        ? SnapshotExtensionPayload.fromPartial(object.extension_payload)
-        : undefined;
-    message.kv =
-      object.kv !== undefined && object.kv !== null
-        ? SnapshotKVItem.fromPartial(object.kv)
-        : undefined;
-    message.schema =
-      object.schema !== undefined && object.schema !== null
-        ? SnapshotSchema.fromPartial(object.schema)
-        : undefined;
+    message.store = (object.store !== undefined && object.store !== null)
+      ? SnapshotStoreItem.fromPartial(object.store)
+      : undefined;
+    message.iavl = (object.iavl !== undefined && object.iavl !== null)
+      ? SnapshotIAVLItem.fromPartial(object.iavl)
+      : undefined;
+    message.extension = (object.extension !== undefined && object.extension !== null)
+      ? SnapshotExtensionMeta.fromPartial(object.extension)
+      : undefined;
+    message.extension_payload = (object.extension_payload !== undefined && object.extension_payload !== null)
+      ? SnapshotExtensionPayload.fromPartial(object.extension_payload)
+      : undefined;
+    message.kv = (object.kv !== undefined && object.kv !== null) ? SnapshotKVItem.fromPartial(object.kv) : undefined;
+    message.schema = (object.schema !== undefined && object.schema !== null)
+      ? SnapshotSchema.fromPartial(object.schema)
+      : undefined;
     return message;
   },
 };
@@ -404,10 +328,7 @@ function createBaseSnapshotStoreItem(): SnapshotStoreItem {
 }
 
 export const SnapshotStoreItem = {
-  encode(
-    message: SnapshotStoreItem,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotStoreItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -433,9 +354,7 @@ export const SnapshotStoreItem = {
   },
 
   fromJSON(object: any): SnapshotStoreItem {
-    return {
-      name: isSet(object.name) ? String(object.name) : "",
-    };
+    return { name: isSet(object.name) ? String(object.name) : "" };
   },
 
   toJSON(message: SnapshotStoreItem): unknown {
@@ -444,9 +363,7 @@ export const SnapshotStoreItem = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotStoreItem>, I>>(
-    object: I
-  ): SnapshotStoreItem {
+  fromPartial<I extends Exact<DeepPartial<SnapshotStoreItem>, I>>(object: I): SnapshotStoreItem {
     const message = createBaseSnapshotStoreItem();
     message.name = object.name ?? "";
     return message;
@@ -454,19 +371,11 @@ export const SnapshotStoreItem = {
 };
 
 function createBaseSnapshotIAVLItem(): SnapshotIAVLItem {
-  return {
-    key: new Uint8Array(),
-    value: new Uint8Array(),
-    version: "0",
-    height: 0,
-  };
+  return { key: new Uint8Array(), value: new Uint8Array(), version: "0", height: 0 };
 }
 
 export const SnapshotIAVLItem = {
-  encode(
-    message: SnapshotIAVLItem,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotIAVLItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
@@ -512,9 +421,7 @@ export const SnapshotIAVLItem = {
   fromJSON(object: any): SnapshotIAVLItem {
     return {
       key: isSet(object.key) ? bytesFromBase64(object.key) : new Uint8Array(),
-      value: isSet(object.value)
-        ? bytesFromBase64(object.value)
-        : new Uint8Array(),
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array(),
       version: isSet(object.version) ? String(object.version) : "0",
       height: isSet(object.height) ? Number(object.height) : 0,
     };
@@ -523,21 +430,15 @@ export const SnapshotIAVLItem = {
   toJSON(message: SnapshotIAVLItem): unknown {
     const obj: any = {};
     message.key !== undefined &&
-      (obj.key = base64FromBytes(
-        message.key !== undefined ? message.key : new Uint8Array()
-      ));
+      (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
     message.value !== undefined &&
-      (obj.value = base64FromBytes(
-        message.value !== undefined ? message.value : new Uint8Array()
-      ));
+      (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
     message.version !== undefined && (obj.version = message.version);
     message.height !== undefined && (obj.height = Math.round(message.height));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotIAVLItem>, I>>(
-    object: I
-  ): SnapshotIAVLItem {
+  fromPartial<I extends Exact<DeepPartial<SnapshotIAVLItem>, I>>(object: I): SnapshotIAVLItem {
     const message = createBaseSnapshotIAVLItem();
     message.key = object.key ?? new Uint8Array();
     message.value = object.value ?? new Uint8Array();
@@ -552,10 +453,7 @@ function createBaseSnapshotExtensionMeta(): SnapshotExtensionMeta {
 }
 
 export const SnapshotExtensionMeta = {
-  encode(
-    message: SnapshotExtensionMeta,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotExtensionMeta, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -565,10 +463,7 @@ export const SnapshotExtensionMeta = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): SnapshotExtensionMeta {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SnapshotExtensionMeta {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSnapshotExtensionMeta();
@@ -603,9 +498,7 @@ export const SnapshotExtensionMeta = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotExtensionMeta>, I>>(
-    object: I
-  ): SnapshotExtensionMeta {
+  fromPartial<I extends Exact<DeepPartial<SnapshotExtensionMeta>, I>>(object: I): SnapshotExtensionMeta {
     const message = createBaseSnapshotExtensionMeta();
     message.name = object.name ?? "";
     message.format = object.format ?? 0;
@@ -618,20 +511,14 @@ function createBaseSnapshotExtensionPayload(): SnapshotExtensionPayload {
 }
 
 export const SnapshotExtensionPayload = {
-  encode(
-    message: SnapshotExtensionPayload,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotExtensionPayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload.length !== 0) {
       writer.uint32(10).bytes(message.payload);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): SnapshotExtensionPayload {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SnapshotExtensionPayload {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSnapshotExtensionPayload();
@@ -650,25 +537,17 @@ export const SnapshotExtensionPayload = {
   },
 
   fromJSON(object: any): SnapshotExtensionPayload {
-    return {
-      payload: isSet(object.payload)
-        ? bytesFromBase64(object.payload)
-        : new Uint8Array(),
-    };
+    return { payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array() };
   },
 
   toJSON(message: SnapshotExtensionPayload): unknown {
     const obj: any = {};
     message.payload !== undefined &&
-      (obj.payload = base64FromBytes(
-        message.payload !== undefined ? message.payload : new Uint8Array()
-      ));
+      (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotExtensionPayload>, I>>(
-    object: I
-  ): SnapshotExtensionPayload {
+  fromPartial<I extends Exact<DeepPartial<SnapshotExtensionPayload>, I>>(object: I): SnapshotExtensionPayload {
     const message = createBaseSnapshotExtensionPayload();
     message.payload = object.payload ?? new Uint8Array();
     return message;
@@ -680,10 +559,7 @@ function createBaseSnapshotKVItem(): SnapshotKVItem {
 }
 
 export const SnapshotKVItem = {
-  encode(
-    message: SnapshotKVItem,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotKVItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
@@ -717,28 +593,20 @@ export const SnapshotKVItem = {
   fromJSON(object: any): SnapshotKVItem {
     return {
       key: isSet(object.key) ? bytesFromBase64(object.key) : new Uint8Array(),
-      value: isSet(object.value)
-        ? bytesFromBase64(object.value)
-        : new Uint8Array(),
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array(),
     };
   },
 
   toJSON(message: SnapshotKVItem): unknown {
     const obj: any = {};
     message.key !== undefined &&
-      (obj.key = base64FromBytes(
-        message.key !== undefined ? message.key : new Uint8Array()
-      ));
+      (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
     message.value !== undefined &&
-      (obj.value = base64FromBytes(
-        message.value !== undefined ? message.value : new Uint8Array()
-      ));
+      (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotKVItem>, I>>(
-    object: I
-  ): SnapshotKVItem {
+  fromPartial<I extends Exact<DeepPartial<SnapshotKVItem>, I>>(object: I): SnapshotKVItem {
     const message = createBaseSnapshotKVItem();
     message.key = object.key ?? new Uint8Array();
     message.value = object.value ?? new Uint8Array();
@@ -751,10 +619,7 @@ function createBaseSnapshotSchema(): SnapshotSchema {
 }
 
 export const SnapshotSchema = {
-  encode(
-    message: SnapshotSchema,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SnapshotSchema, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.keys) {
       writer.uint32(10).bytes(v!);
     }
@@ -780,28 +645,20 @@ export const SnapshotSchema = {
   },
 
   fromJSON(object: any): SnapshotSchema {
-    return {
-      keys: Array.isArray(object?.keys)
-        ? object.keys.map((e: any) => bytesFromBase64(e))
-        : [],
-    };
+    return { keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => bytesFromBase64(e)) : [] };
   },
 
   toJSON(message: SnapshotSchema): unknown {
     const obj: any = {};
     if (message.keys) {
-      obj.keys = message.keys.map((e) =>
-        base64FromBytes(e !== undefined ? e : new Uint8Array())
-      );
+      obj.keys = message.keys.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
     } else {
       obj.keys = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SnapshotSchema>, I>>(
-    object: I
-  ): SnapshotSchema {
+  fromPartial<I extends Exact<DeepPartial<SnapshotSchema>, I>>(object: I): SnapshotSchema {
     const message = createBaseSnapshotSchema();
     message.keys = object.keys?.map((e) => e) || [];
     return message;
@@ -812,62 +669,56 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

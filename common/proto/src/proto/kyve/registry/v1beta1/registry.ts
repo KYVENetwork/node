@@ -473,10 +473,7 @@ function createBaseBundleProposal(): BundleProposal {
 }
 
 export const BundleProposal = {
-  encode(
-    message: BundleProposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BundleProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.uploader !== "") {
       writer.uint32(10).string(message.uploader);
     }
@@ -576,23 +573,15 @@ export const BundleProposal = {
   fromJSON(object: any): BundleProposal {
     return {
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
-      next_uploader: isSet(object.next_uploader)
-        ? String(object.next_uploader)
-        : "",
+      next_uploader: isSet(object.next_uploader) ? String(object.next_uploader) : "",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       byte_size: isSet(object.byte_size) ? String(object.byte_size) : "0",
       from_height: isSet(object.from_height) ? String(object.from_height) : "0",
       to_height: isSet(object.to_height) ? String(object.to_height) : "0",
       created_at: isSet(object.created_at) ? String(object.created_at) : "0",
-      voters_valid: Array.isArray(object?.voters_valid)
-        ? object.voters_valid.map((e: any) => String(e))
-        : [],
-      voters_invalid: Array.isArray(object?.voters_invalid)
-        ? object.voters_invalid.map((e: any) => String(e))
-        : [],
-      voters_abstain: Array.isArray(object?.voters_abstain)
-        ? object.voters_abstain.map((e: any) => String(e))
-        : [],
+      voters_valid: Array.isArray(object?.voters_valid) ? object.voters_valid.map((e: any) => String(e)) : [],
+      voters_invalid: Array.isArray(object?.voters_invalid) ? object.voters_invalid.map((e: any) => String(e)) : [],
+      voters_abstain: Array.isArray(object?.voters_abstain) ? object.voters_abstain.map((e: any) => String(e)) : [],
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
       to_value: isSet(object.to_value) ? String(object.to_value) : "",
       bundle_hash: isSet(object.bundle_hash) ? String(object.bundle_hash) : "",
@@ -602,12 +591,10 @@ export const BundleProposal = {
   toJSON(message: BundleProposal): unknown {
     const obj: any = {};
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.next_uploader !== undefined &&
-      (obj.next_uploader = message.next_uploader);
+    message.next_uploader !== undefined && (obj.next_uploader = message.next_uploader);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.byte_size !== undefined && (obj.byte_size = message.byte_size);
-    message.from_height !== undefined &&
-      (obj.from_height = message.from_height);
+    message.from_height !== undefined && (obj.from_height = message.from_height);
     message.to_height !== undefined && (obj.to_height = message.to_height);
     message.created_at !== undefined && (obj.created_at = message.created_at);
     if (message.voters_valid) {
@@ -627,14 +614,11 @@ export const BundleProposal = {
     }
     message.to_key !== undefined && (obj.to_key = message.to_key);
     message.to_value !== undefined && (obj.to_value = message.to_value);
-    message.bundle_hash !== undefined &&
-      (obj.bundle_hash = message.bundle_hash);
+    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(
-    object: I
-  ): BundleProposal {
+  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(object: I): BundleProposal {
     const message = createBaseBundleProposal();
     message.uploader = object.uploader ?? "";
     message.next_uploader = object.next_uploader ?? "";
@@ -658,10 +642,7 @@ function createBaseProtocol(): Protocol {
 }
 
 export const Protocol = {
-  encode(
-    message: Protocol,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Protocol, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
@@ -708,9 +689,7 @@ export const Protocol = {
     return {
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
-      last_upgrade: isSet(object.last_upgrade)
-        ? String(object.last_upgrade)
-        : "0",
+      last_upgrade: isSet(object.last_upgrade) ? String(object.last_upgrade) : "0",
       test: isSet(object.test) ? String(object.test) : "",
     };
   },
@@ -719,8 +698,7 @@ export const Protocol = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
-    message.last_upgrade !== undefined &&
-      (obj.last_upgrade = message.last_upgrade);
+    message.last_upgrade !== undefined && (obj.last_upgrade = message.last_upgrade);
     message.test !== undefined && (obj.test = message.test);
     return obj;
   },
@@ -740,10 +718,7 @@ function createBaseUpgradePlan(): UpgradePlan {
 }
 
 export const UpgradePlan = {
-  encode(
-    message: UpgradePlan,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UpgradePlan, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
@@ -790,9 +765,7 @@ export const UpgradePlan = {
     return {
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
-      scheduled_at: isSet(object.scheduled_at)
-        ? String(object.scheduled_at)
-        : "0",
+      scheduled_at: isSet(object.scheduled_at) ? String(object.scheduled_at) : "0",
       duration: isSet(object.duration) ? String(object.duration) : "0",
     };
   },
@@ -801,15 +774,12 @@ export const UpgradePlan = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
-    message.scheduled_at !== undefined &&
-      (obj.scheduled_at = message.scheduled_at);
+    message.scheduled_at !== undefined && (obj.scheduled_at = message.scheduled_at);
     message.duration !== undefined && (obj.duration = message.duration);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UpgradePlan>, I>>(
-    object: I
-  ): UpgradePlan {
+  fromPartial<I extends Exact<DeepPartial<UpgradePlan>, I>>(object: I): UpgradePlan {
     const message = createBaseUpgradePlan();
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
@@ -824,10 +794,7 @@ function createBaseDelegationEntries(): DelegationEntries {
 }
 
 export const DelegationEntries = {
-  encode(
-    message: DelegationEntries,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DelegationEntries, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -888,9 +855,7 @@ export const DelegationEntries = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationEntries>, I>>(
-    object: I
-  ): DelegationEntries {
+  fromPartial<I extends Exact<DeepPartial<DelegationEntries>, I>>(object: I): DelegationEntries {
     const message = createBaseDelegationEntries();
     message.id = object.id ?? "0";
     message.balance = object.balance ?? "";
@@ -913,10 +878,7 @@ function createBaseDelegationPoolData(): DelegationPoolData {
 }
 
 export const DelegationPoolData = {
-  encode(
-    message: DelegationPoolData,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DelegationPoolData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -981,18 +943,10 @@ export const DelegationPoolData = {
     return {
       id: isSet(object.id) ? String(object.id) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
-      current_rewards: isSet(object.current_rewards)
-        ? String(object.current_rewards)
-        : "0",
-      total_delegation: isSet(object.total_delegation)
-        ? String(object.total_delegation)
-        : "0",
-      latest_index_k: isSet(object.latest_index_k)
-        ? String(object.latest_index_k)
-        : "0",
-      delegator_count: isSet(object.delegator_count)
-        ? String(object.delegator_count)
-        : "0",
+      current_rewards: isSet(object.current_rewards) ? String(object.current_rewards) : "0",
+      total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
+      latest_index_k: isSet(object.latest_index_k) ? String(object.latest_index_k) : "0",
+      delegator_count: isSet(object.delegator_count) ? String(object.delegator_count) : "0",
       latest_index_was_undelegation: isSet(object.latest_index_was_undelegation)
         ? Boolean(object.latest_index_was_undelegation)
         : false,
@@ -1003,23 +957,16 @@ export const DelegationPoolData = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.staker !== undefined && (obj.staker = message.staker);
-    message.current_rewards !== undefined &&
-      (obj.current_rewards = message.current_rewards);
-    message.total_delegation !== undefined &&
-      (obj.total_delegation = message.total_delegation);
-    message.latest_index_k !== undefined &&
-      (obj.latest_index_k = message.latest_index_k);
-    message.delegator_count !== undefined &&
-      (obj.delegator_count = message.delegator_count);
+    message.current_rewards !== undefined && (obj.current_rewards = message.current_rewards);
+    message.total_delegation !== undefined && (obj.total_delegation = message.total_delegation);
+    message.latest_index_k !== undefined && (obj.latest_index_k = message.latest_index_k);
+    message.delegator_count !== undefined && (obj.delegator_count = message.delegator_count);
     message.latest_index_was_undelegation !== undefined &&
-      (obj.latest_index_was_undelegation =
-        message.latest_index_was_undelegation);
+      (obj.latest_index_was_undelegation = message.latest_index_was_undelegation);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationPoolData>, I>>(
-    object: I
-  ): DelegationPoolData {
+  fromPartial<I extends Exact<DeepPartial<DelegationPoolData>, I>>(object: I): DelegationPoolData {
     const message = createBaseDelegationPoolData();
     message.id = object.id ?? "0";
     message.staker = object.staker ?? "";
@@ -1027,27 +974,17 @@ export const DelegationPoolData = {
     message.total_delegation = object.total_delegation ?? "0";
     message.latest_index_k = object.latest_index_k ?? "0";
     message.delegator_count = object.delegator_count ?? "0";
-    message.latest_index_was_undelegation =
-      object.latest_index_was_undelegation ?? false;
+    message.latest_index_was_undelegation = object.latest_index_was_undelegation ?? false;
     return message;
   },
 };
 
 function createBaseDelegator(): Delegator {
-  return {
-    id: "0",
-    k_index: "0",
-    delegation_amount: "0",
-    staker: "",
-    delegator: "",
-  };
+  return { id: "0", k_index: "0", delegation_amount: "0", staker: "", delegator: "" };
 }
 
 export const Delegator = {
-  encode(
-    message: Delegator,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Delegator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -1100,9 +1037,7 @@ export const Delegator = {
     return {
       id: isSet(object.id) ? String(object.id) : "0",
       k_index: isSet(object.k_index) ? String(object.k_index) : "0",
-      delegation_amount: isSet(object.delegation_amount)
-        ? String(object.delegation_amount)
-        : "0",
+      delegation_amount: isSet(object.delegation_amount) ? String(object.delegation_amount) : "0",
       staker: isSet(object.staker) ? String(object.staker) : "",
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
     };
@@ -1112,16 +1047,13 @@ export const Delegator = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.k_index !== undefined && (obj.k_index = message.k_index);
-    message.delegation_amount !== undefined &&
-      (obj.delegation_amount = message.delegation_amount);
+    message.delegation_amount !== undefined && (obj.delegation_amount = message.delegation_amount);
     message.staker !== undefined && (obj.staker = message.staker);
     message.delegator !== undefined && (obj.delegator = message.delegator);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Delegator>, I>>(
-    object: I
-  ): Delegator {
+  fromPartial<I extends Exact<DeepPartial<Delegator>, I>>(object: I): Delegator {
     const message = createBaseDelegator();
     message.id = object.id ?? "0";
     message.k_index = object.k_index ?? "0";
@@ -1137,10 +1069,7 @@ function createBaseFunder(): Funder {
 }
 
 export const Funder = {
-  encode(
-    message: Funder,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Funder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== "") {
       writer.uint32(18).string(message.account);
     }
@@ -1309,10 +1238,7 @@ export const Pool = {
       writer.uint32(176).uint64(message.total_delegation);
     }
     if (message.bundle_proposal !== undefined) {
-      BundleProposal.encode(
-        message.bundle_proposal,
-        writer.uint32(186).fork()
-      ).ldelim();
+      BundleProposal.encode(message.bundle_proposal, writer.uint32(186).fork()).ldelim();
     }
     if (message.max_bundle_size !== "0") {
       writer.uint32(192).uint64(message.max_bundle_size);
@@ -1321,10 +1247,7 @@ export const Pool = {
       Protocol.encode(message.protocol, writer.uint32(202).fork()).ldelim();
     }
     if (message.upgrade_plan !== undefined) {
-      UpgradePlan.encode(
-        message.upgrade_plan,
-        writer.uint32(210).fork()
-      ).ldelim();
+      UpgradePlan.encode(message.upgrade_plan, writer.uint32(210).fork()).ldelim();
     }
     if (message.start_key !== "") {
       writer.uint32(218).string(message.start_key);
@@ -1424,10 +1347,7 @@ export const Pool = {
           message.total_delegation = longToString(reader.uint64() as Long);
           break;
         case 23:
-          message.bundle_proposal = BundleProposal.decode(
-            reader,
-            reader.uint32()
-          );
+          message.bundle_proposal = BundleProposal.decode(reader, reader.uint32());
           break;
         case 24:
           message.max_bundle_size = longToString(reader.uint64() as Long);
@@ -1476,66 +1396,32 @@ export const Pool = {
       logo: isSet(object.logo) ? String(object.logo) : "",
       versions: isSet(object.versions) ? String(object.versions) : "",
       config: isSet(object.config) ? String(object.config) : "",
-      current_height: isSet(object.current_height)
-        ? String(object.current_height)
-        : "0",
+      current_height: isSet(object.current_height) ? String(object.current_height) : "0",
       total_bytes: isSet(object.total_bytes) ? String(object.total_bytes) : "0",
-      total_bundles: isSet(object.total_bundles)
-        ? String(object.total_bundles)
-        : "0",
-      total_bundle_rewards: isSet(object.total_bundle_rewards)
-        ? String(object.total_bundle_rewards)
-        : "0",
-      start_height: isSet(object.start_height)
-        ? String(object.start_height)
-        : "0",
-      upload_interval: isSet(object.upload_interval)
-        ? String(object.upload_interval)
-        : "0",
-      operating_cost: isSet(object.operating_cost)
-        ? String(object.operating_cost)
-        : "0",
+      total_bundles: isSet(object.total_bundles) ? String(object.total_bundles) : "0",
+      total_bundle_rewards: isSet(object.total_bundle_rewards) ? String(object.total_bundle_rewards) : "0",
+      start_height: isSet(object.start_height) ? String(object.start_height) : "0",
+      upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
+      operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
-      funders: Array.isArray(object?.funders)
-        ? object.funders.map((e: any) => String(e))
-        : [],
-      lowest_funder: isSet(object.lowest_funder)
-        ? String(object.lowest_funder)
-        : "",
+      funders: Array.isArray(object?.funders) ? object.funders.map((e: any) => String(e)) : [],
+      lowest_funder: isSet(object.lowest_funder) ? String(object.lowest_funder) : "",
       total_funds: isSet(object.total_funds) ? String(object.total_funds) : "0",
-      stakers: Array.isArray(object?.stakers)
-        ? object.stakers.map((e: any) => String(e))
-        : [],
-      lowest_staker: isSet(object.lowest_staker)
-        ? String(object.lowest_staker)
-        : "",
+      stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => String(e)) : [],
+      lowest_staker: isSet(object.lowest_staker) ? String(object.lowest_staker) : "",
       total_stake: isSet(object.total_stake) ? String(object.total_stake) : "0",
-      total_delegation: isSet(object.total_delegation)
-        ? String(object.total_delegation)
-        : "0",
-      bundle_proposal: isSet(object.bundle_proposal)
-        ? BundleProposal.fromJSON(object.bundle_proposal)
-        : undefined,
-      max_bundle_size: isSet(object.max_bundle_size)
-        ? String(object.max_bundle_size)
-        : "0",
-      protocol: isSet(object.protocol)
-        ? Protocol.fromJSON(object.protocol)
-        : undefined,
-      upgrade_plan: isSet(object.upgrade_plan)
-        ? UpgradePlan.fromJSON(object.upgrade_plan)
-        : undefined,
+      total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
+      bundle_proposal: isSet(object.bundle_proposal) ? BundleProposal.fromJSON(object.bundle_proposal) : undefined,
+      max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
+      protocol: isSet(object.protocol) ? Protocol.fromJSON(object.protocol) : undefined,
+      upgrade_plan: isSet(object.upgrade_plan) ? UpgradePlan.fromJSON(object.upgrade_plan) : undefined,
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
       current_key: isSet(object.current_key) ? String(object.current_key) : "",
-      current_value: isSet(object.current_value)
-        ? String(object.current_value)
-        : "",
+      current_value: isSet(object.current_value) ? String(object.current_value) : "",
       inactive_stakers: Array.isArray(object?.inactive_stakers)
         ? object.inactive_stakers.map((e: any) => String(e))
         : [],
-      total_inactive_stake: isSet(object.total_inactive_stake)
-        ? String(object.total_inactive_stake)
-        : "0",
+      total_inactive_stake: isSet(object.total_inactive_stake) ? String(object.total_inactive_stake) : "0",
       min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
       status: isSet(object.status) ? poolStatusFromJSON(object.status) : 0,
     };
@@ -1550,70 +1436,46 @@ export const Pool = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.versions !== undefined && (obj.versions = message.versions);
     message.config !== undefined && (obj.config = message.config);
-    message.current_height !== undefined &&
-      (obj.current_height = message.current_height);
-    message.total_bytes !== undefined &&
-      (obj.total_bytes = message.total_bytes);
-    message.total_bundles !== undefined &&
-      (obj.total_bundles = message.total_bundles);
-    message.total_bundle_rewards !== undefined &&
-      (obj.total_bundle_rewards = message.total_bundle_rewards);
-    message.start_height !== undefined &&
-      (obj.start_height = message.start_height);
-    message.upload_interval !== undefined &&
-      (obj.upload_interval = message.upload_interval);
-    message.operating_cost !== undefined &&
-      (obj.operating_cost = message.operating_cost);
+    message.current_height !== undefined && (obj.current_height = message.current_height);
+    message.total_bytes !== undefined && (obj.total_bytes = message.total_bytes);
+    message.total_bundles !== undefined && (obj.total_bundles = message.total_bundles);
+    message.total_bundle_rewards !== undefined && (obj.total_bundle_rewards = message.total_bundle_rewards);
+    message.start_height !== undefined && (obj.start_height = message.start_height);
+    message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
+    message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
     message.paused !== undefined && (obj.paused = message.paused);
     if (message.funders) {
       obj.funders = message.funders.map((e) => e);
     } else {
       obj.funders = [];
     }
-    message.lowest_funder !== undefined &&
-      (obj.lowest_funder = message.lowest_funder);
-    message.total_funds !== undefined &&
-      (obj.total_funds = message.total_funds);
+    message.lowest_funder !== undefined && (obj.lowest_funder = message.lowest_funder);
+    message.total_funds !== undefined && (obj.total_funds = message.total_funds);
     if (message.stakers) {
       obj.stakers = message.stakers.map((e) => e);
     } else {
       obj.stakers = [];
     }
-    message.lowest_staker !== undefined &&
-      (obj.lowest_staker = message.lowest_staker);
-    message.total_stake !== undefined &&
-      (obj.total_stake = message.total_stake);
-    message.total_delegation !== undefined &&
-      (obj.total_delegation = message.total_delegation);
+    message.lowest_staker !== undefined && (obj.lowest_staker = message.lowest_staker);
+    message.total_stake !== undefined && (obj.total_stake = message.total_stake);
+    message.total_delegation !== undefined && (obj.total_delegation = message.total_delegation);
     message.bundle_proposal !== undefined &&
-      (obj.bundle_proposal = message.bundle_proposal
-        ? BundleProposal.toJSON(message.bundle_proposal)
-        : undefined);
-    message.max_bundle_size !== undefined &&
-      (obj.max_bundle_size = message.max_bundle_size);
-    message.protocol !== undefined &&
-      (obj.protocol = message.protocol
-        ? Protocol.toJSON(message.protocol)
-        : undefined);
+      (obj.bundle_proposal = message.bundle_proposal ? BundleProposal.toJSON(message.bundle_proposal) : undefined);
+    message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
+    message.protocol !== undefined && (obj.protocol = message.protocol ? Protocol.toJSON(message.protocol) : undefined);
     message.upgrade_plan !== undefined &&
-      (obj.upgrade_plan = message.upgrade_plan
-        ? UpgradePlan.toJSON(message.upgrade_plan)
-        : undefined);
+      (obj.upgrade_plan = message.upgrade_plan ? UpgradePlan.toJSON(message.upgrade_plan) : undefined);
     message.start_key !== undefined && (obj.start_key = message.start_key);
-    message.current_key !== undefined &&
-      (obj.current_key = message.current_key);
-    message.current_value !== undefined &&
-      (obj.current_value = message.current_value);
+    message.current_key !== undefined && (obj.current_key = message.current_key);
+    message.current_value !== undefined && (obj.current_value = message.current_value);
     if (message.inactive_stakers) {
       obj.inactive_stakers = message.inactive_stakers.map((e) => e);
     } else {
       obj.inactive_stakers = [];
     }
-    message.total_inactive_stake !== undefined &&
-      (obj.total_inactive_stake = message.total_inactive_stake);
+    message.total_inactive_stake !== undefined && (obj.total_inactive_stake = message.total_inactive_stake);
     message.min_stake !== undefined && (obj.min_stake = message.min_stake);
-    message.status !== undefined &&
-      (obj.status = poolStatusToJSON(message.status));
+    message.status !== undefined && (obj.status = poolStatusToJSON(message.status));
     return obj;
   },
 
@@ -1641,19 +1503,16 @@ export const Pool = {
     message.lowest_staker = object.lowest_staker ?? "";
     message.total_stake = object.total_stake ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
-    message.bundle_proposal =
-      object.bundle_proposal !== undefined && object.bundle_proposal !== null
-        ? BundleProposal.fromPartial(object.bundle_proposal)
-        : undefined;
+    message.bundle_proposal = (object.bundle_proposal !== undefined && object.bundle_proposal !== null)
+      ? BundleProposal.fromPartial(object.bundle_proposal)
+      : undefined;
     message.max_bundle_size = object.max_bundle_size ?? "0";
-    message.protocol =
-      object.protocol !== undefined && object.protocol !== null
-        ? Protocol.fromPartial(object.protocol)
-        : undefined;
-    message.upgrade_plan =
-      object.upgrade_plan !== undefined && object.upgrade_plan !== null
-        ? UpgradePlan.fromPartial(object.upgrade_plan)
-        : undefined;
+    message.protocol = (object.protocol !== undefined && object.protocol !== null)
+      ? Protocol.fromPartial(object.protocol)
+      : undefined;
+    message.upgrade_plan = (object.upgrade_plan !== undefined && object.upgrade_plan !== null)
+      ? UpgradePlan.fromPartial(object.upgrade_plan)
+      : undefined;
     message.start_key = object.start_key ?? "";
     message.current_key = object.current_key ?? "";
     message.current_value = object.current_value ?? "";
@@ -1681,10 +1540,7 @@ function createBaseProposal(): Proposal {
 }
 
 export const Proposal = {
-  encode(
-    message: Proposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Proposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.storage_id !== "") {
       writer.uint32(10).string(message.storage_id);
     }
@@ -1770,9 +1626,7 @@ export const Proposal = {
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
       from_height: isSet(object.from_height) ? String(object.from_height) : "0",
       to_height: isSet(object.to_height) ? String(object.to_height) : "0",
-      finalized_at: isSet(object.finalized_at)
-        ? String(object.finalized_at)
-        : "0",
+      finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
       id: isSet(object.id) ? String(object.id) : "0",
       key: isSet(object.key) ? String(object.key) : "",
       value: isSet(object.value) ? String(object.value) : "",
@@ -1785,16 +1639,13 @@ export const Proposal = {
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.from_height !== undefined &&
-      (obj.from_height = message.from_height);
+    message.from_height !== undefined && (obj.from_height = message.from_height);
     message.to_height !== undefined && (obj.to_height = message.to_height);
-    message.finalized_at !== undefined &&
-      (obj.finalized_at = message.finalized_at);
+    message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
     message.id !== undefined && (obj.id = message.id);
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
-    message.bundle_hash !== undefined &&
-      (obj.bundle_hash = message.bundle_hash);
+    message.bundle_hash !== undefined && (obj.bundle_hash = message.bundle_hash);
     return obj;
   },
 
@@ -1830,10 +1681,7 @@ function createBaseStaker(): Staker {
 }
 
 export const Staker = {
-  encode(
-    message: Staker,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Staker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);
     }
@@ -1917,9 +1765,7 @@ export const Staker = {
       account: isSet(object.account) ? String(object.account) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      unbonding_amount: isSet(object.unbonding_amount)
-        ? String(object.unbonding_amount)
-        : "0",
+      unbonding_amount: isSet(object.unbonding_amount) ? String(object.unbonding_amount) : "0",
       commission: isSet(object.commission) ? String(object.commission) : "",
       moniker: isSet(object.moniker) ? String(object.moniker) : "",
       website: isSet(object.website) ? String(object.website) : "",
@@ -1934,15 +1780,13 @@ export const Staker = {
     message.account !== undefined && (obj.account = message.account);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.unbonding_amount !== undefined &&
-      (obj.unbonding_amount = message.unbonding_amount);
+    message.unbonding_amount !== undefined && (obj.unbonding_amount = message.unbonding_amount);
     message.commission !== undefined && (obj.commission = message.commission);
     message.moniker !== undefined && (obj.moniker = message.moniker);
     message.website !== undefined && (obj.website = message.website);
     message.logo !== undefined && (obj.logo = message.logo);
     message.points !== undefined && (obj.points = message.points);
-    message.status !== undefined &&
-      (obj.status = stakerStatusToJSON(message.status));
+    message.status !== undefined && (obj.status = stakerStatusToJSON(message.status));
     return obj;
   },
 
@@ -1963,20 +1807,11 @@ export const Staker = {
 };
 
 function createBaseUnbondingStakingQueueEntry(): UnbondingStakingQueueEntry {
-  return {
-    index: "0",
-    staker: "",
-    pool_id: "0",
-    amount: "0",
-    creation_time: "0",
-  };
+  return { index: "0", staker: "", pool_id: "0", amount: "0", creation_time: "0" };
 }
 
 export const UnbondingStakingQueueEntry = {
-  encode(
-    message: UnbondingStakingQueueEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingStakingQueueEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -1995,10 +1830,7 @@ export const UnbondingStakingQueueEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UnbondingStakingQueueEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnbondingStakingQueueEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingStakingQueueEntry();
@@ -2034,9 +1866,7 @@ export const UnbondingStakingQueueEntry = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      creation_time: isSet(object.creation_time)
-        ? String(object.creation_time)
-        : "0",
+      creation_time: isSet(object.creation_time) ? String(object.creation_time) : "0",
     };
   },
 
@@ -2046,14 +1876,11 @@ export const UnbondingStakingQueueEntry = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.creation_time !== undefined &&
-      (obj.creation_time = message.creation_time);
+    message.creation_time !== undefined && (obj.creation_time = message.creation_time);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UnbondingStakingQueueEntry>, I>>(
-    object: I
-  ): UnbondingStakingQueueEntry {
+  fromPartial<I extends Exact<DeepPartial<UnbondingStakingQueueEntry>, I>>(object: I): UnbondingStakingQueueEntry {
     const message = createBaseUnbondingStakingQueueEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -2069,10 +1896,7 @@ function createBaseUnbondingStaker(): UnbondingStaker {
 }
 
 export const UnbondingStaker = {
-  encode(
-    message: UnbondingStaker,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingStaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.staker !== "") {
       writer.uint32(10).string(message.staker);
     }
@@ -2113,9 +1937,7 @@ export const UnbondingStaker = {
     return {
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      unbonding_amount: isSet(object.unbonding_amount)
-        ? String(object.unbonding_amount)
-        : "0",
+      unbonding_amount: isSet(object.unbonding_amount) ? String(object.unbonding_amount) : "0",
     };
   },
 
@@ -2123,14 +1945,11 @@ export const UnbondingStaker = {
     const obj: any = {};
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.unbonding_amount !== undefined &&
-      (obj.unbonding_amount = message.unbonding_amount);
+    message.unbonding_amount !== undefined && (obj.unbonding_amount = message.unbonding_amount);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UnbondingStaker>, I>>(
-    object: I
-  ): UnbondingStaker {
+  fromPartial<I extends Exact<DeepPartial<UnbondingStaker>, I>>(object: I): UnbondingStaker {
     const message = createBaseUnbondingStaker();
     message.staker = object.staker ?? "";
     message.pool_id = object.pool_id ?? "0";
@@ -2144,10 +1963,7 @@ function createBaseUnbondingStakingQueueState(): UnbondingStakingQueueState {
 }
 
 export const UnbondingStakingQueueState = {
-  encode(
-    message: UnbondingStakingQueueState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingStakingQueueState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.low_index !== "0") {
       writer.uint32(8).uint64(message.low_index);
     }
@@ -2157,10 +1973,7 @@ export const UnbondingStakingQueueState = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UnbondingStakingQueueState {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnbondingStakingQueueState {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingStakingQueueState();
@@ -2195,9 +2008,7 @@ export const UnbondingStakingQueueState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UnbondingStakingQueueState>, I>>(
-    object: I
-  ): UnbondingStakingQueueState {
+  fromPartial<I extends Exact<DeepPartial<UnbondingStakingQueueState>, I>>(object: I): UnbondingStakingQueueState {
     const message = createBaseUnbondingStakingQueueState();
     message.low_index = object.low_index ?? "0";
     message.high_index = object.high_index ?? "0";
@@ -2206,21 +2017,11 @@ export const UnbondingStakingQueueState = {
 };
 
 function createBaseUnbondingDelegationQueueEntry(): UnbondingDelegationQueueEntry {
-  return {
-    index: "0",
-    staker: "",
-    delegator: "",
-    pool_id: "0",
-    amount: "0",
-    creation_time: "0",
-  };
+  return { index: "0", staker: "", delegator: "", pool_id: "0", amount: "0", creation_time: "0" };
 }
 
 export const UnbondingDelegationQueueEntry = {
-  encode(
-    message: UnbondingDelegationQueueEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingDelegationQueueEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -2242,10 +2043,7 @@ export const UnbondingDelegationQueueEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UnbondingDelegationQueueEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnbondingDelegationQueueEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingDelegationQueueEntry();
@@ -2285,9 +2083,7 @@ export const UnbondingDelegationQueueEntry = {
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      creation_time: isSet(object.creation_time)
-        ? String(object.creation_time)
-        : "0",
+      creation_time: isSet(object.creation_time) ? String(object.creation_time) : "0",
     };
   },
 
@@ -2298,13 +2094,12 @@ export const UnbondingDelegationQueueEntry = {
     message.delegator !== undefined && (obj.delegator = message.delegator);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.creation_time !== undefined &&
-      (obj.creation_time = message.creation_time);
+    message.creation_time !== undefined && (obj.creation_time = message.creation_time);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<UnbondingDelegationQueueEntry>, I>>(
-    object: I
+    object: I,
   ): UnbondingDelegationQueueEntry {
     const message = createBaseUnbondingDelegationQueueEntry();
     message.index = object.index ?? "0";
@@ -2322,10 +2117,7 @@ function createBaseUnbondingDelegationQueueState(): UnbondingDelegationQueueStat
 }
 
 export const UnbondingDelegationQueueState = {
-  encode(
-    message: UnbondingDelegationQueueState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UnbondingDelegationQueueState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.low_index !== "0") {
       writer.uint32(8).uint64(message.low_index);
     }
@@ -2335,10 +2127,7 @@ export const UnbondingDelegationQueueState = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UnbondingDelegationQueueState {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnbondingDelegationQueueState {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUnbondingDelegationQueueState();
@@ -2374,7 +2163,7 @@ export const UnbondingDelegationQueueState = {
   },
 
   fromPartial<I extends Exact<DeepPartial<UnbondingDelegationQueueState>, I>>(
-    object: I
+    object: I,
   ): UnbondingDelegationQueueState {
     const message = createBaseUnbondingDelegationQueueState();
     message.low_index = object.low_index ?? "0";
@@ -2388,10 +2177,7 @@ function createBaseRedelegationCooldown(): RedelegationCooldown {
 }
 
 export const RedelegationCooldown = {
-  encode(
-    message: RedelegationCooldown,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: RedelegationCooldown, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -2401,10 +2187,7 @@ export const RedelegationCooldown = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): RedelegationCooldown {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RedelegationCooldown {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRedelegationCooldown();
@@ -2428,23 +2211,18 @@ export const RedelegationCooldown = {
   fromJSON(object: any): RedelegationCooldown {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
     };
   },
 
   toJSON(message: RedelegationCooldown): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<RedelegationCooldown>, I>>(
-    object: I
-  ): RedelegationCooldown {
+  fromPartial<I extends Exact<DeepPartial<RedelegationCooldown>, I>>(object: I): RedelegationCooldown {
     const message = createBaseRedelegationCooldown();
     message.address = object.address ?? "";
     message.creation_date = object.creation_date ?? "0";
@@ -2453,20 +2231,11 @@ export const RedelegationCooldown = {
 };
 
 function createBaseCommissionChangeQueueEntry(): CommissionChangeQueueEntry {
-  return {
-    index: "0",
-    staker: "",
-    pool_id: "0",
-    commission: "",
-    creation_date: "0",
-  };
+  return { index: "0", staker: "", pool_id: "0", commission: "", creation_date: "0" };
 }
 
 export const CommissionChangeQueueEntry = {
-  encode(
-    message: CommissionChangeQueueEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CommissionChangeQueueEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -2485,10 +2254,7 @@ export const CommissionChangeQueueEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): CommissionChangeQueueEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommissionChangeQueueEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommissionChangeQueueEntry();
@@ -2524,9 +2290,7 @@ export const CommissionChangeQueueEntry = {
       staker: isSet(object.staker) ? String(object.staker) : "",
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       commission: isSet(object.commission) ? String(object.commission) : "",
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
     };
   },
 
@@ -2536,14 +2300,11 @@ export const CommissionChangeQueueEntry = {
     message.staker !== undefined && (obj.staker = message.staker);
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.commission !== undefined && (obj.commission = message.commission);
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CommissionChangeQueueEntry>, I>>(
-    object: I
-  ): CommissionChangeQueueEntry {
+  fromPartial<I extends Exact<DeepPartial<CommissionChangeQueueEntry>, I>>(object: I): CommissionChangeQueueEntry {
     const message = createBaseCommissionChangeQueueEntry();
     message.index = object.index ?? "0";
     message.staker = object.staker ?? "";
@@ -2559,10 +2320,7 @@ function createBaseCommissionChangeQueueState(): CommissionChangeQueueState {
 }
 
 export const CommissionChangeQueueState = {
-  encode(
-    message: CommissionChangeQueueState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CommissionChangeQueueState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.low_index !== "0") {
       writer.uint32(8).uint64(message.low_index);
     }
@@ -2572,10 +2330,7 @@ export const CommissionChangeQueueState = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): CommissionChangeQueueState {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommissionChangeQueueState {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCommissionChangeQueueState();
@@ -2610,9 +2365,7 @@ export const CommissionChangeQueueState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CommissionChangeQueueState>, I>>(
-    object: I
-  ): CommissionChangeQueueState {
+  fromPartial<I extends Exact<DeepPartial<CommissionChangeQueueState>, I>>(object: I): CommissionChangeQueueState {
     const message = createBaseCommissionChangeQueueState();
     message.low_index = object.low_index ?? "0";
     message.high_index = object.high_index ?? "0";
@@ -2620,32 +2373,16 @@ export const CommissionChangeQueueState = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

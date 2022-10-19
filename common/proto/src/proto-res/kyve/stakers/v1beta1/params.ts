@@ -32,10 +32,7 @@ function createBaseParams(): Params {
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.vote_slash !== "") {
       writer.uint32(10).string(message.vote_slash);
     }
@@ -74,14 +71,10 @@ export const Params = {
           message.timeout_slash = reader.string();
           break;
         case 4:
-          message.unbonding_staking_time = longToString(
-            reader.uint64() as Long
-          );
+          message.unbonding_staking_time = longToString(reader.uint64() as Long);
           break;
         case 5:
-          message.commission_change_time = longToString(
-            reader.uint64() as Long
-          );
+          message.commission_change_time = longToString(reader.uint64() as Long);
           break;
         case 6:
           message.leave_pool_time = longToString(reader.uint64() as Long);
@@ -97,37 +90,22 @@ export const Params = {
   fromJSON(object: any): Params {
     return {
       vote_slash: isSet(object.vote_slash) ? String(object.vote_slash) : "",
-      upload_slash: isSet(object.upload_slash)
-        ? String(object.upload_slash)
-        : "",
-      timeout_slash: isSet(object.timeout_slash)
-        ? String(object.timeout_slash)
-        : "",
-      unbonding_staking_time: isSet(object.unbonding_staking_time)
-        ? String(object.unbonding_staking_time)
-        : "0",
-      commission_change_time: isSet(object.commission_change_time)
-        ? String(object.commission_change_time)
-        : "0",
-      leave_pool_time: isSet(object.leave_pool_time)
-        ? String(object.leave_pool_time)
-        : "0",
+      upload_slash: isSet(object.upload_slash) ? String(object.upload_slash) : "",
+      timeout_slash: isSet(object.timeout_slash) ? String(object.timeout_slash) : "",
+      unbonding_staking_time: isSet(object.unbonding_staking_time) ? String(object.unbonding_staking_time) : "0",
+      commission_change_time: isSet(object.commission_change_time) ? String(object.commission_change_time) : "0",
+      leave_pool_time: isSet(object.leave_pool_time) ? String(object.leave_pool_time) : "0",
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
     message.vote_slash !== undefined && (obj.vote_slash = message.vote_slash);
-    message.upload_slash !== undefined &&
-      (obj.upload_slash = message.upload_slash);
-    message.timeout_slash !== undefined &&
-      (obj.timeout_slash = message.timeout_slash);
-    message.unbonding_staking_time !== undefined &&
-      (obj.unbonding_staking_time = message.unbonding_staking_time);
-    message.commission_change_time !== undefined &&
-      (obj.commission_change_time = message.commission_change_time);
-    message.leave_pool_time !== undefined &&
-      (obj.leave_pool_time = message.leave_pool_time);
+    message.upload_slash !== undefined && (obj.upload_slash = message.upload_slash);
+    message.timeout_slash !== undefined && (obj.timeout_slash = message.timeout_slash);
+    message.unbonding_staking_time !== undefined && (obj.unbonding_staking_time = message.unbonding_staking_time);
+    message.commission_change_time !== undefined && (obj.commission_change_time = message.commission_change_time);
+    message.leave_pool_time !== undefined && (obj.leave_pool_time = message.leave_pool_time);
     return obj;
   },
 
@@ -143,32 +121,16 @@ export const Params = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

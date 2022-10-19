@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Long from "long";
-import { Pool } from "./pool";
 import _m0 from "protobufjs/minimal";
+import { Pool } from "./pool";
 
 export const protobufPackage = "kyve.pool.v1beta1";
 
@@ -18,10 +18,7 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(
-    message: GenesisState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pool_list) {
       Pool.encode(v!, writer.uint32(18).fork()).ldelim();
     }
@@ -54,9 +51,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      pool_list: Array.isArray(object?.pool_list)
-        ? object.pool_list.map((e: any) => Pool.fromJSON(e))
-        : [],
+      pool_list: Array.isArray(object?.pool_list) ? object.pool_list.map((e: any) => Pool.fromJSON(e)) : [],
       pool_count: isSet(object.pool_count) ? String(object.pool_count) : "0",
     };
   },
@@ -64,9 +59,7 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.pool_list) {
-      obj.pool_list = message.pool_list.map((e) =>
-        e ? Pool.toJSON(e) : undefined
-      );
+      obj.pool_list = message.pool_list.map((e) => e ? Pool.toJSON(e) : undefined);
     } else {
       obj.pool_list = [];
     }
@@ -74,9 +67,7 @@ export const GenesisState = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
-    object: I
-  ): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.pool_list = object.pool_list?.map((e) => Pool.fromPartial(e)) || [];
     message.pool_count = object.pool_count ?? "0";
@@ -84,32 +75,16 @@ export const GenesisState = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

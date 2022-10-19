@@ -157,10 +157,7 @@ function createBaseBundleProposal(): BundleProposal {
 }
 
 export const BundleProposal = {
-  encode(
-    message: BundleProposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BundleProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -268,26 +265,16 @@ export const BundleProposal = {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
       storage_id: isSet(object.storage_id) ? String(object.storage_id) : "",
       uploader: isSet(object.uploader) ? String(object.uploader) : "",
-      next_uploader: isSet(object.next_uploader)
-        ? String(object.next_uploader)
-        : "",
+      next_uploader: isSet(object.next_uploader) ? String(object.next_uploader) : "",
       data_size: isSet(object.data_size) ? String(object.data_size) : "0",
       bundle_size: isSet(object.bundle_size) ? String(object.bundle_size) : "0",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      bundle_summary: isSet(object.bundle_summary)
-        ? String(object.bundle_summary)
-        : "",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
       data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
       updated_at: isSet(object.updated_at) ? String(object.updated_at) : "0",
-      voters_valid: Array.isArray(object?.voters_valid)
-        ? object.voters_valid.map((e: any) => String(e))
-        : [],
-      voters_invalid: Array.isArray(object?.voters_invalid)
-        ? object.voters_invalid.map((e: any) => String(e))
-        : [],
-      voters_abstain: Array.isArray(object?.voters_abstain)
-        ? object.voters_abstain.map((e: any) => String(e))
-        : [],
+      voters_valid: Array.isArray(object?.voters_valid) ? object.voters_valid.map((e: any) => String(e)) : [],
+      voters_invalid: Array.isArray(object?.voters_invalid) ? object.voters_invalid.map((e: any) => String(e)) : [],
+      voters_abstain: Array.isArray(object?.voters_abstain) ? object.voters_abstain.map((e: any) => String(e)) : [],
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
     };
   },
@@ -297,14 +284,11 @@ export const BundleProposal = {
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
     message.storage_id !== undefined && (obj.storage_id = message.storage_id);
     message.uploader !== undefined && (obj.uploader = message.uploader);
-    message.next_uploader !== undefined &&
-      (obj.next_uploader = message.next_uploader);
+    message.next_uploader !== undefined && (obj.next_uploader = message.next_uploader);
     message.data_size !== undefined && (obj.data_size = message.data_size);
-    message.bundle_size !== undefined &&
-      (obj.bundle_size = message.bundle_size);
+    message.bundle_size !== undefined && (obj.bundle_size = message.bundle_size);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.bundle_summary !== undefined &&
-      (obj.bundle_summary = message.bundle_summary);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.updated_at !== undefined && (obj.updated_at = message.updated_at);
     if (message.voters_valid) {
@@ -326,9 +310,7 @@ export const BundleProposal = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(
-    object: I
-  ): BundleProposal {
+  fromPartial<I extends Exact<DeepPartial<BundleProposal>, I>>(object: I): BundleProposal {
     const message = createBaseBundleProposal();
     message.pool_id = object.pool_id ?? "0";
     message.storage_id = object.storage_id ?? "";
@@ -365,10 +347,7 @@ function createBaseFinalizedBundle(): FinalizedBundle {
 }
 
 export const FinalizedBundle = {
-  encode(
-    message: FinalizedBundle,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FinalizedBundle, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -462,13 +441,9 @@ export const FinalizedBundle = {
       from_index: isSet(object.from_index) ? String(object.from_index) : "0",
       to_index: isSet(object.to_index) ? String(object.to_index) : "0",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      bundle_summary: isSet(object.bundle_summary)
-        ? String(object.bundle_summary)
-        : "",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
       data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
-      finalized_at: isSet(object.finalized_at)
-        ? String(object.finalized_at)
-        : "0",
+      finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
     };
   },
@@ -482,18 +457,14 @@ export const FinalizedBundle = {
     message.from_index !== undefined && (obj.from_index = message.from_index);
     message.to_index !== undefined && (obj.to_index = message.to_index);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.bundle_summary !== undefined &&
-      (obj.bundle_summary = message.bundle_summary);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
-    message.finalized_at !== undefined &&
-      (obj.finalized_at = message.finalized_at);
+    message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
     message.from_key !== undefined && (obj.from_key = message.from_key);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<FinalizedBundle>, I>>(
-    object: I
-  ): FinalizedBundle {
+  fromPartial<I extends Exact<DeepPartial<FinalizedBundle>, I>>(object: I): FinalizedBundle {
     const message = createBaseFinalizedBundle();
     message.pool_id = object.pool_id ?? "0";
     message.id = object.id ?? "0";
@@ -510,32 +481,16 @@ export const FinalizedBundle = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

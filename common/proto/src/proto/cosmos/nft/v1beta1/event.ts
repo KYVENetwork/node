@@ -30,10 +30,7 @@ function createBaseEventSend(): EventSend {
 }
 
 export const EventSend = {
-  encode(
-    message: EventSend,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.class_id !== "") {
       writer.uint32(10).string(message.class_id);
     }
@@ -94,9 +91,7 @@ export const EventSend = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventSend>, I>>(
-    object: I
-  ): EventSend {
+  fromPartial<I extends Exact<DeepPartial<EventSend>, I>>(object: I): EventSend {
     const message = createBaseEventSend();
     message.class_id = object.class_id ?? "";
     message.id = object.id ?? "";
@@ -111,10 +106,7 @@ function createBaseEventMint(): EventMint {
 }
 
 export const EventMint = {
-  encode(
-    message: EventMint,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventMint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.class_id !== "") {
       writer.uint32(10).string(message.class_id);
     }
@@ -167,9 +159,7 @@ export const EventMint = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventMint>, I>>(
-    object: I
-  ): EventMint {
+  fromPartial<I extends Exact<DeepPartial<EventMint>, I>>(object: I): EventMint {
     const message = createBaseEventMint();
     message.class_id = object.class_id ?? "";
     message.id = object.id ?? "";
@@ -183,10 +173,7 @@ function createBaseEventBurn(): EventBurn {
 }
 
 export const EventBurn = {
-  encode(
-    message: EventBurn,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventBurn, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.class_id !== "") {
       writer.uint32(10).string(message.class_id);
     }
@@ -239,9 +226,7 @@ export const EventBurn = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventBurn>, I>>(
-    object: I
-  ): EventBurn {
+  fromPartial<I extends Exact<DeepPartial<EventBurn>, I>>(object: I): EventBurn {
     const message = createBaseEventBurn();
     message.class_id = object.class_id ?? "";
     message.id = object.id ?? "";
@@ -250,32 +235,16 @@ export const EventBurn = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

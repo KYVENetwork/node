@@ -22,8 +22,8 @@ export interface EventCreatePool {
   upload_interval: string;
   /** operating_cost ... */
   operating_cost: string;
-  /** min_stake ... */
-  min_stake: string;
+  /** min_delegation ... */
+  min_delegation: string;
   /** max_bundle_size ... */
   max_bundle_size: string;
   /** version ... */
@@ -78,7 +78,7 @@ function createBaseEventCreatePool(): EventCreatePool {
     start_key: "",
     upload_interval: "0",
     operating_cost: "0",
-    min_stake: "0",
+    min_delegation: "0",
     max_bundle_size: "0",
     version: "",
     binaries: "",
@@ -86,10 +86,7 @@ function createBaseEventCreatePool(): EventCreatePool {
 }
 
 export const EventCreatePool = {
-  encode(
-    message: EventCreatePool,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventCreatePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "0") {
       writer.uint32(8).uint64(message.id);
     }
@@ -114,8 +111,8 @@ export const EventCreatePool = {
     if (message.operating_cost !== "0") {
       writer.uint32(64).uint64(message.operating_cost);
     }
-    if (message.min_stake !== "0") {
-      writer.uint32(72).uint64(message.min_stake);
+    if (message.min_delegation !== "0") {
+      writer.uint32(72).uint64(message.min_delegation);
     }
     if (message.max_bundle_size !== "0") {
       writer.uint32(80).uint64(message.max_bundle_size);
@@ -161,7 +158,7 @@ export const EventCreatePool = {
           message.operating_cost = longToString(reader.uint64() as Long);
           break;
         case 9:
-          message.min_stake = longToString(reader.uint64() as Long);
+          message.min_delegation = longToString(reader.uint64() as Long);
           break;
         case 10:
           message.max_bundle_size = longToString(reader.uint64() as Long);
@@ -188,16 +185,10 @@ export const EventCreatePool = {
       logo: isSet(object.logo) ? String(object.logo) : "",
       config: isSet(object.config) ? String(object.config) : "",
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
-      upload_interval: isSet(object.upload_interval)
-        ? String(object.upload_interval)
-        : "0",
-      operating_cost: isSet(object.operating_cost)
-        ? String(object.operating_cost)
-        : "0",
-      min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
-      max_bundle_size: isSet(object.max_bundle_size)
-        ? String(object.max_bundle_size)
-        : "0",
+      upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
+      operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
+      min_delegation: isSet(object.min_delegation) ? String(object.min_delegation) : "0",
+      max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
     };
@@ -211,21 +202,16 @@ export const EventCreatePool = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.config !== undefined && (obj.config = message.config);
     message.start_key !== undefined && (obj.start_key = message.start_key);
-    message.upload_interval !== undefined &&
-      (obj.upload_interval = message.upload_interval);
-    message.operating_cost !== undefined &&
-      (obj.operating_cost = message.operating_cost);
-    message.min_stake !== undefined && (obj.min_stake = message.min_stake);
-    message.max_bundle_size !== undefined &&
-      (obj.max_bundle_size = message.max_bundle_size);
+    message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
+    message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
+    message.min_delegation !== undefined && (obj.min_delegation = message.min_delegation);
+    message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventCreatePool>, I>>(
-    object: I
-  ): EventCreatePool {
+  fromPartial<I extends Exact<DeepPartial<EventCreatePool>, I>>(object: I): EventCreatePool {
     const message = createBaseEventCreatePool();
     message.id = object.id ?? "0";
     message.name = object.name ?? "";
@@ -235,7 +221,7 @@ export const EventCreatePool = {
     message.start_key = object.start_key ?? "";
     message.upload_interval = object.upload_interval ?? "0";
     message.operating_cost = object.operating_cost ?? "0";
-    message.min_stake = object.min_stake ?? "0";
+    message.min_delegation = object.min_delegation ?? "0";
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
@@ -248,10 +234,7 @@ function createBaseEventFundPool(): EventFundPool {
 }
 
 export const EventFundPool = {
-  encode(
-    message: EventFundPool,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventFundPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -304,9 +287,7 @@ export const EventFundPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventFundPool>, I>>(
-    object: I
-  ): EventFundPool {
+  fromPartial<I extends Exact<DeepPartial<EventFundPool>, I>>(object: I): EventFundPool {
     const message = createBaseEventFundPool();
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
@@ -320,10 +301,7 @@ function createBaseEventDefundPool(): EventDefundPool {
 }
 
 export const EventDefundPool = {
-  encode(
-    message: EventDefundPool,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventDefundPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -376,9 +354,7 @@ export const EventDefundPool = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventDefundPool>, I>>(
-    object: I
-  ): EventDefundPool {
+  fromPartial<I extends Exact<DeepPartial<EventDefundPool>, I>>(object: I): EventDefundPool {
     const message = createBaseEventDefundPool();
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
@@ -392,10 +368,7 @@ function createBaseEventPoolFundsSlashed(): EventPoolFundsSlashed {
 }
 
 export const EventPoolFundsSlashed = {
-  encode(
-    message: EventPoolFundsSlashed,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventPoolFundsSlashed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -408,10 +381,7 @@ export const EventPoolFundsSlashed = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): EventPoolFundsSlashed {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventPoolFundsSlashed {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEventPoolFundsSlashed();
@@ -451,9 +421,7 @@ export const EventPoolFundsSlashed = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventPoolFundsSlashed>, I>>(
-    object: I
-  ): EventPoolFundsSlashed {
+  fromPartial<I extends Exact<DeepPartial<EventPoolFundsSlashed>, I>>(object: I): EventPoolFundsSlashed {
     const message = createBaseEventPoolFundsSlashed();
     message.pool_id = object.pool_id ?? "0";
     message.address = object.address ?? "";
@@ -467,10 +435,7 @@ function createBaseEventPoolOutOfFunds(): EventPoolOutOfFunds {
 }
 
 export const EventPoolOutOfFunds = {
-  encode(
-    message: EventPoolOutOfFunds,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EventPoolOutOfFunds, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
@@ -496,9 +461,7 @@ export const EventPoolOutOfFunds = {
   },
 
   fromJSON(object: any): EventPoolOutOfFunds {
-    return {
-      pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-    };
+    return { pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0" };
   },
 
   toJSON(message: EventPoolOutOfFunds): unknown {
@@ -507,41 +470,23 @@ export const EventPoolOutOfFunds = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<EventPoolOutOfFunds>, I>>(
-    object: I
-  ): EventPoolOutOfFunds {
+  fromPartial<I extends Exact<DeepPartial<EventPoolOutOfFunds>, I>>(object: I): EventPoolOutOfFunds {
     const message = createBaseEventPoolOutOfFunds();
     message.pool_id = object.pool_id ?? "0";
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

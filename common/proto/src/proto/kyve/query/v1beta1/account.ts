@@ -1,11 +1,8 @@
 /* eslint-disable */
-import {
-  PageRequest,
-  PageResponse,
-} from "../../../cosmos/base/query/v1beta1/pagination";
-import { FullStaker, BasicPool } from "./query";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { BasicPool, FullStaker } from "./query";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -106,20 +103,14 @@ function createBaseQueryAccountAssetsRequest(): QueryAccountAssetsRequest {
 }
 
 export const QueryAccountAssetsRequest = {
-  encode(
-    message: QueryAccountAssetsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountAssetsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountAssetsRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountAssetsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountAssetsRequest();
@@ -138,9 +129,7 @@ export const QueryAccountAssetsRequest = {
   },
 
   fromJSON(object: any): QueryAccountAssetsRequest {
-    return {
-      address: isSet(object.address) ? String(object.address) : "",
-    };
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryAccountAssetsRequest): unknown {
@@ -149,9 +138,7 @@ export const QueryAccountAssetsRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAccountAssetsRequest>, I>>(
-    object: I
-  ): QueryAccountAssetsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountAssetsRequest>, I>>(object: I): QueryAccountAssetsRequest {
     const message = createBaseQueryAccountAssetsRequest();
     message.address = object.address ?? "";
     return message;
@@ -171,10 +158,7 @@ function createBaseQueryAccountAssetsResponse(): QueryAccountAssetsResponse {
 }
 
 export const QueryAccountAssetsResponse = {
-  encode(
-    message: QueryAccountAssetsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountAssetsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.balance !== "0") {
       writer.uint32(8).uint64(message.balance);
     }
@@ -199,10 +183,7 @@ export const QueryAccountAssetsResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountAssetsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountAssetsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountAssetsResponse();
@@ -213,22 +194,16 @@ export const QueryAccountAssetsResponse = {
           message.balance = longToString(reader.uint64() as Long);
           break;
         case 2:
-          message.protocol_self_delegation = longToString(
-            reader.uint64() as Long
-          );
+          message.protocol_self_delegation = longToString(reader.uint64() as Long);
           break;
         case 3:
-          message.protocol_self_delegation_unbonding = longToString(
-            reader.uint64() as Long
-          );
+          message.protocol_self_delegation_unbonding = longToString(reader.uint64() as Long);
           break;
         case 4:
           message.protocol_delegation = longToString(reader.uint64() as Long);
           break;
         case 5:
-          message.protocol_delegation_unbonding = longToString(
-            reader.uint64() as Long
-          );
+          message.protocol_delegation_unbonding = longToString(reader.uint64() as Long);
           break;
         case 6:
           message.protocol_rewards = longToString(reader.uint64() as Long);
@@ -247,60 +222,40 @@ export const QueryAccountAssetsResponse = {
   fromJSON(object: any): QueryAccountAssetsResponse {
     return {
       balance: isSet(object.balance) ? String(object.balance) : "0",
-      protocol_self_delegation: isSet(object.protocol_self_delegation)
-        ? String(object.protocol_self_delegation)
-        : "0",
-      protocol_self_delegation_unbonding: isSet(
-        object.protocol_self_delegation_unbonding
-      )
+      protocol_self_delegation: isSet(object.protocol_self_delegation) ? String(object.protocol_self_delegation) : "0",
+      protocol_self_delegation_unbonding: isSet(object.protocol_self_delegation_unbonding)
         ? String(object.protocol_self_delegation_unbonding)
         : "0",
-      protocol_delegation: isSet(object.protocol_delegation)
-        ? String(object.protocol_delegation)
-        : "0",
+      protocol_delegation: isSet(object.protocol_delegation) ? String(object.protocol_delegation) : "0",
       protocol_delegation_unbonding: isSet(object.protocol_delegation_unbonding)
         ? String(object.protocol_delegation_unbonding)
         : "0",
-      protocol_rewards: isSet(object.protocol_rewards)
-        ? String(object.protocol_rewards)
-        : "0",
-      protocol_funding: isSet(object.protocol_funding)
-        ? String(object.protocol_funding)
-        : "0",
+      protocol_rewards: isSet(object.protocol_rewards) ? String(object.protocol_rewards) : "0",
+      protocol_funding: isSet(object.protocol_funding) ? String(object.protocol_funding) : "0",
     };
   },
 
   toJSON(message: QueryAccountAssetsResponse): unknown {
     const obj: any = {};
     message.balance !== undefined && (obj.balance = message.balance);
-    message.protocol_self_delegation !== undefined &&
-      (obj.protocol_self_delegation = message.protocol_self_delegation);
+    message.protocol_self_delegation !== undefined && (obj.protocol_self_delegation = message.protocol_self_delegation);
     message.protocol_self_delegation_unbonding !== undefined &&
-      (obj.protocol_self_delegation_unbonding =
-        message.protocol_self_delegation_unbonding);
-    message.protocol_delegation !== undefined &&
-      (obj.protocol_delegation = message.protocol_delegation);
+      (obj.protocol_self_delegation_unbonding = message.protocol_self_delegation_unbonding);
+    message.protocol_delegation !== undefined && (obj.protocol_delegation = message.protocol_delegation);
     message.protocol_delegation_unbonding !== undefined &&
-      (obj.protocol_delegation_unbonding =
-        message.protocol_delegation_unbonding);
-    message.protocol_rewards !== undefined &&
-      (obj.protocol_rewards = message.protocol_rewards);
-    message.protocol_funding !== undefined &&
-      (obj.protocol_funding = message.protocol_funding);
+      (obj.protocol_delegation_unbonding = message.protocol_delegation_unbonding);
+    message.protocol_rewards !== undefined && (obj.protocol_rewards = message.protocol_rewards);
+    message.protocol_funding !== undefined && (obj.protocol_funding = message.protocol_funding);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAccountAssetsResponse>, I>>(
-    object: I
-  ): QueryAccountAssetsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountAssetsResponse>, I>>(object: I): QueryAccountAssetsResponse {
     const message = createBaseQueryAccountAssetsResponse();
     message.balance = object.balance ?? "0";
     message.protocol_self_delegation = object.protocol_self_delegation ?? "0";
-    message.protocol_self_delegation_unbonding =
-      object.protocol_self_delegation_unbonding ?? "0";
+    message.protocol_self_delegation_unbonding = object.protocol_self_delegation_unbonding ?? "0";
     message.protocol_delegation = object.protocol_delegation ?? "0";
-    message.protocol_delegation_unbonding =
-      object.protocol_delegation_unbonding ?? "0";
+    message.protocol_delegation_unbonding = object.protocol_delegation_unbonding ?? "0";
     message.protocol_rewards = object.protocol_rewards ?? "0";
     message.protocol_funding = object.protocol_funding ?? "0";
     return message;
@@ -312,10 +267,7 @@ function createBaseQueryAccountDelegationUnbondingsRequest(): QueryAccountDelega
 }
 
 export const QueryAccountDelegationUnbondingsRequest = {
-  encode(
-    message: QueryAccountDelegationUnbondingsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountDelegationUnbondingsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
@@ -325,10 +277,7 @@ export const QueryAccountDelegationUnbondingsRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountDelegationUnbondingsRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountDelegationUnbondingsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountDelegationUnbondingsRequest();
@@ -351,9 +300,7 @@ export const QueryAccountDelegationUnbondingsRequest = {
 
   fromJSON(object: any): QueryAccountDelegationUnbondingsRequest {
     return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
       address: isSet(object.address) ? String(object.address) : "",
     };
   },
@@ -361,21 +308,18 @@ export const QueryAccountDelegationUnbondingsRequest = {
   toJSON(message: QueryAccountDelegationUnbondingsRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryAccountDelegationUnbondingsRequest>, I>
-  >(object: I): QueryAccountDelegationUnbondingsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountDelegationUnbondingsRequest>, I>>(
+    object: I,
+  ): QueryAccountDelegationUnbondingsRequest {
     const message = createBaseQueryAccountDelegationUnbondingsRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     message.address = object.address ?? "";
     return message;
   },
@@ -386,26 +330,17 @@ function createBaseQueryAccountDelegationUnbondingsResponse(): QueryAccountDeleg
 }
 
 export const QueryAccountDelegationUnbondingsResponse = {
-  encode(
-    message: QueryAccountDelegationUnbondingsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountDelegationUnbondingsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.unbondings) {
       DelegationUnbonding.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountDelegationUnbondingsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountDelegationUnbondingsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountDelegationUnbondingsResponse();
@@ -413,9 +348,7 @@ export const QueryAccountDelegationUnbondingsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.unbondings.push(
-            DelegationUnbonding.decode(reader, reader.uint32())
-          );
+          message.unbondings.push(DelegationUnbonding.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -433,38 +366,30 @@ export const QueryAccountDelegationUnbondingsResponse = {
       unbondings: Array.isArray(object?.unbondings)
         ? object.unbondings.map((e: any) => DelegationUnbonding.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryAccountDelegationUnbondingsResponse): unknown {
     const obj: any = {};
     if (message.unbondings) {
-      obj.unbondings = message.unbondings.map((e) =>
-        e ? DelegationUnbonding.toJSON(e) : undefined
-      );
+      obj.unbondings = message.unbondings.map((e) => e ? DelegationUnbonding.toJSON(e) : undefined);
     } else {
       obj.unbondings = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryAccountDelegationUnbondingsResponse>, I>
-  >(object: I): QueryAccountDelegationUnbondingsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountDelegationUnbondingsResponse>, I>>(
+    object: I,
+  ): QueryAccountDelegationUnbondingsResponse {
     const message = createBaseQueryAccountDelegationUnbondingsResponse();
-    message.unbondings =
-      object.unbondings?.map((e) => DelegationUnbonding.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.unbondings = object.unbondings?.map((e) => DelegationUnbonding.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -474,10 +399,7 @@ function createBaseDelegationUnbonding(): DelegationUnbonding {
 }
 
 export const DelegationUnbonding = {
-  encode(
-    message: DelegationUnbonding,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DelegationUnbonding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.amount !== "0") {
       writer.uint32(8).uint64(message.amount);
     }
@@ -517,37 +439,26 @@ export const DelegationUnbonding = {
   fromJSON(object: any): DelegationUnbonding {
     return {
       amount: isSet(object.amount) ? String(object.amount) : "0",
-      creation_time: isSet(object.creation_time)
-        ? String(object.creation_time)
-        : "0",
-      staker: isSet(object.staker)
-        ? FullStaker.fromJSON(object.staker)
-        : undefined,
+      creation_time: isSet(object.creation_time) ? String(object.creation_time) : "0",
+      staker: isSet(object.staker) ? FullStaker.fromJSON(object.staker) : undefined,
     };
   },
 
   toJSON(message: DelegationUnbonding): unknown {
     const obj: any = {};
     message.amount !== undefined && (obj.amount = message.amount);
-    message.creation_time !== undefined &&
-      (obj.creation_time = message.creation_time);
-    message.staker !== undefined &&
-      (obj.staker = message.staker
-        ? FullStaker.toJSON(message.staker)
-        : undefined);
+    message.creation_time !== undefined && (obj.creation_time = message.creation_time);
+    message.staker !== undefined && (obj.staker = message.staker ? FullStaker.toJSON(message.staker) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DelegationUnbonding>, I>>(
-    object: I
-  ): DelegationUnbonding {
+  fromPartial<I extends Exact<DeepPartial<DelegationUnbonding>, I>>(object: I): DelegationUnbonding {
     const message = createBaseDelegationUnbonding();
     message.amount = object.amount ?? "0";
     message.creation_time = object.creation_time ?? "0";
-    message.staker =
-      object.staker !== undefined && object.staker !== null
-        ? FullStaker.fromPartial(object.staker)
-        : undefined;
+    message.staker = (object.staker !== undefined && object.staker !== null)
+      ? FullStaker.fromPartial(object.staker)
+      : undefined;
     return message;
   },
 };
@@ -557,20 +468,14 @@ function createBaseQueryAccountFundedListRequest(): QueryAccountFundedListReques
 }
 
 export const QueryAccountFundedListRequest = {
-  encode(
-    message: QueryAccountFundedListRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountFundedListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountFundedListRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountFundedListRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountFundedListRequest();
@@ -589,9 +494,7 @@ export const QueryAccountFundedListRequest = {
   },
 
   fromJSON(object: any): QueryAccountFundedListRequest {
-    return {
-      address: isSet(object.address) ? String(object.address) : "",
-    };
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryAccountFundedListRequest): unknown {
@@ -601,7 +504,7 @@ export const QueryAccountFundedListRequest = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryAccountFundedListRequest>, I>>(
-    object: I
+    object: I,
   ): QueryAccountFundedListRequest {
     const message = createBaseQueryAccountFundedListRequest();
     message.address = object.address ?? "";
@@ -614,20 +517,14 @@ function createBaseQueryAccountFundedListResponse(): QueryAccountFundedListRespo
 }
 
 export const QueryAccountFundedListResponse = {
-  encode(
-    message: QueryAccountFundedListResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountFundedListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.funded) {
       Funded.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountFundedListResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountFundedListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountFundedListResponse();
@@ -646,19 +543,13 @@ export const QueryAccountFundedListResponse = {
   },
 
   fromJSON(object: any): QueryAccountFundedListResponse {
-    return {
-      funded: Array.isArray(object?.funded)
-        ? object.funded.map((e: any) => Funded.fromJSON(e))
-        : [],
-    };
+    return { funded: Array.isArray(object?.funded) ? object.funded.map((e: any) => Funded.fromJSON(e)) : [] };
   },
 
   toJSON(message: QueryAccountFundedListResponse): unknown {
     const obj: any = {};
     if (message.funded) {
-      obj.funded = message.funded.map((e) =>
-        e ? Funded.toJSON(e) : undefined
-      );
+      obj.funded = message.funded.map((e) => e ? Funded.toJSON(e) : undefined);
     } else {
       obj.funded = [];
     }
@@ -666,7 +557,7 @@ export const QueryAccountFundedListResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryAccountFundedListResponse>, I>>(
-    object: I
+    object: I,
   ): QueryAccountFundedListResponse {
     const message = createBaseQueryAccountFundedListResponse();
     message.funded = object.funded?.map((e) => Funded.fromPartial(e)) || [];
@@ -679,10 +570,7 @@ function createBaseFunded(): Funded {
 }
 
 export const Funded = {
-  encode(
-    message: Funded,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Funded, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.amount !== "0") {
       writer.uint32(8).uint64(message.amount);
     }
@@ -723,18 +611,14 @@ export const Funded = {
   toJSON(message: Funded): unknown {
     const obj: any = {};
     message.amount !== undefined && (obj.amount = message.amount);
-    message.pool !== undefined &&
-      (obj.pool = message.pool ? BasicPool.toJSON(message.pool) : undefined);
+    message.pool !== undefined && (obj.pool = message.pool ? BasicPool.toJSON(message.pool) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Funded>, I>>(object: I): Funded {
     const message = createBaseFunded();
     message.amount = object.amount ?? "0";
-    message.pool =
-      object.pool !== undefined && object.pool !== null
-        ? BasicPool.fromPartial(object.pool)
-        : undefined;
+    message.pool = (object.pool !== undefined && object.pool !== null) ? BasicPool.fromPartial(object.pool) : undefined;
     return message;
   },
 };
@@ -744,20 +628,14 @@ function createBaseQueryAccountRedelegationRequest(): QueryAccountRedelegationRe
 }
 
 export const QueryAccountRedelegationRequest = {
-  encode(
-    message: QueryAccountRedelegationRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountRedelegationRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountRedelegationRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountRedelegationRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountRedelegationRequest();
@@ -776,9 +654,7 @@ export const QueryAccountRedelegationRequest = {
   },
 
   fromJSON(object: any): QueryAccountRedelegationRequest {
-    return {
-      address: isSet(object.address) ? String(object.address) : "",
-    };
+    return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
   toJSON(message: QueryAccountRedelegationRequest): unknown {
@@ -788,7 +664,7 @@ export const QueryAccountRedelegationRequest = {
   },
 
   fromPartial<I extends Exact<DeepPartial<QueryAccountRedelegationRequest>, I>>(
-    object: I
+    object: I,
   ): QueryAccountRedelegationRequest {
     const message = createBaseQueryAccountRedelegationRequest();
     message.address = object.address ?? "";
@@ -801,10 +677,7 @@ function createBaseQueryAccountRedelegationResponse(): QueryAccountRedelegationR
 }
 
 export const QueryAccountRedelegationResponse = {
-  encode(
-    message: QueryAccountRedelegationResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountRedelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.redelegation_cooldown_entries) {
       RedelegationEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -814,10 +687,7 @@ export const QueryAccountRedelegationResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountRedelegationResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountRedelegationResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountRedelegationResponse();
@@ -825,9 +695,7 @@ export const QueryAccountRedelegationResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.redelegation_cooldown_entries.push(
-            RedelegationEntry.decode(reader, reader.uint32())
-          );
+          message.redelegation_cooldown_entries.push(RedelegationEntry.decode(reader, reader.uint32()));
           break;
         case 2:
           message.available_slots = longToString(reader.uint64() as Long);
@@ -842,42 +710,32 @@ export const QueryAccountRedelegationResponse = {
 
   fromJSON(object: any): QueryAccountRedelegationResponse {
     return {
-      redelegation_cooldown_entries: Array.isArray(
-        object?.redelegation_cooldown_entries
-      )
-        ? object.redelegation_cooldown_entries.map((e: any) =>
-            RedelegationEntry.fromJSON(e)
-          )
+      redelegation_cooldown_entries: Array.isArray(object?.redelegation_cooldown_entries)
+        ? object.redelegation_cooldown_entries.map((e: any) => RedelegationEntry.fromJSON(e))
         : [],
-      available_slots: isSet(object.available_slots)
-        ? String(object.available_slots)
-        : "0",
+      available_slots: isSet(object.available_slots) ? String(object.available_slots) : "0",
     };
   },
 
   toJSON(message: QueryAccountRedelegationResponse): unknown {
     const obj: any = {};
     if (message.redelegation_cooldown_entries) {
-      obj.redelegation_cooldown_entries =
-        message.redelegation_cooldown_entries.map((e) =>
-          e ? RedelegationEntry.toJSON(e) : undefined
-        );
+      obj.redelegation_cooldown_entries = message.redelegation_cooldown_entries.map((e) =>
+        e ? RedelegationEntry.toJSON(e) : undefined
+      );
     } else {
       obj.redelegation_cooldown_entries = [];
     }
-    message.available_slots !== undefined &&
-      (obj.available_slots = message.available_slots);
+    message.available_slots !== undefined && (obj.available_slots = message.available_slots);
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<QueryAccountRedelegationResponse>, I>
-  >(object: I): QueryAccountRedelegationResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountRedelegationResponse>, I>>(
+    object: I,
+  ): QueryAccountRedelegationResponse {
     const message = createBaseQueryAccountRedelegationResponse();
     message.redelegation_cooldown_entries =
-      object.redelegation_cooldown_entries?.map((e) =>
-        RedelegationEntry.fromPartial(e)
-      ) || [];
+      object.redelegation_cooldown_entries?.map((e) => RedelegationEntry.fromPartial(e)) || [];
     message.available_slots = object.available_slots ?? "0";
     return message;
   },
@@ -888,10 +746,7 @@ function createBaseRedelegationEntry(): RedelegationEntry {
 }
 
 export const RedelegationEntry = {
-  encode(
-    message: RedelegationEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: RedelegationEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creation_date !== "0") {
       writer.uint32(8).uint64(message.creation_date);
     }
@@ -924,25 +779,19 @@ export const RedelegationEntry = {
 
   fromJSON(object: any): RedelegationEntry {
     return {
-      creation_date: isSet(object.creation_date)
-        ? String(object.creation_date)
-        : "0",
+      creation_date: isSet(object.creation_date) ? String(object.creation_date) : "0",
       finish_date: isSet(object.finish_date) ? String(object.finish_date) : "0",
     };
   },
 
   toJSON(message: RedelegationEntry): unknown {
     const obj: any = {};
-    message.creation_date !== undefined &&
-      (obj.creation_date = message.creation_date);
-    message.finish_date !== undefined &&
-      (obj.finish_date = message.finish_date);
+    message.creation_date !== undefined && (obj.creation_date = message.creation_date);
+    message.finish_date !== undefined && (obj.finish_date = message.finish_date);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<RedelegationEntry>, I>>(
-    object: I
-  ): RedelegationEntry {
+  fromPartial<I extends Exact<DeepPartial<RedelegationEntry>, I>>(object: I): RedelegationEntry {
     const message = createBaseRedelegationEntry();
     message.creation_date = object.creation_date ?? "0";
     message.finish_date = object.finish_date ?? "0";
@@ -953,125 +802,69 @@ export const RedelegationEntry = {
 /** QueryDelegation contains all rpc requests related to direct delegation data */
 export interface QueryAccount {
   /** AccountAssets returns an overview of the sum of all balances for a given user. e.g. balance, staking, funding, etc. */
-  AccountAssets(
-    request: QueryAccountAssetsRequest
-  ): Promise<QueryAccountAssetsResponse>;
+  AccountAssets(request: QueryAccountAssetsRequest): Promise<QueryAccountAssetsResponse>;
   /** AccountDelegationUnbondings ... */
   AccountDelegationUnbondings(
-    request: QueryAccountDelegationUnbondingsRequest
+    request: QueryAccountDelegationUnbondingsRequest,
   ): Promise<QueryAccountDelegationUnbondingsResponse>;
   /** AccountFundedList returns all pools the given user has funded into. */
-  AccountFundedList(
-    request: QueryAccountFundedListRequest
-  ): Promise<QueryAccountFundedListResponse>;
+  AccountFundedList(request: QueryAccountFundedListRequest): Promise<QueryAccountFundedListResponse>;
   /** AccountRedelegation ... */
-  AccountRedelegation(
-    request: QueryAccountRedelegationRequest
-  ): Promise<QueryAccountRedelegationResponse>;
+  AccountRedelegation(request: QueryAccountRedelegationRequest): Promise<QueryAccountRedelegationResponse>;
 }
 
 export class QueryAccountClientImpl implements QueryAccount {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.query.v1beta1.QueryAccount";
     this.rpc = rpc;
     this.AccountAssets = this.AccountAssets.bind(this);
-    this.AccountDelegationUnbondings =
-      this.AccountDelegationUnbondings.bind(this);
+    this.AccountDelegationUnbondings = this.AccountDelegationUnbondings.bind(this);
     this.AccountFundedList = this.AccountFundedList.bind(this);
     this.AccountRedelegation = this.AccountRedelegation.bind(this);
   }
-  AccountAssets(
-    request: QueryAccountAssetsRequest
-  ): Promise<QueryAccountAssetsResponse> {
+  AccountAssets(request: QueryAccountAssetsRequest): Promise<QueryAccountAssetsResponse> {
     const data = QueryAccountAssetsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryAccount",
-      "AccountAssets",
-      data
-    );
-    return promise.then((data) =>
-      QueryAccountAssetsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "AccountAssets", data);
+    return promise.then((data) => QueryAccountAssetsResponse.decode(new _m0.Reader(data)));
   }
 
   AccountDelegationUnbondings(
-    request: QueryAccountDelegationUnbondingsRequest
+    request: QueryAccountDelegationUnbondingsRequest,
   ): Promise<QueryAccountDelegationUnbondingsResponse> {
-    const data =
-      QueryAccountDelegationUnbondingsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryAccount",
-      "AccountDelegationUnbondings",
-      data
-    );
-    return promise.then((data) =>
-      QueryAccountDelegationUnbondingsResponse.decode(new _m0.Reader(data))
-    );
+    const data = QueryAccountDelegationUnbondingsRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "AccountDelegationUnbondings", data);
+    return promise.then((data) => QueryAccountDelegationUnbondingsResponse.decode(new _m0.Reader(data)));
   }
 
-  AccountFundedList(
-    request: QueryAccountFundedListRequest
-  ): Promise<QueryAccountFundedListResponse> {
+  AccountFundedList(request: QueryAccountFundedListRequest): Promise<QueryAccountFundedListResponse> {
     const data = QueryAccountFundedListRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryAccount",
-      "AccountFundedList",
-      data
-    );
-    return promise.then((data) =>
-      QueryAccountFundedListResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "AccountFundedList", data);
+    return promise.then((data) => QueryAccountFundedListResponse.decode(new _m0.Reader(data)));
   }
 
-  AccountRedelegation(
-    request: QueryAccountRedelegationRequest
-  ): Promise<QueryAccountRedelegationResponse> {
+  AccountRedelegation(request: QueryAccountRedelegationRequest): Promise<QueryAccountRedelegationResponse> {
     const data = QueryAccountRedelegationRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.query.v1beta1.QueryAccount",
-      "AccountRedelegation",
-      data
-    );
-    return promise.then((data) =>
-      QueryAccountRedelegationResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "AccountRedelegation", data);
+    return promise.then((data) => QueryAccountRedelegationResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

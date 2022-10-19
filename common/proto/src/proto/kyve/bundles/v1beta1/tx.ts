@@ -81,7 +81,8 @@ export interface MsgSubmitBundleProposal {
 }
 
 /** MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type. */
-export interface MsgSubmitBundleProposalResponse {}
+export interface MsgSubmitBundleProposalResponse {
+}
 
 /** MsgVoteBundleProposal defines a SDK message for voting on a bundle proposal. */
 export interface MsgVoteBundleProposal {
@@ -98,7 +99,8 @@ export interface MsgVoteBundleProposal {
 }
 
 /** MsgVoteBundleProposalResponse defines the Msg/VoteBundleProposal response type. */
-export interface MsgVoteBundleProposalResponse {}
+export interface MsgVoteBundleProposalResponse {
+}
 
 /** MsgClaimUploaderRole defines a SDK message for claiming the uploader role. */
 export interface MsgClaimUploaderRole {
@@ -111,7 +113,8 @@ export interface MsgClaimUploaderRole {
 }
 
 /** MsgClaimUploaderRoleResponse defines the Msg/ClaimUploaderRole response type. */
-export interface MsgClaimUploaderRoleResponse {}
+export interface MsgClaimUploaderRoleResponse {
+}
 
 /** MsgSubmitBundleProposal defines a SDK message for submitting a bundle proposal. */
 export interface MsgSkipUploaderRole {
@@ -126,7 +129,8 @@ export interface MsgSkipUploaderRole {
 }
 
 /** MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type. */
-export interface MsgSkipUploaderRoleResponse {}
+export interface MsgSkipUploaderRoleResponse {
+}
 
 /** MsgUpdateParams defines a SDK message for updating the module parameters. */
 export interface MsgUpdateParams {
@@ -137,7 +141,8 @@ export interface MsgUpdateParams {
 }
 
 /** MsgUpdateParamsResponse defines the Msg/UpdateParams response type. */
-export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponse {
+}
 
 function createBaseMsgSubmitBundleProposal(): MsgSubmitBundleProposal {
   return {
@@ -156,10 +161,7 @@ function createBaseMsgSubmitBundleProposal(): MsgSubmitBundleProposal {
 }
 
 export const MsgSubmitBundleProposal = {
-  encode(
-    message: MsgSubmitBundleProposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSubmitBundleProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -196,10 +198,7 @@ export const MsgSubmitBundleProposal = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSubmitBundleProposal {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitBundleProposal {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitBundleProposal();
@@ -259,9 +258,7 @@ export const MsgSubmitBundleProposal = {
       bundle_size: isSet(object.bundle_size) ? String(object.bundle_size) : "0",
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
       to_key: isSet(object.to_key) ? String(object.to_key) : "",
-      bundle_summary: isSet(object.bundle_summary)
-        ? String(object.bundle_summary)
-        : "",
+      bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
     };
   },
 
@@ -274,18 +271,14 @@ export const MsgSubmitBundleProposal = {
     message.data_size !== undefined && (obj.data_size = message.data_size);
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.from_index !== undefined && (obj.from_index = message.from_index);
-    message.bundle_size !== undefined &&
-      (obj.bundle_size = message.bundle_size);
+    message.bundle_size !== undefined && (obj.bundle_size = message.bundle_size);
     message.from_key !== undefined && (obj.from_key = message.from_key);
     message.to_key !== undefined && (obj.to_key = message.to_key);
-    message.bundle_summary !== undefined &&
-      (obj.bundle_summary = message.bundle_summary);
+    message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSubmitBundleProposal>, I>>(
-    object: I
-  ): MsgSubmitBundleProposal {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitBundleProposal>, I>>(object: I): MsgSubmitBundleProposal {
     const message = createBaseMsgSubmitBundleProposal();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -307,17 +300,11 @@ function createBaseMsgSubmitBundleProposalResponse(): MsgSubmitBundleProposalRes
 }
 
 export const MsgSubmitBundleProposalResponse = {
-  encode(
-    _: MsgSubmitBundleProposalResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSubmitBundleProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSubmitBundleProposalResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitBundleProposalResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitBundleProposalResponse();
@@ -341,9 +328,7 @@ export const MsgSubmitBundleProposalResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSubmitBundleProposalResponse>, I>>(
-    _: I
-  ): MsgSubmitBundleProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitBundleProposalResponse>, I>>(_: I): MsgSubmitBundleProposalResponse {
     const message = createBaseMsgSubmitBundleProposalResponse();
     return message;
   },
@@ -354,10 +339,7 @@ function createBaseMsgVoteBundleProposal(): MsgVoteBundleProposal {
 }
 
 export const MsgVoteBundleProposal = {
-  encode(
-    message: MsgVoteBundleProposal,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgVoteBundleProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -376,10 +358,7 @@ export const MsgVoteBundleProposal = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgVoteBundleProposal {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgVoteBundleProposal {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgVoteBundleProposal();
@@ -429,9 +408,7 @@ export const MsgVoteBundleProposal = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgVoteBundleProposal>, I>>(
-    object: I
-  ): MsgVoteBundleProposal {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteBundleProposal>, I>>(object: I): MsgVoteBundleProposal {
     const message = createBaseMsgVoteBundleProposal();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -447,17 +424,11 @@ function createBaseMsgVoteBundleProposalResponse(): MsgVoteBundleProposalRespons
 }
 
 export const MsgVoteBundleProposalResponse = {
-  encode(
-    _: MsgVoteBundleProposalResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgVoteBundleProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgVoteBundleProposalResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgVoteBundleProposalResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgVoteBundleProposalResponse();
@@ -481,9 +452,7 @@ export const MsgVoteBundleProposalResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgVoteBundleProposalResponse>, I>>(
-    _: I
-  ): MsgVoteBundleProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteBundleProposalResponse>, I>>(_: I): MsgVoteBundleProposalResponse {
     const message = createBaseMsgVoteBundleProposalResponse();
     return message;
   },
@@ -494,10 +463,7 @@ function createBaseMsgClaimUploaderRole(): MsgClaimUploaderRole {
 }
 
 export const MsgClaimUploaderRole = {
-  encode(
-    message: MsgClaimUploaderRole,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgClaimUploaderRole, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -510,10 +476,7 @@ export const MsgClaimUploaderRole = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgClaimUploaderRole {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimUploaderRole {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimUploaderRole();
@@ -553,9 +516,7 @@ export const MsgClaimUploaderRole = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgClaimUploaderRole>, I>>(
-    object: I
-  ): MsgClaimUploaderRole {
+  fromPartial<I extends Exact<DeepPartial<MsgClaimUploaderRole>, I>>(object: I): MsgClaimUploaderRole {
     const message = createBaseMsgClaimUploaderRole();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -569,17 +530,11 @@ function createBaseMsgClaimUploaderRoleResponse(): MsgClaimUploaderRoleResponse 
 }
 
 export const MsgClaimUploaderRoleResponse = {
-  encode(
-    _: MsgClaimUploaderRoleResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgClaimUploaderRoleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgClaimUploaderRoleResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimUploaderRoleResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClaimUploaderRoleResponse();
@@ -603,9 +558,7 @@ export const MsgClaimUploaderRoleResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgClaimUploaderRoleResponse>, I>>(
-    _: I
-  ): MsgClaimUploaderRoleResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgClaimUploaderRoleResponse>, I>>(_: I): MsgClaimUploaderRoleResponse {
     const message = createBaseMsgClaimUploaderRoleResponse();
     return message;
   },
@@ -616,10 +569,7 @@ function createBaseMsgSkipUploaderRole(): MsgSkipUploaderRole {
 }
 
 export const MsgSkipUploaderRole = {
-  encode(
-    message: MsgSkipUploaderRole,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSkipUploaderRole, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -680,9 +630,7 @@ export const MsgSkipUploaderRole = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRole>, I>>(
-    object: I
-  ): MsgSkipUploaderRole {
+  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRole>, I>>(object: I): MsgSkipUploaderRole {
     const message = createBaseMsgSkipUploaderRole();
     message.creator = object.creator ?? "";
     message.staker = object.staker ?? "";
@@ -697,17 +645,11 @@ function createBaseMsgSkipUploaderRoleResponse(): MsgSkipUploaderRoleResponse {
 }
 
 export const MsgSkipUploaderRoleResponse = {
-  encode(
-    _: MsgSkipUploaderRoleResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSkipUploaderRoleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSkipUploaderRoleResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSkipUploaderRoleResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSkipUploaderRoleResponse();
@@ -731,9 +673,7 @@ export const MsgSkipUploaderRoleResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRoleResponse>, I>>(
-    _: I
-  ): MsgSkipUploaderRoleResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSkipUploaderRoleResponse>, I>>(_: I): MsgSkipUploaderRoleResponse {
     const message = createBaseMsgSkipUploaderRoleResponse();
     return message;
   },
@@ -744,10 +684,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 
 export const MsgUpdateParams = {
-  encode(
-    message: MsgUpdateParams,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -792,9 +729,7 @@ export const MsgUpdateParams = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
-    object: I
-  ): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
     message.payload = object.payload ?? "";
@@ -807,17 +742,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 
 export const MsgUpdateParamsResponse = {
-  encode(
-    _: MsgUpdateParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateParamsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -841,9 +770,7 @@ export const MsgUpdateParamsResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
-    _: I
-  ): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
@@ -852,21 +779,13 @@ export const MsgUpdateParamsResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** SubmitBundleProposal ... */
-  SubmitBundleProposal(
-    request: MsgSubmitBundleProposal
-  ): Promise<MsgSubmitBundleProposalResponse>;
+  SubmitBundleProposal(request: MsgSubmitBundleProposal): Promise<MsgSubmitBundleProposalResponse>;
   /** VoteBundleProposal ... */
-  VoteBundleProposal(
-    request: MsgVoteBundleProposal
-  ): Promise<MsgVoteBundleProposalResponse>;
+  VoteBundleProposal(request: MsgVoteBundleProposal): Promise<MsgVoteBundleProposalResponse>;
   /** ClaimUploaderRole ... */
-  ClaimUploaderRole(
-    request: MsgClaimUploaderRole
-  ): Promise<MsgClaimUploaderRoleResponse>;
+  ClaimUploaderRole(request: MsgClaimUploaderRole): Promise<MsgClaimUploaderRoleResponse>;
   /** SkipUploaderRole ... */
-  SkipUploaderRole(
-    request: MsgSkipUploaderRole
-  ): Promise<MsgSkipUploaderRoleResponse>;
+  SkipUploaderRole(request: MsgSkipUploaderRole): Promise<MsgSkipUploaderRoleResponse>;
   /**
    * UpdateParams defines a governance operation for updating the x/bundles module
    * parameters. The authority is hard-coded to the x/gov module account.
@@ -876,7 +795,9 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "kyve.bundles.v1beta1.Msg";
     this.rpc = rpc;
     this.SubmitBundleProposal = this.SubmitBundleProposal.bind(this);
     this.VoteBundleProposal = this.VoteBundleProposal.bind(this);
@@ -884,109 +805,51 @@ export class MsgClientImpl implements Msg {
     this.SkipUploaderRole = this.SkipUploaderRole.bind(this);
     this.UpdateParams = this.UpdateParams.bind(this);
   }
-  SubmitBundleProposal(
-    request: MsgSubmitBundleProposal
-  ): Promise<MsgSubmitBundleProposalResponse> {
+  SubmitBundleProposal(request: MsgSubmitBundleProposal): Promise<MsgSubmitBundleProposalResponse> {
     const data = MsgSubmitBundleProposal.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.bundles.v1beta1.Msg",
-      "SubmitBundleProposal",
-      data
-    );
-    return promise.then((data) =>
-      MsgSubmitBundleProposalResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "SubmitBundleProposal", data);
+    return promise.then((data) => MsgSubmitBundleProposalResponse.decode(new _m0.Reader(data)));
   }
 
-  VoteBundleProposal(
-    request: MsgVoteBundleProposal
-  ): Promise<MsgVoteBundleProposalResponse> {
+  VoteBundleProposal(request: MsgVoteBundleProposal): Promise<MsgVoteBundleProposalResponse> {
     const data = MsgVoteBundleProposal.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.bundles.v1beta1.Msg",
-      "VoteBundleProposal",
-      data
-    );
-    return promise.then((data) =>
-      MsgVoteBundleProposalResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "VoteBundleProposal", data);
+    return promise.then((data) => MsgVoteBundleProposalResponse.decode(new _m0.Reader(data)));
   }
 
-  ClaimUploaderRole(
-    request: MsgClaimUploaderRole
-  ): Promise<MsgClaimUploaderRoleResponse> {
+  ClaimUploaderRole(request: MsgClaimUploaderRole): Promise<MsgClaimUploaderRoleResponse> {
     const data = MsgClaimUploaderRole.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.bundles.v1beta1.Msg",
-      "ClaimUploaderRole",
-      data
-    );
-    return promise.then((data) =>
-      MsgClaimUploaderRoleResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "ClaimUploaderRole", data);
+    return promise.then((data) => MsgClaimUploaderRoleResponse.decode(new _m0.Reader(data)));
   }
 
-  SkipUploaderRole(
-    request: MsgSkipUploaderRole
-  ): Promise<MsgSkipUploaderRoleResponse> {
+  SkipUploaderRole(request: MsgSkipUploaderRole): Promise<MsgSkipUploaderRoleResponse> {
     const data = MsgSkipUploaderRole.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.bundles.v1beta1.Msg",
-      "SkipUploaderRole",
-      data
-    );
-    return promise.then((data) =>
-      MsgSkipUploaderRoleResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "SkipUploaderRole", data);
+    return promise.then((data) => MsgSkipUploaderRoleResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request(
-      "kyve.bundles.v1beta1.Msg",
-      "UpdateParams",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateParamsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "UpdateParams", data);
+    return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

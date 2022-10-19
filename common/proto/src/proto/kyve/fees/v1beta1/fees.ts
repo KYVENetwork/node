@@ -35,20 +35,11 @@ export interface GasRefund {
 }
 
 function createBaseParams(): Params {
-  return {
-    min_gas_price: "",
-    burn_ratio: "",
-    gas_adjustments: [],
-    gas_refunds: [],
-    min_initial_deposit_ratio: "",
-  };
+  return { min_gas_price: "", burn_ratio: "", gas_adjustments: [], gas_refunds: [], min_initial_deposit_ratio: "" };
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.min_gas_price !== "") {
       writer.uint32(10).string(message.min_gas_price);
     }
@@ -81,9 +72,7 @@ export const Params = {
           message.burn_ratio = reader.string();
           break;
         case 3:
-          message.gas_adjustments.push(
-            GasAdjustment.decode(reader, reader.uint32())
-          );
+          message.gas_adjustments.push(GasAdjustment.decode(reader, reader.uint32()));
           break;
         case 4:
           message.gas_refunds.push(GasRefund.decode(reader, reader.uint32()));
@@ -101,16 +90,12 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      min_gas_price: isSet(object.min_gas_price)
-        ? String(object.min_gas_price)
-        : "",
+      min_gas_price: isSet(object.min_gas_price) ? String(object.min_gas_price) : "",
       burn_ratio: isSet(object.burn_ratio) ? String(object.burn_ratio) : "",
       gas_adjustments: Array.isArray(object?.gas_adjustments)
         ? object.gas_adjustments.map((e: any) => GasAdjustment.fromJSON(e))
         : [],
-      gas_refunds: Array.isArray(object?.gas_refunds)
-        ? object.gas_refunds.map((e: any) => GasRefund.fromJSON(e))
-        : [],
+      gas_refunds: Array.isArray(object?.gas_refunds) ? object.gas_refunds.map((e: any) => GasRefund.fromJSON(e)) : [],
       min_initial_deposit_ratio: isSet(object.min_initial_deposit_ratio)
         ? String(object.min_initial_deposit_ratio)
         : "",
@@ -119,20 +104,15 @@ export const Params = {
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.min_gas_price !== undefined &&
-      (obj.min_gas_price = message.min_gas_price);
+    message.min_gas_price !== undefined && (obj.min_gas_price = message.min_gas_price);
     message.burn_ratio !== undefined && (obj.burn_ratio = message.burn_ratio);
     if (message.gas_adjustments) {
-      obj.gas_adjustments = message.gas_adjustments.map((e) =>
-        e ? GasAdjustment.toJSON(e) : undefined
-      );
+      obj.gas_adjustments = message.gas_adjustments.map((e) => e ? GasAdjustment.toJSON(e) : undefined);
     } else {
       obj.gas_adjustments = [];
     }
     if (message.gas_refunds) {
-      obj.gas_refunds = message.gas_refunds.map((e) =>
-        e ? GasRefund.toJSON(e) : undefined
-      );
+      obj.gas_refunds = message.gas_refunds.map((e) => e ? GasRefund.toJSON(e) : undefined);
     } else {
       obj.gas_refunds = [];
     }
@@ -145,10 +125,8 @@ export const Params = {
     const message = createBaseParams();
     message.min_gas_price = object.min_gas_price ?? "";
     message.burn_ratio = object.burn_ratio ?? "";
-    message.gas_adjustments =
-      object.gas_adjustments?.map((e) => GasAdjustment.fromPartial(e)) || [];
-    message.gas_refunds =
-      object.gas_refunds?.map((e) => GasRefund.fromPartial(e)) || [];
+    message.gas_adjustments = object.gas_adjustments?.map((e) => GasAdjustment.fromPartial(e)) || [];
+    message.gas_refunds = object.gas_refunds?.map((e) => GasRefund.fromPartial(e)) || [];
     message.min_initial_deposit_ratio = object.min_initial_deposit_ratio ?? "";
     return message;
   },
@@ -159,10 +137,7 @@ function createBaseGasAdjustment(): GasAdjustment {
 }
 
 export const GasAdjustment = {
-  encode(
-    message: GasAdjustment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GasAdjustment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.type !== "") {
       writer.uint32(10).string(message.type);
     }
@@ -207,9 +182,7 @@ export const GasAdjustment = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GasAdjustment>, I>>(
-    object: I
-  ): GasAdjustment {
+  fromPartial<I extends Exact<DeepPartial<GasAdjustment>, I>>(object: I): GasAdjustment {
     const message = createBaseGasAdjustment();
     message.type = object.type ?? "";
     message.amount = object.amount ?? "0";
@@ -222,10 +195,7 @@ function createBaseGasRefund(): GasRefund {
 }
 
 export const GasRefund = {
-  encode(
-    message: GasRefund,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GasRefund, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.type !== "") {
       writer.uint32(10).string(message.type);
     }
@@ -270,9 +240,7 @@ export const GasRefund = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GasRefund>, I>>(
-    object: I
-  ): GasRefund {
+  fromPartial<I extends Exact<DeepPartial<GasRefund>, I>>(object: I): GasRefund {
     const message = createBaseGasRefund();
     message.type = object.type ?? "";
     message.fraction = object.fraction ?? "";
@@ -280,32 +248,16 @@ export const GasRefund = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

@@ -99,15 +99,9 @@ function createBaseTableDescriptor(): TableDescriptor {
 }
 
 export const TableDescriptor = {
-  encode(
-    message: TableDescriptor,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TableDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.primary_key !== undefined) {
-      PrimaryKeyDescriptor.encode(
-        message.primary_key,
-        writer.uint32(10).fork()
-      ).ldelim();
+      PrimaryKeyDescriptor.encode(message.primary_key, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.index) {
       SecondaryIndexDescriptor.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -126,15 +120,10 @@ export const TableDescriptor = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.primary_key = PrimaryKeyDescriptor.decode(
-            reader,
-            reader.uint32()
-          );
+          message.primary_key = PrimaryKeyDescriptor.decode(reader, reader.uint32());
           break;
         case 2:
-          message.index.push(
-            SecondaryIndexDescriptor.decode(reader, reader.uint32())
-          );
+          message.index.push(SecondaryIndexDescriptor.decode(reader, reader.uint32()));
           break;
         case 3:
           message.id = reader.uint32();
@@ -149,12 +138,8 @@ export const TableDescriptor = {
 
   fromJSON(object: any): TableDescriptor {
     return {
-      primary_key: isSet(object.primary_key)
-        ? PrimaryKeyDescriptor.fromJSON(object.primary_key)
-        : undefined,
-      index: Array.isArray(object?.index)
-        ? object.index.map((e: any) => SecondaryIndexDescriptor.fromJSON(e))
-        : [],
+      primary_key: isSet(object.primary_key) ? PrimaryKeyDescriptor.fromJSON(object.primary_key) : undefined,
+      index: Array.isArray(object?.index) ? object.index.map((e: any) => SecondaryIndexDescriptor.fromJSON(e)) : [],
       id: isSet(object.id) ? Number(object.id) : 0,
     };
   },
@@ -162,13 +147,9 @@ export const TableDescriptor = {
   toJSON(message: TableDescriptor): unknown {
     const obj: any = {};
     message.primary_key !== undefined &&
-      (obj.primary_key = message.primary_key
-        ? PrimaryKeyDescriptor.toJSON(message.primary_key)
-        : undefined);
+      (obj.primary_key = message.primary_key ? PrimaryKeyDescriptor.toJSON(message.primary_key) : undefined);
     if (message.index) {
-      obj.index = message.index.map((e) =>
-        e ? SecondaryIndexDescriptor.toJSON(e) : undefined
-      );
+      obj.index = message.index.map((e) => e ? SecondaryIndexDescriptor.toJSON(e) : undefined);
     } else {
       obj.index = [];
     }
@@ -176,16 +157,12 @@ export const TableDescriptor = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<TableDescriptor>, I>>(
-    object: I
-  ): TableDescriptor {
+  fromPartial<I extends Exact<DeepPartial<TableDescriptor>, I>>(object: I): TableDescriptor {
     const message = createBaseTableDescriptor();
-    message.primary_key =
-      object.primary_key !== undefined && object.primary_key !== null
-        ? PrimaryKeyDescriptor.fromPartial(object.primary_key)
-        : undefined;
-    message.index =
-      object.index?.map((e) => SecondaryIndexDescriptor.fromPartial(e)) || [];
+    message.primary_key = (object.primary_key !== undefined && object.primary_key !== null)
+      ? PrimaryKeyDescriptor.fromPartial(object.primary_key)
+      : undefined;
+    message.index = object.index?.map((e) => SecondaryIndexDescriptor.fromPartial(e)) || [];
     message.id = object.id ?? 0;
     return message;
   },
@@ -196,10 +173,7 @@ function createBasePrimaryKeyDescriptor(): PrimaryKeyDescriptor {
 }
 
 export const PrimaryKeyDescriptor = {
-  encode(
-    message: PrimaryKeyDescriptor,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: PrimaryKeyDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.fields !== "") {
       writer.uint32(10).string(message.fields);
     }
@@ -209,10 +183,7 @@ export const PrimaryKeyDescriptor = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): PrimaryKeyDescriptor {
+  decode(input: _m0.Reader | Uint8Array, length?: number): PrimaryKeyDescriptor {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePrimaryKeyDescriptor();
@@ -236,23 +207,18 @@ export const PrimaryKeyDescriptor = {
   fromJSON(object: any): PrimaryKeyDescriptor {
     return {
       fields: isSet(object.fields) ? String(object.fields) : "",
-      auto_increment: isSet(object.auto_increment)
-        ? Boolean(object.auto_increment)
-        : false,
+      auto_increment: isSet(object.auto_increment) ? Boolean(object.auto_increment) : false,
     };
   },
 
   toJSON(message: PrimaryKeyDescriptor): unknown {
     const obj: any = {};
     message.fields !== undefined && (obj.fields = message.fields);
-    message.auto_increment !== undefined &&
-      (obj.auto_increment = message.auto_increment);
+    message.auto_increment !== undefined && (obj.auto_increment = message.auto_increment);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PrimaryKeyDescriptor>, I>>(
-    object: I
-  ): PrimaryKeyDescriptor {
+  fromPartial<I extends Exact<DeepPartial<PrimaryKeyDescriptor>, I>>(object: I): PrimaryKeyDescriptor {
     const message = createBasePrimaryKeyDescriptor();
     message.fields = object.fields ?? "";
     message.auto_increment = object.auto_increment ?? false;
@@ -265,10 +231,7 @@ function createBaseSecondaryIndexDescriptor(): SecondaryIndexDescriptor {
 }
 
 export const SecondaryIndexDescriptor = {
-  encode(
-    message: SecondaryIndexDescriptor,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SecondaryIndexDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.fields !== "") {
       writer.uint32(10).string(message.fields);
     }
@@ -281,10 +244,7 @@ export const SecondaryIndexDescriptor = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): SecondaryIndexDescriptor {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SecondaryIndexDescriptor {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSecondaryIndexDescriptor();
@@ -324,9 +284,7 @@ export const SecondaryIndexDescriptor = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SecondaryIndexDescriptor>, I>>(
-    object: I
-  ): SecondaryIndexDescriptor {
+  fromPartial<I extends Exact<DeepPartial<SecondaryIndexDescriptor>, I>>(object: I): SecondaryIndexDescriptor {
     const message = createBaseSecondaryIndexDescriptor();
     message.fields = object.fields ?? "";
     message.id = object.id ?? 0;
@@ -340,10 +298,7 @@ function createBaseSingletonDescriptor(): SingletonDescriptor {
 }
 
 export const SingletonDescriptor = {
-  encode(
-    message: SingletonDescriptor,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SingletonDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -369,9 +324,7 @@ export const SingletonDescriptor = {
   },
 
   fromJSON(object: any): SingletonDescriptor {
-    return {
-      id: isSet(object.id) ? Number(object.id) : 0,
-    };
+    return { id: isSet(object.id) ? Number(object.id) : 0 };
   },
 
   toJSON(message: SingletonDescriptor): unknown {
@@ -380,41 +333,23 @@ export const SingletonDescriptor = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<SingletonDescriptor>, I>>(
-    object: I
-  ): SingletonDescriptor {
+  fromPartial<I extends Exact<DeepPartial<SingletonDescriptor>, I>>(object: I): SingletonDescriptor {
     const message = createBaseSingletonDescriptor();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

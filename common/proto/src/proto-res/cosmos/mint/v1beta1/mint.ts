@@ -33,10 +33,7 @@ function createBaseMinter(): Minter {
 }
 
 export const Minter = {
-  encode(
-    message: Minter,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Minter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.inflation !== "") {
       writer.uint32(10).string(message.inflation);
     }
@@ -70,17 +67,14 @@ export const Minter = {
   fromJSON(object: any): Minter {
     return {
       inflation: isSet(object.inflation) ? String(object.inflation) : "",
-      annual_provisions: isSet(object.annual_provisions)
-        ? String(object.annual_provisions)
-        : "",
+      annual_provisions: isSet(object.annual_provisions) ? String(object.annual_provisions) : "",
     };
   },
 
   toJSON(message: Minter): unknown {
     const obj: any = {};
     message.inflation !== undefined && (obj.inflation = message.inflation);
-    message.annual_provisions !== undefined &&
-      (obj.annual_provisions = message.annual_provisions);
+    message.annual_provisions !== undefined && (obj.annual_provisions = message.annual_provisions);
     return obj;
   },
 
@@ -104,10 +98,7 @@ function createBaseParams(): Params {
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.mint_denom !== "") {
       writer.uint32(10).string(message.mint_denom);
     }
@@ -165,35 +156,22 @@ export const Params = {
   fromJSON(object: any): Params {
     return {
       mint_denom: isSet(object.mint_denom) ? String(object.mint_denom) : "",
-      inflation_rate_change: isSet(object.inflation_rate_change)
-        ? String(object.inflation_rate_change)
-        : "",
-      inflation_max: isSet(object.inflation_max)
-        ? String(object.inflation_max)
-        : "",
-      inflation_min: isSet(object.inflation_min)
-        ? String(object.inflation_min)
-        : "",
+      inflation_rate_change: isSet(object.inflation_rate_change) ? String(object.inflation_rate_change) : "",
+      inflation_max: isSet(object.inflation_max) ? String(object.inflation_max) : "",
+      inflation_min: isSet(object.inflation_min) ? String(object.inflation_min) : "",
       goal_bonded: isSet(object.goal_bonded) ? String(object.goal_bonded) : "",
-      blocks_per_year: isSet(object.blocks_per_year)
-        ? String(object.blocks_per_year)
-        : "0",
+      blocks_per_year: isSet(object.blocks_per_year) ? String(object.blocks_per_year) : "0",
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
     message.mint_denom !== undefined && (obj.mint_denom = message.mint_denom);
-    message.inflation_rate_change !== undefined &&
-      (obj.inflation_rate_change = message.inflation_rate_change);
-    message.inflation_max !== undefined &&
-      (obj.inflation_max = message.inflation_max);
-    message.inflation_min !== undefined &&
-      (obj.inflation_min = message.inflation_min);
-    message.goal_bonded !== undefined &&
-      (obj.goal_bonded = message.goal_bonded);
-    message.blocks_per_year !== undefined &&
-      (obj.blocks_per_year = message.blocks_per_year);
+    message.inflation_rate_change !== undefined && (obj.inflation_rate_change = message.inflation_rate_change);
+    message.inflation_max !== undefined && (obj.inflation_max = message.inflation_max);
+    message.inflation_min !== undefined && (obj.inflation_min = message.inflation_min);
+    message.goal_bonded !== undefined && (obj.goal_bonded = message.goal_bonded);
+    message.blocks_per_year !== undefined && (obj.blocks_per_year = message.blocks_per_year);
     return obj;
   },
 
@@ -209,32 +187,16 @@ export const Params = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

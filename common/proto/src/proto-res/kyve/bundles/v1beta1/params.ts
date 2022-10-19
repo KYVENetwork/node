@@ -17,19 +17,11 @@ export interface Params {
 }
 
 function createBaseParams(): Params {
-  return {
-    upload_timeout: "0",
-    storage_cost: "0",
-    network_fee: "",
-    max_points: "0",
-  };
+  return { upload_timeout: "0", storage_cost: "0", network_fee: "", max_points: "0" };
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.upload_timeout !== "0") {
       writer.uint32(8).uint64(message.upload_timeout);
     }
@@ -74,12 +66,8 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      upload_timeout: isSet(object.upload_timeout)
-        ? String(object.upload_timeout)
-        : "0",
-      storage_cost: isSet(object.storage_cost)
-        ? String(object.storage_cost)
-        : "0",
+      upload_timeout: isSet(object.upload_timeout) ? String(object.upload_timeout) : "0",
+      storage_cost: isSet(object.storage_cost) ? String(object.storage_cost) : "0",
       network_fee: isSet(object.network_fee) ? String(object.network_fee) : "",
       max_points: isSet(object.max_points) ? String(object.max_points) : "0",
     };
@@ -87,12 +75,9 @@ export const Params = {
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.upload_timeout !== undefined &&
-      (obj.upload_timeout = message.upload_timeout);
-    message.storage_cost !== undefined &&
-      (obj.storage_cost = message.storage_cost);
-    message.network_fee !== undefined &&
-      (obj.network_fee = message.network_fee);
+    message.upload_timeout !== undefined && (obj.upload_timeout = message.upload_timeout);
+    message.storage_cost !== undefined && (obj.storage_cost = message.storage_cost);
+    message.network_fee !== undefined && (obj.network_fee = message.network_fee);
     message.max_points !== undefined && (obj.max_points = message.max_points);
     return obj;
   },
@@ -107,32 +92,16 @@ export const Params = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

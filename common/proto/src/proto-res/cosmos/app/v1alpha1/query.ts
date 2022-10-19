@@ -1,11 +1,12 @@
 /* eslint-disable */
-import { Config } from "./config";
 import _m0 from "protobufjs/minimal";
+import { Config } from "./config";
 
 export const protobufPackage = "cosmos.app.v1alpha1";
 
 /** QueryConfigRequest is the Query/Config request type. */
-export interface QueryConfigRequest {}
+export interface QueryConfigRequest {
+}
 
 /** QueryConfigRequest is the Query/Config response type. */
 export interface QueryConfigResponse {
@@ -18,10 +19,7 @@ function createBaseQueryConfigRequest(): QueryConfigRequest {
 }
 
 export const QueryConfigRequest = {
-  encode(
-    _: QueryConfigRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: QueryConfigRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -49,9 +47,7 @@ export const QueryConfigRequest = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryConfigRequest>, I>>(
-    _: I
-  ): QueryConfigRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryConfigRequest>, I>>(_: I): QueryConfigRequest {
     const message = createBaseQueryConfigRequest();
     return message;
   },
@@ -62,10 +58,7 @@ function createBaseQueryConfigResponse(): QueryConfigResponse {
 }
 
 export const QueryConfigResponse = {
-  encode(
-    message: QueryConfigResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.config !== undefined) {
       Config.encode(message.config, writer.uint32(10).fork()).ldelim();
     }
@@ -91,26 +84,20 @@ export const QueryConfigResponse = {
   },
 
   fromJSON(object: any): QueryConfigResponse {
-    return {
-      config: isSet(object.config) ? Config.fromJSON(object.config) : undefined,
-    };
+    return { config: isSet(object.config) ? Config.fromJSON(object.config) : undefined };
   },
 
   toJSON(message: QueryConfigResponse): unknown {
     const obj: any = {};
-    message.config !== undefined &&
-      (obj.config = message.config ? Config.toJSON(message.config) : undefined);
+    message.config !== undefined && (obj.config = message.config ? Config.toJSON(message.config) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryConfigResponse>, I>>(
-    object: I
-  ): QueryConfigResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryConfigResponse>, I>>(object: I): QueryConfigResponse {
     const message = createBaseQueryConfigResponse();
-    message.config =
-      object.config !== undefined && object.config !== null
-        ? Config.fromPartial(object.config)
-        : undefined;
+    message.config = (object.config !== undefined && object.config !== null)
+      ? Config.fromPartial(object.config)
+      : undefined;
     return message;
   },
 };
@@ -123,57 +110,33 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "cosmos.app.v1alpha1.Query";
     this.rpc = rpc;
     this.Config = this.Config.bind(this);
   }
   Config(request: QueryConfigRequest): Promise<QueryConfigResponse> {
     const data = QueryConfigRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "cosmos.app.v1alpha1.Query",
-      "Config",
-      data
-    );
-    return promise.then((data) =>
-      QueryConfigResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Config", data);
+    return promise.then((data) => QueryConfigResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

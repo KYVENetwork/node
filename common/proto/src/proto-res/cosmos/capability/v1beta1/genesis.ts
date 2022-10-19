@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { CapabilityOwners } from "./capability";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { CapabilityOwners } from "./capability";
 
 export const protobufPackage = "cosmos.capability.v1beta1";
 
@@ -29,18 +29,12 @@ function createBaseGenesisOwners(): GenesisOwners {
 }
 
 export const GenesisOwners = {
-  encode(
-    message: GenesisOwners,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisOwners, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
     if (message.index_owners !== undefined) {
-      CapabilityOwners.encode(
-        message.index_owners,
-        writer.uint32(18).fork()
-      ).ldelim();
+      CapabilityOwners.encode(message.index_owners, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -56,10 +50,7 @@ export const GenesisOwners = {
           message.index = longToString(reader.uint64() as Long);
           break;
         case 2:
-          message.index_owners = CapabilityOwners.decode(
-            reader,
-            reader.uint32()
-          );
+          message.index_owners = CapabilityOwners.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -72,9 +63,7 @@ export const GenesisOwners = {
   fromJSON(object: any): GenesisOwners {
     return {
       index: isSet(object.index) ? String(object.index) : "0",
-      index_owners: isSet(object.index_owners)
-        ? CapabilityOwners.fromJSON(object.index_owners)
-        : undefined,
+      index_owners: isSet(object.index_owners) ? CapabilityOwners.fromJSON(object.index_owners) : undefined,
     };
   },
 
@@ -82,21 +71,16 @@ export const GenesisOwners = {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
     message.index_owners !== undefined &&
-      (obj.index_owners = message.index_owners
-        ? CapabilityOwners.toJSON(message.index_owners)
-        : undefined);
+      (obj.index_owners = message.index_owners ? CapabilityOwners.toJSON(message.index_owners) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisOwners>, I>>(
-    object: I
-  ): GenesisOwners {
+  fromPartial<I extends Exact<DeepPartial<GenesisOwners>, I>>(object: I): GenesisOwners {
     const message = createBaseGenesisOwners();
     message.index = object.index ?? "0";
-    message.index_owners =
-      object.index_owners !== undefined && object.index_owners !== null
-        ? CapabilityOwners.fromPartial(object.index_owners)
-        : undefined;
+    message.index_owners = (object.index_owners !== undefined && object.index_owners !== null)
+      ? CapabilityOwners.fromPartial(object.index_owners)
+      : undefined;
     return message;
   },
 };
@@ -106,10 +90,7 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(
-    message: GenesisState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.index !== "0") {
       writer.uint32(8).uint64(message.index);
     }
@@ -143,9 +124,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       index: isSet(object.index) ? String(object.index) : "0",
-      owners: Array.isArray(object?.owners)
-        ? object.owners.map((e: any) => GenesisOwners.fromJSON(e))
-        : [],
+      owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => GenesisOwners.fromJSON(e)) : [],
     };
   },
 
@@ -153,52 +132,31 @@ export const GenesisState = {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
     if (message.owners) {
-      obj.owners = message.owners.map((e) =>
-        e ? GenesisOwners.toJSON(e) : undefined
-      );
+      obj.owners = message.owners.map((e) => e ? GenesisOwners.toJSON(e) : undefined);
     } else {
       obj.owners = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
-    object: I
-  ): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.index = object.index ?? "0";
-    message.owners =
-      object.owners?.map((e) => GenesisOwners.fromPartial(e)) || [];
+    message.owners = object.owners?.map((e) => GenesisOwners.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();

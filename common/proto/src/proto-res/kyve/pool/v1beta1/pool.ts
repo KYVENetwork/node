@@ -14,8 +14,8 @@ export enum PoolStatus {
   POOL_STATUS_PAUSED = "POOL_STATUS_PAUSED",
   /** POOL_STATUS_NO_FUNDS - POOL_STATUS_NO_FUNDS ... */
   POOL_STATUS_NO_FUNDS = "POOL_STATUS_NO_FUNDS",
-  /** POOL_STATUS_NOT_ENOUGH_STAKE - POOL_STATUS_NOT_ENOUGH_STAKE ... */
-  POOL_STATUS_NOT_ENOUGH_STAKE = "POOL_STATUS_NOT_ENOUGH_STAKE",
+  /** POOL_STATUS_NOT_ENOUGH_DELEGATION - POOL_STATUS_NOT_ENOUGH_DELEGATION ... */
+  POOL_STATUS_NOT_ENOUGH_DELEGATION = "POOL_STATUS_NOT_ENOUGH_DELEGATION",
   /** POOL_STATUS_UPGRADING - POOL_STATUS_UPGRADING ... */
   POOL_STATUS_UPGRADING = "POOL_STATUS_UPGRADING",
   UNRECOGNIZED = "UNRECOGNIZED",
@@ -36,8 +36,8 @@ export function poolStatusFromJSON(object: any): PoolStatus {
     case "POOL_STATUS_NO_FUNDS":
       return PoolStatus.POOL_STATUS_NO_FUNDS;
     case 4:
-    case "POOL_STATUS_NOT_ENOUGH_STAKE":
-      return PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE;
+    case "POOL_STATUS_NOT_ENOUGH_DELEGATION":
+      return PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION;
     case 5:
     case "POOL_STATUS_UPGRADING":
       return PoolStatus.POOL_STATUS_UPGRADING;
@@ -58,8 +58,8 @@ export function poolStatusToJSON(object: PoolStatus): string {
       return "POOL_STATUS_PAUSED";
     case PoolStatus.POOL_STATUS_NO_FUNDS:
       return "POOL_STATUS_NO_FUNDS";
-    case PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE:
-      return "POOL_STATUS_NOT_ENOUGH_STAKE";
+    case PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION:
+      return "POOL_STATUS_NOT_ENOUGH_DELEGATION";
     case PoolStatus.POOL_STATUS_UPGRADING:
       return "POOL_STATUS_UPGRADING";
     case PoolStatus.UNRECOGNIZED:
@@ -78,7 +78,7 @@ export function poolStatusToNumber(object: PoolStatus): number {
       return 2;
     case PoolStatus.POOL_STATUS_NO_FUNDS:
       return 3;
-    case PoolStatus.POOL_STATUS_NOT_ENOUGH_STAKE:
+    case PoolStatus.POOL_STATUS_NOT_ENOUGH_DELEGATION:
       return 4;
     case PoolStatus.POOL_STATUS_UPGRADING:
       return 5;
@@ -144,8 +144,8 @@ export interface Pool {
   upload_interval: string;
   /** operating_cost ... */
   operating_cost: string;
-  /** min_stake ... */
-  min_stake: string;
+  /** min_delegation ... */
+  min_delegation: string;
   /** max_bundle_size ... */
   max_bundle_size: string;
   /** paused ... */
@@ -165,10 +165,7 @@ function createBaseProtocol(): Protocol {
 }
 
 export const Protocol = {
-  encode(
-    message: Protocol,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Protocol, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
@@ -209,9 +206,7 @@ export const Protocol = {
     return {
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
-      last_upgrade: isSet(object.last_upgrade)
-        ? String(object.last_upgrade)
-        : "0",
+      last_upgrade: isSet(object.last_upgrade) ? String(object.last_upgrade) : "0",
     };
   },
 
@@ -219,8 +214,7 @@ export const Protocol = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
-    message.last_upgrade !== undefined &&
-      (obj.last_upgrade = message.last_upgrade);
+    message.last_upgrade !== undefined && (obj.last_upgrade = message.last_upgrade);
     return obj;
   },
 
@@ -238,10 +232,7 @@ function createBaseUpgradePlan(): UpgradePlan {
 }
 
 export const UpgradePlan = {
-  encode(
-    message: UpgradePlan,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UpgradePlan, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
@@ -288,9 +279,7 @@ export const UpgradePlan = {
     return {
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
-      scheduled_at: isSet(object.scheduled_at)
-        ? String(object.scheduled_at)
-        : "0",
+      scheduled_at: isSet(object.scheduled_at) ? String(object.scheduled_at) : "0",
       duration: isSet(object.duration) ? String(object.duration) : "0",
     };
   },
@@ -299,15 +288,12 @@ export const UpgradePlan = {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
-    message.scheduled_at !== undefined &&
-      (obj.scheduled_at = message.scheduled_at);
+    message.scheduled_at !== undefined && (obj.scheduled_at = message.scheduled_at);
     message.duration !== undefined && (obj.duration = message.duration);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<UpgradePlan>, I>>(
-    object: I
-  ): UpgradePlan {
+  fromPartial<I extends Exact<DeepPartial<UpgradePlan>, I>>(object: I): UpgradePlan {
     const message = createBaseUpgradePlan();
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
@@ -322,10 +308,7 @@ function createBaseFunder(): Funder {
 }
 
 export const Funder = {
-  encode(
-    message: Funder,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Funder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(18).string(message.address);
     }
@@ -392,7 +375,7 @@ function createBasePool(): Pool {
     total_bundles: "0",
     upload_interval: "0",
     operating_cost: "0",
-    min_stake: "0",
+    min_delegation: "0",
     max_bundle_size: "0",
     paused: false,
     funders: [],
@@ -440,8 +423,8 @@ export const Pool = {
     if (message.operating_cost !== "0") {
       writer.uint32(96).uint64(message.operating_cost);
     }
-    if (message.min_stake !== "0") {
-      writer.uint32(104).uint64(message.min_stake);
+    if (message.min_delegation !== "0") {
+      writer.uint32(104).uint64(message.min_delegation);
     }
     if (message.max_bundle_size !== "0") {
       writer.uint32(112).uint64(message.max_bundle_size);
@@ -459,10 +442,7 @@ export const Pool = {
       Protocol.encode(message.protocol, writer.uint32(146).fork()).ldelim();
     }
     if (message.upgrade_plan !== undefined) {
-      UpgradePlan.encode(
-        message.upgrade_plan,
-        writer.uint32(154).fork()
-      ).ldelim();
+      UpgradePlan.encode(message.upgrade_plan, writer.uint32(154).fork()).ldelim();
     }
     return writer;
   },
@@ -511,7 +491,7 @@ export const Pool = {
           message.operating_cost = longToString(reader.uint64() as Long);
           break;
         case 13:
-          message.min_stake = longToString(reader.uint64() as Long);
+          message.min_delegation = longToString(reader.uint64() as Long);
           break;
         case 14:
           message.max_bundle_size = longToString(reader.uint64() as Long);
@@ -548,36 +528,18 @@ export const Pool = {
       config: isSet(object.config) ? String(object.config) : "",
       start_key: isSet(object.start_key) ? String(object.start_key) : "",
       current_key: isSet(object.current_key) ? String(object.current_key) : "",
-      current_summary: isSet(object.current_summary)
-        ? String(object.current_summary)
-        : "",
-      current_index: isSet(object.current_index)
-        ? String(object.current_index)
-        : "0",
-      total_bundles: isSet(object.total_bundles)
-        ? String(object.total_bundles)
-        : "0",
-      upload_interval: isSet(object.upload_interval)
-        ? String(object.upload_interval)
-        : "0",
-      operating_cost: isSet(object.operating_cost)
-        ? String(object.operating_cost)
-        : "0",
-      min_stake: isSet(object.min_stake) ? String(object.min_stake) : "0",
-      max_bundle_size: isSet(object.max_bundle_size)
-        ? String(object.max_bundle_size)
-        : "0",
+      current_summary: isSet(object.current_summary) ? String(object.current_summary) : "",
+      current_index: isSet(object.current_index) ? String(object.current_index) : "0",
+      total_bundles: isSet(object.total_bundles) ? String(object.total_bundles) : "0",
+      upload_interval: isSet(object.upload_interval) ? String(object.upload_interval) : "0",
+      operating_cost: isSet(object.operating_cost) ? String(object.operating_cost) : "0",
+      min_delegation: isSet(object.min_delegation) ? String(object.min_delegation) : "0",
+      max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
-      funders: Array.isArray(object?.funders)
-        ? object.funders.map((e: any) => Funder.fromJSON(e))
-        : [],
+      funders: Array.isArray(object?.funders) ? object.funders.map((e: any) => Funder.fromJSON(e)) : [],
       total_funds: isSet(object.total_funds) ? String(object.total_funds) : "0",
-      protocol: isSet(object.protocol)
-        ? Protocol.fromJSON(object.protocol)
-        : undefined,
-      upgrade_plan: isSet(object.upgrade_plan)
-        ? UpgradePlan.fromJSON(object.upgrade_plan)
-        : undefined,
+      protocol: isSet(object.protocol) ? Protocol.fromJSON(object.protocol) : undefined,
+      upgrade_plan: isSet(object.upgrade_plan) ? UpgradePlan.fromJSON(object.upgrade_plan) : undefined,
     };
   },
 
@@ -589,39 +551,24 @@ export const Pool = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.config !== undefined && (obj.config = message.config);
     message.start_key !== undefined && (obj.start_key = message.start_key);
-    message.current_key !== undefined &&
-      (obj.current_key = message.current_key);
-    message.current_summary !== undefined &&
-      (obj.current_summary = message.current_summary);
-    message.current_index !== undefined &&
-      (obj.current_index = message.current_index);
-    message.total_bundles !== undefined &&
-      (obj.total_bundles = message.total_bundles);
-    message.upload_interval !== undefined &&
-      (obj.upload_interval = message.upload_interval);
-    message.operating_cost !== undefined &&
-      (obj.operating_cost = message.operating_cost);
-    message.min_stake !== undefined && (obj.min_stake = message.min_stake);
-    message.max_bundle_size !== undefined &&
-      (obj.max_bundle_size = message.max_bundle_size);
+    message.current_key !== undefined && (obj.current_key = message.current_key);
+    message.current_summary !== undefined && (obj.current_summary = message.current_summary);
+    message.current_index !== undefined && (obj.current_index = message.current_index);
+    message.total_bundles !== undefined && (obj.total_bundles = message.total_bundles);
+    message.upload_interval !== undefined && (obj.upload_interval = message.upload_interval);
+    message.operating_cost !== undefined && (obj.operating_cost = message.operating_cost);
+    message.min_delegation !== undefined && (obj.min_delegation = message.min_delegation);
+    message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.paused !== undefined && (obj.paused = message.paused);
     if (message.funders) {
-      obj.funders = message.funders.map((e) =>
-        e ? Funder.toJSON(e) : undefined
-      );
+      obj.funders = message.funders.map((e) => e ? Funder.toJSON(e) : undefined);
     } else {
       obj.funders = [];
     }
-    message.total_funds !== undefined &&
-      (obj.total_funds = message.total_funds);
-    message.protocol !== undefined &&
-      (obj.protocol = message.protocol
-        ? Protocol.toJSON(message.protocol)
-        : undefined);
+    message.total_funds !== undefined && (obj.total_funds = message.total_funds);
+    message.protocol !== undefined && (obj.protocol = message.protocol ? Protocol.toJSON(message.protocol) : undefined);
     message.upgrade_plan !== undefined &&
-      (obj.upgrade_plan = message.upgrade_plan
-        ? UpgradePlan.toJSON(message.upgrade_plan)
-        : undefined);
+      (obj.upgrade_plan = message.upgrade_plan ? UpgradePlan.toJSON(message.upgrade_plan) : undefined);
     return obj;
   },
 
@@ -639,49 +586,31 @@ export const Pool = {
     message.total_bundles = object.total_bundles ?? "0";
     message.upload_interval = object.upload_interval ?? "0";
     message.operating_cost = object.operating_cost ?? "0";
-    message.min_stake = object.min_stake ?? "0";
+    message.min_delegation = object.min_delegation ?? "0";
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.paused = object.paused ?? false;
     message.funders = object.funders?.map((e) => Funder.fromPartial(e)) || [];
     message.total_funds = object.total_funds ?? "0";
-    message.protocol =
-      object.protocol !== undefined && object.protocol !== null
-        ? Protocol.fromPartial(object.protocol)
-        : undefined;
-    message.upgrade_plan =
-      object.upgrade_plan !== undefined && object.upgrade_plan !== null
-        ? UpgradePlan.fromPartial(object.upgrade_plan)
-        : undefined;
+    message.protocol = (object.protocol !== undefined && object.protocol !== null)
+      ? Protocol.fromPartial(object.protocol)
+      : undefined;
+    message.upgrade_plan = (object.upgrade_plan !== undefined && object.upgrade_plan !== null)
+      ? UpgradePlan.fromPartial(object.upgrade_plan)
+      : undefined;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToString(long: Long) {
   return long.toString();
