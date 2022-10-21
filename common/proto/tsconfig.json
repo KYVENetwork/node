@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
     "declaration": true,
     "esModuleInterop": true,
     "outDir": "dist",
@@ -8,5 +10,5 @@
   "exclude": [
     "node_modules"
   ],
-  "files": ["src/index.ts"]
+  "include": ["src/**/*"]
 }

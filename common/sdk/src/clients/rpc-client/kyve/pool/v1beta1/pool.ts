@@ -3,10 +3,9 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
-import { kyve } from "@kyve/proto";
 
-import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
-import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
+import {MsgDefundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
+import {MsgFundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
 
 export default class {
   private nativeClient: SigningStargateClient;
