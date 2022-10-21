@@ -2,35 +2,38 @@ import KyveClient from "../../src/clients/rpc-client/client";
 import { createValidator } from "../helper";
 import * as fs from "fs";
 import { resolve } from "path";
-import { kyve, cosmos as cosmosProto } from "@kyve/proto";
+// import { kyve, cosmos as cosmosProto } from "@kyve/proto";
 
-import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
-import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
-import MsgClaimUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgClaimUploaderRole;
-import MsgSkipUploaderRole = kyve.registry.v1beta1.kyveBundles.MsgSkipUploaderRole;
+/** pool **/
+import {MsgFundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
+import {MsgDefundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
+/** stakers **/
+import {MsgCreateStaker} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateMetadata} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import {MsgJoinPool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateCommission} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import {MsgLeavePool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+/** delegations **/
+import {MsgDelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
+import {MsgWithdrawRewards} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
+import {MsgRedelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
+import {MsgUndelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
+/** bundles **/
+import {MsgSubmitBundleProposal} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
+import {MsgVoteBundleProposal} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
+import {MsgClaimUploaderRole} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
+import {MsgSkipUploaderRole} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
 
-import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
-import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
-import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
-import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
+/** gov **/
+import  {TextProposal} from "@kyve/proto/client/cosmos/gov/v1beta1/gov";
+import  {ParameterChangeProposal} from "@kyve/proto/client/cosmos/params/v1beta1/params";
 
-import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
-import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
+import { CreatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
+import { PausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
+import { SchedulePoolUpgradeProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
+import { UnpausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
+import { UpdatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
 
-import MsgCreateStaker = kyve.registry.v1beta1.kyveStakers.MsgCreateStaker;
-import MsgUpdateMetadata = kyve.registry.v1beta1.kyveStakers.MsgUpdateMetadata;
-import MsgUpdateCommission = kyve.registry.v1beta1.kyveStakers.MsgUpdateCommission;
-import MsgJoinPool = kyve.registry.v1beta1.kyveStakers.MsgJoinPool;
-import MsgLeavePool = kyve.registry.v1beta1.kyveStakers.MsgLeavePool;
-
-import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
-import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
-
-import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.CreatePoolProposal;
-import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
-import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
-import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
 
 import Mock = jest.Mock;
 import { DENOM  } from "../../src/constants";
@@ -62,7 +65,7 @@ const methodsByGroup = [
     {
       name: "bundles",
       pathToTypes: extractTsFromPath(
-        "../proto/dist/proto/kyve/bundles/v1beta1"
+        "../proto/client/kyve/bundles/v1beta1"
       ),
     },
     [
@@ -100,7 +103,7 @@ const methodsByGroup = [
     {
       name: "delegation",
       pathToTypes: extractTsFromPath(
-        "../proto/dist/proto/kyve/delegation/v1beta1"
+        "../proto/client/kyve/delegation/v1beta1"
       ),
     },
     [
@@ -137,7 +140,7 @@ const methodsByGroup = [
   [
     {
       name: "pool",
-      pathToTypes: extractTsFromPath("../proto/dist/proto/kyve/pool/v1beta1"),
+      pathToTypes: extractTsFromPath("../proto/client/kyve//pool/v1beta1"),
     },
     [
       {
@@ -160,7 +163,7 @@ const methodsByGroup = [
     {
       name: "stakers",
       pathToTypes: extractTsFromPath(
-        "../proto/dist/proto/kyve/stakers/v1beta1"
+        "../proto/client/kyve/stakers/v1beta1"
       ),
     },
     [
