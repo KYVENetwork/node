@@ -1,4 +1,4 @@
-import { kyve, cosmos } from "@kyve/proto";
+import { kyve, cosmos } from "@kyve/proto-beta";
 import kyveQuery = kyve.query.v1beta1.kyveQuery;
 import kyveQueryRes = kyve.query.v1beta1.kyveQuery;
 

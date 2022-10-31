@@ -22,7 +22,7 @@
     "outputPath": "out"
   },
   "dependencies": {
-    "@kyve/core": "1.21.7",
+    "@kyve/core-beta": "1.21.7",
     "axios": "^0.26.1",
     "nanoid": "^3.3.3"
   },

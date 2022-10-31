@@ -1,5 +1,5 @@
 {
-  "name": "@kyve/sdk",
+  "name": "@kyve/sdk-beta",
   "version": "3.3.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +32,7 @@
     "@cosmjs/tendermint-rpc": "0.28.0",
     "@cosmostation/extension-client": "^0.0.6",
     "@keplr-wallet/cosmos": "0.9.16",
-    "@kyve/proto": "1.10.0",
+    "@kyve/proto-beta": "1.10.0",
     "axios": "0.25.0",
     "bech32": "2.0.0",
     "bignumber.js": "9.0.2",

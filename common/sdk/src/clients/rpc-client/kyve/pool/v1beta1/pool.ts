@@ -3,7 +3,7 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
-import { kyve } from "@kyve/proto";
+import { kyve } from "@kyve/proto-beta";
 
 import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
 import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;

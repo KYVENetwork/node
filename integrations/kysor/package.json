@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
-    "@kyve/proto": "1.10.0",
-    "@kyve/sdk": "3.3.0",
+    "@kyve/proto-beta": "1.10.0",
+    "@kyve/sdk-beta": "3.3.0",
     "axios": "^0.27.2",
     "bignumber.js": "^9.1.0",
     "commander": "^9.4.0",

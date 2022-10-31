@@ -37,7 +37,7 @@ import {
   runNode,
   runCache,
 } from "./methods";
-import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk";
+import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk-beta";
 import { Logger } from "tslog";
 import { Command, OptionValues } from "commander";
 import {
@@ -46,7 +46,7 @@ import {
   parseMnemonic,
   parseCache,
 } from "./commander";
-import { kyve } from "@kyve/proto";
+import { kyve } from "@kyve/proto-beta";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 import { standardizeJSON } from "./utils";
 import * as storageProvider from "./reactors/storageProviders";

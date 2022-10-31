@@ -2,11 +2,11 @@ import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { DENOM } from "../../../../../constants";
-import { cosmos as cosmosProto } from "@kyve/proto";
+import { cosmos as cosmosProto } from "@kyve/proto-beta";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 import { cosmos } from "@keplr-wallet/cosmos";
 
-import { kyve } from "@kyve/proto";
+import { kyve } from "@kyve/proto-beta";
 
 import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
 import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;

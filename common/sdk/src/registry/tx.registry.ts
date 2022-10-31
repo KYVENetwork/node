@@ -1,5 +1,5 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { kyve, cosmos } from "@kyve/proto";
+import { kyve, cosmos } from "@kyve/proto-beta";
 /** pool **/
 import MsgFundPool = kyve.registry.v1beta1.kyvePool.MsgFundPool;
 import MsgDefundPool = kyve.registry.v1beta1.kyvePool.MsgDefundPool;
@@ -16,7 +16,7 @@ import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
 import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
 import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
 import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
-import { defaultRegistryTypes } from "@cosmjs/stargate"
+import { defaultRegistryTypes } from "@cosmjs/stargate";
 /** bundles **/
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;

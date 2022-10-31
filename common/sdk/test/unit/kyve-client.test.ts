@@ -2,7 +2,7 @@ import KyveClient from "../../src/clients/rpc-client/client";
 import { createValidator } from "../helper";
 import * as fs from "fs";
 import { resolve } from "path";
-import { kyve, cosmos as cosmosProto } from "@kyve/proto";
+import { kyve, cosmos as cosmosProto } from "@kyve/proto-beta";
 
 import MsgSubmitBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgSubmitBundleProposal;
 import MsgVoteBundleProposal = kyve.registry.v1beta1.kyveBundles.MsgVoteBundleProposal;
@@ -33,7 +33,7 @@ import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
 import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
 
 import Mock = jest.Mock;
-import { DENOM  } from "../../src/constants";
+import { DENOM } from "../../src/constants";
 
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
@@ -282,7 +282,7 @@ describe("Base methods", () => {
     expect(fee.gas.toString()).toEqual(TEST_FEE.toString());
     expect(tx.value.amount[0]).toEqual({
       denom: DENOM,
-      amount: testAmount
+      amount: testAmount,
     });
   });
 

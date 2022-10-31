@@ -1,5 +1,5 @@
 import { Node, standardizeJSON } from "../..";
-import KyveSDK from "@kyve/sdk";
+import KyveSDK from "@kyve/sdk-beta";
 import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
 
 /**

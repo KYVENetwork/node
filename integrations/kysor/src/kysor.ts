@@ -5,8 +5,8 @@ import fs from "fs";
 import TOML from "@iarna/toml";
 import { IConfig, IValaccountConfig } from "./types/interfaces";
 import extract from "extract-zip";
-import KyveSDK, { KyveLCDClientType } from "@kyve/sdk";
-import { kyve } from "@kyve/proto";
+import KyveSDK, { KyveLCDClientType } from "@kyve/sdk-beta";
+import { kyve } from "@kyve/proto-beta";
 import download from "download";
 import { getChecksum, setupLogger, startNodeProcess } from "./utils";
 

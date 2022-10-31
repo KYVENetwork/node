@@ -25,7 +25,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.21.7",
+    "@kyve/core-beta": "1.21.7",
     "axios": "^0.27.2"
   },
   "devDependencies": {
