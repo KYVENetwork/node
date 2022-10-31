@@ -1,3 +1,4 @@
+import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
@@ -206,7 +207,7 @@ export async function validateBundleProposal(
       `this.runtime.validateBundle($THIS, $PROPOSED_BUNDLE, $VALIDATION_BUNDLE)`
     );
 
-    const valid = await this.runtime
+    const vote = await this.runtime
       .validateBundle(
         this,
         standardizeJSON(proposedBundle),
@@ -218,33 +219,10 @@ export async function validateBundleProposal(
         );
         this.logger.error(standardizeJSON(err));
 
-        return null;
+        return VoteType.VOTE_TYPE_ABSTAIN;
       });
 
-    // vote abstain if validateBundle returns null
-    if (valid === null) {
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.ABSTAIN
-      );
-      return;
-    }
-
-    if (valid) {
-      this.logger.info(`Found valid bundle by runtime validation`);
-
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.VALID
-      );
-    } else {
-      this.logger.info(`Found invalid bundle by runtime validation`);
-
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.INVALID
-      );
-    }
+    await this.voteBundleProposal(this.pool.bundle_proposal!.storage_id, vote);
 
     // update metrics
     this.m.bundles_amount.inc();

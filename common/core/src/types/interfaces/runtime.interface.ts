@@ -1,3 +1,4 @@
+import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
 import { DataItem } from "..";
 import { Node } from "../..";
 
@@ -59,13 +60,13 @@ export interface IRuntime {
    * @param {Node} core the class of @kyve/core
    * @param {DataItem[]} proposedBundle is the bundle saved by the uploader on the storage provider
    * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
-   * @return {Promise<boolean>} returns whether the bundle is valid or invalid
+   * @return {Promise<VoteType>} returns the vote type the node should vote with
    */
   validateBundle(
     core: Node,
     proposedBundle: DataItem[],
     validationBundle: DataItem[]
-  ): Promise<boolean>;
+  ): Promise<VoteType>;
 
   /**
    * Gets a formatted value string from a bundle. This produces a "summary" of

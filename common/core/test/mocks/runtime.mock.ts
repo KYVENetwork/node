@@ -25,7 +25,11 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
           Buffer.from(JSON.stringify(validationBundle))
         );
 
-        return proposedBundleHash === validationBundleHash;
+        if (proposedBundleHash === validationBundleHash) {
+          return VoteType.VOTE_TYPE_YES;
+        } else {
+          return VoteType.VOTE_TYPE_NO;
+        }
       }
     ),
     summarizeBundle: jest.fn(async (bundle: DataItem[]) =>

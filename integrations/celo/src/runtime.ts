@@ -1,4 +1,5 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
+import { VoteType } from '@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx';
 import { name, version } from '../package.json';
 import { fetchBlock } from './utils';
 
@@ -37,7 +38,9 @@ export default class Celo implements IRuntime {
       Buffer.from(JSON.stringify(validationBundle))
     );
 
-    return proposedBundleHash === validationBundleHash;
+    return proposedBundleHash === validationBundleHash
+      ? VoteType.VOTE_TYPE_YES
+      : VoteType.VOTE_TYPE_NO;
   }
 
   async summarizeBundle(bundle: DataItem[]): Promise<string> {

@@ -1,6 +1,7 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
 import { name, version } from '../package.json';
 import { providers } from 'ethers';
+import { VoteType } from '@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx';
 
 export default class Evm implements IRuntime {
   public name = name;
@@ -66,7 +67,9 @@ export default class Evm implements IRuntime {
       Buffer.from(JSON.stringify(validationBundle))
     );
 
-    return proposedBundleHash === validationBundleHash;
+    return proposedBundleHash === validationBundleHash
+      ? VoteType.VOTE_TYPE_YES
+      : VoteType.VOTE_TYPE_NO;
   }
 
   async summarizeBundle(bundle: DataItem[]): Promise<string> {
