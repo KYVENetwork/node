@@ -15,6 +15,9 @@
   ],
   "author": "Ruslan Hlaznov <ruslan@kyve.network>, John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>, Max Breithecker <max@kyve.network>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf dist && tsc",
     "format": "prettier --write .",

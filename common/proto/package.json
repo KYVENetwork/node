@@ -9,6 +9,9 @@
   },
   "author": "John Letey <john@kyve.network>, ruslan glaznyov <ruslan.glaznyov@gmail.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf dist && tsc",
     "generate": "sh proto-gen.sh && yarn build"

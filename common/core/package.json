@@ -9,9 +9,6 @@
     "type": "git",
     "url": "git+https://github.com/KYVENetwork/node.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "keywords": [
     "KYVE",
     "Arweave",
@@ -20,6 +17,9 @@
   ],
   "author": "John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf dist && yarn format && tsc",
     "test": "jest",
