@@ -10,17 +10,14 @@ export class Bundlr implements IStorageProvider {
   private wallet!: JWKInterface;
   private bundlrClient!: BundlrClient;
 
-  init(wallet: string) {
-    // TODO: built in wallet format validation?
-    this.wallet = JSON.parse(wallet);
+  async init(storagePriv: string) {
+    this.wallet = JSON.parse(storagePriv);
 
     this.bundlrClient = new BundlrClient(
       "http://node1.bundlr.network",
       "arweave",
       this.wallet
     );
-
-    return this;
   }
 
   async getBalance() {

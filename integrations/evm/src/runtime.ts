@@ -25,7 +25,7 @@ export default class Evm implements IRuntime {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
         {
-          url: core.poolConfig.rpc,
+          url: core.poolConfig.source,
           headers,
         },
         network

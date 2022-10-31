@@ -13,7 +13,7 @@ export default class Solana implements IRuntime {
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
+      block = await fetchBlock(core.poolConfig.source, +key, headers);
     } catch (err) {
       if (wasSlotSkipped(err, +key)) return { key, value: null };
       throw err;

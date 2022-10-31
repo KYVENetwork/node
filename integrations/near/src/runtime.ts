@@ -12,11 +12,11 @@ export default class Near implements IRuntime {
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
-    const height = await fetchHeight(core.poolConfig.rpc, headers);
+    const height = await fetchHeight(core.poolConfig.source, headers);
     if (+key > height) throw new Error();
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
+      block = await fetchBlock(core.poolConfig.source, +key, headers);
     } catch (err) {
       if (isBlockNotFound(err)) return { key, value: null };
 

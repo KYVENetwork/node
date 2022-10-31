@@ -10,11 +10,11 @@ export default class Zilliqa implements IRuntime {
   async getDataItem(core: Node, key: string): Promise<DataItem> {
     let block;
 
-    const height = await fetchHeight(core.poolConfig.rpc);
+    const height = await fetchHeight(core.poolConfig.source);
     if (+key > height) throw new Error();
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key);
+      block = await fetchBlock(core.poolConfig.source, +key);
     } catch (err) {
       throw err;
     }

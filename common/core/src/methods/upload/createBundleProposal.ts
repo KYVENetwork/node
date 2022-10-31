@@ -133,6 +133,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // on the storage provider itself
     const tags: BundleTag[] = [
       {
+        name: "Content-Type",
+        value: this.compression.mimeType,
+      },
+      {
         name: "Application",
         value: "KYVE",
       },

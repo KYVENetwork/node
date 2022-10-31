@@ -13,11 +13,8 @@ export class Arweave implements IStorageProvider {
     protocol: "https",
   });
 
-  init(wallet: string) {
-    // TODO: built in wallet format validation?
+  async init(wallet: string) {
     this.wallet = JSON.parse(wallet);
-
-    return this;
   }
 
   async getBalance() {

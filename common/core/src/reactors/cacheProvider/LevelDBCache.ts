@@ -10,7 +10,7 @@ export class LevelDBCache implements ICacheProvider {
 
   private db!: Level<string, DataItem>;
 
-  init(path: string): this {
+  async init(path: string): Promise<void> {
     this.path = path;
 
     if (!existsSync(this.path)) {
@@ -21,7 +21,7 @@ export class LevelDBCache implements ICacheProvider {
       valueEncoding: "json",
     });
 
-    return this;
+    await this.drop();
   }
 
   public async put(key: string, value: DataItem): Promise<void> {

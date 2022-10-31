@@ -8,7 +8,7 @@ import {
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  setupReactors,
+  setupCacheProvider,
   setupMetrics,
   setupSDK,
   setupValidator,
@@ -97,7 +97,7 @@ export class Node {
 
   // setups
   protected setupLogger = setupLogger;
-  protected setupReactors = setupReactors;
+  protected setupCacheProvider = setupCacheProvider;
   protected setupMetrics = setupMetrics;
   protected setupSDK = setupSDK;
   protected setupValidator = setupValidator;
@@ -154,43 +154,8 @@ export class Node {
     // set provided runtime
     this.runtime = runtime;
 
-    // default storage provider is Arweave
-    this.storageProvider = new storageProvider.Arweave();
-
-    // default compression is Gzip
-    this.compression = new compression.Gzip();
-
     // set @kyve/core version
     this.coreVersion = coreVersion;
-  }
-
-  /**
-   * Override the default storage provider for the protocol node.
-   * The Storage Provider handles data storage and retrieval for a pool.
-   *
-   * @method useStorageProvider
-   * @param {IStorageProvider} storageProvider which implements the interface IStorageProvider
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public useStorageProvider(storageProvider: IStorageProvider): this {
-    this.storageProvider = storageProvider;
-    return this;
-  }
-
-  /**
-   * Override the default compression type for the protocol node.
-   * Before saving bundles to the storage provider the node uses this compression
-   * to store data more efficiently
-   *
-   * @method useCompression
-   * @param {ICompression} compression which implements the interface ICompression
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public useCompression(compression: ICompression): this {
-    this.compression = compression;
-    return this;
   }
 
   /**
@@ -295,12 +260,12 @@ export class Node {
 
     // perform setups
     this.setupLogger();
-    this.setupReactors();
     this.setupMetrics();
 
     // perform async setups
     await this.setupSDK();
     await this.setupValidator();
+    await this.setupCacheProvider();
 
     // start the node process. Node and cache should run at the same time.
     // Thats why, although they are async they are called synchronously

@@ -13,7 +13,7 @@ export default class Substrate implements IRuntime {
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
+      block = await fetchBlock(core.poolConfig.source, +key, headers);
     } catch (err) {
       if (isHeightOutOfRange(err)) throw new Error();
 

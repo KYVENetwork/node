@@ -16,6 +16,15 @@ export interface ICompression {
   name: string;
 
   /**
+   * MIME type of the compressed data. Examples are 'application/json' for raw json or
+   * 'application/gzip' for gzipped files
+   *
+   * @property mimeType
+   * @type {string}
+   */
+  mimeType: string;
+
+  /**
    * Compresses a bundle
    *
    * @method compress

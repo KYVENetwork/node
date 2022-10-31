@@ -11,7 +11,7 @@ export default class Celo implements IRuntime {
     let block;
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key);
+      block = await fetchBlock(core.poolConfig.source, +key);
     } catch (err) {
       throw err;
     }

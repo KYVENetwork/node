@@ -33,10 +33,10 @@ export interface IStorageProvider {
    * for setting up the wallet so the storage provider can save data
    *
    * @method init
-   * @param {string} storagePriv can be a private key a mnemonic or even a file path to the wallet
-   * @return {this}
+   * @param {string} storagePriv can be a pk, a mnemonic or a keyfile which is used to setup the storage provider wallet
+   * @return {void}
    */
-  init(storagePriv: string): this;
+  init(storagePriv: string): Promise<void>;
 
   /**
    * Gets the balance of the storage provider wallet
