@@ -28,6 +28,7 @@ export * from "./txs/submitBundleProposal";
 
 // queries
 export * from "./queries/syncPoolState";
+export * from "./queries/syncPoolConfig";
 export * from "./queries/getBalances";
 export * from "./queries/canVote";
 export * from "./queries/canPropose";

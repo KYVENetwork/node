@@ -1,5 +1,5 @@
 import { Node, standardizeJSON } from "../..";
-import { DENOM, KYVE_DECIMALS } from "@kyve/sdk/dist/constants";
+import { DENOM, KYVE_DECIMALS } from "@kyve/sdk-beta/dist/constants";
 import BigNumber from "bignumber.js";
 
 /**

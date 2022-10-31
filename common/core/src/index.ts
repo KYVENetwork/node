@@ -26,6 +26,7 @@ import {
   voteBundleProposal,
   submitBundleProposal,
   syncPoolState,
+  syncPoolConfig,
   getBalances,
   canVote,
   canPropose,
@@ -124,6 +125,7 @@ export class Node {
 
   // queries
   protected syncPoolState = syncPoolState;
+  protected syncPoolConfig = syncPoolConfig;
   protected getBalances = getBalances;
   protected canVote = canVote;
   protected canPropose = canPropose;
@@ -303,6 +305,8 @@ export class Node {
     // start the node process. Node and cache should run at the same time.
     // Thats why, although they are async they are called synchronously
     try {
+      await this.syncPoolState();
+
       this.runNode();
       this.runCache();
     } catch (err) {

@@ -27,9 +27,6 @@ import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
  * @return {Promise<void>}
  */
 export async function runCache(this: Node): Promise<void> {
-  // get pool state so cache can start working
-  await this.syncPoolState();
-
   // run rounds indefinitely, continueRound returns always
   // true and is only used by unit tests to control the termination of
   // rounds by mocking it
