@@ -1,6 +1,7 @@
 import { Node } from "../..";
 import { bytesToBundle, standardizeJSON } from "../../utils";
 import { DataItem } from "../../types";
+import { compressionFactory } from "../../reactors/compression";
 
 /**
  * saveBundleDecompress decompresses a bundle with the specified compression.
@@ -16,20 +17,28 @@ export async function saveBundleDecompress(
   rawStorageData: Buffer
 ): Promise<DataItem[]> {
   try {
+    // get compression the proposed bundle was compressed with
+    this.logger.debug(
+      `compressionFactory(${this.pool.bundle_proposal?.compression ?? 0})`
+    );
+    const compression = compressionFactory(
+      this.pool.bundle_proposal?.compression ?? 0
+    );
+
     this.logger.debug(`this.compression.decompress($RAW_STORAGE_DATA)`);
 
     const storageBundle = bytesToBundle(
-      await this.compression.decompress(rawStorageData)
+      await compression.decompress(rawStorageData)
     );
 
     this.logger.info(
-      `Successfully decompressed bundle with Compression:${this.compression.name}`
+      `Successfully decompressed bundle with Compression:${compression.name}`
     );
 
     return storageBundle;
   } catch (err) {
     this.logger.error(
-      `Could not decompress bundle with Compression:${this.compression.name}. Continuing ...`
+      `Could not decompress bundle with Compression. Continuing ...`
     );
     this.logger.error(standardizeJSON(err));
 

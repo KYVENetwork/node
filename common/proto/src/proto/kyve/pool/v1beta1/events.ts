@@ -4,7 +4,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.pool.v1beta1";
 
-/** EventCreatePool ... */
+/**
+ * EventCreatePool ...
+ * emitted_by: EndBlock(gov)
+ */
 export interface EventCreatePool {
   /** id ... */
   id: string;
@@ -30,9 +33,16 @@ export interface EventCreatePool {
   version: string;
   /** binaries ... */
   binaries: string;
+  /** storage_provider ... */
+  storage_provider: number;
+  /** compression ... */
+  compression: number;
 }
 
-/** EventFundPool is an event emitted when a pool is funded. */
+/**
+ * EventFundPool is an event emitted when a pool is funded.
+ * emitted_by: MsgFundPool
+ */
 export interface EventFundPool {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -42,7 +52,10 @@ export interface EventFundPool {
   amount: string;
 }
 
-/** EventDefundPool is an event emitted when a pool is defunded. */
+/**
+ * EventDefundPool is an event emitted when a pool is defunded.
+ * emitted_by: MsgDefundPool
+ */
 export interface EventDefundPool {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -52,7 +65,10 @@ export interface EventDefundPool {
   amount: string;
 }
 
-/** EventDefundPool is an event emitted when a pool is defunded. */
+/**
+ * EventDefundPool is an event emitted when a pool is defunded.
+ * emitted_by: MsgSubmitBundleProposal
+ */
 export interface EventPoolFundsSlashed {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -62,7 +78,10 @@ export interface EventPoolFundsSlashed {
   amount: string;
 }
 
-/** EventPoolOutOfFunds is an event emitted when a pool has run out of funds */
+/**
+ * EventPoolOutOfFunds is an event emitted when a pool has run out of funds
+ * emitted_by: MsgSubmitBundleProposal
+ */
 export interface EventPoolOutOfFunds {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -82,6 +101,8 @@ function createBaseEventCreatePool(): EventCreatePool {
     max_bundle_size: "0",
     version: "",
     binaries: "",
+    storage_provider: 0,
+    compression: 0,
   };
 }
 
@@ -122,6 +143,12 @@ export const EventCreatePool = {
     }
     if (message.binaries !== "") {
       writer.uint32(98).string(message.binaries);
+    }
+    if (message.storage_provider !== 0) {
+      writer.uint32(104).uint32(message.storage_provider);
+    }
+    if (message.compression !== 0) {
+      writer.uint32(112).uint32(message.compression);
     }
     return writer;
   },
@@ -169,6 +196,12 @@ export const EventCreatePool = {
         case 12:
           message.binaries = reader.string();
           break;
+        case 13:
+          message.storage_provider = reader.uint32();
+          break;
+        case 14:
+          message.compression = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -191,6 +224,8 @@ export const EventCreatePool = {
       max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
+      storage_provider: isSet(object.storage_provider) ? Number(object.storage_provider) : 0,
+      compression: isSet(object.compression) ? Number(object.compression) : 0,
     };
   },
 
@@ -208,6 +243,8 @@ export const EventCreatePool = {
     message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
+    message.storage_provider !== undefined && (obj.storage_provider = Math.round(message.storage_provider));
+    message.compression !== undefined && (obj.compression = Math.round(message.compression));
     return obj;
   },
 
@@ -225,6 +262,8 @@ export const EventCreatePool = {
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
+    message.storage_provider = object.storage_provider ?? 0;
+    message.compression = object.compression ?? 0;
     return message;
   },
 };

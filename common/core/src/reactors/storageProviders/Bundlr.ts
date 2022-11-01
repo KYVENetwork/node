@@ -7,17 +7,19 @@ export class Bundlr implements IStorageProvider {
   public name = "Bundlr";
   public decimals = 12;
 
-  private wallet!: JWKInterface;
+  private jwk!: JWKInterface;
   private bundlrClient!: BundlrClient;
 
   async init(storagePriv: string) {
-    this.wallet = JSON.parse(storagePriv);
+    this.jwk = JSON.parse(storagePriv);
 
     this.bundlrClient = new BundlrClient(
       "http://node1.bundlr.network",
       "arweave",
-      this.wallet
+      this.jwk
     );
+
+    return this;
   }
 
   async getBalance() {
@@ -44,15 +46,18 @@ export class Bundlr implements IStorageProvider {
     await transaction.sign();
     await transaction.upload();
 
-    return transaction.id;
+    return {
+      storageId: transaction.id,
+      storageData: Buffer.from(transaction.data),
+    };
   }
 
   async retrieveBundle(storageId: string, timeout: number) {
-    const { data: bundle } = await axios.get(
+    const { data: storageData } = await axios.get(
       `https://arweave.net/${storageId}`,
       { responseType: "arraybuffer", timeout }
     );
 
-    return bundle;
+    return { storageId, storageData };
   }
 }

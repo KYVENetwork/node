@@ -7,18 +7,19 @@ export class Arweave implements IStorageProvider {
   public name = "Arweave";
   public decimals = 12;
 
-  private wallet!: JWKInterface;
+  private jwk!: JWKInterface;
   private arweaveClient = new ArweaveClient({
     host: "arweave.net",
     protocol: "https",
   });
 
-  async init(wallet: string) {
-    this.wallet = JSON.parse(wallet);
+  async init(storagePriv: string) {
+    this.jwk = JSON.parse(storagePriv);
+    return this;
   }
 
   async getBalance() {
-    const account = await this.arweaveClient.wallets.getAddress(this.wallet);
+    const account = await this.arweaveClient.wallets.getAddress(this.jwk);
     return await this.arweaveClient.wallets.getBalance(account);
   }
 
@@ -31,7 +32,7 @@ export class Arweave implements IStorageProvider {
       transaction.addTag(tag.name, tag.value);
     }
 
-    await this.arweaveClient.transactions.sign(transaction, this.wallet);
+    await this.arweaveClient.transactions.sign(transaction, this.jwk);
 
     const balance = await this.getBalance();
 
@@ -43,15 +44,18 @@ export class Arweave implements IStorageProvider {
 
     await this.arweaveClient.transactions.post(transaction);
 
-    return transaction.id;
+    return {
+      storageId: transaction.id,
+      storageData: Buffer.from(transaction.data),
+    };
   }
 
   async retrieveBundle(storageId: string, timeout: number) {
-    const { data: bundle } = await axios.get(
+    const { data: storageData } = await axios.get(
       `https://arweave.net/${storageId}`,
       { responseType: "arraybuffer", timeout }
     );
 
-    return bundle;
+    return { storageId, storageData };
   }
 }

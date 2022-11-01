@@ -5,7 +5,10 @@ import { SlashType, slashTypeFromJSON, slashTypeToJSON, slashTypeToNumber } from
 
 export const protobufPackage = "kyve.stakers.v1beta1";
 
-/** EventCreateStaker is an event emitted when a protocol node stakes in a pool. */
+/**
+ * EventCreateStaker is an event emitted when a protocol node stakes in a pool.
+ * emitted_by: MsgCreateStaker
+ */
 export interface EventCreateStaker {
   /** address is the account address of the protocol node. */
   address: string;
@@ -13,7 +16,10 @@ export interface EventCreateStaker {
   amount: string;
 }
 
-/** EventUpdateMetadata is an event emitted when a protocol node updates their metadata. */
+/**
+ * EventUpdateMetadata is an event emitted when a protocol node updates their metadata.
+ * emitted_by: MsgUpdateMetadata
+ */
 export interface EventUpdateMetadata {
   /** address is the account address of the protocol node. */
   address: string;
@@ -25,7 +31,10 @@ export interface EventUpdateMetadata {
   logo: string;
 }
 
-/** EventSlash is an event emitted when a protocol node is slashed. */
+/**
+ * EventSlash is an event emitted when a protocol node is slashed.
+ * emitted_by: MsgSubmitBundleProposal, EndBlock
+ */
 export interface EventSlash {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -37,7 +46,10 @@ export interface EventSlash {
   slash_type: SlashType;
 }
 
-/** EventUpdateCommission ... */
+/**
+ * EventUpdateCommission ...
+ * emitted_by: EndBlock
+ */
 export interface EventUpdateCommission {
   /** address is the account address of the protocol node. */
   address: string;
@@ -45,7 +57,10 @@ export interface EventUpdateCommission {
   commission: string;
 }
 
-/** EventJoinPool ... */
+/**
+ * EventJoinPool ...
+ * emitted_by: MsgJoinPool
+ */
 export interface EventJoinPool {
   /** pool_id ... */
   pool_id: string;
@@ -57,7 +72,10 @@ export interface EventJoinPool {
   amount: string;
 }
 
-/** EventLeavePool ... */
+/**
+ * EventLeavePool ...
+ * emitted_by: EndBlock
+ */
 export interface EventLeavePool {
   /** pool_id ... */
   pool_id: string;

@@ -1,6 +1,8 @@
 import { Node } from "../..";
 import { bundleToBytes, sha256, standardizeJSON } from "../../utils";
 import { BundleTag, DataItem } from "../../types";
+import { compressionFactory } from "../../reactors/compression";
+import { storageProviderFactory } from "../../reactors/storageProviders";
 
 /**
  * createBundleProposal assembles a bundle proposal by loading
@@ -97,10 +99,18 @@ export async function createBundleProposal(this: Node): Promise<void> {
       return;
     }
 
+    // get current compression defined on pool
+    this.logger.debug(
+      `compressionFactory(${this.pool.data?.current_compression ?? 0})`
+    );
+    const compression = compressionFactory(
+      this.pool.data?.current_compression ?? 0
+    );
+
     // if data was found on the cache proceed with compressing the
     // bundle for the upload to the storage provider
     this.logger.debug(`this.compression.compress($RAW_BUNDLE_PROPOSAL)`);
-    const storageProviderData = await this.compression
+    const storageProviderData = await compression
       .compress(bundleToBytes(bundleProposal))
       .catch((err) => {
         this.logger.error(
@@ -118,23 +128,15 @@ export async function createBundleProposal(this: Node): Promise<void> {
     }
 
     this.logger.info(
-      `Successfully compressed bundle with Compression:${this.compression.name}`
+      `Successfully compressed bundle with Compression:${compression.name}`
     );
-
-    // hash the raw data which gets uploaded to the storage provider
-    // with sha256
-    const dataSize = storageProviderData.byteLength;
-
-    // hash the raw data which gets uploaded to the storage provider
-    // with sha256
-    const dataHash = sha256(storageProviderData);
 
     // create tags for bundle to make it easier to find KYVE data
     // on the storage provider itself
     const tags: BundleTag[] = [
       {
         name: "Content-Type",
-        value: this.compression.mimeType,
+        value: compression.mimeType,
       },
       {
         name: "Application",
@@ -159,14 +161,6 @@ export async function createBundleProposal(this: Node): Promise<void> {
       {
         name: "Uploader",
         value: this.client.account.address,
-      },
-      {
-        name: "DataSize",
-        value: dataSize.toString(),
-      },
-      {
-        name: "DataHash",
-        value: dataHash,
       },
       {
         name: "FromIndex",
@@ -198,6 +192,17 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // if the upload fails the node should immediately skip the
     // uploader role to prevent upload slashes
     try {
+      // get current storage provider defined on pool
+      this.logger.debug(
+        `storageProviderFactory(${
+          this.pool.data?.current_storage_provider ?? 0
+        }, $STORAGE_PRIV)`
+      );
+      const storageProvider = await storageProviderFactory(
+        this.pool.data?.current_storage_provider ?? 0,
+        this.storagePriv
+      );
+
       // upload the bundle proposal to the storage provider
       // and get a storage id. With that other participants in the
       // network can retrieve the data again and validate it
@@ -205,7 +210,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
         `this.storageProvider.saveBundle($STORAGE_PROVIDER_DATA,$TAGS)`
       );
 
-      const storageId = await this.storageProvider.saveBundle(
+      const { storageId, storageData } = await storageProvider.saveBundle(
         storageProviderData,
         tags
       );
@@ -215,10 +220,18 @@ export async function createBundleProposal(this: Node): Promise<void> {
         throw new Error("Storage Provider returned empty storageId");
       }
 
+      // hash the raw data which gets uploaded to the storage provider
+      // with sha256
+      const dataSize = storageData.byteLength;
+
+      // hash the raw data which gets uploaded to the storage provider
+      // with sha256
+      const dataHash = sha256(storageData);
+
       this.m.storage_provider_save_successful.inc();
 
       this.logger.info(
-        `Successfully saved bundle on StorageProvider:${this.storageProvider.name}`
+        `Successfully saved bundle on StorageProvider:${storageProvider.name}`
       );
 
       // if the bundle was successfully uploaded to the storage provider
@@ -238,7 +251,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
       this.logger.info(`Successfully submitted BundleProposal:${storageId}`);
     } catch (err) {
       this.logger.info(
-        `Saving bundle proposal on StorageProvider:${this.storageProvider.name} was unsucessful`
+        `Saving bundle proposal on StorageProvider was unsucessful`
       );
       this.logger.debug(standardizeJSON(err));
 

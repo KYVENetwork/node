@@ -1,10 +1,4 @@
-import {
-  IRuntime,
-  IStorageProvider,
-  ICacheProvider,
-  ICompression,
-  IMetrics,
-} from "./types";
+import { IRuntime, ICacheProvider, IMetrics } from "./types";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
@@ -50,8 +44,6 @@ import {
 import { kyve } from "@kyve/proto-beta";
 import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
 import { standardizeJSON } from "./utils";
-import * as storageProvider from "./reactors/storageProviders";
-import * as compression from "./reactors/compression";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -62,8 +54,6 @@ import * as compression from "./reactors/compression";
 export class Node {
   // reactor attributes
   protected runtime!: IRuntime;
-  protected storageProvider!: IStorageProvider;
-  protected compression!: ICompression;
   protected cacheProvider!: ICacheProvider;
 
   // sdk attributes

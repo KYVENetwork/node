@@ -1,6 +1,7 @@
 import { Node, standardizeJSON } from "../..";
 import { DENOM, KYVE_DECIMALS } from "@kyve/sdk-beta/dist/constants";
 import BigNumber from "bignumber.js";
+import { storageProviderFactory } from "../../reactors/storageProviders";
 
 /**
  * getBalances tries to retrieve the $KYVE balance of the staker account, the $KYVE
@@ -57,16 +58,25 @@ export async function getBalances(this: Node): Promise<void> {
   }
 
   try {
+    // get current storage provider defined on pool
+    this.logger.debug(
+      `storageProviderFactory(${
+        this.pool.data?.current_storage_provider ?? 0
+      }, $STORAGE_PRIV)`
+    );
+    const storageProvider = await storageProviderFactory(
+      this.pool.data?.current_storage_provider ?? 0,
+      this.storagePriv
+    );
+
     this.logger.debug(`this.storageProvider.getBalance()`);
 
-    const storageProviderBalanceRaw = await this.storageProvider.getBalance();
+    const storageProviderBalanceRaw = await storageProvider.getBalance();
 
     this.logger.debug(JSON.stringify(storageProviderBalanceRaw));
 
     const storageProviderBalance = new BigNumber(storageProviderBalanceRaw)
-      .dividedBy(
-        new BigNumber(10).exponentiatedBy(this.storageProvider.decimals)
-      )
+      .dividedBy(new BigNumber(10).exponentiatedBy(storageProvider.decimals))
       .toNumber();
 
     this.m.balance_storage_provider.set(storageProviderBalance);

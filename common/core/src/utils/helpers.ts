@@ -49,8 +49,13 @@ export const bytesToBundle = (bytes: Buffer): DataItem[] =>
  * @param {Buffer} data
  * @return {string}
  */
-export const sha256 = (data: Buffer): string =>
-  crypto.createHash("sha256").update(data).digest("hex");
+export const sha256 = (data: Buffer): string => {
+  if (data.byteLength) {
+    return crypto.createHash("sha256").update(data).digest("hex");
+  }
+
+  return "";
+};
 
 /**
  * Formats any bignumber into a human readable format
