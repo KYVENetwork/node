@@ -1,6 +1,4 @@
-import { readFile } from "jsonfile";
-import { existsSync, mkdirSync, promises as fs } from "fs";
-import fse from "fs-extra";
+import { existsSync, mkdirSync } from "fs";
 import { DataItem, ICacheProvider } from "../../types";
 import { Level } from "level";
 
