@@ -1,3 +1,4 @@
+import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
 import { DataItem, Node, sha256 } from "../../src";
 
 export const TestRuntime = jest.fn().mockImplementation(() => {

@@ -1,8 +1,6 @@
 import { Node } from "../..";
 import { bundleToBytes, sha256, standardizeJSON } from "../../utils";
 import { BundleTag, DataItem } from "../../types";
-import { compressionFactory } from "../../reactors/compression";
-import { storageProviderFactory } from "../../reactors/storageProviders";
 
 /**
  * createBundleProposal assembles a bundle proposal by loading
@@ -103,7 +101,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
     this.logger.debug(
       `compressionFactory(${this.pool.data?.current_compression ?? 0})`
     );
-    const compression = compressionFactory(
+    const compression = this.compressionFactory(
       this.pool.data?.current_compression ?? 0
     );
 
@@ -198,9 +196,8 @@ export async function createBundleProposal(this: Node): Promise<void> {
           this.pool.data?.current_storage_provider ?? 0
         }, $STORAGE_PRIV)`
       );
-      const storageProvider = await storageProviderFactory(
-        this.pool.data?.current_storage_provider ?? 0,
-        this.storagePriv
+      const storageProvider = await this.storageProviderFactory(
+        this.pool.data?.current_storage_provider ?? 0
       );
 
       // upload the bundle proposal to the storage provider

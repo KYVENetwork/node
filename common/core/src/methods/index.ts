@@ -20,6 +20,10 @@ export * from "./timeouts/waitForCacheContinuation";
 // helpers
 export * from "./helpers/continueRound";
 
+// factories
+export * from "./factories/storageProviderFactory";
+export * from "./factories/compressionFactory";
+
 // txs
 export * from "./txs/claimUploaderRole";
 export * from "./txs/skipUploaderRole";

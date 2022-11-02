@@ -8,7 +8,7 @@ export class Arweave implements IStorageProvider {
   public decimals = 12;
 
   private jwk!: JWKInterface;
-  private arweaveClient = new ArweaveClient({
+  private client = new ArweaveClient({
     host: "arweave.net",
     protocol: "https",
   });
@@ -19,12 +19,12 @@ export class Arweave implements IStorageProvider {
   }
 
   async getBalance() {
-    const account = await this.arweaveClient.wallets.getAddress(this.jwk);
-    return await this.arweaveClient.wallets.getBalance(account);
+    const account = await this.client.wallets.getAddress(this.jwk);
+    return await this.client.wallets.getBalance(account);
   }
 
   async saveBundle(bundle: Buffer, tags: BundleTag[]) {
-    const transaction = await this.arweaveClient.createTransaction({
+    const transaction = await this.client.createTransaction({
       data: bundle,
     });
 
@@ -32,7 +32,7 @@ export class Arweave implements IStorageProvider {
       transaction.addTag(tag.name, tag.value);
     }
 
-    await this.arweaveClient.transactions.sign(transaction, this.jwk);
+    await this.client.transactions.sign(transaction, this.jwk);
 
     const balance = await this.getBalance();
 
@@ -42,7 +42,7 @@ export class Arweave implements IStorageProvider {
       );
     }
 
-    await this.arweaveClient.transactions.post(transaction);
+    await this.client.transactions.post(transaction);
 
     return {
       storageId: transaction.id,

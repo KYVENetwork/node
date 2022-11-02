@@ -1,7 +1,6 @@
 import { Node } from "../..";
 import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
 import BigNumber from "bignumber.js";
-import { storageProviderFactory } from "../../reactors/storageProviders";
 
 /**
  * saveBundleDownload downloads a bundle from the storage provider.
@@ -58,9 +57,8 @@ export async function saveBundleDownload(
           this.pool.bundle_proposal?.storage_provider ?? 0
         }, $STORAGE_PRIV)`
       );
-      const storageProvider = await storageProviderFactory(
-        this.pool.bundle_proposal?.storage_provider ?? 0,
-        this.storagePriv
+      const storageProvider = await this.storageProviderFactory(
+        this.pool.bundle_proposal?.storage_provider ?? 0
       );
 
       // calculate download timeout for storage provider

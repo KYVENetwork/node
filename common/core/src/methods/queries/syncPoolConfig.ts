@@ -1,5 +1,5 @@
 import axios from "axios";
-import { compression, Node, storageProvider } from "../..";
+import { Node } from "../..";
 import { standardizeJSON } from "../../utils";
 
 /**

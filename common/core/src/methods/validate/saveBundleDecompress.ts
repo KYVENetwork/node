@@ -1,7 +1,6 @@
 import { Node } from "../..";
 import { bytesToBundle, standardizeJSON } from "../../utils";
 import { DataItem } from "../../types";
-import { compressionFactory } from "../../reactors/compression";
 
 /**
  * saveBundleDecompress decompresses a bundle with the specified compression.
@@ -21,7 +20,7 @@ export async function saveBundleDecompress(
     this.logger.debug(
       `compressionFactory(${this.pool.bundle_proposal?.compression ?? 0})`
     );
-    const compression = compressionFactory(
+    const compression = this.compressionFactory(
       this.pool.bundle_proposal?.compression ?? 0
     );
 

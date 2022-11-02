@@ -1,16 +1,23 @@
 import { Logger } from "tslog";
-import { bundleToBytes, Node, sha256, standardizeJSON } from "../src/index";
+import {
+  bundleToBytes,
+  ICompression,
+  IStorageProvider,
+  Node,
+  sha256,
+  standardizeJSON,
+} from "../src/index";
 import { runNode } from "../src/methods/main/runNode";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
-import { TestStorageProvider } from "./mocks/storageProvider.mock";
 import { TestCacheProvider } from "./mocks/cache.mock";
-import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
 import { VoteType } from "../../proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { TestNormalStorageProvider } from "./mocks/storageProvider.mock";
+import { TestNormalCompression } from "./mocks/compression.mock";
 
 /*
 
@@ -32,13 +39,23 @@ describe("vote valid tests", () => {
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
 
+  let storageProvider: IStorageProvider;
+  let compression: ICompression;
+
   beforeEach(() => {
     core = new Node(new TestRuntime());
 
-    core.useStorageProvider(new TestStorageProvider());
-    core.useCompression(new TestCompression());
-
     core["cacheProvider"] = new TestCacheProvider();
+
+    // mock storage provider
+    storageProvider = new TestNormalStorageProvider();
+    core["storageProviderFactory"] = jest
+      .fn()
+      .mockResolvedValue(storageProvider);
+
+    // mock compression
+    compression = new TestNormalCompression();
+    core["compressionFactory"] = jest.fn().mockResolvedValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -136,9 +153,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -276,9 +291,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -416,7 +429,7 @@ describe("vote valid tests", () => {
         value: "test_value_2",
       });
 
-    core["storageProvider"].retrieveBundle = jest
+    storageProvider.retrieveBundle = jest
       .fn()
       .mockRejectedValueOnce(new Error())
       .mockResolvedValue(compressedBundle);
@@ -427,9 +440,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -579,9 +590,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -725,9 +734,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -850,9 +857,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -974,9 +979,7 @@ describe("vote valid tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================

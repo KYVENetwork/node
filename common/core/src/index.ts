@@ -15,6 +15,8 @@ import {
   waitForNextBundleProposal,
   waitForCacheContinuation,
   continueRound,
+  storageProviderFactory,
+  compressionFactory,
   claimUploaderRole,
   skipUploaderRole,
   voteBundleProposal,
@@ -106,6 +108,10 @@ export class Node {
 
   // helpers
   protected continueRound = continueRound;
+
+  // factories
+  protected storageProviderFactory = storageProviderFactory;
+  protected compressionFactory = compressionFactory;
 
   // txs
   protected claimUploaderRole = claimUploaderRole;
@@ -281,9 +287,3 @@ export * from "./types";
 
 // export utils
 export * from "./utils";
-
-// export storage providers
-export * as storageProvider from "./reactors/storageProviders";
-
-// export compression types
-export * as compression from "./reactors/compression";
