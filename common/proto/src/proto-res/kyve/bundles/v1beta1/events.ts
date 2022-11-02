@@ -53,10 +53,10 @@ export interface EventBundleProposed {
   data_hash: string;
   /** proposed_at ... */
   proposed_at: string;
-  /** storage_provider ... */
-  storage_provider: number;
-  /** compression ... */
-  compression: number;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
+  /** compression_id ... */
+  compression_id: number;
 }
 
 /**
@@ -236,8 +236,8 @@ function createBaseEventBundleProposed(): EventBundleProposed {
     bundle_summary: "",
     data_hash: "",
     proposed_at: "0",
-    storage_provider: 0,
-    compression: 0,
+    storage_provider_id: 0,
+    compression_id: 0,
   };
 }
 
@@ -279,11 +279,11 @@ export const EventBundleProposed = {
     if (message.proposed_at !== "0") {
       writer.uint32(96).uint64(message.proposed_at);
     }
-    if (message.storage_provider !== 0) {
-      writer.uint32(104).uint32(message.storage_provider);
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(104).uint32(message.storage_provider_id);
     }
-    if (message.compression !== 0) {
-      writer.uint32(112).uint32(message.compression);
+    if (message.compression_id !== 0) {
+      writer.uint32(112).uint32(message.compression_id);
     }
     return writer;
   },
@@ -332,10 +332,10 @@ export const EventBundleProposed = {
           message.proposed_at = longToString(reader.uint64() as Long);
           break;
         case 13:
-          message.storage_provider = reader.uint32();
+          message.storage_provider_id = reader.uint32();
           break;
         case 14:
-          message.compression = reader.uint32();
+          message.compression_id = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -359,8 +359,8 @@ export const EventBundleProposed = {
       bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
       data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
       proposed_at: isSet(object.proposed_at) ? String(object.proposed_at) : "0",
-      storage_provider: isSet(object.storage_provider) ? Number(object.storage_provider) : 0,
-      compression: isSet(object.compression) ? Number(object.compression) : 0,
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
+      compression_id: isSet(object.compression_id) ? Number(object.compression_id) : 0,
     };
   },
 
@@ -378,8 +378,8 @@ export const EventBundleProposed = {
     message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.proposed_at !== undefined && (obj.proposed_at = message.proposed_at);
-    message.storage_provider !== undefined && (obj.storage_provider = Math.round(message.storage_provider));
-    message.compression !== undefined && (obj.compression = Math.round(message.compression));
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
+    message.compression_id !== undefined && (obj.compression_id = Math.round(message.compression_id));
     return obj;
   },
 
@@ -397,8 +397,8 @@ export const EventBundleProposed = {
     message.bundle_summary = object.bundle_summary ?? "";
     message.data_hash = object.data_hash ?? "";
     message.proposed_at = object.proposed_at ?? "0";
-    message.storage_provider = object.storage_provider ?? 0;
-    message.compression = object.compression ?? 0;
+    message.storage_provider_id = object.storage_provider_id ?? 0;
+    message.compression_id = object.compression_id ?? 0;
     return message;
   },
 };

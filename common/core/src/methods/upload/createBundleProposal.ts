@@ -99,10 +99,10 @@ export async function createBundleProposal(this: Node): Promise<void> {
 
     // get current compression defined on pool
     this.logger.debug(
-      `compressionFactory(${this.pool.data?.current_compression ?? 0})`
+      `compressionFactory(${this.pool.data?.current_compression_id ?? 0})`
     );
     const compression = this.compressionFactory(
-      this.pool.data?.current_compression ?? 0
+      this.pool.data?.current_compression_id ?? 0
     );
 
     // if data was found on the cache proceed with compressing the
@@ -193,11 +193,11 @@ export async function createBundleProposal(this: Node): Promise<void> {
       // get current storage provider defined on pool
       this.logger.debug(
         `storageProviderFactory(${
-          this.pool.data?.current_storage_provider ?? 0
+          this.pool.data?.current_storage_provider_id ?? 0
         }, $STORAGE_PRIV)`
       );
       const storageProvider = await this.storageProviderFactory(
-        this.pool.data?.current_storage_provider ?? 0
+        this.pool.data?.current_storage_provider_id ?? 0
       );
 
       // upload the bundle proposal to the storage provider

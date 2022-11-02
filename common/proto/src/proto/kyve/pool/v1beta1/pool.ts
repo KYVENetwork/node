@@ -138,10 +138,10 @@ export interface Pool {
   protocol?: Protocol;
   /** upgrade_plan ... */
   upgrade_plan?: UpgradePlan;
-  /** storage_provider ... */
-  current_storage_provider: number;
-  /** compression ... */
-  current_compression: number;
+  /** storage_provider_id ... */
+  current_storage_provider_id: number;
+  /** compression_id ... */
+  current_compression_id: number;
 }
 
 function createBaseProtocol(): Protocol {
@@ -366,8 +366,8 @@ function createBasePool(): Pool {
     total_funds: "0",
     protocol: undefined,
     upgrade_plan: undefined,
-    current_storage_provider: 0,
-    current_compression: 0,
+    current_storage_provider_id: 0,
+    current_compression_id: 0,
   };
 }
 
@@ -430,11 +430,11 @@ export const Pool = {
     if (message.upgrade_plan !== undefined) {
       UpgradePlan.encode(message.upgrade_plan, writer.uint32(154).fork()).ldelim();
     }
-    if (message.current_storage_provider !== 0) {
-      writer.uint32(160).uint32(message.current_storage_provider);
+    if (message.current_storage_provider_id !== 0) {
+      writer.uint32(160).uint32(message.current_storage_provider_id);
     }
-    if (message.current_compression !== 0) {
-      writer.uint32(168).uint32(message.current_compression);
+    if (message.current_compression_id !== 0) {
+      writer.uint32(168).uint32(message.current_compression_id);
     }
     return writer;
   },
@@ -504,10 +504,10 @@ export const Pool = {
           message.upgrade_plan = UpgradePlan.decode(reader, reader.uint32());
           break;
         case 20:
-          message.current_storage_provider = reader.uint32();
+          message.current_storage_provider_id = reader.uint32();
           break;
         case 21:
-          message.current_compression = reader.uint32();
+          message.current_compression_id = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -538,8 +538,10 @@ export const Pool = {
       total_funds: isSet(object.total_funds) ? String(object.total_funds) : "0",
       protocol: isSet(object.protocol) ? Protocol.fromJSON(object.protocol) : undefined,
       upgrade_plan: isSet(object.upgrade_plan) ? UpgradePlan.fromJSON(object.upgrade_plan) : undefined,
-      current_storage_provider: isSet(object.current_storage_provider) ? Number(object.current_storage_provider) : 0,
-      current_compression: isSet(object.current_compression) ? Number(object.current_compression) : 0,
+      current_storage_provider_id: isSet(object.current_storage_provider_id)
+        ? Number(object.current_storage_provider_id)
+        : 0,
+      current_compression_id: isSet(object.current_compression_id) ? Number(object.current_compression_id) : 0,
     };
   },
 
@@ -569,9 +571,10 @@ export const Pool = {
     message.protocol !== undefined && (obj.protocol = message.protocol ? Protocol.toJSON(message.protocol) : undefined);
     message.upgrade_plan !== undefined &&
       (obj.upgrade_plan = message.upgrade_plan ? UpgradePlan.toJSON(message.upgrade_plan) : undefined);
-    message.current_storage_provider !== undefined &&
-      (obj.current_storage_provider = Math.round(message.current_storage_provider));
-    message.current_compression !== undefined && (obj.current_compression = Math.round(message.current_compression));
+    message.current_storage_provider_id !== undefined &&
+      (obj.current_storage_provider_id = Math.round(message.current_storage_provider_id));
+    message.current_compression_id !== undefined &&
+      (obj.current_compression_id = Math.round(message.current_compression_id));
     return obj;
   },
 
@@ -600,8 +603,8 @@ export const Pool = {
     message.upgrade_plan = (object.upgrade_plan !== undefined && object.upgrade_plan !== null)
       ? UpgradePlan.fromPartial(object.upgrade_plan)
       : undefined;
-    message.current_storage_provider = object.current_storage_provider ?? 0;
-    message.current_compression = object.current_compression ?? 0;
+    message.current_storage_provider_id = object.current_storage_provider_id ?? 0;
+    message.current_compression_id = object.current_compression_id ?? 0;
     return message;
   },
 };

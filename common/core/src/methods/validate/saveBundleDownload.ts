@@ -54,11 +54,11 @@ export async function saveBundleDownload(
       // get storage provider the proposed bundle was saved to
       this.logger.debug(
         `storageProviderFactory(${
-          this.pool.bundle_proposal?.storage_provider ?? 0
+          this.pool.bundle_proposal?.storage_provider_id ?? 0
         }, $STORAGE_PRIV)`
       );
       const storageProvider = await this.storageProviderFactory(
-        this.pool.bundle_proposal?.storage_provider ?? 0
+        this.pool.bundle_proposal?.storage_provider_id ?? 0
       );
 
       // calculate download timeout for storage provider

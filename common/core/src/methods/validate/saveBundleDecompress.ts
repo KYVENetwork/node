@@ -18,10 +18,10 @@ export async function saveBundleDecompress(
   try {
     // get compression the proposed bundle was compressed with
     this.logger.debug(
-      `compressionFactory(${this.pool.bundle_proposal?.compression ?? 0})`
+      `compressionFactory(${this.pool.bundle_proposal?.compression_id ?? 0})`
     );
     const compression = this.compressionFactory(
-      this.pool.bundle_proposal?.compression ?? 0
+      this.pool.bundle_proposal?.compression_id ?? 0
     );
 
     this.logger.debug(`this.compression.decompress($RAW_STORAGE_DATA)`);

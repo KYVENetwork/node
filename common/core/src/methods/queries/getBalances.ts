@@ -60,11 +60,11 @@ export async function getBalances(this: Node): Promise<void> {
     // get current storage provider defined on pool
     this.logger.debug(
       `storageProviderFactory(${
-        this.pool.data?.current_storage_provider ?? 0
+        this.pool.data?.current_storage_provider_id ?? 0
       }, $STORAGE_PRIV)`
     );
     const storageProvider = await this.storageProviderFactory(
-      this.pool.data?.current_storage_provider ?? 0
+      this.pool.data?.current_storage_provider_id ?? 0
     );
 
     this.logger.debug(`this.storageProvider.getBalance()`);
