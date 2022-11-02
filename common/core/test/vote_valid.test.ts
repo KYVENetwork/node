@@ -55,7 +55,7 @@ describe("vote valid tests", () => {
 
     // mock compression
     compression = new TestNormalCompression();
-    core["compressionFactory"] = jest.fn().mockResolvedValue(compression);
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -432,7 +432,10 @@ describe("vote valid tests", () => {
     storageProvider.retrieveBundle = jest
       .fn()
       .mockRejectedValueOnce(new Error())
-      .mockResolvedValue(compressedBundle);
+      .mockResolvedValue({
+        storageId: "test_storage_id",
+        storageData: compressedBundle,
+      });
 
     // ACT
     await runNode.call(core);

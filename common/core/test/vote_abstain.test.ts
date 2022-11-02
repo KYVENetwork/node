@@ -62,7 +62,7 @@ describe("vote abstain tests", () => {
 
     // mock compression
     compression = new TestNormalCompression();
-    core["compressionFactory"] = jest.fn().mockResolvedValue(compression);
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -606,7 +606,10 @@ describe("vote abstain tests", () => {
     storageProvider.retrieveBundle = jest
       .fn()
       .mockRejectedValueOnce(new Error())
-      .mockResolvedValue(compressedBundle);
+      .mockResolvedValue({
+        storageId: "test_storage_id",
+        storageData: compressedBundle,
+      });
 
     // ACT
     await runNode.call(core);
@@ -761,7 +764,10 @@ describe("vote abstain tests", () => {
       .fn()
       .mockRejectedValueOnce(new Error())
       .mockRejectedValueOnce(new Error())
-      .mockResolvedValue(compressedBundle);
+      .mockResolvedValue({
+        storageId: "test_storage_id",
+        storageData: compressedBundle,
+      });
     storageProvider.retrieveBundle = retrieveBundleMock;
 
     // ACT
@@ -923,7 +929,10 @@ describe("vote abstain tests", () => {
     storageProvider.retrieveBundle = jest
       .fn()
       .mockRejectedValueOnce(new Error())
-      .mockResolvedValue(compressedBundle);
+      .mockResolvedValue({
+        storageId: "test_storage_id",
+        storageData: compressedBundle,
+      });
 
     // ACT
     await runNode.call(core);
@@ -1687,8 +1696,7 @@ describe("vote abstain tests", () => {
 
     expect(compression.compress).toHaveBeenCalledTimes(0);
 
-    expect(compression.decompress).toHaveBeenCalledTimes(1);
-    expect(compression.decompress).toHaveBeenLastCalledWith(compressedBundle);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES

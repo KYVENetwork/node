@@ -49,7 +49,7 @@ describe("cache tests", () => {
 
     // mock compression
     compression = new TestNormalCompression();
-    core["compressionFactory"] = jest.fn().mockResolvedValue(compression);
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -100,11 +100,9 @@ describe("cache tests", () => {
 
   test("start caching from a pool which is in genesis state", async () => {
     // ARRANGE
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -240,30 +238,28 @@ describe("cache tests", () => {
 
   test("start caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "test_storage_id",
-          uploader: "test_staker",
-          next_uploader: "test_staker",
-          data_size: "123456789",
-          data_hash: "test_bundle_hash",
-          bundle_size: "50",
-          from_key: "100",
-          to_key: "149",
-          bundle_summary: "test_summary",
-          updated_at: "0",
-          voters_valid: ["test_staker"],
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "test_storage_id",
+        uploader: "test_staker",
+        next_uploader: "test_staker",
+        data_size: "123456789",
+        data_hash: "test_bundle_hash",
+        bundle_size: "50",
+        from_key: "100",
+        to_key: "149",
+        bundle_summary: "test_summary",
+        updated_at: "0",
+        voters_valid: ["test_staker"],
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -417,30 +413,28 @@ describe("cache tests", () => {
       .mockResolvedValueOnce(true)
       .mockResolvedValue(false);
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "test_storage_id",
-          uploader: "test_staker",
-          next_uploader: "test_staker",
-          data_size: "123456789",
-          data_hash: "test_bundle_hash",
-          bundle_size: "3",
-          from_key: "100",
-          to_key: "102",
-          bundle_summary: "test_summary",
-          updated_at: "0",
-          voters_valid: ["test_staker"],
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "test_storage_id",
+        uploader: "test_staker",
+        next_uploader: "test_staker",
+        data_size: "123456789",
+        data_hash: "test_bundle_hash",
+        bundle_size: "3",
+        from_key: "100",
+        to_key: "102",
+        bundle_summary: "test_summary",
+        updated_at: "0",
+        voters_valid: ["test_staker"],
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -587,29 +581,27 @@ describe("cache tests", () => {
 
   test("start caching from a pool where last bundle proposal was dropped", async () => {
     // ARRANGE
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "",
-          uploader: "",
-          next_uploader: "test_staker",
-          data_size: "0",
-          data_hash: "",
-          bundle_size: "0",
-          from_key: "",
-          to_key: "",
-          bundle_summary: "",
-          updated_at: "0",
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "",
+        uploader: "",
+        next_uploader: "test_staker",
+        data_size: "0",
+        data_hash: "",
+        bundle_size: "0",
+        from_key: "",
+        to_key: "",
+        bundle_summary: "",
+        updated_at: "0",
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -772,15 +764,13 @@ describe("cache tests", () => {
         })
       );
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          max_bundle_size: "2",
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        max_bundle_size: "2",
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -944,30 +934,28 @@ describe("cache tests", () => {
       .mockResolvedValueOnce(true)
       .mockResolvedValue(false);
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "test_storage_id",
-          uploader: "test_staker",
-          next_uploader: "test_staker",
-          data_size: "123456789",
-          data_hash: "test_bundle_hash",
-          bundle_size: "3",
-          from_key: "100",
-          to_key: "102",
-          bundle_summary: "test_summary",
-          updated_at: "0",
-          voters_valid: ["test_staker"],
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "test_storage_id",
+        uploader: "test_staker",
+        next_uploader: "test_staker",
+        data_size: "123456789",
+        data_hash: "test_bundle_hash",
+        bundle_size: "3",
+        from_key: "100",
+        to_key: "102",
+        bundle_summary: "test_summary",
+        updated_at: "0",
+        voters_valid: ["test_staker"],
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -1178,15 +1166,13 @@ describe("cache tests", () => {
         })
       );
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          max_bundle_size: "5",
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        max_bundle_size: "5",
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -1326,30 +1312,28 @@ describe("cache tests", () => {
     // ARRANGE
     core["runtime"].nextKey = jest.fn().mockRejectedValue(new Error());
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "test_storage_id",
-          uploader: "test_staker",
-          next_uploader: "test_staker",
-          data_size: "123456789",
-          data_hash: "test_bundle_hash",
-          bundle_size: "50",
-          from_key: "100",
-          to_key: "149",
-          bundle_summary: "test_summary",
-          updated_at: "0",
-          voters_valid: ["test_staker"],
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "test_storage_id",
+        uploader: "test_staker",
+        next_uploader: "test_staker",
+        data_size: "123456789",
+        data_hash: "test_bundle_hash",
+        bundle_size: "50",
+        from_key: "100",
+        to_key: "149",
+        bundle_summary: "test_summary",
+        updated_at: "0",
+        voters_valid: ["test_staker"],
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);
@@ -1448,30 +1432,28 @@ describe("cache tests", () => {
       .fn()
       .mockRejectedValue(new Error("io error"));
 
-    core["syncPoolState"] = jest.fn().mockImplementationOnce(() => {
-      core.pool = {
-        ...genesis_pool,
-        data: {
-          ...genesis_pool.data,
-          current_key: "99",
-          current_index: "100",
-        },
-        bundle_proposal: {
-          ...genesis_pool.bundle_proposal,
-          storage_id: "test_storage_id",
-          uploader: "test_staker",
-          next_uploader: "test_staker",
-          data_size: "123456789",
-          data_hash: "test_bundle_hash",
-          bundle_size: "50",
-          from_key: "100",
-          to_key: "149",
-          bundle_summary: "test_summary",
-          updated_at: "0",
-          voters_valid: ["test_staker"],
-        },
-      } as any;
-    });
+    core.pool = {
+      ...genesis_pool,
+      data: {
+        ...genesis_pool.data,
+        current_key: "99",
+        current_index: "100",
+      },
+      bundle_proposal: {
+        ...genesis_pool.bundle_proposal,
+        storage_id: "test_storage_id",
+        uploader: "test_staker",
+        next_uploader: "test_staker",
+        data_size: "123456789",
+        data_hash: "test_bundle_hash",
+        bundle_size: "50",
+        from_key: "100",
+        to_key: "149",
+        bundle_summary: "test_summary",
+        updated_at: "0",
+        voters_valid: ["test_staker"],
+      },
+    } as any;
 
     // ACT
     await runCache.call(core);

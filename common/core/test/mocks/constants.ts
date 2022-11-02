@@ -4,9 +4,8 @@ export const genesis_pool = {
     id: "0",
     name: "Moonbeam",
     runtime: "@kyve/evm",
-    logo: "9FJDam56yBbmvn8rlamEucATH5UcYqSBw468rlCXn8E",
-    config:
-      '{"rpc":"https://rpc.api.moonbeam.network","github":"https://github.com/KYVENetwork/evm"}',
+    logo: "ar://9FJDam56yBbmvn8rlamEucATH5UcYqSBw468rlCXn8E",
+    config: "ar://bYvlKiVLb1YY0Gx4mjUhpWBkztqmA4uEN97kTaZtBfY",
     start_key: "0",
     current_key: "",
     current_summary: "",
@@ -36,6 +35,8 @@ export const genesis_pool = {
       scheduled_at: "0",
       duration: "0",
     },
+    current_storage_provider_id: 0,
+    current_compression_id: 0,
   },
   bundle_proposal: {
     pool_id: "0",

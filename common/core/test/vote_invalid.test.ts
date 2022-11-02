@@ -60,7 +60,7 @@ describe("invalid votes tests", () => {
 
     // mock compression
     compression = new TestNormalCompression();
-    core["compressionFactory"] = jest.fn().mockResolvedValue(compression);
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -489,8 +489,7 @@ describe("invalid votes tests", () => {
 
     expect(compression.compress).toHaveBeenCalledTimes(0);
 
-    expect(compression.decompress).toHaveBeenCalledTimes(1);
-    expect(compression.decompress).toHaveBeenLastCalledWith(compressedBundle);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
@@ -620,8 +619,7 @@ describe("invalid votes tests", () => {
 
     expect(compression.compress).toHaveBeenCalledTimes(0);
 
-    expect(compression.decompress).toHaveBeenCalledTimes(1);
-    expect(compression.decompress).toHaveBeenLastCalledWith(compressedBundle);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
@@ -751,8 +749,7 @@ describe("invalid votes tests", () => {
 
     expect(compression.compress).toHaveBeenCalledTimes(0);
 
-    expect(compression.decompress).toHaveBeenCalledTimes(1);
-    expect(compression.decompress).toHaveBeenLastCalledWith(compressedBundle);
+    expect(compression.decompress).toHaveBeenCalledTimes(0);
 
     // =============================
     // ASSERT INTEGRATION INTERFACES
@@ -1506,7 +1503,10 @@ describe("invalid votes tests", () => {
     storageProvider.retrieveBundle = jest
       .fn()
       .mockRejectedValueOnce(new Error())
-      .mockResolvedValue(compressedBundle);
+      .mockResolvedValue({
+        storageId: "test_storage_id",
+        storageData: compressedBundle,
+      });
 
     // ACT
     await runNode.call(core);
