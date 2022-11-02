@@ -48,7 +48,7 @@ export class Bundlr implements IStorageProvider {
 
     return {
       storageId: transaction.id,
-      storageData: Buffer.from(transaction.data),
+      storageData: transaction.rawData,
     };
   }
 
