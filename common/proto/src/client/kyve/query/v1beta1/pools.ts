@@ -3,7 +3,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
 import { BundleProposal } from "../../bundles/v1beta1/bundles";
-import { Pool, PoolStatus, poolStatusFromJSON, poolStatusToJSON, poolStatusToNumber } from "../../pool/v1beta1/pool";
+import { Pool, PoolStatus, poolStatusFromJSON, poolStatusToJSON } from "../../pool/v1beta1/pool";
 
 export const protobufPackage = "kyve.query.v1beta1";
 
@@ -17,8 +17,8 @@ export interface QueryPoolsRequest {
   runtime: string;
   /** paused ... */
   paused: boolean;
-  /** storageProviderId ... */
-  storageProviderId: number;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
 }
 
 /** QueryPoolsResponse is the response type for the Query/Pools RPC method. */
@@ -60,7 +60,7 @@ export interface QueryPoolResponse {
 }
 
 function createBaseQueryPoolsRequest(): QueryPoolsRequest {
-  return { pagination: undefined, search: "", runtime: "", paused: false, storageProviderId: 0 };
+  return { pagination: undefined, search: "", runtime: "", paused: false, storage_provider_id: 0 };
 }
 
 export const QueryPoolsRequest = {
@@ -77,8 +77,8 @@ export const QueryPoolsRequest = {
     if (message.paused === true) {
       writer.uint32(32).bool(message.paused);
     }
-    if (message.storageProviderId !== 0) {
-      writer.uint32(40).uint32(message.storageProviderId);
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(40).uint32(message.storage_provider_id);
     }
     return writer;
   },
@@ -103,7 +103,7 @@ export const QueryPoolsRequest = {
           message.paused = reader.bool();
           break;
         case 5:
-          message.storageProviderId = reader.uint32();
+          message.storage_provider_id = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -119,7 +119,7 @@ export const QueryPoolsRequest = {
       search: isSet(object.search) ? String(object.search) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
-      storageProviderId: isSet(object.storageProviderId) ? Number(object.storageProviderId) : 0,
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
     };
   },
 
@@ -130,7 +130,7 @@ export const QueryPoolsRequest = {
     message.search !== undefined && (obj.search = message.search);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.paused !== undefined && (obj.paused = message.paused);
-    message.storageProviderId !== undefined && (obj.storageProviderId = Math.round(message.storageProviderId));
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
     return obj;
   },
 
@@ -142,7 +142,7 @@ export const QueryPoolsRequest = {
     message.search = object.search ?? "";
     message.runtime = object.runtime ?? "";
     message.paused = object.paused ?? false;
-    message.storageProviderId = object.storageProviderId ?? 0;
+    message.storage_provider_id = object.storage_provider_id ?? 0;
     return message;
   },
 };
@@ -220,7 +220,7 @@ function createBasePoolResponse(): PoolResponse {
     stakers: [],
     total_self_delegation: "0",
     total_delegation: "0",
-    status: PoolStatus.POOL_STATUS_UNSPECIFIED,
+    status: 0,
   };
 }
 
@@ -244,8 +244,8 @@ export const PoolResponse = {
     if (message.total_delegation !== "0") {
       writer.uint32(48).uint64(message.total_delegation);
     }
-    if (message.status !== PoolStatus.POOL_STATUS_UNSPECIFIED) {
-      writer.uint32(56).int32(poolStatusToNumber(message.status));
+    if (message.status !== 0) {
+      writer.uint32(56).int32(message.status);
     }
     return writer;
   },
@@ -276,7 +276,7 @@ export const PoolResponse = {
           message.total_delegation = longToString(reader.uint64() as Long);
           break;
         case 7:
-          message.status = poolStatusFromJSON(reader.int32());
+          message.status = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -294,7 +294,7 @@ export const PoolResponse = {
       stakers: Array.isArray(object?.stakers) ? object.stakers.map((e: any) => String(e)) : [],
       total_self_delegation: isSet(object.total_self_delegation) ? String(object.total_self_delegation) : "0",
       total_delegation: isSet(object.total_delegation) ? String(object.total_delegation) : "0",
-      status: isSet(object.status) ? poolStatusFromJSON(object.status) : PoolStatus.POOL_STATUS_UNSPECIFIED,
+      status: isSet(object.status) ? poolStatusFromJSON(object.status) : 0,
     };
   },
 
@@ -325,7 +325,7 @@ export const PoolResponse = {
     message.stakers = object.stakers?.map((e) => e) || [];
     message.total_self_delegation = object.total_self_delegation ?? "0";
     message.total_delegation = object.total_delegation ?? "0";
-    message.status = object.status ?? PoolStatus.POOL_STATUS_UNSPECIFIED;
+    message.status = object.status ?? 0;
     return message;
   },
 };

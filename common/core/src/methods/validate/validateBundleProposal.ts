@@ -1,4 +1,4 @@
-import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
@@ -214,7 +214,7 @@ export async function validateBundleProposal(
     } else {
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
-        VoteType.VOTE_TYPE_YES
+        VoteType.VOTE_TYPE_VALID
       );
 
       // update metrics

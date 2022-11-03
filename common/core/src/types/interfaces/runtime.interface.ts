@@ -1,4 +1,4 @@
-import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { DataItem } from "..";
 import { Node } from "../..";
 

@@ -86,7 +86,10 @@ export interface EventBundleFinalized {
   reward_delegation: string;
   /** rewardTotal ... */
   reward_total: string;
-  /** finalized_at ... */
+  /**
+   * finalized_at ...
+   * could be removed as it is included in the block itself
+   */
   finalized_at: string;
   /** uploader ... */
   uploader: string;

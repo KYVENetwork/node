@@ -113,7 +113,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     const validateBundleMock = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
     core["runtime"].validateBundle = validateBundleMock;
 
     const bundle = [
@@ -177,7 +177,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -314,7 +314,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -442,7 +442,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -572,7 +572,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -702,7 +702,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -833,7 +833,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -902,7 +902,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     const validateBundleMock = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     core["runtime"].validateBundle = validateBundleMock;
 
@@ -968,7 +968,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -1046,7 +1046,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     const validateBundleMock = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     core["runtime"].validateBundle = validateBundleMock;
 
@@ -1178,7 +1178,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     const validateBundleMock = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     core["runtime"].validateBundle = validateBundleMock;
 
@@ -1308,7 +1308,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     core["runtime"].validateBundle = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1378,7 +1378,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -1457,7 +1457,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     core["runtime"].validateBundle = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1534,7 +1534,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -1618,7 +1618,7 @@ describe("invalid votes tests", () => {
     // ARRANGE
     core["runtime"].validateBundle = jest
       .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_NO);
+      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
     core["client"].kyve.bundles.v1beta1.voteBundleProposal = jest
       .fn()
@@ -1685,7 +1685,7 @@ describe("invalid votes tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);

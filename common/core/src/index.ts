@@ -43,8 +43,7 @@ import {
   parseMnemonic,
   parseCache,
 } from "./commander";
-import { kyve } from "@kyve/proto-beta";
-import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
+import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
 import { standardizeJSON } from "./utils";
 
 /**

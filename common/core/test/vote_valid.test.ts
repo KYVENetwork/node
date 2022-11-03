@@ -167,7 +167,7 @@ describe("vote valid tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -311,7 +311,7 @@ describe("vote valid tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -463,7 +463,7 @@ describe("vote valid tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -607,7 +607,7 @@ describe("vote valid tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -996,7 +996,7 @@ describe("vote valid tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);

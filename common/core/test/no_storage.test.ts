@@ -16,7 +16,7 @@ import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
 import { TestNoStorageProvider } from "./mocks/storageProvider.mock";
 import { TestNoCompression } from "./mocks/compression.mock";
-import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 
 /*
 
@@ -461,7 +461,7 @@ describe("no storage tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -576,7 +576,7 @@ describe("no storage tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -688,7 +688,7 @@ describe("no storage tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -811,7 +811,7 @@ describe("no storage tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_NO,
+      vote: VoteType.VOTE_TYPE_INVALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);

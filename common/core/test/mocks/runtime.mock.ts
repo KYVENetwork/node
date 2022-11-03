@@ -1,4 +1,4 @@
-import { VoteType } from "@kyve/proto-beta/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { DataItem, Node, sha256 } from "../../src";
 
 export const TestRuntime = jest.fn().mockImplementation(() => {
@@ -27,9 +27,9 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
         );
 
         if (proposedBundleHash === validationBundleHash) {
-          return VoteType.VOTE_TYPE_YES;
+          return VoteType.VOTE_TYPE_VALID;
         } else {
-          return VoteType.VOTE_TYPE_NO;
+          return VoteType.VOTE_TYPE_INVALID;
         }
       }
     ),
