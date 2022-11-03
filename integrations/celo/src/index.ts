@@ -1,4 +1,4 @@
-import { Node } from '@kyve/core';
+import { Node } from '@kyve/core-beta';
 import Celo from './runtime';
 
 const runtime = new Celo();

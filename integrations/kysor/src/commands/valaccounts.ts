@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import KyveSDK from "@kyve/sdk";
+import KyveSDK from "@kyve/sdk-beta";
 import fs from "fs";
 import path from "path";
 import prompts from "prompts";

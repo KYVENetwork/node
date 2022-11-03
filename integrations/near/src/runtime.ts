@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node, sha256 } from '@kyve/core';
+import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
 import { fetchBlock, fetchHeight, isBlockNotFound } from './utils';
 import { name, version } from '../package.json';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@kyve/core",
+  "name": "@kyve/core-beta",
   "description": "🚀 The base KYVE node implementation.",
   "version": "1.21.7",
   "main": "./dist/src/index.js",
@@ -9,9 +9,6 @@
     "type": "git",
     "url": "git+https://github.com/KYVENetwork/node.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "keywords": [
     "KYVE",
     "Arweave",
@@ -20,6 +17,9 @@
   ],
   "author": "John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf dist && yarn format && tsc",
     "test": "jest",
@@ -30,8 +30,8 @@
     "@bundlr-network/client": "^0.8.9",
     "@cosmjs/proto-signing": "^0.27.1",
     "@cosmjs/stargate": "^0.27.1",
-    "@kyve/proto": "1.10.0",
-    "@kyve/sdk": "3.3.0",
+    "@kyve/proto-beta": "1.10.0",
+    "@kyve/sdk-beta": "3.3.0",
     "@types/cli-progress": "^3.9.2",
     "@types/jsonfile": "^6.0.1",
     "arweave": "^1.10.17",

@@ -1,5 +1,5 @@
 {
-  "name": "@kyve/proto",
+  "name": "@kyve/proto-beta",
   "version": "1.10.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -9,6 +9,9 @@
   },
   "author": "John Letey <john@kyve.network>, ruslan glaznyov <ruslan.glaznyov@gmail.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf ./dist && tsc  && yarn prepare-publishing",
     "prepare-publishing": "./scripts/prepare-publishing.sh",
