@@ -1,5 +1,4 @@
-import { DataItem, IRuntime, Node, sha256 } from "@kyve/core-beta";
-import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { DataItem, IRuntime, Node, sha256, VoteOptions } from "@kyve/core-beta";
 import { name, version } from "../package.json";
 import { fetchBlock, fetchBlockHash } from "./utils";
 
@@ -37,7 +36,8 @@ export default class Bitcoin implements IRuntime {
   async validateBundle(
     core: Node,
     proposedBundle: DataItem[],
-    validationBundle: DataItem[]
+    validationBundle: DataItem[],
+    voteOptions: VoteOptions
   ) {
     const proposedBundleHash = sha256(
       Buffer.from(JSON.stringify(proposedBundle))
@@ -47,8 +47,8 @@ export default class Bitcoin implements IRuntime {
     );
 
     return proposedBundleHash === validationBundleHash
-      ? VoteType.VOTE_TYPE_VALID
-      : VoteType.VOTE_TYPE_INVALID;
+      ? voteOptions.VOTE_TYPE_VALID
+      : voteOptions.VOTE_TYPE_INVALID;
   }
 
   public async summarizeBundle(bundle: DataItem[]): Promise<string> {

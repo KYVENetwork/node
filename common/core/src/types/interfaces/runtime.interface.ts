@@ -2,6 +2,8 @@ import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { DataItem } from "..";
 import { Node } from "../..";
 
+export type VoteOptions = typeof VoteType;
+
 /**
  * Interface of Runtime.
  *
@@ -60,12 +62,14 @@ export interface IRuntime {
    * @param {Node} core the class of @kyve/core
    * @param {DataItem[]} proposedBundle is the bundle saved by the uploader on the storage provider
    * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
+   * @param {VoteOptions} voteOptions is the enum which holds all available vote options
    * @return {Promise<VoteType>} returns the vote type the node should vote with
    */
   validateBundle(
     core: Node,
     proposedBundle: DataItem[],
-    validationBundle: DataItem[]
+    validationBundle: DataItem[],
+    voteOptions: VoteOptions
   ): Promise<VoteType>;
 
   /**

@@ -1,7 +1,6 @@
-import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
+import { DataItem, IRuntime, Node, sha256, VoteOptions } from '@kyve/core-beta';
 import { fetchBlock, fetchHeight, isBlockNotFound } from './utils';
 import { name, version } from '../package.json';
-import { VoteType } from '@kyve/proto-beta/client/kyve/bundles/v1beta1/tx';
 
 export default class Near implements IRuntime {
   public name = name;
@@ -34,7 +33,8 @@ export default class Near implements IRuntime {
   async validateBundle(
     core: Node,
     proposedBundle: DataItem[],
-    validationBundle: DataItem[]
+    validationBundle: DataItem[],
+    voteOptions: VoteOptions
   ) {
     const proposedBundleHash = sha256(
       Buffer.from(JSON.stringify(proposedBundle))
@@ -44,8 +44,8 @@ export default class Near implements IRuntime {
     );
 
     return proposedBundleHash === validationBundleHash
-      ? VoteType.VOTE_TYPE_VALID
-      : VoteType.VOTE_TYPE_INVALID;
+      ? voteOptions.VOTE_TYPE_VALID
+      : voteOptions.VOTE_TYPE_INVALID;
   }
 
   async summarizeBundle(bundle: DataItem[]): Promise<string> {

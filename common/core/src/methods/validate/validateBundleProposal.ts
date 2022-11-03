@@ -191,7 +191,8 @@ export async function validateBundleProposal(
         .validateBundle(
           this,
           standardizeJSON(proposedBundle),
-          standardizeJSON(validationBundle)
+          standardizeJSON(validationBundle),
+          VoteType
         )
         .catch((err) => {
           this.logger.error(
