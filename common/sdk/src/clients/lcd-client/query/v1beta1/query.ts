@@ -90,6 +90,10 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
       parameters.paused = params.paused;
     }
 
+    if (typeof params?.storageProviderId !== "undefined") {
+      parameters.storageProviderId = params.storageProviderId;
+    }
+
     const endpoint = `/kyve/query/v1beta1/pools`;
     return await this.request(endpoint, parameters);
   }
