@@ -13,14 +13,14 @@ import { ICompression } from "../..";
  *
  * @method compressionFactory
  * @param {Node} this
- * @param {number} compression the id of the compression
+ * @param {number} compressionId the id of the compression
  * @return {ICompression}
  */
 export function compressionFactory(
   this: Node,
-  compression: number
+  compressionId: number
 ): ICompression {
-  switch (compression) {
+  switch (compressionId) {
     case 1:
       return new Gzip();
     default:

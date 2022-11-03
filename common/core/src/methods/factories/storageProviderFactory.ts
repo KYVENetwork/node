@@ -15,14 +15,14 @@ import { IStorageProvider } from "../..";
  *
  * @method storageProviderFactory
  * @param {Node} this
- * @param {number} storageProvider the id of the storage provider
+ * @param {number} storageProviderId the id of the storage provider
  * @return {Promise<IStorageProvider>}
  */
 export async function storageProviderFactory(
   this: Node,
-  storageProvider: number
+  storageProviderId: number
 ): Promise<IStorageProvider> {
-  switch (storageProvider) {
+  switch (storageProviderId) {
     case 1:
       return await new Arweave().init(this.storagePriv);
     case 2:
