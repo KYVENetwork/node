@@ -2,7 +2,7 @@
 rm -rf temp
 mkdir temp
 KYVE_CHAIN_REPO="git@github.com:KYVENetwork/chain-beta.git"
-BRANCH_KYVE="development"
+BRANCH_KYVE="v0.7.0_beta8"
 git -C ./temp clone  -b ${BRANCH_KYVE} --single-branch ${KYVE_CHAIN_REPO}
 rm -rf ./src/client
 rm -rf ./src/lcd
@@ -30,6 +30,6 @@ protoc --plugin="protoc-gen-ts_proto=${PROTOC_GEN_TS_PROTO_PATH}" \
 --proto_path="$KYVE_PROTO" \
 $(find ${PROTO_DIR}  -path -prune -o -name '*.proto' -print0 | xargs -0) \
 $(find ${KYVE_PROTO}  -path -prune -o -name '*.proto' -print0 | xargs -0)
-rm -rf temps
+rm -rf temp
 git add ./src/client
 git add ./src/lcd

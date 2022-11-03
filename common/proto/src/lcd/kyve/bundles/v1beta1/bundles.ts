@@ -109,6 +109,10 @@ export interface BundleProposal {
   voters_abstain: string[];
   /** from_key ... */
   from_key: string;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
+  /** compression_id ... */
+  compression_id: number;
 }
 
 /** Proposal ... */
@@ -135,6 +139,10 @@ export interface FinalizedBundle {
   finalized_at: string;
   /** from_key ... */
   from_key: string;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
+  /** compression_id ... */
+  compression_id: number;
 }
 
 function createBaseBundleProposal(): BundleProposal {
@@ -153,6 +161,8 @@ function createBaseBundleProposal(): BundleProposal {
     voters_invalid: [],
     voters_abstain: [],
     from_key: "",
+    storage_provider_id: 0,
+    compression_id: 0,
   };
 }
 
@@ -199,6 +209,12 @@ export const BundleProposal = {
     }
     if (message.from_key !== "") {
       writer.uint32(114).string(message.from_key);
+    }
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(120).uint32(message.storage_provider_id);
+    }
+    if (message.compression_id !== 0) {
+      writer.uint32(128).uint32(message.compression_id);
     }
     return writer;
   },
@@ -252,6 +268,12 @@ export const BundleProposal = {
         case 14:
           message.from_key = reader.string();
           break;
+        case 15:
+          message.storage_provider_id = reader.uint32();
+          break;
+        case 16:
+          message.compression_id = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -276,6 +298,8 @@ export const BundleProposal = {
       voters_invalid: Array.isArray(object?.voters_invalid) ? object.voters_invalid.map((e: any) => String(e)) : [],
       voters_abstain: Array.isArray(object?.voters_abstain) ? object.voters_abstain.map((e: any) => String(e)) : [],
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
+      compression_id: isSet(object.compression_id) ? Number(object.compression_id) : 0,
     };
   },
 
@@ -307,6 +331,8 @@ export const BundleProposal = {
       obj.voters_abstain = [];
     }
     message.from_key !== undefined && (obj.from_key = message.from_key);
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
+    message.compression_id !== undefined && (obj.compression_id = Math.round(message.compression_id));
     return obj;
   },
 
@@ -326,6 +352,8 @@ export const BundleProposal = {
     message.voters_invalid = object.voters_invalid?.map((e) => e) || [];
     message.voters_abstain = object.voters_abstain?.map((e) => e) || [];
     message.from_key = object.from_key ?? "";
+    message.storage_provider_id = object.storage_provider_id ?? 0;
+    message.compression_id = object.compression_id ?? 0;
     return message;
   },
 };
@@ -343,6 +371,8 @@ function createBaseFinalizedBundle(): FinalizedBundle {
     data_hash: "",
     finalized_at: "0",
     from_key: "",
+    storage_provider_id: 0,
+    compression_id: 0,
   };
 }
 
@@ -380,6 +410,12 @@ export const FinalizedBundle = {
     }
     if (message.from_key !== "") {
       writer.uint32(90).string(message.from_key);
+    }
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(96).uint32(message.storage_provider_id);
+    }
+    if (message.compression_id !== 0) {
+      writer.uint32(104).uint32(message.compression_id);
     }
     return writer;
   },
@@ -424,6 +460,12 @@ export const FinalizedBundle = {
         case 11:
           message.from_key = reader.string();
           break;
+        case 12:
+          message.storage_provider_id = reader.uint32();
+          break;
+        case 13:
+          message.compression_id = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -445,6 +487,8 @@ export const FinalizedBundle = {
       data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
       finalized_at: isSet(object.finalized_at) ? String(object.finalized_at) : "0",
       from_key: isSet(object.from_key) ? String(object.from_key) : "",
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
+      compression_id: isSet(object.compression_id) ? Number(object.compression_id) : 0,
     };
   },
 
@@ -461,6 +505,8 @@ export const FinalizedBundle = {
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.finalized_at !== undefined && (obj.finalized_at = message.finalized_at);
     message.from_key !== undefined && (obj.from_key = message.from_key);
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
+    message.compression_id !== undefined && (obj.compression_id = Math.round(message.compression_id));
     return obj;
   },
 
@@ -477,6 +523,8 @@ export const FinalizedBundle = {
     message.data_hash = object.data_hash ?? "";
     message.finalized_at = object.finalized_at ?? "0";
     message.from_key = object.from_key ?? "";
+    message.storage_provider_id = object.storage_provider_id ?? 0;
+    message.compression_id = object.compression_id ?? 0;
     return message;
   },
 };

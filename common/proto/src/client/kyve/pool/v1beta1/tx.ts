@@ -58,6 +58,10 @@ export interface MsgCreatePool {
   version: string;
   /** binaries ... */
   binaries: string;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
+  /** compression_id ... */
+  compression_id: number;
 }
 
 /** MsgCreatePoolResponse defines the Msg/CreatePool response type. */
@@ -374,6 +378,8 @@ function createBaseMsgCreatePool(): MsgCreatePool {
     max_bundle_size: "0",
     version: "",
     binaries: "",
+    storage_provider_id: 0,
+    compression_id: 0,
   };
 }
 
@@ -414,6 +420,12 @@ export const MsgCreatePool = {
     }
     if (message.binaries !== "") {
       writer.uint32(98).string(message.binaries);
+    }
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(104).uint32(message.storage_provider_id);
+    }
+    if (message.compression_id !== 0) {
+      writer.uint32(112).uint32(message.compression_id);
     }
     return writer;
   },
@@ -461,6 +473,12 @@ export const MsgCreatePool = {
         case 12:
           message.binaries = reader.string();
           break;
+        case 13:
+          message.storage_provider_id = reader.uint32();
+          break;
+        case 14:
+          message.compression_id = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -483,6 +501,8 @@ export const MsgCreatePool = {
       max_bundle_size: isSet(object.max_bundle_size) ? String(object.max_bundle_size) : "0",
       version: isSet(object.version) ? String(object.version) : "",
       binaries: isSet(object.binaries) ? String(object.binaries) : "",
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
+      compression_id: isSet(object.compression_id) ? Number(object.compression_id) : 0,
     };
   },
 
@@ -500,6 +520,8 @@ export const MsgCreatePool = {
     message.max_bundle_size !== undefined && (obj.max_bundle_size = message.max_bundle_size);
     message.version !== undefined && (obj.version = message.version);
     message.binaries !== undefined && (obj.binaries = message.binaries);
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
+    message.compression_id !== undefined && (obj.compression_id = Math.round(message.compression_id));
     return obj;
   },
 
@@ -517,6 +539,8 @@ export const MsgCreatePool = {
     message.max_bundle_size = object.max_bundle_size ?? "0";
     message.version = object.version ?? "";
     message.binaries = object.binaries ?? "";
+    message.storage_provider_id = object.storage_provider_id ?? 0;
+    message.compression_id = object.compression_id ?? 0;
     return message;
   },
 };

@@ -9,8 +9,7 @@ import kyveQueryStakersRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/stakers
 import kyveQueryDelegation from "@kyve/proto-beta/client/kyve/query/v1beta1/delegation";
 import kyveQueryDelegationRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/delegation";
 import kyveQueryParamsRes from "@kyve/proto-beta/client/kyve/query/v1beta1/params";
-import paginationQuery from "@kyve/proto-beta/client/cosmos/base/query/v1beta1/pagination"
-
+import paginationQuery from "@kyve/proto-beta/client/cosmos/base/query/v1beta1/pagination";
 
 import { AbstractKyveLCDClient } from "../../lcd-client.abstract";
 
@@ -27,8 +26,9 @@ type PaginationRequestType = {
   reverse: boolean;
   key: string;
 };
-type PaginationPartialRequestUtilType<T extends { pagination?: paginationQuery.PageRequest }> =
-  Overwrite<T, { pagination?: Partial<PaginationRequestType> }>;
+type PaginationPartialRequestUtilType<
+  T extends { pagination?: paginationQuery.PageRequest }
+> = Overwrite<T, { pagination?: Partial<PaginationRequestType> }>;
 type PaginationAllPartialRequestUtilType<T> = NestedPartial<
   Overwrite<
     T,

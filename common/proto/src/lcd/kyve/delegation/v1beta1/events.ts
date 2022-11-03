@@ -4,7 +4,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "kyve.delegation.v1beta1";
 
-/** EventDelegate is an event emitted when someone delegates to a protocol node. */
+/**
+ * EventDelegate is an event emitted when someone delegates to a protocol node.
+ * emitted_by: MsgDelegate
+ */
 export interface EventDelegate {
   /** address is the account address of the delegator. */
   address: string;
@@ -14,7 +17,10 @@ export interface EventDelegate {
   amount: string;
 }
 
-/** EventUndelegate is an event emitted when someone undelegates from a protocol node. */
+/**
+ * EventUndelegate is an event emitted when someone undelegates from a protocol node.
+ * emitted_by: EndBlock
+ */
 export interface EventUndelegate {
   /** address is the account address of the delegator. */
   address: string;
@@ -24,7 +30,10 @@ export interface EventUndelegate {
   amount: string;
 }
 
-/** EventRedelegate is an event emitted when someone redelegates from one protocol node to another. */
+/**
+ * EventRedelegate is an event emitted when someone redelegates from one protocol node to another.
+ * emitted_by: MsgRedelegate
+ */
 export interface EventRedelegate {
   /** address is the account address of the delegator. */
   address: string;
@@ -36,7 +45,10 @@ export interface EventRedelegate {
   amount: string;
 }
 
-/** EventWithdrawRewards ... */
+/**
+ * EventWithdrawRewards ...
+ * emitted_by: MsgRedelegate, MsgDelegate, MsgWithdrawRewards, EndBlock
+ */
 export interface EventWithdrawRewards {
   /** address is the account address of the delegator. */
   address: string;

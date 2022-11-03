@@ -6,7 +6,10 @@ import { VoteType, voteTypeFromJSON, voteTypeToJSON } from "./tx";
 
 export const protobufPackage = "kyve.bundles.v1beta1";
 
-/** EventBundleVote is an event emitted when a protocol node votes on a bundle. */
+/**
+ * EventBundleVote is an event emitted when a protocol node votes on a bundle.
+ * emitted_by: MsgVoteBundleProposal
+ */
 export interface EventBundleVote {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
@@ -18,15 +21,21 @@ export interface EventBundleVote {
   vote: VoteType;
 }
 
-/** EventBundleProposed ... */
+/**
+ * EventBundleProposed is submitted by the MsgSubmitBundleProposal message
+ * emitted_by: MsgSubmitBundleProposal
+ */
 export interface EventBundleProposed {
   /** pool_id ... */
   pool_id: string;
-  /** id ... */
+  /** internal id for the KYVE-bundle */
   id: string;
-  /** storage_id ... */
+  /**
+   * storage_id is the ID to retrieve to data item from the configured storage provider
+   * e.g. the ARWEAVE-id
+   */
   storage_id: string;
-  /** uploader ... */
+  /** Address of the uploader/proposer of the bundle */
   uploader: string;
   /** data_size ... */
   data_size: string;
@@ -44,25 +53,32 @@ export interface EventBundleProposed {
   data_hash: string;
   /** proposed_at ... */
   proposed_at: string;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
+  /** compression_id ... */
+  compression_id: number;
 }
 
-/** EventBundleFinalized is an event emitted when a bundle is finalised. */
+/**
+ * EventBundleFinalized is an event emitted when a bundle is finalised.
+ * emitted_by: MsgSubmitBundleProposal, EndBlock
+ */
 export interface EventBundleFinalized {
   /** pool_id ... */
   pool_id: string;
-  /** id ... */
+  /** internal id for the KYVE-bundle */
   id: string;
-  /** valid ... */
+  /** Voting Power "valid" in ukyve */
   valid: string;
-  /** invalid ... */
+  /** Voting Power "invalid" in ukyve */
   invalid: string;
-  /** abstain ... */
+  /** Voting Power "abstain" in ukyve */
   abstain: string;
-  /** total ... */
+  /** Total Voting Power in ukyve */
   total: string;
   /** status ... */
   status: BundleStatus;
-  /** rewardTreasury ... */
+  /** rewards transferred to treasury (in ukyve) */
   reward_treasury: string;
   /** rewardUploader ... */
   reward_uploader: string;
@@ -70,7 +86,10 @@ export interface EventBundleFinalized {
   reward_delegation: string;
   /** rewardTotal ... */
   reward_total: string;
-  /** finalized_at ... */
+  /**
+   * finalized_at ...
+   * could be removed as it is included in the block itself
+   */
   finalized_at: string;
   /** uploader ... */
   uploader: string;
@@ -78,7 +97,10 @@ export interface EventBundleFinalized {
   next_uploader: string;
 }
 
-/** EventClaimedUploaderRole is an event emitted when an uploader claims the uploader role */
+/**
+ * EventClaimedUploaderRole is an event emitted when an uploader claims the uploader role
+ * emitted_by: MsgClaimUploaderRole
+ */
 export interface EventClaimedUploaderRole {
   /** pool_id ... */
   pool_id: string;
@@ -88,7 +110,10 @@ export interface EventClaimedUploaderRole {
   new_uploader: string;
 }
 
-/** EventSkippedUploaderRole is an event emitted when an uploader skips the upload */
+/**
+ * EventSkippedUploaderRole is an event emitted when an uploader skips the upload
+ * emitted_by: MsgSkipUploaderRole
+ */
 export interface EventSkippedUploaderRole {
   /** pool_id ... */
   pool_id: string;
@@ -100,7 +125,10 @@ export interface EventSkippedUploaderRole {
   new_uploader: string;
 }
 
-/** EventPointIncreased is an event emitted when a staker receives a point */
+/**
+ * EventPointIncreased is an event emitted when a staker receives a point
+ * emitted_by: MsgSubmitBundleProposal, EndBlock
+ */
 export interface EventPointIncreased {
   /** pool_id ... */
   pool_id: string;
@@ -110,7 +138,10 @@ export interface EventPointIncreased {
   current_points: string;
 }
 
-/** EventPointIncreased is an event emitted when a staker receives a point */
+/**
+ * EventPointIncreased is an event emitted when a staker receives a point
+ * emitted_by: MsgSubmitBundleProposal, EndBlock
+ */
 export interface EventPointsReset {
   /** pool_id ... */
   pool_id: string;
@@ -208,6 +239,8 @@ function createBaseEventBundleProposed(): EventBundleProposed {
     bundle_summary: "",
     data_hash: "",
     proposed_at: "0",
+    storage_provider_id: 0,
+    compression_id: 0,
   };
 }
 
@@ -248,6 +281,12 @@ export const EventBundleProposed = {
     }
     if (message.proposed_at !== "0") {
       writer.uint32(96).uint64(message.proposed_at);
+    }
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(104).uint32(message.storage_provider_id);
+    }
+    if (message.compression_id !== 0) {
+      writer.uint32(112).uint32(message.compression_id);
     }
     return writer;
   },
@@ -295,6 +334,12 @@ export const EventBundleProposed = {
         case 12:
           message.proposed_at = longToString(reader.uint64() as Long);
           break;
+        case 13:
+          message.storage_provider_id = reader.uint32();
+          break;
+        case 14:
+          message.compression_id = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -317,6 +362,8 @@ export const EventBundleProposed = {
       bundle_summary: isSet(object.bundle_summary) ? String(object.bundle_summary) : "",
       data_hash: isSet(object.data_hash) ? String(object.data_hash) : "",
       proposed_at: isSet(object.proposed_at) ? String(object.proposed_at) : "0",
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
+      compression_id: isSet(object.compression_id) ? Number(object.compression_id) : 0,
     };
   },
 
@@ -334,6 +381,8 @@ export const EventBundleProposed = {
     message.bundle_summary !== undefined && (obj.bundle_summary = message.bundle_summary);
     message.data_hash !== undefined && (obj.data_hash = message.data_hash);
     message.proposed_at !== undefined && (obj.proposed_at = message.proposed_at);
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
+    message.compression_id !== undefined && (obj.compression_id = Math.round(message.compression_id));
     return obj;
   },
 
@@ -351,6 +400,8 @@ export const EventBundleProposed = {
     message.bundle_summary = object.bundle_summary ?? "";
     message.data_hash = object.data_hash ?? "";
     message.proposed_at = object.proposed_at ?? "0";
+    message.storage_provider_id = object.storage_provider_id ?? 0;
+    message.compression_id = object.compression_id ?? 0;
     return message;
   },
 };

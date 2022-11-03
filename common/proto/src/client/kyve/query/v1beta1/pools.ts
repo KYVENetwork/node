@@ -17,6 +17,8 @@ export interface QueryPoolsRequest {
   runtime: string;
   /** paused ... */
   paused: boolean;
+  /** storage_provider_id ... */
+  storage_provider_id: number;
 }
 
 /** QueryPoolsResponse is the response type for the Query/Pools RPC method. */
@@ -58,7 +60,7 @@ export interface QueryPoolResponse {
 }
 
 function createBaseQueryPoolsRequest(): QueryPoolsRequest {
-  return { pagination: undefined, search: "", runtime: "", paused: false };
+  return { pagination: undefined, search: "", runtime: "", paused: false, storage_provider_id: 0 };
 }
 
 export const QueryPoolsRequest = {
@@ -74,6 +76,9 @@ export const QueryPoolsRequest = {
     }
     if (message.paused === true) {
       writer.uint32(32).bool(message.paused);
+    }
+    if (message.storage_provider_id !== 0) {
+      writer.uint32(40).uint32(message.storage_provider_id);
     }
     return writer;
   },
@@ -97,6 +102,9 @@ export const QueryPoolsRequest = {
         case 4:
           message.paused = reader.bool();
           break;
+        case 5:
+          message.storage_provider_id = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -111,6 +119,7 @@ export const QueryPoolsRequest = {
       search: isSet(object.search) ? String(object.search) : "",
       runtime: isSet(object.runtime) ? String(object.runtime) : "",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
+      storage_provider_id: isSet(object.storage_provider_id) ? Number(object.storage_provider_id) : 0,
     };
   },
 
@@ -121,6 +130,7 @@ export const QueryPoolsRequest = {
     message.search !== undefined && (obj.search = message.search);
     message.runtime !== undefined && (obj.runtime = message.runtime);
     message.paused !== undefined && (obj.paused = message.paused);
+    message.storage_provider_id !== undefined && (obj.storage_provider_id = Math.round(message.storage_provider_id));
     return obj;
   },
 
@@ -132,6 +142,7 @@ export const QueryPoolsRequest = {
     message.search = object.search ?? "";
     message.runtime = object.runtime ?? "";
     message.paused = object.paused ?? false;
+    message.storage_provider_id = object.storage_provider_id ?? 0;
     return message;
   },
 };
