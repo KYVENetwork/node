@@ -5,34 +5,34 @@ import { resolve } from "path";
 // import { kyve, cosmos as cosmosProto } from "@kyve/proto";
 
 /** pool **/
-import {MsgFundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
-import {MsgDefundPool} from "@kyve/proto/client/kyve/pool/v1beta1/tx";
+import {MsgFundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import {MsgDefundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
 /** stakers **/
-import {MsgCreateStaker} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateMetadata} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgJoinPool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateCommission} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgLeavePool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import {MsgCreateStaker} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateMetadata} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgJoinPool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateCommission} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgLeavePool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 /** delegations **/
-import {MsgDelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
-import {MsgWithdrawRewards} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
-import {MsgRedelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
-import {MsgUndelegate} from "@kyve/proto/client/kyve/delegation/v1beta1/tx";
+import {MsgDelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import {MsgWithdrawRewards} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import {MsgRedelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import {MsgUndelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
 /** bundles **/
-import {MsgSubmitBundleProposal} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
-import {MsgVoteBundleProposal} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
-import {MsgClaimUploaderRole} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
-import {MsgSkipUploaderRole} from "@kyve/proto/client/kyve/bundles/v1beta1/tx";
+import {MsgSubmitBundleProposal} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import {MsgVoteBundleProposal} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import {MsgClaimUploaderRole} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import {MsgSkipUploaderRole} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 
 /** gov **/
-import  {TextProposal} from "@kyve/proto/client/cosmos/gov/v1beta1/gov";
-import  {ParameterChangeProposal} from "@kyve/proto/client/cosmos/params/v1beta1/params";
+import  {TextProposal} from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
+import  {ParameterChangeProposal} from "@kyve/proto-beta/client/cosmos/params/v1beta1/params";
 
-import { CreatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { PausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { SchedulePoolUpgradeProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { UnpausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { UpdatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
+import { CreatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { PausePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { SchedulePoolUpgradeProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { UnpausePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { UpdatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
 
 
 import Mock = jest.Mock;

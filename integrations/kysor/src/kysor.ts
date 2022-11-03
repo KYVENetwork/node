@@ -5,11 +5,11 @@ import fs from "fs";
 import TOML from "@iarna/toml";
 import { IConfig, IValaccountConfig } from "./types/interfaces";
 import extract from "extract-zip";
-import KyveSDK, { KyveLCDClientType } from "@kyve/sdk";
+import KyveSDK, { KyveLCDClientType } from "@kyve/sdk-beta";
 import download from "download";
 import { getChecksum, setupLogger, startNodeProcess } from "./utils";
 
-import {PoolResponse} from "@kyve/proto/lcd/kyve/query/v1beta1/pools";
+import {PoolResponse} from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
 
 const home = path.join(process.env.HOME!, ".kysor");
 const platform = os.platform() === "darwin" ? "macos" : os.platform();

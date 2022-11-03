@@ -4,11 +4,11 @@ import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
-import { MsgCreateStaker as MsgStake } from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateMetadata} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateCommission} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgJoinPool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
-import {MsgLeavePool} from "@kyve/proto/client/kyve/stakers/v1beta1/tx";
+import { MsgCreateStaker as MsgStake } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateMetadata} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgUpdateCommission} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgJoinPool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import {MsgLeavePool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 
 export default class {
   private nativeClient: SigningStargateClient;

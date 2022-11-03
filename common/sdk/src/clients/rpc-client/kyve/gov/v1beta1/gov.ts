@@ -4,16 +4,16 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { DENOM } from "../../../../../constants";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
-import  {TextProposal} from "@kyve/proto/client/cosmos/gov/v1beta1/gov";
-import  {ParameterChangeProposal} from "@kyve/proto/client/cosmos/params/v1beta1/params";
+import  {TextProposal} from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
+import  {ParameterChangeProposal} from "@kyve/proto-beta/client/cosmos/params/v1beta1/params";
 
-import { CreatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { CancelPoolUpgradeProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { PausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { SchedulePoolUpgradeProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { UnpausePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { UpdatePoolProposal } from '@kyve/proto/client/kyve/pool/v1beta1/gov'
-import { VoteOption } from "@kyve/proto/client/cosmos/gov/v1beta1/gov"
+import { CreatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { CancelPoolUpgradeProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { PausePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { SchedulePoolUpgradeProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { UnpausePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { UpdatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/gov'
+import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov"
 
 export default class KyveGovMsg {
   private nativeClient: SigningStargateClient;

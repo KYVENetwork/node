@@ -1,6 +1,6 @@
 import { Node, standardizeJSON } from "../..";
 import KyveSDK from "@kyve/sdk-beta";
-import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
+import { KYVE_NETWORK } from "@kyve/sdk-beta/dist/constants";
 
 /**
  * setupSDK creates the main KYVE SDK and the client which is used for transactions

@@ -4,10 +4,10 @@ import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
-import { MsgSubmitBundleProposal } from '@kyve/proto/client/kyve/bundles/v1beta1/tx'
-import { MsgVoteBundleProposal} from '@kyve/proto/client/kyve/bundles/v1beta1/tx'
-import { MsgClaimUploaderRole} from '@kyve/proto/client/kyve/bundles/v1beta1/tx'
-import { MsgSkipUploaderRole} from '@kyve/proto/client/kyve/bundles/v1beta1/tx'
+import { MsgSubmitBundleProposal } from '@kyve/proto-beta/client/kyve/bundles/v1beta1/tx'
+import { MsgVoteBundleProposal} from '@kyve/proto-beta/client/kyve/bundles/v1beta1/tx'
+import { MsgClaimUploaderRole} from '@kyve/proto-beta/client/kyve/bundles/v1beta1/tx'
+import { MsgSkipUploaderRole} from '@kyve/proto-beta/client/kyve/bundles/v1beta1/tx'
 
 export default class {
   private nativeClient: SigningStargateClient;

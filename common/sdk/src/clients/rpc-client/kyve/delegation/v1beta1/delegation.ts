@@ -4,10 +4,10 @@ import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
-import {MsgDelegate} from '@kyve/proto/client/kyve/delegation/v1beta1/tx'
-import {MsgWithdrawRewards} from '@kyve/proto/client/kyve/delegation/v1beta1/tx'
-import {MsgUndelegate} from '@kyve/proto/client/kyve/delegation/v1beta1/tx'
-import {MsgRedelegate} from '@kyve/proto/client/kyve/delegation/v1beta1/tx'
+import {MsgDelegate} from '@kyve/proto-beta/client/kyve/delegation/v1beta1/tx'
+import {MsgWithdrawRewards} from '@kyve/proto-beta/client/kyve/delegation/v1beta1/tx'
+import {MsgUndelegate} from '@kyve/proto-beta/client/kyve/delegation/v1beta1/tx'
+import {MsgRedelegate} from '@kyve/proto-beta/client/kyve/delegation/v1beta1/tx'
 export default class {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
