@@ -6,10 +6,14 @@ export default class Cosmos implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
-    const block = await fetchBlock(core.poolConfig.source, +key, headers);
+    const block = await fetchBlock(source, +key, headers);
 
     return { key, value: block };
   }

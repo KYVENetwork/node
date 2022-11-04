@@ -6,11 +6,15 @@ export default class Celo implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let block;
 
     try {
-      block = await fetchBlock(core.poolConfig.source, +key);
+      block = await fetchBlock(source, +key);
     } catch (err) {
       throw err;
     }

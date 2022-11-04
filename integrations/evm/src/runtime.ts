@@ -6,7 +6,11 @@ export default class Evm implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     try {
       // set network settings if available
       let network;
@@ -24,7 +28,7 @@ export default class Evm implements IRuntime {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
         {
-          url: core.poolConfig.source,
+          url: source,
           headers,
         },
         network

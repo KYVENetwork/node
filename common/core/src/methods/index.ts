@@ -19,7 +19,7 @@ export * from "./timeouts/waitForCacheContinuation";
 
 // helpers
 export * from "./helpers/continueRound";
-export * from "./helpers/saveGetAndTransformDataItem";
+export * from "./helpers/saveGetDataItem";
 
 // factories
 export * from "./factories/storageProviderFactory";

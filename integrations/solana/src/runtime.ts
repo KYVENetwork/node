@@ -6,13 +6,17 @@ export default class Solana implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let block;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      block = await fetchBlock(core.poolConfig.source, +key, headers);
+      block = await fetchBlock(source, +key, headers);
     } catch (err) {
       if (wasSlotSkipped(err, +key)) return { key, value: null };
       throw err;

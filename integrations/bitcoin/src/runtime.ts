@@ -6,21 +6,25 @@ export default class Bitcoin implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let hash: string;
     let block: any;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      hash = await fetchBlockHash(core.poolConfig.source, +key, headers);
+      hash = await fetchBlockHash(source, +key, headers);
     } catch (err) {
       // The only time this should fail is if the height is out of range.
       throw err;
     }
 
     try {
-      block = await fetchBlock(core.poolConfig.source, hash, headers);
+      block = await fetchBlock(source, hash, headers);
     } catch (err) {
       throw err;
     }

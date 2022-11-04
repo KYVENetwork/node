@@ -6,16 +6,20 @@ export default class Near implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let block;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
-    const height = await fetchHeight(core.poolConfig.source, headers);
+    const height = await fetchHeight(source, headers);
     if (+key > height) throw new Error();
 
     try {
-      block = await fetchBlock(core.poolConfig.source, +key, headers);
+      block = await fetchBlock(source, +key, headers);
     } catch (err) {
       if (isBlockNotFound(err)) return { key, value: null };
 

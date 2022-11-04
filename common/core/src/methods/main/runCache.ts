@@ -127,7 +127,7 @@ export async function runCache(this: Node): Promise<void> {
           // collect and transform data from every source at once
           const results: DataItem[] = await Promise.all(
             this.poolConfig.sources.map((source: string) =>
-              this.saveGetAndTransformDataItem(source, nextKey)
+              this.saveGetDataItem(source, nextKey)
             )
           );
 
@@ -142,12 +142,6 @@ export async function runCache(this: Node): Promise<void> {
 
           // validate every data item for each possible index pair
           for (let pair of indexPairs) {
-            this.logger.debug(
-              `Validating source ${this.poolConfig.sources[pair[0]]} against ${
-                this.poolConfig.sources[pair[1]]
-              }`
-            );
-
             try {
               // validate pair of data items
               valid = await this.runtime.validateDataItem(
@@ -168,7 +162,9 @@ export async function runCache(this: Node): Promise<void> {
               }
             } catch (err) {
               this.logger.error(
-                `Unexpected error validating data items from source`
+                `Unexpected error validating data items between sources ${
+                  this.poolConfig.sources[pair[0]]
+                } and ${this.poolConfig.sources[pair[1]]}`
               );
               this.logger.error(standardizeJSON(err));
 
@@ -179,9 +175,6 @@ export async function runCache(this: Node): Promise<void> {
 
           // if validation between sources fails we abort further data collection
           if (!valid) {
-            this.logger.info(
-              `Found invalid data items from multiple sources. Skipping data collection ...`
-            );
             break;
           }
 
@@ -193,12 +186,26 @@ export async function runCache(this: Node): Promise<void> {
           );
 
           this.logger.debug(
-            `Choosing random item with seed:${seed} and index:${randIndex}`
+            `Choosing item from seed:${seed} index:${randIndex} source:${this.poolConfig.sources[randIndex]}`
           );
+
+          // choose one data item from multiple sources
+          let item = results[randIndex];
+
+          // transform data item
+          try {
+            this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
+            item = await this.runtime.transformDataItem(item);
+          } catch (err) {
+            this.logger.error(
+              `Unexpected error transforming data item. Skipping transformation ...`
+            );
+            this.logger.error(standardizeJSON(err));
+          }
 
           // add this data item to the cache
           this.logger.debug(`this.cacheProvider.put(${i.toString()},$ITEM)`);
-          await this.cacheProvider.put(i.toString(), results[randIndex]);
+          await this.cacheProvider.put(i.toString(), item);
 
           this.m.cache_current_items.inc();
           this.m.cache_index_head.set(i);

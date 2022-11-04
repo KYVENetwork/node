@@ -6,24 +6,21 @@ import {
 } from "../..";
 
 /**
- * saveGetAndTransformDataItem tries to retrieve the $KYVE balance of the staker account, the $KYVE
- * balance of the valaccount and the balance of the storage provider which
- * can be of any currency for metrics
+ * saveGetDataItem gets the data item with a backoff strategy
  *
- * @method saveGetAndTransformDataItem
+ * @method saveGetDataItem
  * @param {Node} this
  * @param {string} source
  * @param {string} key
- * @param {number} updatedAt
  * @return {Promise<DataItem | null>}
  */
-export async function saveGetAndTransformDataItem(
+export async function saveGetDataItem(
   this: Node,
   source: string,
   key: string
 ): Promise<DataItem | null> {
   // if item does not exist in cache yet collect it
-  let item = await callWithBackoffStrategy(
+  return await callWithBackoffStrategy(
     async () => {
       // collect data item from runtime source
       this.logger.debug(`this.runtime.getDataItem($THIS,${source},${key})`);
@@ -32,7 +29,7 @@ export async function saveGetAndTransformDataItem(
 
       this.m.runtime_get_data_item_successful.inc();
 
-      return item;
+      return standardizeJSON(item);
     },
     {
       limitTimeoutMs: 5 * 60 * 1000,
@@ -49,20 +46,4 @@ export async function saveGetAndTransformDataItem(
       this.m.runtime_get_data_item_failed.inc();
     }
   );
-
-  // transform data item
-  try {
-    this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
-    item = await this.runtime.transformDataItem(item);
-  } catch (err) {
-    this.logger.error(
-      `Unexpected error transforming data item. Skipping transformation ...`
-    );
-    this.logger.error(standardizeJSON(err));
-  }
-
-  return standardizeJSON({
-    key,
-    value: item,
-  });
 }
