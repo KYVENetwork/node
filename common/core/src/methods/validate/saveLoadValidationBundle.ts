@@ -80,7 +80,7 @@ export async function saveLoadValidationBundle(
         `Successfully loaded validation bundle from CacheProvider:${this.cacheProvider.name}`
       );
 
-      return bundle;
+      return standardizeJSON(bundle);
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     async (err: any, ctx) => {

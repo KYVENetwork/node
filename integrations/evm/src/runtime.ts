@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node, sha256, VoteOptions } from '@kyve/core-beta';
+import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
 import { name, version } from '../package.json';
 import { providers } from 'ethers';
 
@@ -45,7 +45,7 @@ export default class Evm implements IRuntime {
     }
   }
 
-  async transformDataItem(item: DataItem) {
+  async transformDataItem(item: DataItem): Promise<DataItem> {
     // Delete the number of confirmations from a transaction to keep data deterministic.
     item.value.transactions.forEach(
       (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
@@ -54,25 +54,22 @@ export default class Evm implements IRuntime {
     return item;
   }
 
-  async validateBundle(
+  async validateDataItem(
     core: Node,
-    proposedBundle: DataItem[],
-    validationBundle: DataItem[],
-    voteOptions: VoteOptions
-  ) {
-    const proposedBundleHash = sha256(
-      Buffer.from(JSON.stringify(proposedBundle))
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
+  ): Promise<boolean> {
+    const proposedDataItemHash = sha256(
+      Buffer.from(JSON.stringify(proposedDataItem))
     );
-    const validationBundleHash = sha256(
-      Buffer.from(JSON.stringify(validationBundle))
+    const validationDataItemHash = sha256(
+      Buffer.from(JSON.stringify(validationDataItem))
     );
 
-    return proposedBundleHash === validationBundleHash
-      ? voteOptions.VOTE_TYPE_VALID
-      : voteOptions.VOTE_TYPE_INVALID;
+    return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 

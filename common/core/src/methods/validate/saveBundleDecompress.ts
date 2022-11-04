@@ -34,7 +34,7 @@ export async function saveBundleDecompress(
       `Successfully decompressed bundle with Compression:${compression.name}`
     );
 
-    return storageBundle;
+    return standardizeJSON(storageBundle);
   } catch (err) {
     this.logger.error(
       `Could not decompress bundle with Compression. Continuing ...`

@@ -1,8 +1,5 @@
-import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { DataItem } from "..";
 import { Node } from "../..";
-
-export type VoteOptions = typeof VoteType;
 
 /**
  * Interface of Runtime.
@@ -56,21 +53,19 @@ export interface IRuntime {
   transformDataItem(item: DataItem): Promise<DataItem>;
 
   /**
-   * Validates a bundle proposal
+   * Validates a single data item of a bundle proposal
    *
-   * @method validateBundle
+   * @method validateDataItem
    * @param {Node} core the class of @kyve/core
-   * @param {DataItem[]} proposedBundle is the bundle saved by the uploader on the storage provider
-   * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
-   * @param {VoteOptions} voteOptions is the enum which holds all available vote options
-   * @return {Promise<VoteType>} returns the vote type the node should vote with
+   * @param {DataItem} proposedDataItem the data item proposed by the uploader
+   * @param {DataItem} validationDataItem the data item which the validator created himself for validation again the proposed data item
+   * @return {Promise<boolean>} returns whether the proposed data item is valid compared to the validation data item
    */
-  validateBundle(
+  validateDataItem(
     core: Node,
-    proposedBundle: DataItem[],
-    validationBundle: DataItem[],
-    voteOptions: VoteOptions
-  ): Promise<VoteType>;
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
+  ): Promise<boolean>;
 
   /**
    * Gets a formatted value string from a bundle. This produces a "summary" of
@@ -80,11 +75,11 @@ export interface IRuntime {
    *
    * Deterministic behavior is required
    *
-   * @method summarizeBundle
+   * @method summarizeDataBundle
    * @param {DataItem[]} bundle is the bundle which needs to be summarized
    * @return {Promise<string>} returns a formatted value string
    */
-  summarizeBundle(bundle: DataItem[]): Promise<string>;
+  summarizeDataBundle(bundle: DataItem[]): Promise<string>;
 
   /**
    * Gets the next key from the current key so that the data archived has an order.

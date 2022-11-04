@@ -131,7 +131,7 @@ export async function validateBundleProposal(
     this.logger.debug(`this.runtime.summarizeBundle($VALIDATION_BUNDLE)`);
 
     const bundleSummary = await this.runtime
-      .summarizeBundle(validationBundle)
+      .summarizeDataBundle(validationBundle)
       .catch((err) => {
         this.logger.error(
           `Unexpected error summarizing bundle with runtime. Voting abstain ...`
@@ -179,34 +179,60 @@ export async function validateBundleProposal(
         storageProviderResult
       );
 
-      // perform custom runtime bundle validation
-      this.logger.debug(
-        `Validating bundle proposal by custom runtime validation`
-      );
-      this.logger.debug(
-        `this.runtime.validateBundle($THIS, $PROPOSED_BUNDLE, $VALIDATION_BUNDLE)`
-      );
+      try {
+        // perform custom runtime bundle validation
+        this.logger.debug(
+          `Validating bundle proposal by custom runtime validation`
+        );
 
-      const vote = await this.runtime
-        .validateBundle(
-          this,
-          standardizeJSON(proposedBundle),
-          standardizeJSON(validationBundle),
-          VoteType
-        )
-        .catch((err) => {
-          this.logger.error(
-            `Unexpected error validating bundle with runtime. Voting abstain ...`
-          );
-          this.logger.error(standardizeJSON(err));
+        // validate if bundle size matches
+        let valid = proposedBundle.length === validationBundle.length;
 
-          return VoteType.VOTE_TYPE_ABSTAIN;
-        });
+        // validate each data item in bundle with custom runtime validation
+        for (let i = 0; i < proposedBundle.length; i++) {
+          if (valid) {
+            this.logger.debug(
+              `this.runtime.validateDataItem($THIS, $PROPOSED_DATA_ITEM, $VALIDATION_DATA_ITEM)`
+            );
+            valid = await this.runtime.validateDataItem(
+              this,
+              proposedBundle[i],
+              validationBundle[i]
+            );
+            this.logger.debug(
+              `Validated data item: index:${i} - key:${proposedBundle[i].key} - result:${valid}`
+            );
+          } else {
+            // abort further validation if an invalid data item was
+            // found in bundle
+            break;
+          }
+        }
 
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        vote
-      );
+        this.logger.debug(
+          `Finished validating bundle by custom runtime validation. Result = ${valid}`
+        );
+
+        // vote with either valid or invalid
+        const vote = valid
+          ? VoteType.VOTE_TYPE_VALID
+          : VoteType.VOTE_TYPE_INVALID;
+
+        await this.voteBundleProposal(
+          this.pool.bundle_proposal!.storage_id,
+          vote
+        );
+      } catch (err) {
+        this.logger.error(
+          `Unexpected error validating data items with runtime. Voting abstain ...`
+        );
+        this.logger.error(standardizeJSON(err));
+
+        await this.voteBundleProposal(
+          this.pool.bundle_proposal!.storage_id,
+          VoteType.VOTE_TYPE_ABSTAIN
+        );
+      }
 
       // update metrics
       this.m.bundles_amount.inc();
