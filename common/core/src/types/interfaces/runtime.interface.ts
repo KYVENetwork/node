@@ -35,10 +35,11 @@ export interface IRuntime {
    *
    * @method getDataItem
    * @param {Node} core the class of @kyve/core
-   * @param {string} key which gets inserted by @kyve/core
+   * @param {string} source the source from which to get the data item from. usually an api or rpc endpoint
+   * @param {string} key the key of the data item
    * @return {Promise<DataItem>}
    */
-  getDataItem(core: Node, key: string): Promise<DataItem>;
+  getDataItem(core: Node, source: string, key: string): Promise<DataItem>;
 
   /**
    * Transforms a single data item and return it. Used for example
