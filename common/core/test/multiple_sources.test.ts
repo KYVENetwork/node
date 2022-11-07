@@ -1,5 +1,11 @@
 import { Logger } from "tslog";
-import { DataItem, ICompression, IStorageProvider, Node } from "../src/index";
+import {
+  DataItem,
+  generateIndexPairs,
+  ICompression,
+  IStorageProvider,
+  Node,
+} from "../src/index";
 import { runCache } from "../src/methods/main/runCache";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
@@ -105,7 +111,7 @@ describe("multiple sources tests", () => {
     register.clear();
   });
 
-  test.skip("start caching from a pool with multiple sources which is in genesis state", async () => {
+  test("start caching from a pool with multiple sources which is in genesis state", async () => {
     // ARRANGE
     core.pool = {
       ...genesis_pool,
@@ -199,30 +205,63 @@ describe("multiple sources tests", () => {
         core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
+    let n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
       for (let s = 0; s < core.poolConfig.sources.length; s++) {
         expect(runtime.getDataItem).toHaveBeenNthCalledWith(
-          n + s + 1,
-          core,
+          n,
+          expect.any(Node),
           core.poolConfig.sources[s],
-          n.toString()
+          b.toString()
         );
+
+        n++;
       }
     }
 
     expect(runtime.transformDataItem).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
+      parseInt(genesis_pool.data.max_bundle_size) *
+        core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      const item = {
-        key: n.toString(),
-        value: `${n}-value`,
-      };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        const item = {
+          key: b.toString(),
+          value: `${b}-value`,
+        };
+        expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n, item);
+
+        n++;
+      }
     }
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) *
+        core.poolConfig.sources.length
+    );
+
+    const pairs = generateIndexPairs(core.poolConfig.sources.length);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
+      for (let p = 0; p < pairs.length; p++) {
+        const item = {
+          key: b.toString(),
+          value: `${b}-value-transform`,
+        };
+        expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          item,
+          item
+        );
+        n++;
+      }
+    }
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
@@ -247,7 +286,7 @@ describe("multiple sources tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("start caching from a pool with multiple sources which has a bundle proposal ongoing", async () => {
+  test("start caching from a pool with multiple sources which has a bundle proposal ongoing", async () => {
     // ARRANGE
     core.pool = {
       ...genesis_pool,
@@ -365,31 +404,69 @@ describe("multiple sources tests", () => {
     // =========================
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 50
+      (parseInt(genesis_pool.data.max_bundle_size) + 50) *
+        core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
-        n + 1,
-        core,
-        core.poolConfig.sources[0],
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
+    let n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size) + 50; b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          core.poolConfig.sources[s],
+          (b + parseInt(genesis_pool.data.max_bundle_size)).toString()
+        );
+
+        n++;
+      }
     }
 
     expect(runtime.transformDataItem).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 50
+      (parseInt(genesis_pool.data.max_bundle_size) + 50) *
+        core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      const item = {
-        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
-      };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size) + 50; b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        const item = {
+          key: (b + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+          value: `${b + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+        };
+        expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n, item);
+
+        n++;
+      }
     }
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(
+      (parseInt(genesis_pool.data.max_bundle_size) + 50) *
+        core.poolConfig.sources.length
+    );
+
+    const pairs = generateIndexPairs(core.poolConfig.sources.length);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size) + 50; b++) {
+      for (let p = 0; p < pairs.length; p++) {
+        const item = {
+          key: (b + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+          value: `${
+            b + parseInt(genesis_pool.data.max_bundle_size)
+          }-value-transform`,
+        };
+        expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          item,
+          item
+        );
+        n++;
+      }
+    }
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
