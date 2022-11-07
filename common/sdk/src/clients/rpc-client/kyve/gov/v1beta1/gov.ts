@@ -16,7 +16,7 @@ import { UpdatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/go
 import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov"
 
 export default class KyveGovMsg {
-  private nativeClient: SigningStargateClient;
+  protected nativeClient: SigningStargateClient;
   public readonly account: AccountData;
 
   constructor(client: SigningStargateClient, account: AccountData) {
