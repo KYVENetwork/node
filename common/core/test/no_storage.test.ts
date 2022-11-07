@@ -1,11 +1,5 @@
 import { Logger } from "tslog";
-import {
-  bundleToBytes,
-  ICompression,
-  IStorageProvider,
-  Node,
-  sha256,
-} from "../src/index";
+import { ICompression, IStorageProvider, Node } from "../src/index";
 import { runNode } from "../src/methods/main/runNode";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";

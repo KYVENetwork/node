@@ -1,11 +1,10 @@
-import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { DataItem, Node, sha256 } from "../../src";
 
 export const TestRuntime = jest.fn().mockImplementation(() => {
   return {
     name: "@kyve/evm",
     version: "0.0.0",
-    getDataItem: jest.fn(async (core: Node, key: string) => ({
+    getDataItem: jest.fn(async (core: Node, source: string, key: string) => ({
       key,
       value: `${key}-value`,
     })),
@@ -16,21 +15,17 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
     validateDataItem: jest.fn(
       async (
         core: Node,
-        proposedBundle: DataItem[],
-        validationBundle: DataItem[]
+        proposedDataItem: DataItem,
+        validationDataItem: DataItem
       ) => {
-        const proposedBundleHash = sha256(
-          Buffer.from(JSON.stringify(proposedBundle))
+        const proposedDataItemHash = sha256(
+          Buffer.from(JSON.stringify(proposedDataItem))
         );
-        const validationBundleHash = sha256(
-          Buffer.from(JSON.stringify(validationBundle))
+        const validationDataItemHash = sha256(
+          Buffer.from(JSON.stringify(validationDataItem))
         );
 
-        if (proposedBundleHash === validationBundleHash) {
-          return VoteType.VOTE_TYPE_VALID;
-        } else {
-          return VoteType.VOTE_TYPE_INVALID;
-        }
+        return proposedDataItemHash === validationDataItemHash;
       }
     ),
     summarizeDataBundle: jest.fn(async (bundle: DataItem[]) =>

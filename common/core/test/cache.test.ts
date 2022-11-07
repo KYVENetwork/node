@@ -79,6 +79,9 @@ describe("cache tests", () => {
 
     core["poolId"] = 0;
     core["staker"] = "test_staker";
+    core["poolConfig"] = {
+      sources: ["https://rpc.api.moonbeam.network"],
+    };
 
     core.client = client();
     core.lcd = lcd();
@@ -195,6 +198,7 @@ describe("cache tests", () => {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
+        core.poolConfig.sources[0],
         n.toString()
       );
     }
@@ -361,6 +365,7 @@ describe("cache tests", () => {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
+        core.poolConfig.sources[0],
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
@@ -536,6 +541,7 @@ describe("cache tests", () => {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
+        core.poolConfig.sources[0],
         (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
       );
     }
@@ -703,6 +709,7 @@ describe("cache tests", () => {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         core,
+        core.poolConfig.sources[0],
         (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
       );
     }
@@ -750,14 +757,14 @@ describe("cache tests", () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
-      .mockImplementationOnce((core: Node, key: string) =>
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
           value: `${key}-value`,
         })
       )
       .mockRejectedValueOnce(new Error("network error"))
-      .mockImplementation((core: Node, key: string) =>
+      .mockImplementation((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
           value: `${key}-value`,
@@ -856,16 +863,19 @@ describe("cache tests", () => {
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       1,
       expect.any(Node),
+      core.poolConfig.sources[0],
       "0"
     );
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       2,
       expect.any(Node),
+      core.poolConfig.sources[0],
       "1"
     );
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       3,
       expect.any(Node),
+      core.poolConfig.sources[0],
       "1"
     );
 
@@ -906,21 +916,21 @@ describe("cache tests", () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
-      .mockImplementationOnce((core: Node, key: string) =>
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
           value: `${key}-value`,
         })
       )
       .mockRejectedValueOnce(new Error("network error"))
-      .mockImplementationOnce((core: Node, key: string) =>
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
           value: `${key}-value`,
         })
       )
       .mockRejectedValueOnce(new Error("network error"))
-      .mockImplementation((core: Node, key: string) =>
+      .mockImplementation((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
           value: `${key}-value`,
@@ -1056,48 +1066,56 @@ describe("cache tests", () => {
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       1,
       core,
+      core.poolConfig.sources[0],
       (0 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       2,
       core,
+      core.poolConfig.sources[0],
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       3,
       core,
+      core.poolConfig.sources[0],
       (1 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       4,
       core,
+      core.poolConfig.sources[0],
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       5,
       core,
+      core.poolConfig.sources[0],
       (2 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       6,
       core,
+      core.poolConfig.sources[0],
       (3 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       7,
       core,
+      core.poolConfig.sources[0],
       (4 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       8,
       core,
+      core.poolConfig.sources[0],
       (5 + parseInt(genesis_pool.data.max_bundle_size) + 3).toString()
     );
 
@@ -1271,6 +1289,7 @@ describe("cache tests", () => {
       expect(runtime.getDataItem).toHaveBeenNthCalledWith(
         n + 1,
         expect.any(Node),
+        core.poolConfig.sources[0],
         n.toString()
       );
     }
@@ -1526,7 +1545,12 @@ describe("cache tests", () => {
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(1);
 
-    expect(runtime.getDataItem).toHaveBeenNthCalledWith(1, core, "100");
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+      1,
+      core,
+      core.poolConfig.sources[0],
+      "100"
+    );
 
     expect(runtime.transformDataItem).toHaveBeenCalledTimes(1);
 

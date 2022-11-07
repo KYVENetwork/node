@@ -15,7 +15,7 @@ import { TestCacheProvider } from "./mocks/cache.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
-import { VoteType } from "../../proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { TestNormalStorageProvider } from "./mocks/storageProvider.mock";
 import { TestNormalCompression } from "./mocks/compression.mock";
 
@@ -239,12 +239,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -390,12 +394,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -543,12 +551,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -700,12 +712,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -865,12 +881,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1025,12 +1045,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1165,12 +1189,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1567,12 +1595,16 @@ describe("vote abstain tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
-    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1843,9 +1875,9 @@ describe("vote abstain tests", () => {
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================

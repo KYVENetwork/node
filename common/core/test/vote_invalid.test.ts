@@ -15,7 +15,7 @@ import { TestCacheProvider } from "./mocks/cache.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
-import { VoteType } from "../../proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { TestNormalStorageProvider } from "./mocks/storageProvider.mock";
 import { TestNormalCompression } from "./mocks/compression.mock";
 
@@ -111,9 +111,7 @@ describe("invalid votes tests", () => {
 
   test("vote invalid because runtime validate function returns false", async () => {
     // ARRANGE
-    const validateBundleMock = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
     core["runtime"].validateDataItem = validateBundleMock;
 
     const bundle = [
@@ -235,10 +233,11 @@ describe("invalid votes tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================
@@ -900,9 +899,7 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted abstain bebore", async () => {
     // ARRANGE
-    const validateBundleMock = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
     core["runtime"].validateDataItem = validateBundleMock;
 
@@ -1026,10 +1023,11 @@ describe("invalid votes tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================
@@ -1044,9 +1042,7 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted invalid before", async () => {
     // ARRANGE
-    const validateBundleMock = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
     core["runtime"].validateDataItem = validateBundleMock;
 
@@ -1176,9 +1172,7 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid after validator has voted valid before", async () => {
     // ARRANGE
-    const validateBundleMock = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    const validateBundleMock = jest.fn().mockResolvedValue(false);
 
     core["runtime"].validateDataItem = validateBundleMock;
 
@@ -1306,9 +1300,7 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but local bundle could not be loaded in the first try", async () => {
     // ARRANGE
-    core["runtime"].validateDataItem = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    core["runtime"].validateDataItem = jest.fn().mockResolvedValue(false);
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1437,10 +1429,11 @@ describe("invalid votes tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================
@@ -1455,9 +1448,7 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but bundle from storage provider could not be loaded in the first try", async () => {
     // ARRANGE
-    core["runtime"].validateDataItem = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    core["runtime"].validateDataItem = jest.fn().mockResolvedValue(false);
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1598,10 +1589,11 @@ describe("invalid votes tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================
@@ -1616,9 +1608,7 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid where voteBundleProposal fails", async () => {
     // ARRANGE
-    core["runtime"].validateDataItem = jest
-      .fn()
-      .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
+    core["runtime"].validateDataItem = jest.fn().mockResolvedValue(false);
 
     core["client"].kyve.bundles.v1beta1.voteBundleProposal = jest
       .fn()
@@ -1743,10 +1733,11 @@ describe("invalid votes tests", () => {
     expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+
     expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
+      expect.any(Node),
+      standardizeJSON(bundle[0]),
+      standardizeJSON(bundle[0])
     );
 
     // ========================
