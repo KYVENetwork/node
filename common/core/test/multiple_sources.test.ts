@@ -24,9 +24,9 @@ TEST CASES - multiple sources tests
 * start caching from a pool with multiple sources which is in genesis state
 * start caching from a pool with multiple sources which has a bundle proposal ongoing
 * continue caching from a pool with multiple sources which has a bundle proposal ongoing
-* start caching from a pool where last bundle proposal was dropped
-* start caching from a pool where getNextDataItem fails once
-* start caching from a pool where getNextDataItem fails multiple times
+* start caching from a pool with multiple sources where last bundle proposal was dropped
+* start caching from a pool with multiple sources where getDataItem fails once
+* start caching from a pool where getDataItem fails multiple times
 * start caching from a pool where transformDataItem fails
 * start caching from a pool where nextKey fails
 * start caching from a pool where cache methods fail
@@ -707,7 +707,7 @@ describe("multiple sources tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("start caching from a pool where last bundle proposal was dropped", async () => {
+  test("start caching from a pool with multiple sources where last bundle proposal was dropped", async () => {
     // ARRANGE
     core.pool = {
       ...genesis_pool,
@@ -824,31 +824,69 @@ describe("multiple sources tests", () => {
     // =========================
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
+      parseInt(genesis_pool.data.max_bundle_size) *
+        core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(runtime.getDataItem).toHaveBeenNthCalledWith(
-        n + 1,
-        core,
-        core.poolConfig.sources[0],
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
+    let n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          core.poolConfig.sources[s],
+          (b + parseInt(genesis_pool.data.max_bundle_size)).toString()
+        );
+
+        n++;
+      }
     }
 
     expect(runtime.transformDataItem).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size)
+      parseInt(genesis_pool.data.max_bundle_size) *
+        core.poolConfig.sources.length
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      const item = {
-        key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
-        value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
-      };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        const item = {
+          key: (b + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+          value: `${b + parseInt(genesis_pool.data.max_bundle_size)}-value`,
+        };
+        expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n, item);
+
+        n++;
+      }
     }
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(
+      parseInt(genesis_pool.data.max_bundle_size) *
+        core.poolConfig.sources.length
+    );
+
+    const pairs = generateIndexPairs(core.poolConfig.sources.length);
+    n = 1;
+
+    for (let b = 0; b < parseInt(genesis_pool.data.max_bundle_size); b++) {
+      for (let p = 0; p < pairs.length; p++) {
+        const item = {
+          key: (b + parseInt(genesis_pool.data.max_bundle_size)).toString(),
+          value: `${
+            b + parseInt(genesis_pool.data.max_bundle_size)
+          }-value-transform`,
+        };
+        expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          item,
+          item
+        );
+        n++;
+      }
+    }
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
@@ -875,10 +913,28 @@ describe("multiple sources tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("start caching from a pool where getNextDataItem fails once", async () => {
+  test("start caching from a pool with multiple sources where getDataItem fails once", async () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      )
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      )
+      .mockImplementationOnce((core: Node, source: string, key: string) =>
+        Promise.resolve({
+          key,
+          value: `${key}-value`,
+        })
+      )
       .mockImplementationOnce((core: Node, source: string, key: string) =>
         Promise.resolve({
           key,
@@ -980,7 +1036,9 @@ describe("multiple sources tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.getDataItem).toHaveBeenCalledTimes(2 + 1);
+    expect(runtime.getDataItem).toHaveBeenCalledTimes(
+      2 * core.poolConfig.sources.length + 1
+    );
 
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       1,
@@ -991,27 +1049,78 @@ describe("multiple sources tests", () => {
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       2,
       expect.any(Node),
-      core.poolConfig.sources[0],
-      "1"
+      core.poolConfig.sources[1],
+      "0"
     );
     expect(runtime.getDataItem).toHaveBeenNthCalledWith(
       3,
       expect.any(Node),
+      core.poolConfig.sources[2],
+      "0"
+    );
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+      4,
+      expect.any(Node),
       core.poolConfig.sources[0],
       "1"
     );
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+      5,
+      expect.any(Node),
+      core.poolConfig.sources[1],
+      "1"
+    );
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+      5,
+      expect.any(Node),
+      core.poolConfig.sources[1],
+      "1"
+    );
+    expect(runtime.getDataItem).toHaveBeenNthCalledWith(
+      6,
+      expect.any(Node),
+      core.poolConfig.sources[2],
+      "1"
+    );
 
-    expect(runtime.transformDataItem).toHaveBeenCalledTimes(2);
+    expect(runtime.transformDataItem).toHaveBeenCalledTimes(6);
 
-    for (let n = 0; n < 2; n++) {
-      const item = {
-        key: n.toString(),
-        value: `${n}-value`,
-      };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+    let n = 1;
+
+    for (let b = 0; b < 2; b++) {
+      for (let s = 0; s < core.poolConfig.sources.length; s++) {
+        const item = {
+          key: b.toString(),
+          value: `${b}-value`,
+        };
+        expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n, item);
+
+        n++;
+      }
     }
 
-    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(
+      2 * core.poolConfig.sources.length
+    );
+
+    const pairs = generateIndexPairs(core.poolConfig.sources.length);
+    n = 1;
+
+    for (let b = 0; b < 2; b++) {
+      for (let p = 0; p < pairs.length; p++) {
+        const item = {
+          key: b.toString(),
+          value: `${b}-value-transform`,
+        };
+        expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+          n,
+          expect.any(Node),
+          item,
+          item
+        );
+        n++;
+      }
+    }
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
@@ -1034,7 +1143,7 @@ describe("multiple sources tests", () => {
     // TODO: assert timeouts
   });
 
-  test.skip("start caching from a pool where getNextDataItem fails multiple times", async () => {
+  test.skip("start caching from a pool where getDataItem fails multiple times", async () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
