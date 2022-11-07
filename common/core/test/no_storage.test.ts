@@ -249,10 +249,10 @@ describe("no storage tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -385,9 +385,9 @@ describe("no storage tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -514,10 +514,10 @@ describe("no storage tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -627,9 +627,9 @@ describe("no storage tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -739,9 +739,9 @@ describe("no storage tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -863,9 +863,9 @@ describe("no storage tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES

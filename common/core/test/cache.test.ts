@@ -211,7 +211,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
@@ -224,7 +224,7 @@ describe("cache tests", () => {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -377,7 +377,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 50
@@ -392,7 +392,7 @@ describe("cache tests", () => {
       );
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -552,7 +552,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
@@ -567,7 +567,7 @@ describe("cache tests", () => {
       );
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -719,7 +719,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size)
@@ -734,7 +734,7 @@ describe("cache tests", () => {
       );
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -879,7 +879,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
@@ -890,7 +890,7 @@ describe("cache tests", () => {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1115,7 +1115,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(
       parseInt(genesis_pool.data.max_bundle_size) + 3
@@ -1130,7 +1130,7 @@ describe("cache tests", () => {
       );
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1285,7 +1285,7 @@ describe("cache tests", () => {
       expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
     }
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // we only call getNextKey max_bundle_size - 1 because
     // the pool is in genesis state and therefore start_key
@@ -1296,7 +1296,7 @@ describe("cache tests", () => {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1408,13 +1408,13 @@ describe("cache tests", () => {
 
     expect(runtime.transformDataItem).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(1);
 
     expect(runtime.nextKey).toHaveBeenNthCalledWith(1, "99");
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1535,13 +1535,13 @@ describe("cache tests", () => {
       value: `100-value`,
     });
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.nextKey).toHaveBeenCalledTimes(1);
 
     expect(runtime.nextKey).toHaveBeenNthCalledWith(1, "99");
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES

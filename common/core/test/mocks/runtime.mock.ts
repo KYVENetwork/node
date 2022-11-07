@@ -13,7 +13,7 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
       key: item.key,
       value: `${item.value}-transform`,
     })),
-    validateBundle: jest.fn(
+    validateDataItem: jest.fn(
       async (
         core: Node,
         proposedBundle: DataItem[],
@@ -33,7 +33,7 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
         }
       }
     ),
-    summarizeBundle: jest.fn(async (bundle: DataItem[]) =>
+    summarizeDataBundle: jest.fn(async (bundle: DataItem[]) =>
       JSON.stringify(bundle)
     ),
     nextKey: jest.fn(async (key: string) => (parseInt(key) + 1).toString()),

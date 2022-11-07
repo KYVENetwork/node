@@ -128,7 +128,7 @@ export async function validateBundleProposal(
 
     // vote invalid if bundle summary does not match with proposed summary
     this.logger.debug(`Validating bundle proposal by bundle summary`);
-    this.logger.debug(`this.runtime.summarizeBundle($VALIDATION_BUNDLE)`);
+    this.logger.debug(`this.runtime.summarizeDataBundle($VALIDATION_BUNDLE)`);
 
     const bundleSummary = await this.runtime
       .summarizeDataBundle(validationBundle)

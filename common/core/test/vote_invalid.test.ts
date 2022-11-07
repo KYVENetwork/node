@@ -114,7 +114,7 @@ describe("invalid votes tests", () => {
     const validateBundleMock = jest
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
-    core["runtime"].validateBundle = validateBundleMock;
+    core["runtime"].validateDataItem = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -231,11 +231,11 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -365,9 +365,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -495,9 +495,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -625,9 +625,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -755,10 +755,10 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -884,9 +884,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -904,7 +904,7 @@ describe("invalid votes tests", () => {
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
-    core["runtime"].validateBundle = validateBundleMock;
+    core["runtime"].validateDataItem = validateBundleMock;
 
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1022,11 +1022,11 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1048,7 +1048,7 @@ describe("invalid votes tests", () => {
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
-    core["runtime"].validateBundle = validateBundleMock;
+    core["runtime"].validateDataItem = validateBundleMock;
 
     const canVoteMock = jest.fn().mockResolvedValue({
       possible: false,
@@ -1160,9 +1160,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1180,7 +1180,7 @@ describe("invalid votes tests", () => {
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
-    core["runtime"].validateBundle = validateBundleMock;
+    core["runtime"].validateDataItem = validateBundleMock;
 
     const canVoteMock = jest.fn().mockResolvedValue({
       possible: false,
@@ -1290,9 +1290,9 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1306,7 +1306,7 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but local bundle could not be loaded in the first try", async () => {
     // ARRANGE
-    core["runtime"].validateBundle = jest
+    core["runtime"].validateDataItem = jest
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
@@ -1433,11 +1433,11 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1455,7 +1455,7 @@ describe("invalid votes tests", () => {
 
   test("vote invalid but bundle from storage provider could not be loaded in the first try", async () => {
     // ARRANGE
-    core["runtime"].validateBundle = jest
+    core["runtime"].validateDataItem = jest
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
@@ -1594,11 +1594,11 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1616,7 +1616,7 @@ describe("invalid votes tests", () => {
 
   test("try to vote invalid where voteBundleProposal fails", async () => {
     // ARRANGE
-    core["runtime"].validateBundle = jest
+    core["runtime"].validateDataItem = jest
       .fn()
       .mockResolvedValue(VoteType.VOTE_TYPE_INVALID);
 
@@ -1739,11 +1739,11 @@ describe("invalid votes tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)

@@ -23,7 +23,7 @@ TEST CASES - propose bundle tests
 * propose bundle where submitBundleProposal fails
 * propose bundle where skipUploaderRole fails
 * propose bundle where saveBundle and skipUploaderRole fails
-* propose bundle where summarizeBundle fails
+* propose bundle where summarizeDataBundle fails
 * propose bundle where compress fails
 
 */
@@ -246,10 +246,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -382,9 +382,9 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -529,10 +529,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -679,10 +679,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -829,10 +829,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -988,10 +988,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1128,9 +1128,9 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1281,10 +1281,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1300,14 +1300,16 @@ describe("propose bundle tests", () => {
     // TODO: assert timeouts
   });
 
-  test("propose bundle where summarizeBundle fails", async () => {
+  test("propose bundle where summarizeDataBundle fails", async () => {
     // ARRANGE
     core["lcd"].kyve.query.v1beta1.canVote = jest.fn().mockResolvedValue({
       possible: false,
       reason: "Already voted",
     });
 
-    core["runtime"].summarizeBundle = jest.fn().mockRejectedValue(new Error());
+    core["runtime"].summarizeDataBundle = jest
+      .fn()
+      .mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -1424,10 +1426,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1570,10 +1572,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 

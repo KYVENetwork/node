@@ -35,8 +35,8 @@ TEST CASES - vote abstain tests
 * try to vote abstain after validator has already voted valid
 * try to vote abstain after validator has already voted invalid
 * try to vote abstain where voteBundleProposal fails
-* try to validate bundle but summarizeBundle fails
-* try to validate bundle but validateBundle fails
+* try to validate bundle but summarizeDataBundle fails
+* try to validate bundle but validateDataItem fails
 
 */
 
@@ -236,11 +236,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -387,11 +387,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -540,11 +540,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -697,11 +697,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -862,11 +862,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1022,11 +1022,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1162,11 +1162,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1294,9 +1294,9 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1421,9 +1421,9 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1564,11 +1564,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -1584,7 +1584,7 @@ describe("vote abstain tests", () => {
     // TODO: assert timeouts
   });
 
-  test("try to validate bundle but summarizeBundle fails", async () => {
+  test("try to validate bundle but summarizeDataBundle fails", async () => {
     // ARRANGE
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1596,7 +1596,9 @@ describe("vote abstain tests", () => {
     const dataSize = compressedBundle.byteLength.toString();
     const dataHash = sha256(bundleBytes);
 
-    core["runtime"].summarizeBundle = jest.fn().mockRejectedValue(new Error());
+    core["runtime"].summarizeDataBundle = jest
+      .fn()
+      .mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -1702,10 +1704,10 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1717,7 +1719,7 @@ describe("vote abstain tests", () => {
     // TODO: assert timeouts
   });
 
-  test("try to validate bundle but validateBundle fails", async () => {
+  test("try to validate bundle but validateDataItem fails", async () => {
     // ARRANGE
     const bundle = [
       { key: "test_key_1", value: "test_value_1" },
@@ -1729,7 +1731,7 @@ describe("vote abstain tests", () => {
     const dataSize = compressedBundle.byteLength.toString();
     const dataHash = sha256(bundleBytes);
 
-    core["runtime"].validateBundle = jest.fn().mockRejectedValue(new Error());
+    core["runtime"].validateDataItem = jest.fn().mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -1836,11 +1838,11 @@ describe("vote abstain tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)

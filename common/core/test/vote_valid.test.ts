@@ -221,11 +221,11 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -366,11 +366,11 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -523,11 +523,11 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -661,11 +661,11 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)
@@ -792,9 +792,9 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -915,9 +915,9 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -1050,11 +1050,11 @@ describe("vote valid tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(1);
+    expect(runtime.validateDataItem).toHaveBeenLastCalledWith(
       expect.anything(),
       standardizeJSON(bundle),
       standardizeJSON(bundle)

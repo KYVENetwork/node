@@ -79,7 +79,7 @@ export async function createBundleProposal(this: Node): Promise<void> {
     // get the last value of the bundle proposal and format
     // it so it can be included in the bundle proposal and
     // saved on chain
-    this.logger.debug(`this.runtime.summarizeBundle($BUNDLE_PROPOSAL)`);
+    this.logger.debug(`this.runtime.summarizeDataBundle($BUNDLE_PROPOSAL)`);
     const bundleSummary = await this.runtime
       .summarizeDataBundle(bundleProposal)
       .catch((err) => {
