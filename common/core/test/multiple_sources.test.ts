@@ -27,9 +27,8 @@ TEST CASES - multiple sources tests
 * start caching from a pool with multiple sources where last bundle proposal was dropped
 * start caching from a pool with multiple sources where getDataItem fails once
 * start caching from a pool with multiple sources where getDataItem fails multiple times
-* start caching from a pool where transformDataItem fails
-* start caching from a pool where nextKey fails
-* start caching from a pool where cache methods fail
+* TODO: start caching from a pool where transformDataItem fails
+* TODO: start caching from multiple sources but sources return different result
 
 */
 
