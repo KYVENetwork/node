@@ -6,15 +6,15 @@ import {
 } from "../..";
 
 /**
- * saveGetDataItem gets the data item with a backoff strategy
+ * saveGetTransformDataItem gets the data item with a backoff strategy
  *
- * @method saveGetDataItem
+ * @method saveGetTransformDataItem
  * @param {Node} this
  * @param {string} source
  * @param {string} key
  * @return {Promise<DataItem | null>}
  */
-export async function saveGetDataItem(
+export async function saveGetTransformDataItem(
   this: Node,
   source: string,
   key: string
@@ -25,9 +25,20 @@ export async function saveGetDataItem(
       // collect data item from runtime source
       this.logger.debug(`this.runtime.getDataItem($THIS,${source},${key})`);
 
-      const item = await this.runtime.getDataItem(this, source, key);
+      let item = await this.runtime.getDataItem(this, source, key);
 
       this.m.runtime_get_data_item_successful.inc();
+
+      // transform data item
+      try {
+        this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
+        item = await this.runtime.transformDataItem(item);
+      } catch (err) {
+        this.logger.error(
+          `Unexpected error transforming data item. Skipping transformation ...`
+        );
+        this.logger.error(standardizeJSON(err));
+      }
 
       return standardizeJSON(item);
     },

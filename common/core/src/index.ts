@@ -15,7 +15,7 @@ import {
   waitForNextBundleProposal,
   waitForCacheContinuation,
   continueRound,
-  saveGetDataItem,
+  saveGetTransformDataItem,
   storageProviderFactory,
   compressionFactory,
   claimUploaderRole,
@@ -108,7 +108,7 @@ export class Node {
 
   // helpers
   protected continueRound = continueRound;
-  protected saveGetDataItem = saveGetDataItem;
+  protected saveGetTransformDataItem = saveGetTransformDataItem;
 
   // factories
   protected storageProviderFactory = storageProviderFactory;

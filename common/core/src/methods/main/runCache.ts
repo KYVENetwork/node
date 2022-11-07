@@ -127,7 +127,7 @@ export async function runCache(this: Node): Promise<void> {
           // collect and transform data from every source at once
           const results: DataItem[] = await Promise.all(
             this.poolConfig.sources.map((source: string) =>
-              this.saveGetDataItem(source, nextKey)
+              this.saveGetTransformDataItem(source, nextKey)
             )
           );
 
@@ -189,23 +189,9 @@ export async function runCache(this: Node): Promise<void> {
             `Choosing item from seed:${seed} index:${randIndex} source:${this.poolConfig.sources[randIndex]}`
           );
 
-          // choose one data item from multiple sources
-          let item = results[randIndex];
-
-          // transform data item
-          try {
-            this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
-            item = await this.runtime.transformDataItem(item);
-          } catch (err) {
-            this.logger.error(
-              `Unexpected error transforming data item. Skipping transformation ...`
-            );
-            this.logger.error(standardizeJSON(err));
-          }
-
           // add this data item to the cache
           this.logger.debug(`this.cacheProvider.put(${i.toString()},$ITEM)`);
-          await this.cacheProvider.put(i.toString(), item);
+          await this.cacheProvider.put(i.toString(), results[randIndex]);
 
           this.m.cache_current_items.inc();
           this.m.cache_index_head.set(i);
