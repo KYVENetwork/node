@@ -169,6 +169,7 @@ export async function runCache(this: Node): Promise<void> {
               this.logger.error(standardizeJSON(err));
 
               // if data item validation fails abort and don't save to cache
+              valid = false;
               break;
             }
           }
