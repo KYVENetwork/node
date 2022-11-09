@@ -1,15 +1,15 @@
 import { Logger } from "tslog";
-import { Node, sha256 } from "../src/index";
+import { ICompression, IStorageProvider, Node, sha256 } from "../src/index";
 import { runNode } from "../src/methods/main/runNode";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
-import { TestStorageProvider } from "./mocks/storageProvider.mock";
 import { TestCacheProvider } from "./mocks/cache.mock";
-import { TestCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
+import { TestNormalStorageProvider } from "./mocks/storageProvider.mock";
+import { TestNormalCompression } from "./mocks/compression.mock";
 
 /*
 
@@ -23,7 +23,7 @@ TEST CASES - propose bundle tests
 * propose bundle where submitBundleProposal fails
 * propose bundle where skipUploaderRole fails
 * propose bundle where saveBundle and skipUploaderRole fails
-* propose bundle where summarizeBundle fails
+* propose bundle where summarizeDataBundle fails
 * propose bundle where compress fails
 
 */
@@ -34,13 +34,23 @@ describe("propose bundle tests", () => {
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
 
+  let storageProvider: IStorageProvider;
+  let compression: ICompression;
+
   beforeEach(() => {
     core = new Node(new TestRuntime());
 
-    core.useStorageProvider(new TestStorageProvider());
-    core.useCompression(new TestCompression());
-
     core["cacheProvider"] = new TestCacheProvider();
+
+    // mock storage provider
+    storageProvider = new TestNormalStorageProvider();
+    core["storageProviderFactory"] = jest
+      .fn()
+      .mockResolvedValue(storageProvider);
+
+    // mock compression
+    compression = new TestNormalCompression();
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -151,9 +161,7 @@ describe("propose bundle tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -238,10 +246,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -307,9 +315,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -376,9 +382,9 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -446,9 +452,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -525,10 +529,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -551,9 +555,7 @@ describe("propose bundle tests", () => {
       reason: "Already voted",
     });
 
-    core["storageProvider"].saveBundle = jest
-      .fn()
-      .mockRejectedValue(new Error());
+    storageProvider.saveBundle = jest.fn().mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -601,9 +603,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -679,10 +679,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -705,7 +705,7 @@ describe("propose bundle tests", () => {
       reason: "Already voted",
     });
 
-    core["storageProvider"].saveBundle = jest.fn().mockResolvedValue(null);
+    storageProvider.saveBundle = jest.fn().mockResolvedValue(null);
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -753,9 +753,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -831,10 +829,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -907,9 +905,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -992,10 +988,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1065,9 +1061,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -1134,9 +1128,9 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1159,9 +1153,7 @@ describe("propose bundle tests", () => {
       reason: "Already voted",
     });
 
-    core["storageProvider"].saveBundle = jest
-      .fn()
-      .mockRejectedValue(new Error());
+    storageProvider.saveBundle = jest.fn().mockRejectedValue(new Error());
 
     core["client"].kyve.bundles.v1beta1.skipUploaderRole = jest
       .fn()
@@ -1213,9 +1205,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -1291,10 +1281,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1310,14 +1300,16 @@ describe("propose bundle tests", () => {
     // TODO: assert timeouts
   });
 
-  test("propose bundle where summarizeBundle fails", async () => {
+  test("propose bundle where summarizeDataBundle fails", async () => {
     // ARRANGE
     core["lcd"].kyve.query.v1beta1.canVote = jest.fn().mockResolvedValue({
       possible: false,
       reason: "Already voted",
     });
 
-    core["runtime"].summarizeBundle = jest.fn().mockRejectedValue(new Error());
+    core["runtime"].summarizeDataBundle = jest
+      .fn()
+      .mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -1365,9 +1357,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -1436,10 +1426,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 
@@ -1462,7 +1452,7 @@ describe("propose bundle tests", () => {
       reason: "Already voted",
     });
 
-    core["compression"].compress = jest.fn().mockRejectedValue(new Error());
+    compression.compress = jest.fn().mockRejectedValue(new Error());
 
     core["syncPoolState"] = jest.fn().mockImplementation(() => {
       core.pool = {
@@ -1510,9 +1500,7 @@ describe("propose bundle tests", () => {
 
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -1584,10 +1572,10 @@ describe("propose bundle tests", () => {
     // ASSERT RUNTIME INTERFACES
     // =========================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     expect(runtime.getDataItem).toHaveBeenCalledTimes(0);
 

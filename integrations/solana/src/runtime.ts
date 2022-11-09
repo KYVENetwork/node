@@ -6,13 +6,17 @@ export default class Solana implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let block;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
+      block = await fetchBlock(source, +key, headers);
     } catch (err) {
       if (wasSlotSkipped(err, +key)) return { key, value: null };
       throw err;
@@ -21,27 +25,27 @@ export default class Solana implements IRuntime {
     return { key, value: block };
   }
 
-  async transformDataItem(item: DataItem) {
+  async transformDataItem(item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;
   }
 
-  async validateBundle(
+  async validateDataItem(
     core: Node,
-    proposedBundle: DataItem[],
-    validationBundle: DataItem[]
-  ) {
-    const proposedBundleHash = sha256(
-      Buffer.from(JSON.stringify(proposedBundle))
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
+  ): Promise<boolean> {
+    const proposedDataItemHash = sha256(
+      Buffer.from(JSON.stringify(proposedDataItem))
     );
-    const validationBundleHash = sha256(
-      Buffer.from(JSON.stringify(validationBundle))
+    const validationDataItemHash = sha256(
+      Buffer.from(JSON.stringify(validationDataItem))
     );
 
-    return proposedBundleHash === validationBundleHash;
+    return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 

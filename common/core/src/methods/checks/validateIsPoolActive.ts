@@ -1,5 +1,5 @@
 import { Node } from "../..";
-import { PoolStatus } from "@kyve/proto-beta/dist/proto-res/kyve/pool/v1beta1/pool";
+import { PoolStatus } from "@kyve/proto-beta/lcd/kyve/pool/v1beta1/pool";
 
 /**
  * validateIsPoolActive checks if the pool is active or not.

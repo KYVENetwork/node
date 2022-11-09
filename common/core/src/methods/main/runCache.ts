@@ -1,5 +1,6 @@
-import { Node } from "../..";
-import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
+import { DataItem, Node } from "../..";
+import { generateIndexPairs, sleep, standardizeJSON } from "../../utils";
+import seedrandom from "seedrandom";
 
 /**
  * runCache is the other main execution thread for collecting data items
@@ -27,9 +28,6 @@ import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
  * @return {Promise<void>}
  */
 export async function runCache(this: Node): Promise<void> {
-  // get pool state so cache can start working
-  await this.syncPoolState();
-
   // run rounds indefinitely, continueRound returns always
   // true and is only used by unit tests to control the termination of
   // rounds by mocking it
@@ -126,60 +124,75 @@ export async function runCache(this: Node): Promise<void> {
           : this.pool.data!.start_key;
 
         if (!itemFound) {
-          // if item does not exist in cache yet collect it
-          let item = await callWithBackoffStrategy(
-            async () => {
-              // if a new bundle proposal was created in the meantime
-              // skip the current caching and proceed
-              if (parseInt(this.pool.bundle_proposal!.updated_at) > updatedAt) {
-                return null;
-              }
-
-              // collect data item from runtime source
-              this.logger.debug(`this.runtime.getDataItem($THIS,${nextKey})`);
-
-              const item = await this.runtime.getDataItem(this, nextKey);
-
-              this.m.runtime_get_data_item_successful.inc();
-
-              return item;
-            },
-            {
-              limitTimeoutMs: 5 * 60 * 1000,
-              increaseByMs: 10 * 1000,
-            },
-            (err, ctx) => {
-              this.logger.info(
-                `Requesting getDataItem from runtime was unsuccessful. Retrying in ${(
-                  ctx.nextTimeoutInMs / 1000
-                ).toFixed(2)}s ...`
-              );
-              this.logger.debug(standardizeJSON(err));
-
-              this.m.runtime_get_data_item_failed.inc();
-            }
+          // collect and transform data from every source at once
+          const results: DataItem[] = await Promise.all(
+            this.poolConfig.sources.map((source: string) =>
+              this.saveGetTransformDataItem(source, nextKey)
+            )
           );
 
-          // abort caching of current proposal round and proceed
-          // to next one
-          if (!item) {
+          // validate if data items from those multiple sources are
+          // valid against each other
+          let valid = true;
+
+          // we generate all possible index pairs so we can cross-validate
+          // each data item with every other data item to ensure that
+          // everything is correct
+          const indexPairs = generateIndexPairs(results.length);
+
+          // validate every data item for each possible index pair
+          for (let pair of indexPairs) {
+            try {
+              // validate pair of data items
+              valid = await this.runtime.validateDataItem(
+                this,
+                results[pair[0]],
+                results[pair[1]]
+              );
+
+              // if an invalid data item pair was found abort and don't save
+              // to cache
+              if (!valid) {
+                this.logger.info(
+                  `Found mismatching data item between sources ${
+                    this.poolConfig.sources[pair[0]]
+                  } and ${this.poolConfig.sources[pair[1]]}`
+                );
+                break;
+              }
+            } catch (err) {
+              this.logger.error(
+                `Unexpected error validating data items between sources ${
+                  this.poolConfig.sources[pair[0]]
+                } and ${this.poolConfig.sources[pair[1]]}`
+              );
+              this.logger.error(standardizeJSON(err));
+
+              // if data item validation fails abort and don't save to cache
+              valid = false;
+              break;
+            }
+          }
+
+          // if validation between sources fails we abort further data collection
+          if (!valid) {
             break;
           }
 
-          // transform data item
-          try {
-            this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
-            item = await this.runtime.transformDataItem(item);
-          } catch (err) {
-            this.logger.error(
-              `Unexpected error transforming data item. Skipping transformation ...`
-            );
-            this.logger.error(standardizeJSON(err));
-          }
+          // a random item from the result gets chosen. seed is the current item key
+          const seed = i.toString();
+          // calculate randIndex in results range
+          const randIndex = Math.floor(
+            seedrandom(seed).quick() * results.length
+          );
+
+          this.logger.debug(
+            `Choosing item from seed:${seed} index:${randIndex} source:${this.poolConfig.sources[randIndex]}`
+          );
 
           // add this data item to the cache
           this.logger.debug(`this.cacheProvider.put(${i.toString()},$ITEM)`);
-          await this.cacheProvider.put(i.toString(), item);
+          await this.cacheProvider.put(i.toString(), results[randIndex]);
 
           this.m.cache_current_items.inc();
           this.m.cache_index_head.set(i);

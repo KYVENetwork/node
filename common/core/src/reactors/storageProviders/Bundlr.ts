@@ -7,24 +7,23 @@ export class Bundlr implements IStorageProvider {
   public name = "Bundlr";
   public decimals = 12;
 
-  private wallet!: JWKInterface;
-  private bundlrClient!: BundlrClient;
+  private jwk!: JWKInterface;
+  private client!: BundlrClient;
 
-  init(wallet: string) {
-    // TODO: built in wallet format validation?
-    this.wallet = JSON.parse(wallet);
+  async init(storagePriv: string) {
+    this.jwk = JSON.parse(storagePriv);
 
-    this.bundlrClient = new BundlrClient(
+    this.client = new BundlrClient(
       "http://node1.bundlr.network",
       "arweave",
-      this.wallet
+      this.jwk
     );
 
     return this;
   }
 
   async getBalance() {
-    const atomicUnits = await this.bundlrClient.getLoadedBalance();
+    const atomicUnits = await this.client.getLoadedBalance();
     return atomicUnits.toString();
   }
 
@@ -39,7 +38,7 @@ export class Bundlr implements IStorageProvider {
       ],
     };
 
-    const transaction = this.bundlrClient.createTransaction(
+    const transaction = this.client.createTransaction(
       bundle,
       transactionOptions
     );
@@ -47,15 +46,18 @@ export class Bundlr implements IStorageProvider {
     await transaction.sign();
     await transaction.upload();
 
-    return transaction.id;
+    return {
+      storageId: transaction.id,
+      storageData: transaction.rawData,
+    };
   }
 
   async retrieveBundle(storageId: string, timeout: number) {
-    const { data: bundle } = await axios.get(
+    const { data: storageData } = await axios.get(
       `https://arweave.net/${storageId}`,
       { responseType: "arraybuffer", timeout }
     );
 
-    return bundle;
+    return { storageId, storageData };
   }
 }

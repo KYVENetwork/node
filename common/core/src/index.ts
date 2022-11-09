@@ -1,14 +1,8 @@
-import {
-  IRuntime,
-  IStorageProvider,
-  ICacheProvider,
-  ICompression,
-  IMetrics,
-} from "./types";
+import { IRuntime, ICacheProvider, IMetrics } from "./types";
 import { version as coreVersion } from "../package.json";
 import {
   setupLogger,
-  setupReactors,
+  setupCacheProvider,
   setupMetrics,
   setupSDK,
   setupValidator,
@@ -21,11 +15,15 @@ import {
   waitForNextBundleProposal,
   waitForCacheContinuation,
   continueRound,
+  saveGetTransformDataItem,
+  storageProviderFactory,
+  compressionFactory,
   claimUploaderRole,
   skipUploaderRole,
   voteBundleProposal,
   submitBundleProposal,
   syncPoolState,
+  syncPoolConfig,
   getBalances,
   canVote,
   canPropose,
@@ -46,11 +44,8 @@ import {
   parseMnemonic,
   parseCache,
 } from "./commander";
-import { kyve } from "@kyve/proto-beta";
-import PoolResponse = kyve.query.v1beta1.kyveQueryPoolsRes.PoolResponse;
+import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
 import { standardizeJSON } from "./utils";
-import * as storageProvider from "./reactors/storageProviders";
-import * as compression from "./reactors/compression";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -61,8 +56,6 @@ import * as compression from "./reactors/compression";
 export class Node {
   // reactor attributes
   protected runtime!: IRuntime;
-  protected storageProvider!: IStorageProvider;
-  protected compression!: ICompression;
   protected cacheProvider!: ICacheProvider;
 
   // sdk attributes
@@ -96,7 +89,7 @@ export class Node {
 
   // setups
   protected setupLogger = setupLogger;
-  protected setupReactors = setupReactors;
+  protected setupCacheProvider = setupCacheProvider;
   protected setupMetrics = setupMetrics;
   protected setupSDK = setupSDK;
   protected setupValidator = setupValidator;
@@ -115,6 +108,11 @@ export class Node {
 
   // helpers
   protected continueRound = continueRound;
+  protected saveGetTransformDataItem = saveGetTransformDataItem;
+
+  // factories
+  protected storageProviderFactory = storageProviderFactory;
+  protected compressionFactory = compressionFactory;
 
   // txs
   protected claimUploaderRole = claimUploaderRole;
@@ -124,6 +122,7 @@ export class Node {
 
   // queries
   protected syncPoolState = syncPoolState;
+  protected syncPoolConfig = syncPoolConfig;
   protected getBalances = getBalances;
   protected canVote = canVote;
   protected canPropose = canPropose;
@@ -152,43 +151,8 @@ export class Node {
     // set provided runtime
     this.runtime = runtime;
 
-    // default storage provider is Arweave
-    this.storageProvider = new storageProvider.Arweave();
-
-    // default compression is Gzip
-    this.compression = new compression.Gzip();
-
     // set @kyve/core version
     this.coreVersion = coreVersion;
-  }
-
-  /**
-   * Override the default storage provider for the protocol node.
-   * The Storage Provider handles data storage and retrieval for a pool.
-   *
-   * @method useStorageProvider
-   * @param {IStorageProvider} storageProvider which implements the interface IStorageProvider
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public useStorageProvider(storageProvider: IStorageProvider): this {
-    this.storageProvider = storageProvider;
-    return this;
-  }
-
-  /**
-   * Override the default compression type for the protocol node.
-   * Before saving bundles to the storage provider the node uses this compression
-   * to store data more efficiently
-   *
-   * @method useCompression
-   * @param {ICompression} compression which implements the interface ICompression
-   * @return {Promise<this>} returns this for chained commands
-   * @chainable
-   */
-  public useCompression(compression: ICompression): this {
-    this.compression = compression;
-    return this;
   }
 
   /**
@@ -293,16 +257,18 @@ export class Node {
 
     // perform setups
     this.setupLogger();
-    this.setupReactors();
     this.setupMetrics();
 
     // perform async setups
     await this.setupSDK();
     await this.setupValidator();
+    await this.setupCacheProvider();
 
     // start the node process. Node and cache should run at the same time.
     // Thats why, although they are async they are called synchronously
     try {
+      await this.syncPoolState();
+
       this.runNode();
       this.runCache();
     } catch (err) {
@@ -322,9 +288,3 @@ export * from "./types";
 
 // export utils
 export * from "./utils";
-
-// export storage providers
-export * as storageProvider from "./reactors/storageProviders";
-
-// export compression types
-export * as compression from "./reactors/compression";

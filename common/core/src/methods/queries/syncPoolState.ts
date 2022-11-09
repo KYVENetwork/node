@@ -19,6 +19,8 @@ export async function syncPoolState(this: Node): Promise<void> {
         `this.lcd.kyve.query.v1beta1.pool({id: ${this.poolId.toString()}})`
       );
 
+      const prevPoolConfig = this.pool?.data?.config ?? "";
+
       const { pool } = await this.lcd.kyve.query.v1beta1.pool({
         id: this.poolId.toString(),
       });
@@ -26,14 +28,9 @@ export async function syncPoolState(this: Node): Promise<void> {
 
       this.m.query_pool_successful.inc();
 
-      try {
-        this.poolConfig = JSON.parse(this.pool.data!.config);
-      } catch (err) {
-        this.logger.error(
-          `Failed to parse the pool config: ${this.pool.data?.config}`
-        );
-        this.logger.error(standardizeJSON(err));
-        this.poolConfig = {};
+      // if config link has changed sync the config
+      if (prevPoolConfig !== this.pool.data!.config) {
+        await this.syncPoolConfig();
       }
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },

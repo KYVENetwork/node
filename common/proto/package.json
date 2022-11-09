@@ -13,9 +13,14 @@
     "access": "public"
   },
   "scripts": {
-    "build": "rimraf dist && tsc",
-    "generate": "sh proto-gen.sh && yarn build"
+    "build": "rimraf ./dist && tsc  && yarn prepare-publishing",
+    "prepare-publishing": "./scripts/prepare-publishing.sh",
+    "generate": "sh scripts/proto-gen.sh"
   },
+  "files": [
+    "lcd/",
+    "client/"
+  ],
   "dependencies": {
     "@protobufs/cosmos": "^0.0.11",
     "@protobufs/gogoproto": "^0.0.10",

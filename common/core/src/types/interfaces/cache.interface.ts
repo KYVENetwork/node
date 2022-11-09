@@ -31,9 +31,9 @@ export interface ICacheProvider {
    *
    * @method init
    * @param {string} path folder path where the data is cached
-   * @return {this}
+   * @return {Promise<void>}
    */
-  init(path: string): this;
+  init(path: string): Promise<void>;
 
   /**
    * Saves the value with a key

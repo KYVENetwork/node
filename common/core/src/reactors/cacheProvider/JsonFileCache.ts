@@ -7,14 +7,14 @@ export class JsonFileCache implements ICacheProvider {
   public name = "JsonFileCache";
   public path!: string;
 
-  init(path: string): this {
+  async init(path: string): Promise<void> {
     this.path = path;
 
     if (!existsSync(this.path)) {
       mkdirSync(this.path, { recursive: true });
     }
 
-    return this;
+    await this.drop();
   }
 
   public async put(key: string, value: DataItem): Promise<void> {

@@ -1,16 +1,23 @@
 import { Logger } from "tslog";
-import { bundleToBytes, Node, sha256, standardizeJSON } from "../src/index";
+import {
+  bundleToBytes,
+  ICompression,
+  IStorageProvider,
+  Node,
+  sha256,
+  standardizeJSON,
+} from "../src/index";
 import { runNode } from "../src/methods/main/runNode";
 import { genesis_pool } from "./mocks/constants";
 import { client } from "./mocks/client.mock";
 import { lcd } from "./mocks/lcd.mock";
-import { TestStorageProvider } from "./mocks/storageProvider.mock";
+import { TestNormalStorageProvider } from "./mocks/storageProvider.mock";
 import { TestCacheProvider } from "./mocks/cache.mock";
-import { TestCompression } from "./mocks/compression.mock";
+import { TestNormalCompression } from "./mocks/compression.mock";
 import { setupMetrics } from "../src/methods";
 import { register } from "prom-client";
 import { TestRuntime } from "./mocks/runtime.mock";
-import { VoteType } from "../../proto/dist/proto/kyve/bundles/v1beta1/tx";
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 
 /*
 
@@ -28,13 +35,23 @@ describe("genesis tests", () => {
   let processExit: jest.Mock<never, never>;
   let setTimeoutMock: jest.Mock;
 
+  let storageProvider: IStorageProvider;
+  let compression: ICompression;
+
   beforeEach(() => {
     core = new Node(new TestRuntime());
 
-    core.useStorageProvider(new TestStorageProvider());
-    core.useCompression(new TestCompression());
-
     core["cacheProvider"] = new TestCacheProvider();
+
+    // mock storage provider
+    storageProvider = new TestNormalStorageProvider();
+    core["storageProviderFactory"] = jest
+      .fn()
+      .mockResolvedValue(storageProvider);
+
+    // mock compression
+    compression = new TestNormalCompression();
+    core["compressionFactory"] = jest.fn().mockReturnValue(compression);
 
     // mock process.exit
     processExit = jest.fn<never, never>();
@@ -122,9 +139,7 @@ describe("genesis tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -205,11 +220,11 @@ describe("genesis tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
 
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -250,9 +265,7 @@ describe("genesis tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -317,9 +330,9 @@ describe("genesis tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(0);
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
 
     // ========================
     // ASSERT NODEJS INTERFACES
@@ -402,9 +415,7 @@ describe("genesis tests", () => {
     // ASSERT
     const txs = core["client"].kyve.bundles.v1beta1;
     const queries = core["lcd"].kyve.query.v1beta1;
-    const storageProvider = core["storageProvider"];
     const cacheProvider = core["cacheProvider"];
-    const compression = core["compression"];
     const runtime = core["runtime"];
 
     // ========================
@@ -422,7 +433,7 @@ describe("genesis tests", () => {
       staker: "test_staker",
       pool_id: "0",
       storage_id: "another_test_storage_id",
-      vote: VoteType.VOTE_TYPE_YES,
+      vote: VoteType.VOTE_TYPE_VALID,
     });
 
     expect(txs.submitBundleProposal).toHaveBeenCalledTimes(0);
@@ -476,15 +487,19 @@ describe("genesis tests", () => {
     // ASSERT INTEGRATION INTERFACES
     // =============================
 
-    expect(runtime.summarizeBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.summarizeBundle).toHaveBeenLastCalledWith(bundle);
+    expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(1);
+    expect(runtime.summarizeDataBundle).toHaveBeenLastCalledWith(bundle);
 
-    expect(runtime.validateBundle).toHaveBeenCalledTimes(1);
-    expect(runtime.validateBundle).toHaveBeenLastCalledWith(
-      expect.anything(),
-      standardizeJSON(bundle),
-      standardizeJSON(bundle)
-    );
+    expect(runtime.validateDataItem).toHaveBeenCalledTimes(bundle.length);
+
+    for (let i = 0; i < bundle.length; i++) {
+      expect(runtime.validateDataItem).toHaveBeenNthCalledWith(
+        i + 1,
+        expect.any(Node),
+        standardizeJSON(bundle[i]),
+        standardizeJSON(bundle[i])
+      );
+    }
 
     // ========================
     // ASSERT NODEJS INTERFACES

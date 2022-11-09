@@ -6,7 +6,11 @@ export default class Evm implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     try {
       // set network settings if available
       let network;
@@ -24,7 +28,7 @@ export default class Evm implements IRuntime {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
         {
-          url: core.poolConfig.rpc,
+          url: source,
           headers,
         },
         network
@@ -45,7 +49,7 @@ export default class Evm implements IRuntime {
     }
   }
 
-  async transformDataItem(item: DataItem) {
+  async transformDataItem(item: DataItem): Promise<DataItem> {
     // Delete the number of confirmations from a transaction to keep data deterministic.
     item.value.transactions.forEach(
       (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
@@ -54,22 +58,22 @@ export default class Evm implements IRuntime {
     return item;
   }
 
-  async validateBundle(
+  async validateDataItem(
     core: Node,
-    proposedBundle: DataItem[],
-    validationBundle: DataItem[]
-  ) {
-    const proposedBundleHash = sha256(
-      Buffer.from(JSON.stringify(proposedBundle))
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
+  ): Promise<boolean> {
+    const proposedDataItemHash = sha256(
+      Buffer.from(JSON.stringify(proposedDataItem))
     );
-    const validationBundleHash = sha256(
-      Buffer.from(JSON.stringify(validationBundle))
+    const validationDataItemHash = sha256(
+      Buffer.from(JSON.stringify(validationDataItem))
     );
 
-    return proposedBundleHash === validationBundleHash;
+    return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 

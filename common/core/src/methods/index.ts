@@ -1,6 +1,6 @@
 // setups
 export * from "./setups/setupLogger";
-export * from "./setups/setupReactors";
+export * from "./setups/setupCacheProvider";
 export * from "./setups/setupMetrics";
 export * from "./setups/setupSDK";
 export * from "./setups/setupValidator";
@@ -19,6 +19,11 @@ export * from "./timeouts/waitForCacheContinuation";
 
 // helpers
 export * from "./helpers/continueRound";
+export * from "./helpers/saveGetTransformDataItem";
+
+// factories
+export * from "./factories/storageProviderFactory";
+export * from "./factories/compressionFactory";
 
 // txs
 export * from "./txs/claimUploaderRole";
@@ -28,6 +33,7 @@ export * from "./txs/submitBundleProposal";
 
 // queries
 export * from "./queries/syncPoolState";
+export * from "./queries/syncPoolConfig";
 export * from "./queries/getBalances";
 export * from "./queries/canVote";
 export * from "./queries/canPropose";

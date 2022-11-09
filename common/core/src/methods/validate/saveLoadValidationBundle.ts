@@ -12,12 +12,12 @@ import { DataItem } from "../../types";
  * @method saveLoadValidationBundle
  * @param {Node} this
  * @param {number} updatedAt
- * @return {Promise<DataItem[] | undefined>}
+ * @return {Promise<DataItem[] | null>}
  */
 export async function saveLoadValidationBundle(
   this: Node,
   updatedAt: number
-): Promise<DataItem[] | undefined> {
+): Promise<DataItem[] | null> {
   return await callWithBackoffStrategy(
     async () => {
       await this.syncPoolState();
@@ -31,12 +31,12 @@ export async function saveLoadValidationBundle(
 
       // check if new proposal is available in the meantime
       if (parseInt(this.pool.bundle_proposal!.updated_at) > updatedAt) {
-        return;
+        return null;
       }
 
       // check if pool got inactive in the meantime
       if (this.validateIsPoolActive()) {
-        return;
+        return null;
       }
 
       // check if validator needs to upload
@@ -44,7 +44,7 @@ export async function saveLoadValidationBundle(
         this.pool.bundle_proposal!.next_uploader === this.staker &&
         unixNow.gte(unixIntervalEnd)
       ) {
-        return;
+        return null;
       }
 
       // load bundle from current pool current index to proposed index
@@ -80,7 +80,7 @@ export async function saveLoadValidationBundle(
         `Successfully loaded validation bundle from CacheProvider:${this.cacheProvider.name}`
       );
 
-      return bundle;
+      return standardizeJSON(bundle);
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     async (err: any, ctx) => {

@@ -359,6 +359,36 @@ export function setupMetrics(this: Node): void {
       help: "The current index of the first data item in the cache.",
     });
 
+    // GAS METRICS
+
+    this.logger.debug(`Initializing metrics: gas_claim_uploader_role`);
+
+    this.m.gas_claim_uploader_role = new prom_client.Gauge({
+      name: "gas_claim_uploader_role",
+      help: "The current gas costs of tx claim uploader role metrics",
+    });
+
+    this.logger.debug(`Initializing metrics: gas_vote_bundle_proposal`);
+
+    this.m.gas_vote_bundle_proposal = new prom_client.Gauge({
+      name: "gas_vote_bundle_proposal",
+      help: "The current gas costs of tx vote bundle proposal metrics",
+    });
+
+    this.logger.debug(`Initializing metrics: gas_submit_bundle_proposal`);
+
+    this.m.gas_submit_bundle_proposal = new prom_client.Gauge({
+      name: "gas_submit_bundle_proposal",
+      help: "The current gas costs of tx submit bundle proposal metrics",
+    });
+
+    this.logger.debug(`Initializing metrics: gas_skip_uploader_role`);
+
+    this.m.gas_skip_uploader_role = new prom_client.Gauge({
+      name: "gas_skip_uploader_role",
+      help: "The current gas costs of tx skip uploader role metrics",
+    });
+
     // start local metrics server
     if (this.metrics) {
       this.logger.info(

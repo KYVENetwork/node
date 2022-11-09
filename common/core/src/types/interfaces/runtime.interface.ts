@@ -35,10 +35,11 @@ export interface IRuntime {
    *
    * @method getDataItem
    * @param {Node} core the class of @kyve/core
-   * @param {string} key which gets inserted by @kyve/core
+   * @param {string} source the source from which to get the data item from. usually an api or rpc endpoint
+   * @param {string} key the key of the data item
    * @return {Promise<DataItem>}
    */
-  getDataItem(core: Node, key: string): Promise<DataItem>;
+  getDataItem(core: Node, source: string, key: string): Promise<DataItem>;
 
   /**
    * Transforms a single data item and return it. Used for example
@@ -53,18 +54,18 @@ export interface IRuntime {
   transformDataItem(item: DataItem): Promise<DataItem>;
 
   /**
-   * Validates a bundle proposal
+   * Validates a single data item of a bundle proposal
    *
-   * @method validateBundle
+   * @method validateDataItem
    * @param {Node} core the class of @kyve/core
-   * @param {DataItem[]} proposedBundle is the bundle saved by the uploader on the storage provider
-   * @param {DataItem[]} validationBundle is the bundle recreated locally by the validator
-   * @return {Promise<boolean>} returns whether the bundle is valid or invalid
+   * @param {DataItem} proposedDataItem the data item proposed by the uploader
+   * @param {DataItem} validationDataItem the data item which the validator created himself for validation again the proposed data item
+   * @return {Promise<boolean>} returns whether the proposed data item is valid compared to the validation data item
    */
-  validateBundle(
+  validateDataItem(
     core: Node,
-    proposedBundle: DataItem[],
-    validationBundle: DataItem[]
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
   ): Promise<boolean>;
 
   /**
@@ -75,11 +76,11 @@ export interface IRuntime {
    *
    * Deterministic behavior is required
    *
-   * @method summarizeBundle
+   * @method summarizeDataBundle
    * @param {DataItem[]} bundle is the bundle which needs to be summarized
    * @return {Promise<string>} returns a formatted value string
    */
-  summarizeBundle(bundle: DataItem[]): Promise<string>;
+  summarizeDataBundle(bundle: DataItem[]): Promise<string>;
 
   /**
    * Gets the next key from the current key so that the data archived has an order.

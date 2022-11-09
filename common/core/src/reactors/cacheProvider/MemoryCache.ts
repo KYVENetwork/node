@@ -6,8 +6,8 @@ export class MemoryCache implements ICacheProvider {
 
   private store: any = {};
 
-  init(path: string): this {
-    return this;
+  async init(): Promise<void> {
+    await this.drop();
   }
 
   public async put(key: string, value: DataItem): Promise<void> {

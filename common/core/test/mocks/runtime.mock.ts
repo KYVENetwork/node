@@ -4,7 +4,7 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
   return {
     name: "@kyve/evm",
     version: "0.0.0",
-    getDataItem: jest.fn(async (core: Node, key: string) => ({
+    getDataItem: jest.fn(async (core: Node, source: string, key: string) => ({
       key,
       value: `${key}-value`,
     })),
@@ -12,23 +12,23 @@ export const TestRuntime = jest.fn().mockImplementation(() => {
       key: item.key,
       value: `${item.value}-transform`,
     })),
-    validateBundle: jest.fn(
+    validateDataItem: jest.fn(
       async (
         core: Node,
-        proposedBundle: DataItem[],
-        validationBundle: DataItem[]
+        proposedDataItem: DataItem,
+        validationDataItem: DataItem
       ) => {
-        const proposedBundleHash = sha256(
-          Buffer.from(JSON.stringify(proposedBundle))
+        const proposedDataItemHash = sha256(
+          Buffer.from(JSON.stringify(proposedDataItem))
         );
-        const validationBundleHash = sha256(
-          Buffer.from(JSON.stringify(validationBundle))
+        const validationDataItemHash = sha256(
+          Buffer.from(JSON.stringify(validationDataItem))
         );
 
-        return proposedBundleHash === validationBundleHash;
+        return proposedDataItemHash === validationDataItemHash;
       }
     ),
-    summarizeBundle: jest.fn(async (bundle: DataItem[]) =>
+    summarizeDataBundle: jest.fn(async (bundle: DataItem[]) =>
       JSON.stringify(bundle)
     ),
     nextKey: jest.fn(async (key: string) => (parseInt(key) + 1).toString()),

@@ -90,4 +90,11 @@ export interface IMetrics {
   cache_current_items: PromGauge;
   cache_index_tail: PromGauge;
   cache_index_head: PromGauge;
+
+  // GAS METRICS
+
+  gas_claim_uploader_role: PromGauge;
+  gas_vote_bundle_proposal: PromGauge;
+  gas_submit_bundle_proposal: PromGauge;
+  gas_skip_uploader_role: PromGauge;
 }

@@ -3,6 +3,11 @@ export type BundleTag = {
   value: string;
 };
 
+export type StorageReceipt = {
+  storageId: string;
+  storageData: Buffer;
+};
+
 /**
  * Interface of Storage Provider.
  *
@@ -33,10 +38,10 @@ export interface IStorageProvider {
    * for setting up the wallet so the storage provider can save data
    *
    * @method init
-   * @param {string} storagePriv can be a private key a mnemonic or even a file path to the wallet
+   * @param {string} storagePriv can be a pk, a mnemonic or a keyfile which is used to setup the storage provider wallet
    * @return {this}
    */
-  init(storagePriv: string): this;
+  init(storagePriv: string): Promise<this>;
 
   /**
    * Gets the balance of the storage provider wallet
@@ -52,9 +57,10 @@ export interface IStorageProvider {
    * @method saveBundle
    * @param {Buffer} bundle data of the bundle which will get saved
    * @param {BundleTag[]} tags metadata that should be included
-   * @return {Promise<string>} returns a storage Id which should be able to retrieve the bundle again
+   * @return {Promise<StorageReceipt>} returns a storage receipt including the storage id
+   * with which the data can be retrieved again and the stored data on the storage provider
    */
-  saveBundle(bundle: Buffer, tags: BundleTag[]): Promise<string>;
+  saveBundle(bundle: Buffer, tags: BundleTag[]): Promise<StorageReceipt>;
 
   /**
    * Retrieves the bundle from the storage provider with the Storage Id
@@ -62,7 +68,8 @@ export interface IStorageProvider {
    * @method retrieveBundle
    * @param {string} storageId storage Id from which the data of the bundle can be retrieved
    * @param {number} timeout timeout defines the download timeout in milliseconds
-   * @return {Promise<Buffer>} returns the data of the bundle
+   * @return {Promise<StorageReceipt>} returns a storage receipt including the storage id
+   * with which the data was retrieved with an the actual retrieved data on the storage provider
    */
-  retrieveBundle(storageId: string, timeout: number): Promise<Buffer>;
+  retrieveBundle(storageId: string, timeout: number): Promise<StorageReceipt>;
 }

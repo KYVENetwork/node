@@ -1,3 +1,4 @@
+import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
@@ -28,7 +29,7 @@ export async function validateBundleProposal(
 
     // if no bundle got returned it means that the pool is not active anymore
     // or a new bundle proposal round has started
-    if (!storageProviderResult) {
+    if (storageProviderResult === null) {
       return;
     }
 
@@ -79,39 +80,11 @@ export async function validateBundleProposal(
       `Found matching data hash = ${this.pool.bundle_proposal!.data_hash}`
     );
 
-    // decompress the bundle with the specified compression type
-    // and convert the bytes into a JSON format
-    const proposedBundle = await this.saveBundleDecompress(
-      storageProviderResult
-    );
-
-    // vote invalid if no valid data bundle could be found on raw
-    // data from storage provider
-    this.logger.debug(`Validating bundle proposal by data included`);
-
-    if (
-      parseInt(this.pool.bundle_proposal!.bundle_size) !== proposedBundle.length
-    ) {
-      this.logger.info(
-        `Found different bundle size on bundle downloaded from storage provider`
-      );
-
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.INVALID
-      );
-      return;
-    }
-
-    this.logger.info(
-      `Found matching bundle size = ${this.pool.bundle_proposal!.bundle_size}`
-    );
-
     const validationBundle = await this.saveLoadValidationBundle(updatedAt);
 
     // if no bundle got returned it means that the pool is not active anymore
     // or a new bundle proposal round has started
-    if (!validationBundle) {
+    if (validationBundle === null) {
       return;
     }
 
@@ -155,10 +128,10 @@ export async function validateBundleProposal(
 
     // vote invalid if bundle summary does not match with proposed summary
     this.logger.debug(`Validating bundle proposal by bundle summary`);
-    this.logger.debug(`this.runtime.summarizeBundle($VALIDATION_BUNDLE)`);
+    this.logger.debug(`this.runtime.summarizeDataBundle($VALIDATION_BUNDLE)`);
 
     const bundleSummary = await this.runtime
-      .summarizeBundle(validationBundle)
+      .summarizeDataBundle(validationBundle)
       .catch((err) => {
         this.logger.error(
           `Unexpected error summarizing bundle with runtime. Voting abstain ...`
@@ -198,58 +171,86 @@ export async function validateBundleProposal(
       }`
     );
 
-    // perform custom runtime bundle validation
-    this.logger.debug(
-      `Validating bundle proposal by custom runtime validation`
-    );
-    this.logger.debug(
-      `this.runtime.validateBundle($THIS, $PROPOSED_BUNDLE, $VALIDATION_BUNDLE)`
-    );
+    // if storage provider result is empty skip runtime validation
+    if (storageProviderResult.byteLength) {
+      // decompress the bundle with the specified compression type
+      // and convert the bytes into a JSON format
+      const proposedBundle = await this.saveBundleDecompress(
+        storageProviderResult
+      );
 
-    const valid = await this.runtime
-      .validateBundle(
-        this,
-        standardizeJSON(proposedBundle),
-        standardizeJSON(validationBundle)
-      )
-      .catch((err) => {
+      try {
+        // perform custom runtime bundle validation
+        this.logger.debug(
+          `Validating bundle proposal by custom runtime validation`
+        );
+
+        // validate if bundle size matches
+        let valid = proposedBundle.length === validationBundle.length;
+
+        // validate each data item in bundle with custom runtime validation
+        for (let i = 0; i < proposedBundle.length; i++) {
+          if (valid) {
+            this.logger.debug(
+              `this.runtime.validateDataItem($THIS, $PROPOSED_DATA_ITEM, $VALIDATION_DATA_ITEM)`
+            );
+            valid = await this.runtime.validateDataItem(
+              this,
+              proposedBundle[i],
+              validationBundle[i]
+            );
+            this.logger.debug(
+              `Validated data item: index:${i} - key:${proposedBundle[i].key} - result:${valid}`
+            );
+          } else {
+            // abort further validation if an invalid data item was
+            // found in bundle
+            break;
+          }
+        }
+
+        this.logger.debug(
+          `Finished validating bundle by custom runtime validation. Result = ${valid}`
+        );
+
+        // vote with either valid or invalid
+        const vote = valid
+          ? VoteType.VOTE_TYPE_VALID
+          : VoteType.VOTE_TYPE_INVALID;
+
+        await this.voteBundleProposal(
+          this.pool.bundle_proposal!.storage_id,
+          vote
+        );
+      } catch (err) {
         this.logger.error(
-          `Unexpected error validating bundle with runtime. Voting abstain ...`
+          `Unexpected error validating data items with runtime. Voting abstain ...`
         );
         this.logger.error(standardizeJSON(err));
 
-        return null;
-      });
+        await this.voteBundleProposal(
+          this.pool.bundle_proposal!.storage_id,
+          VoteType.VOTE_TYPE_ABSTAIN
+        );
+      }
 
-    // vote abstain if validateBundle returns null
-    if (valid === null) {
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.ABSTAIN
-      );
-      return;
-    }
-
-    if (valid) {
-      this.logger.info(`Found valid bundle by runtime validation`);
-
-      await this.voteBundleProposal(
-        this.pool.bundle_proposal!.storage_id,
-        VOTE.VALID
-      );
+      // update metrics
+      this.m.bundles_amount.inc();
+      this.m.bundles_data_items.set(proposedBundle.length);
+      this.m.bundles_byte_size.set(storageProviderResult.byteLength);
     } else {
-      this.logger.info(`Found invalid bundle by runtime validation`);
-
       await this.voteBundleProposal(
         this.pool.bundle_proposal!.storage_id,
-        VOTE.INVALID
+        VoteType.VOTE_TYPE_VALID
       );
-    }
 
-    // update metrics
-    this.m.bundles_amount.inc();
-    this.m.bundles_data_items.set(proposedBundle.length);
-    this.m.bundles_byte_size.set(storageProviderResult.byteLength);
+      // update metrics
+      this.m.bundles_amount.inc();
+      this.m.bundles_data_items.set(
+        parseInt(this.pool.bundle_proposal!.bundle_size)
+      );
+      this.m.bundles_byte_size.set(storageProviderResult.byteLength);
+    }
   } catch (err) {
     this.logger.error(
       `Unexpected error validating bundle proposal. Skipping validation ...`

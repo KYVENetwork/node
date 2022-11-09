@@ -16,20 +16,28 @@ export async function saveBundleDecompress(
   rawStorageData: Buffer
 ): Promise<DataItem[]> {
   try {
+    // get compression the proposed bundle was compressed with
+    this.logger.debug(
+      `compressionFactory(${this.pool.bundle_proposal?.compression_id ?? 0})`
+    );
+    const compression = this.compressionFactory(
+      this.pool.bundle_proposal?.compression_id ?? 0
+    );
+
     this.logger.debug(`this.compression.decompress($RAW_STORAGE_DATA)`);
 
     const storageBundle = bytesToBundle(
-      await this.compression.decompress(rawStorageData)
+      await compression.decompress(rawStorageData)
     );
 
     this.logger.info(
-      `Successfully decompressed bundle with Compression:${this.compression.name}`
+      `Successfully decompressed bundle with Compression:${compression.name}`
     );
 
-    return storageBundle;
+    return standardizeJSON(storageBundle);
   } catch (err) {
     this.logger.error(
-      `Could not decompress bundle with Compression:${this.compression.name}. Continuing ...`
+      `Could not decompress bundle with Compression. Continuing ...`
     );
     this.logger.error(standardizeJSON(err));
 

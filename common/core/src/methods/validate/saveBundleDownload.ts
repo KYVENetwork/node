@@ -16,12 +16,12 @@ import BigNumber from "bignumber.js";
  * @method saveBundleDownload
  * @param {Node} this
  * @param {number} updatedAt
- * @return {Promise<Buffer | undefined>}
+ * @return {Promise<Buffer | null>}
  */
 export async function saveBundleDownload(
   this: Node,
   updatedAt: number
-): Promise<Buffer | undefined> {
+): Promise<Buffer | null> {
   return await callWithBackoffStrategy(
     async () => {
       await this.syncPoolState();
@@ -35,12 +35,12 @@ export async function saveBundleDownload(
 
       // check if new proposal is available in the meantime
       if (parseInt(this.pool.bundle_proposal!.updated_at) > updatedAt) {
-        return;
+        return null;
       }
 
       // check if pool got inactive in the meantime
       if (this.validateIsPoolActive()) {
-        return;
+        return null;
       }
 
       // check if validator needs to upload
@@ -48,8 +48,18 @@ export async function saveBundleDownload(
         this.pool.bundle_proposal!.next_uploader === this.staker &&
         unixNow.gte(unixIntervalEnd)
       ) {
-        return;
+        return null;
       }
+
+      // get storage provider the proposed bundle was saved to
+      this.logger.debug(
+        `storageProviderFactory(${
+          this.pool.bundle_proposal?.storage_provider_id ?? 0
+        }, $STORAGE_PRIV)`
+      );
+      const storageProvider = await this.storageProviderFactory(
+        this.pool.bundle_proposal?.storage_provider_id ?? 0
+      );
 
       // calculate download timeout for storage provider
       // the timeout should always be 20 seconds less than the upload interval
@@ -66,7 +76,7 @@ export async function saveBundleDownload(
         },${downloadTimeoutSec * 1000})`
       );
 
-      const storageProviderResult = await this.storageProvider.retrieveBundle(
+      const { storageData } = await storageProvider.retrieveBundle(
         this.pool.bundle_proposal!.storage_id,
         downloadTimeoutSec * 1000
       );
@@ -76,19 +86,17 @@ export async function saveBundleDownload(
       this.logger.info(
         `Successfully downloaded bundle with id ${
           this.pool.bundle_proposal!.storage_id
-        } from StorageProvider:${this.storageProvider.name}`
+        } from StorageProvider:${storageProvider.name}`
       );
 
-      return storageProviderResult;
+      return storageData;
     },
     { limitTimeoutMs: 5 * 60 * 1000, increaseByMs: 10 * 1000 },
     async (err: any, ctx) => {
       this.logger.info(
-        `Retrieving bundle from StorageProvider:${
-          this.storageProvider.name
-        } was unsuccessful. Retrying in ${(ctx.nextTimeoutInMs / 1000).toFixed(
-          2
-        )}s ...`
+        `Retrieving bundle from StorageProvider was unsuccessful. Retrying in ${(
+          ctx.nextTimeoutInMs / 1000
+        ).toFixed(2)}s ...`
       );
       this.logger.debug(standardizeJSON(err));
 
