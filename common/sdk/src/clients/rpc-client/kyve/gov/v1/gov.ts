@@ -1,12 +1,12 @@
-import { SigningStargateClient } from "@cosmjs/stargate";
-import { AccountData } from "@cosmjs/amino/build/signer";
+import {SigningStargateClient} from "@cosmjs/stargate";
+import {AccountData} from "@cosmjs/amino/build/signer";
 import KyveGovMsgV1beta1 from "../v1beta1/gov";
 import {StdFee} from "@cosmjs/amino/build/signdoc";
 import {VoteOption} from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
 import {signTx, TxPromise} from "../../../../../utils/helper";
 
 
-export default class KyveGovMsg extends KyveGovMsgV1beta1{
+export default class KyveGovMsg extends KyveGovMsgV1beta1 {
     constructor(client: SigningStargateClient, account: AccountData) {
         super(client, account);
     }
