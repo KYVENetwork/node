@@ -6,119 +6,79 @@
   <p align="center">🚀 The base KYVE node implementation.</p>
 </p>
 
-# Integrations
+# Architecture Overview
 
-In order to archive data with KYVE protocol nodes have to run on a storage pool. Every protocol node runs on a runtime which defines how data is being retrieved and how data is being validated. A runtime is just the execution environment for a integration.
+The KYVE protocol node is in general responsible for collecting data from various sources and submitting them
+for validation to the KYVE network. It does that by transforming the data, packaging it in bundles and storing
+them on permanent storage providers like Arweave, where other protocol nodes can retrieve and validate them
+for their correctness.
 
-## Creating a custom integration
+During all that time KYVE protocol nodes are communicating with the KYVE blockchain, a cosmos-sdk based PoS chain
+providing the main KYVE logic of registering bundle proposals and keeping track of votes.
 
-Everybody can create a custom integration. For that it is highly recommended to use this package to ensure no unexpected behaviour occurs.
+## General protocol node architecture
 
-## Installation
+The basic architecture of a protocol node can be found below:
 
-```
-yarn add @kyve/core
-```
+<br/>
+<br/>
 
-## Implement interface IRuntime
+<img src="https://arweave.net/FAj2xIyD_D-_sfLr5XGeUY91kHF8aEBG8oa9dgxrCPQ" style="display: block; margin-left: auto; margin-right: auto" />
 
-The interface `IRuntime` defines how a runtime needs to be implemented. It has three main methods which need to be implemented. Explanations in detail can be found on the interface itself in the form of comments (`src/types/interfaces.ts`).
+<br/>
+<br/>
 
-An example implementation of the EVM runtime can be found here:
+**Overview**
 
-```ts
-import { DataItem, IRuntime, Node } from "@kyve/core";
-import { providers } from "ethers";
+- **KYVE blockchain** - a cosmos-sdk based PoS blockchain which has all the KYVE logic and is responsible for scheduling bundle proposal rounds and keeping track of bundle proposals and their respected votes from protocol nodes
+- **Permanent Storage** - usually web3 permanent storage providers like Arweave. This is the place where all validated data from KYVE will be archived
+- **Local Node Cache** - a local Key-Value-Store on the protocol node for caching all the data which is currently in the validation process
+- **Data Sources** - data sources defined by the storage pool. There can be multiple data sources or only one. Examples for data sources can be blockchain rpc endpoints or web2 api endpoints which need to be validated and archived
+- **Proposal Round Cyclic Updates** - schedules both main threads when to start collecting data or when to start validating/uploading bundle proposals. This schedule is dictated by the KYVE blockchain
+- **Data Collection Thread** - the main thread collecting the required data for the current proposal round. It requests all given data sources defined on the storage pool and writes them to the local node cache
+- **Data Indexing Thread** - the main thread validating proposed bundles proposals from other protocol nodes and proposing new bundle proposals to the network. It communicates closely with the KYVE blockchain and reads all the cached items for validation and proposition. Also for validation and proposition it reads and writes data to the permanent storage provider
 
-export default class EVM implements IRuntime {
-  public name = "@kyve/evm";
-  public version = "1.0.0";
+<br/>
+<br/>
 
-  // get block with transactions by height
-  public async getDataItem(core: Node, key: string): Promise<DataItem> {
-    try {
-      // setup web3 provider
-      const provider = new providers.StaticJsonRpcProvider({
-        url: core.poolConfig.source,
-      });
+## Data collection thread overview
 
-      // fetch data item
-      const value = await provider.getBlockWithTransactions(+key);
+A more detailed architecture overview of the data collection thread can be found below:
 
-      // throw if data item is not available
-      if (!value) throw new Error();
+<br/>
+<br/>
 
-      // Delete the number of confirmations from a transaction to keep data deterministic.
-      value.transactions.forEach(
-        (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
-      );
+<img src="https://arweave.net/3Ot8WfE4YyLWD4PkDcsQrhj_MzKGobWjiLV0hAIvyzE" style="display: block; margin-left: auto; margin-right: auto" />
 
-      return {
-        key,
-        value,
-      };
-    } catch (err) {
-      throw err;
-    }
-  }
+<br/>
+<br/>
 
-  // increment block height by 1
-  public async getNextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1).toString();
-  }
+- **core logic (red)** - all the logic controlled by `@kyve/core`
+- **runtime logic (blue)** - all the custom logic defined by the `runtime`. This is very application specific
+- **external data sources (green)** - data sources defined on the storage pool which should be validated and archived
+- **Key-Value-Store (yellow)** - a local Key-Value-Store which serves as cache for the protocol node
 
-  // save only the hash of a block on KYVE chain
-  public async formatValue(value: any): Promise<string> {
-    return value.hash;
-  }
-}
-```
+<br/>
+<br/>
 
-## Build your custom integration
+## Data indexing thread overview
 
-Having the runtime implemented the final steps now are choosing suitable prebuild
-modules for your integration. There are three core features which need to be defined:
+A more detailed architecture overview of the data indexing thread can be found below:
 
-### Storage Provider
+<br/>
+<br/>
 
-The storage provider is basically the harddrive of KYVE. It saves all the data a bundle has and should be web 3 by nature. Current supported storage providers are:
+<img src="https://arweave.net/8PKehcv8vYYhtKI2KRBGJkpe6CNvD8uDrudau_Zfpag" style="display: block; margin-left: auto; margin-right: auto" />
 
-- [Arweave](https://arweave.net) (recommended)
+<br/>
+<br/>
 
-### Compression
+- **core logic (red)** - all the logic controlled by `@kyve/core`
+- **runtime logic (blue)** - all the custom logic defined by the `runtime`. This is very application specific
+- **external data sources (green)** - data sources defined on the storage pool which should be validated and archived
+- **Key-Value-Store (yellow)** - a local Key-Value-Store which serves as cache for the protocol node
+- **Permanent Storage (grey)** - a web3 permanent storage provider like Arweave where all the validated data from KYVE gets archived
+- **KYVE blockchain (orange)** - the KYVE chain which keeps track of bundle proposals and votes
 
-The compression type should also be chosen carefully. Each bundle saved on the storage provider gets compressed and decompressed by this algorithm. Current supported compression types are:
-
-- NoCompression
-- Gzip (recommended)
-
-### Cache
-
-The cache of an integration is responsible for precaching data, making data archival much faster. Current supported caches are:
-
-- JsonFileCache (recommended)
-
-After settling on certain modules the integration can just be built together and started. An example from the EVM integration can be found here:
-
-```ts
-import { Node } from "@kyve/core";
-
-import Evm from "./runtime";
-
-const runtime = new Evm();
-
-new Node(runtime).start();
-```
-
-## Contributing
-
-To contribute to this repository please follow these steps:
-
-1.  Clone the repository
-    ```
-    git clone git@github.com:KYVENetwork/core.git
-    ```
-2.  Install dependencies
-    ```
-    yarn install
-    ```
+<br/>
+<br/>
