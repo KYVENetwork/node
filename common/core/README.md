@@ -23,7 +23,9 @@ The basic architecture of a protocol node can be found below:
 <br/>
 <br/>
 
+<p align="center">
 <img src="https://arweave.net/FAj2xIyD_D-_sfLr5XGeUY91kHF8aEBG8oa9dgxrCPQ" style="display: block; margin-left: auto; margin-right: auto" />
+</p>
 
 <br/>
 <br/>
@@ -48,7 +50,9 @@ A more detailed architecture overview of the data collection thread can be found
 <br/>
 <br/>
 
+<p align="center">
 <img src="https://arweave.net/3Ot8WfE4YyLWD4PkDcsQrhj_MzKGobWjiLV0hAIvyzE" style="display: block; margin-left: auto; margin-right: auto" />
+</p>
 
 <br/>
 <br/>
@@ -68,7 +72,9 @@ A more detailed architecture overview of the data indexing thread can be found b
 <br/>
 <br/>
 
+<p align="center">
 <img src="https://arweave.net/8PKehcv8vYYhtKI2KRBGJkpe6CNvD8uDrudau_Zfpag" style="display: block; margin-left: auto; margin-right: auto" />
+</p>
 
 <br/>
 <br/>
