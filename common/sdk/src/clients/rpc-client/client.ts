@@ -1,7 +1,8 @@
+import { StdSignature } from "@cosmjs/amino";
 import { AccountData, OfflineAminoSigner } from "@cosmjs/amino/build/signer";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { makeADR36AminoSignDoc } from "@keplr-wallet/cosmos";
-import { StdSignature } from "@cosmjs/amino";
+
 import KyveBaseMethods from "./kyve/base/v1beta1/base";
 import KyveBundlesMethods from "./kyve/bundles/v1beta1/bundles";
 import KyveDelegationMethods from "./kyve/delegation/v1beta1/delegation";

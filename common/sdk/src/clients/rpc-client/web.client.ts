@@ -1,6 +1,7 @@
-import KyveClient from "./client";
 import { AccountData, OfflineAminoSigner } from "@cosmjs/amino/build/signer";
 import { SigningStargateClient } from "@cosmjs/stargate";
+
+import KyveClient from "./client";
 
 export default class KyveWebClient extends KyveClient {
   private readonly walletName: string;

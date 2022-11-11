@@ -1,15 +1,15 @@
-import kyveQueryAccount from "@kyve/proto-beta/client/kyve/query/v1beta1/account";
-import kyveQueryAccountRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/account";
-import kyveQueryBundles from "@kyve/proto-beta/client/kyve/query/v1beta1/bundles";
-import kyveQueryBundlesRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/bundles";
-import kyveQueryPools from "@kyve/proto-beta/client/kyve/query/v1beta1/pools";
-import kyveQueryPoolsRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
-import kyveQueryStakers from "@kyve/proto-beta/client/kyve/query/v1beta1/stakers";
-import kyveQueryStakersRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/stakers";
-import kyveQueryDelegation from "@kyve/proto-beta/client/kyve/query/v1beta1/delegation";
-import kyveQueryDelegationRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/delegation";
-import kyveQueryParamsRes from "@kyve/proto-beta/client/kyve/query/v1beta1/params";
 import paginationQuery from "@kyve/proto-beta/client/cosmos/base/query/v1beta1/pagination";
+import kyveQueryAccount from "@kyve/proto-beta/client/kyve/query/v1beta1/account";
+import kyveQueryBundles from "@kyve/proto-beta/client/kyve/query/v1beta1/bundles";
+import kyveQueryDelegation from "@kyve/proto-beta/client/kyve/query/v1beta1/delegation";
+import kyveQueryParamsRes from "@kyve/proto-beta/client/kyve/query/v1beta1/params";
+import kyveQueryPools from "@kyve/proto-beta/client/kyve/query/v1beta1/pools";
+import kyveQueryStakers from "@kyve/proto-beta/client/kyve/query/v1beta1/stakers";
+import kyveQueryAccountRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/account";
+import kyveQueryBundlesRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/bundles";
+import kyveQueryDelegationRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/delegation";
+import kyveQueryPoolsRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
+import kyveQueryStakersRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/stakers";
 
 import { AbstractKyveLCDClient } from "../../lcd-client.abstract";
 

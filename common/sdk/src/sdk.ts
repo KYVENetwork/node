@@ -1,4 +1,28 @@
 import {
+  pubkeyToAddress,
+  Secp256k1HdWallet,
+  Secp256k1Wallet,
+} from "@cosmjs/amino";
+import { fromBase64, fromHex } from "@cosmjs/encoding";
+import {
+  DirectSecp256k1HdWallet,
+  DirectSecp256k1Wallet,
+} from "@cosmjs/proto-signing";
+import {
+  RequestAccountResponse,
+  SignOptions,
+} from "@cosmostation/extension-client/types/message";
+import { verifyADR36Amino } from "@keplr-wallet/cosmos";
+import { BigNumber } from "bignumber.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import humanize from "humanize-number";
+
+import { getSigningKyveClient } from "./clients/full-client";
+import { createKyveLCDClient } from "./clients/lcd-client/client";
+import KyveClient from "./clients/rpc-client/client";
+import KyveWebClient from "./clients/rpc-client/web.client";
+import {
   KYVE_COSMOSTATION_CONFIG,
   KYVE_DECIMALS,
   KYVE_ENDPOINTS,
@@ -8,33 +32,11 @@ import {
   PREFIX,
   SUPPORTED_WALLETS,
 } from "./constants";
-import { getSigningKyveClient } from "./clients/full-client";
-import {
-  DirectSecp256k1HdWallet,
-  DirectSecp256k1Wallet,
-} from "@cosmjs/proto-signing";
-import {
-  RequestAccountResponse,
-  SignOptions,
-} from "@cosmostation/extension-client/types/message";
 import {
   cosmostationMethods,
   CosmostationSigner,
 } from "./utils/cosmostation-helper";
-import { createKyveLCDClient } from "./clients/lcd-client/client";
-import { BigNumber } from "bignumber.js";
-// @ts-ignore
-import humanize from "humanize-number";
-import KyveWebClient from "./clients/rpc-client/web.client";
-import KyveClient from "./clients/rpc-client/client";
-import { fromBase64, fromHex } from "@cosmjs/encoding";
-import {
-  pubkeyToAddress,
-  Secp256k1HdWallet,
-  Secp256k1Wallet,
-} from "@cosmjs/amino";
 import { KeplrAminoSigner } from "./utils/keplr-helper";
-import { verifyADR36Amino } from "@keplr-wallet/cosmos";
 
 /** Class representing a KyveSDK. */
 export class KyveSDK {
@@ -201,7 +203,7 @@ export class KyveSDK {
     return signer.mnemonic;
   }
 
-  static formatBalance(balance: string, decimals: number = 2): string {
+  static formatBalance(balance: string, decimals = 2): string {
     return humanize(
       new BigNumber(balance)
         .dividedBy(new BigNumber(10).exponentiatedBy(KYVE_DECIMALS))

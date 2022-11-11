@@ -1,17 +1,18 @@
+import { StdSignDoc } from "@cosmjs/amino/build/signdoc";
+import { makeSignDoc } from "@cosmjs/proto-signing";
+import {
+  AccountData,
+  OfflineDirectSigner,
+} from "@cosmjs/proto-signing/build/signer";
 import {
   AddChainParams,
   RequestAccountResponse,
   SignAminoResponse,
   SignOptions,
 } from "@cosmostation/extension-client/types/message";
-import {
-  AccountData,
-  OfflineDirectSigner,
-} from "@cosmjs/proto-signing/build/signer";
-import { Network } from "../constants";
-import { makeSignDoc } from "@cosmjs/proto-signing";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { StdSignDoc } from "@cosmjs/amino/build/signdoc";
+
+import { Network } from "../constants";
 
 export const cosmostationMethods = {
   getSupportedChains() {
@@ -31,7 +32,7 @@ export const cosmostationMethods = {
       params: { chainName: chainId },
     });
   },
-  signDirect(chainName: string, doc: Object, options?: SignOptions) {
+  signDirect(chainName: string, doc: unknown, options?: SignOptions) {
     return window.cosmostation.tendermint.request({
       method: "ten_signDirect",
       params: {
