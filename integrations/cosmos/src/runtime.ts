@@ -18,7 +18,7 @@ export default class Cosmos implements IRuntime {
     return { key, value: block };
   }
 
-  async transformDataItem(item: DataItem): Promise<DataItem> {
+  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;
   }
@@ -38,7 +38,7 @@ export default class Cosmos implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 
