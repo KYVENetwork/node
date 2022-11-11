@@ -32,7 +32,7 @@ export async function saveGetTransformDataItem(
       // transform data item
       try {
         this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
-        item = await this.runtime.transformDataItem(item);
+        item = await this.runtime.transformDataItem(this, item);
       } catch (err) {
         this.logger.error(
           `Unexpected error transforming data item. Skipping transformation ...`
