@@ -1,5 +1,6 @@
 import { BlockResponse, Connection } from '@solana/web3.js';
-import { Signature, SLOT_WAS_SKIPPED } from './types';
+
+import { SLOT_WAS_SKIPPED } from './types';
 
 // NOTE: The response type isn't correct because of our patch.
 export async function fetchBlock(

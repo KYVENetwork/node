@@ -2,6 +2,7 @@ import { connect } from 'near-api-js';
 import { NearConfig } from 'near-api-js/lib/near';
 import { Provider } from 'near-api-js/lib/providers';
 import { ChunkResult } from 'near-api-js/lib/providers/provider';
+
 import { NOT_FOUND } from './types';
 
 export async function fetchHeight(
@@ -61,6 +62,7 @@ async function initialiseNearRPC(
   headers: any
 ): Promise<Provider> {
   const config: NearConfig = {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     deps: {},
     networkId: 'mainnet',

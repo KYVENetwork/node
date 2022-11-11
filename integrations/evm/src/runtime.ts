@@ -1,6 +1,7 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
-import { name, version } from '../package.json';
 import { providers } from 'ethers';
+
+import { name, version } from '../package.json';
 
 export default class Evm implements IRuntime {
   public name = name;
@@ -11,42 +12,37 @@ export default class Evm implements IRuntime {
     source: string,
     key: string
   ): Promise<DataItem> {
-    try {
-      // set network settings if available
-      let network;
+    let network;
 
-      if (core.poolConfig.chainId && core.poolConfig.chainName) {
-        network = {
-          chainId: core.poolConfig.chainId,
-          name: core.poolConfig.chainName,
-        };
-      }
-
-      // get auth headers for coinbase cloud endpoints
-      const headers = await this.generateCoinbaseCloudHeaders(core);
-
-      // setup web3 provider
-      const provider = new providers.StaticJsonRpcProvider(
-        {
-          url: source,
-          headers,
-        },
-        network
-      );
-
-      // fetch data item
-      const value = await provider.getBlockWithTransactions(+key);
-
-      // throw if data item is not available
-      if (!value) throw new Error();
-
-      return {
-        key,
-        value,
+    if (core.poolConfig.chainId && core.poolConfig.chainName) {
+      network = {
+        chainId: core.poolConfig.chainId,
+        name: core.poolConfig.chainName,
       };
-    } catch (err) {
-      throw err;
     }
+
+    // get auth headers for coinbase cloud endpoints
+    const headers = await this.generateCoinbaseCloudHeaders(core);
+
+    // setup web3 provider
+    const provider = new providers.StaticJsonRpcProvider(
+      {
+        url: source,
+        headers,
+      },
+      network
+    );
+
+    // fetch data item
+    const value = await provider.getBlockWithTransactions(+key);
+
+    // throw if data item is not available
+    if (!value) throw new Error();
+
+    return {
+      key,
+      value,
+    };
   }
 
   async transformDataItem(item: DataItem): Promise<DataItem> {

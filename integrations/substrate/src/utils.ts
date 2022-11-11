@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { Signature, UNABLE_TO_RETRIEVE } from './types';
+
+import { UNABLE_TO_RETRIEVE } from './types';
 
 export async function fetchBlock(
   endpoint: string,

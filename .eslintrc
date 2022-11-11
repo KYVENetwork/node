@@ -37,7 +37,9 @@
     "no-console": "off",
     "sort-keys": "off",
     "sort-imports": "off",
-    "import/no-anonymous-default-export":  "off"
+    "import/no-anonymous-default-export":  "off",
+    //https://eslint.org/docs/latest/rules/no-async-promise-executor
+    "no-async-promise-executor": "off"
   },
   "env": {
     "browser": true,

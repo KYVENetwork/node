@@ -1,4 +1,5 @@
 import { DataItem, IRuntime, Node, sha256 } from "@kyve/core-beta";
+
 import { name, version } from "../package.json";
 import { fetchBlock, fetchHeight } from "./utils";
 
@@ -11,16 +12,10 @@ export default class Zilliqa implements IRuntime {
     source: string,
     key: string
   ): Promise<DataItem> {
-    let block;
-
     const height = await fetchHeight(source);
     if (+key > height) throw new Error();
 
-    try {
-      block = await fetchBlock(source, +key);
-    } catch (err) {
-      throw err;
-    }
+    const block = await fetchBlock(source, +key);
 
     return { key, value: block };
   }

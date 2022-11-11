@@ -1,4 +1,5 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
+
 import { name, version } from '../package.json';
 import { fetchBlock } from './utils';
 
@@ -11,13 +12,7 @@ export default class Celo implements IRuntime {
     source: string,
     key: string
   ): Promise<DataItem> {
-    let block;
-
-    try {
-      block = await fetchBlock(source, +key);
-    } catch (err) {
-      throw err;
-    }
+    const block = await fetchBlock(source, +key);
 
     if (!block) throw new Error();
 
