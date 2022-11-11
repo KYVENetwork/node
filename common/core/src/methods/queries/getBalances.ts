@@ -1,6 +1,7 @@
-import { Node, standardizeJSON } from "../..";
 import { DENOM, KYVE_DECIMALS } from "@kyve/sdk-beta/dist/constants";
 import BigNumber from "bignumber.js";
+
+import { Node, standardizeJSON } from "../..";
 
 /**
  * getBalances tries to retrieve the $KYVE balance of the staker account, the $KYVE

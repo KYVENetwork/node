@@ -1,8 +1,8 @@
 import { Node } from "../..";
-import { NoStorageProvider } from "../../reactors/storageProviders/NoStorageProvider";
+import { IStorageProvider } from "../..";
 import { Arweave } from "../../reactors/storageProviders/Arweave";
 import { Bundlr } from "../../reactors/storageProviders/Bundlr";
-import { IStorageProvider } from "../..";
+import { NoStorageProvider } from "../../reactors/storageProviders/NoStorageProvider";
 
 /**
  * storageProviderFactory creates the correct storage provider class
@@ -28,6 +28,6 @@ export async function storageProviderFactory(
     case 2:
       return await new Bundlr().init(this.storagePriv);
     default:
-      return await new NoStorageProvider().init(this.storagePriv);
+      return await new NoStorageProvider().init();
   }
 }

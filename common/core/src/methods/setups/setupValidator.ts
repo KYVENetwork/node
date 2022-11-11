@@ -1,4 +1,3 @@
-import { Node, standardizeJSON } from "../..";
 import Prando from "prando";
 import {
   adjectives,
@@ -6,6 +5,8 @@ import {
   colors,
   uniqueNamesGenerator,
 } from "unique-names-generator";
+
+import { Node, standardizeJSON } from "../..";
 
 /**
  * setupValidator ensures the node starts as a valid validator

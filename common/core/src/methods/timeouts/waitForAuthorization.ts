@@ -5,6 +5,7 @@ import {
   sleep,
   standardizeJSON,
 } from "../../utils";
+import { INFINITY_LOOP } from "../../utils";
 
 /**
  * waitForAuthorization ensures that the node starts with a valid validator
@@ -72,7 +73,7 @@ export async function waitForAuthorization(this: Node): Promise<void> {
     }
 
     // wait until valaccount got authorized
-    while (true) {
+    while (INFINITY_LOOP) {
       const canValidate = await callWithBackoffStrategy(
         async () => {
           this.logger.debug(

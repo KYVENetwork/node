@@ -14,3 +14,5 @@ export const VOTE = {
   INVALID: 2,
   ABSTAIN: 3,
 };
+
+export const INFINITY_LOOP = true;

@@ -1,11 +1,11 @@
 import { sha256 } from "../..";
-import { BundleTag, IStorageProvider } from "../../types";
+import { IStorageProvider } from "../../types";
 
 export class NoStorageProvider implements IStorageProvider {
   public name = "NoStorageProvider";
   public decimals = 0;
 
-  async init(storagePriv: string) {
+  async init() {
     return this;
   }
 
@@ -13,14 +13,14 @@ export class NoStorageProvider implements IStorageProvider {
     return "0";
   }
 
-  async saveBundle(bundle: Buffer, tags: BundleTag[]) {
+  async saveBundle(bundle: Buffer) {
     return {
       storageId: sha256(bundle),
       storageData: Buffer.from(""),
     };
   }
 
-  async retrieveBundle(storageId: string, timeout: number) {
+  async retrieveBundle(storageId: string) {
     return {
       storageId,
       storageData: Buffer.from(""),

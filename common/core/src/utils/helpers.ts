@@ -1,6 +1,8 @@
 import { BigNumber } from "bignumber.js";
 import crypto from "crypto";
+
 import { DataItem } from "..";
+import { INFINITY_LOOP } from "./constants";
 
 /**
  * Waits for a specific amount of time
@@ -86,7 +88,7 @@ export const toHumanReadable = (amount: string, precision = 4): string => {
  * @return {[number, number][]}
  */
 export const generateIndexPairs = (n: number): [number, number][] => {
-  let pairs: [number, number][] = [];
+  const pairs: [number, number][] = [];
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
@@ -133,7 +135,7 @@ export async function callWithBackoffStrategy<T>(
   let requests = 1;
 
   return new Promise(async (resolve) => {
-    while (true) {
+    while (INFINITY_LOOP) {
       try {
         return resolve(await execution());
       } catch (e) {

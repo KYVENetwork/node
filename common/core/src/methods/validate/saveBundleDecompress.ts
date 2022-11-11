@@ -1,6 +1,6 @@
 import { Node } from "../..";
-import { bytesToBundle, standardizeJSON } from "../../utils";
 import { DataItem } from "../../types";
+import { bytesToBundle, standardizeJSON } from "../../utils";
 
 /**
  * saveBundleDecompress decompresses a bundle with the specified compression.

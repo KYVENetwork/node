@@ -1,4 +1,3 @@
-import { isErrored } from "stream";
 import { Node, standardizeJSON } from "../..";
 
 /**

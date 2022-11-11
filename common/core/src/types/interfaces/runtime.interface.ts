@@ -1,5 +1,5 @@
-import { DataItem } from "..";
 import { Node } from "../..";
+import { DataItem } from "..";
 
 /**
  * Interface of Runtime.

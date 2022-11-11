@@ -1,6 +1,6 @@
 import { Node } from "../..";
-import { bundleToBytes, sha256, standardizeJSON } from "../../utils";
 import { BundleTag, DataItem } from "../../types";
+import { bundleToBytes, sha256, standardizeJSON } from "../../utils";
 
 /**
  * createBundleProposal assembles a bundle proposal by loading

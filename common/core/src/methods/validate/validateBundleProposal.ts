@@ -1,4 +1,5 @@
 import { VoteType } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+
 import { Node } from "../..";
 import { sha256, standardizeJSON, VOTE } from "../../utils";
 
