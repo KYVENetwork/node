@@ -1,6 +1,5 @@
-import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
-import { name, version } from '../package.json';
-import { providers, utils} from 'ethers';
+import {DataItem, IRuntime, Node, sha256} from '@kyve/core-beta';
+import {providers, utils} from 'ethers';
 
 // method to just get the named args
 const parseArgs = (struct: any) => {
@@ -15,8 +14,8 @@ const parseArgs = (struct: any) => {
 };
 
 export default class EvmContractEvents implements IRuntime {
-  public name = name;
-  public version = version;
+  public name = "";
+  public version = "";
 
   async getDataItem(
       core: any,
@@ -29,27 +28,11 @@ export default class EvmContractEvents implements IRuntime {
           source,
       );
 
-      // interface of contract-ABI for decoding the logs
-      let iface = new utils.Interface(core.poolConfig.contract.abi);
-
       // try to fetch data item
-      const logs = await provider.getLogs({
+      const value = await provider.getLogs({
         address: core.poolConfig.contract.address,
         fromBlock: parseInt(key),
         toBlock: parseInt(key),
-      });
-
-      const value = logs.map((log) => {
-        const info = iface.parseLog(log);
-
-        return {
-          ...log,
-          parsedEvent: {
-            name: info.name,
-            signature: info.signature,
-            args: parseArgs(info.args),
-          }
-        };
       });
 
       // throw if data item is not available
@@ -64,9 +47,27 @@ export default class EvmContractEvents implements IRuntime {
     }
   }
 
-  async transformDataItem(item: DataItem): Promise<DataItem> {
+  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
 
-    return item;
+    // interface of contract-ABI for decoding the logs
+    let iface = new utils.Interface(core.poolConfig.contract.abi);
+
+    const result = item.value.map((log: any) => {
+      const info = iface.parseLog(log);
+      return {
+        ...log,
+        parsedEvent: {
+          name: info.name,
+          signature: info.signature,
+          args: parseArgs(info.args),
+        }
+      };
+    });
+    console.log("TRANSFORM",result)
+    return {
+      key: item.key,
+      value: result,
+    };
   }
 
   async validateDataItem(
@@ -84,7 +85,7 @@ export default class EvmContractEvents implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
     return "";
   }
 
