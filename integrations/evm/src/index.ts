@@ -1,10 +1,6 @@
-import { Node, Arweave, Gzip, JsonFileCache } from '@kyve/core';
+import { Node } from '@kyve/core-beta';
+import Evm from './runtime';
 
-import EVM from './runtime';
+const runtime = new Evm();
 
-new Node()
-  .addRuntime(new EVM())
-  .addStorageProvider(new Arweave())
-  .addCompression(new Gzip())
-  .addCache(new JsonFileCache())
-  .bootstrap();
+new Node(runtime).bootstrap();

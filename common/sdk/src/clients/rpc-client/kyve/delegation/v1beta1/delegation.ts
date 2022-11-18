@@ -3,20 +3,22 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
-import { kyve } from "@kyve/proto";
 
-import MsgDelegate = kyve.registry.v1beta1.kyveDelegation.MsgDelegate;
-import MsgWithdrawRewards = kyve.registry.v1beta1.kyveDelegation.MsgWithdrawRewards;
-import MsgUndelegate = kyve.registry.v1beta1.kyveDelegation.MsgUndelegate;
-import MsgRedelegate = kyve.registry.v1beta1.kyveDelegation.MsgRedelegate;
-import {Network} from "../../../../../constants";
-
+import { MsgDelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgWithdrawRewards } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgUndelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgRedelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { Network } from "../../../../../constants";
 export default class {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
   private network: Network;
 
-  constructor(client: SigningStargateClient, network: Network, account: AccountData) {
+  constructor(
+    client: SigningStargateClient,
+    network: Network,
+    account: AccountData
+  ) {
     this.account = account;
     this.nativeClient = client;
     this.network = network;
@@ -35,7 +37,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
   public async withdrawRewards(
@@ -51,7 +59,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -68,7 +82,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -85,7 +105,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 }

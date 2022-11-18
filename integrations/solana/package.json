@@ -1,6 +1,6 @@
 {
   "name": "@kyve/solana",
-  "version": "0.6.6",
+  "version": "0.6.8",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -12,7 +12,9 @@
   "bin": "./dist/src/index.js",
   "pkg": {
     "scripts": "./dist/src/index.js",
-    "assets": "./node_modules/@kyve/sdk/dist/proto/*",
+    "assets": [
+      "../../node_modules/classic-level/**/*"
+    ],
     "targets": [
       "latest-linux-x64",
       "latest-linux-arm64",
@@ -24,7 +26,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core": "1.21.6",
+    "@kyve/core-beta": "1.22.0",
     "@solana/web3.js": "^1.50.1"
   },
   "devDependencies": {

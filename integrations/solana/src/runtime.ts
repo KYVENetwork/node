@@ -1,4 +1,4 @@
-import { DataItem, IRuntime, Node, sha256 } from '@kyve/core';
+import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
 import { name, version } from '../package.json';
 import { fetchBlock, wasSlotSkipped } from './utils';
 
@@ -6,13 +6,17 @@ export default class Solana implements IRuntime {
   public name = name;
   public version = version;
 
-  public async getDataItem(core: Node, key: string): Promise<DataItem> {
+  async getDataItem(
+    core: Node,
+    source: string,
+    key: string
+  ): Promise<DataItem> {
     let block;
 
     const headers = await this.generateCoinbaseCloudHeaders(core);
 
     try {
-      block = await fetchBlock(core.poolConfig.rpc, +key, headers);
+      block = await fetchBlock(source, +key, headers);
     } catch (err) {
       if (wasSlotSkipped(err, +key)) return { key, value: null };
       throw err;
@@ -21,31 +25,32 @@ export default class Solana implements IRuntime {
     return { key, value: block };
   }
 
-  async validate(
+  async transformDataItem(item: DataItem): Promise<DataItem> {
+    // don't transform data item
+    return item;
+  }
+
+  async validateDataItem(
     core: Node,
-    uploadedBundle: DataItem[],
-    validationBundle: DataItem[]
-  ) {
-    const uploadedBundleHash = sha256(
-      Buffer.from(JSON.stringify(uploadedBundle))
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
+  ): Promise<boolean> {
+    const proposedDataItemHash = sha256(
+      Buffer.from(JSON.stringify(proposedDataItem))
     );
-    const validationBundleHash = sha256(
-      Buffer.from(JSON.stringify(validationBundle))
+    const validationDataItemHash = sha256(
+      Buffer.from(JSON.stringify(validationDataItem))
     );
 
-    core.logger.debug(`Validating bundle proposal by hash`);
-    core.logger.debug(`Uploaded:     ${uploadedBundleHash}`);
-    core.logger.debug(`Validation:   ${validationBundleHash}\n`);
-
-    return uploadedBundleHash === validationBundleHash;
+    return proposedDataItemHash === validationDataItemHash;
   }
 
-  public async getNextKey(key: string): Promise<string> {
+  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
+    return bundle.at(-1)?.value?.hash ?? '';
+  }
+
+  async nextKey(key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
-  }
-
-  public async formatValue(value: any): Promise<string> {
-    return value.hash;
   }
 
   private async generateCoinbaseCloudHeaders(core: Node): Promise<any> {

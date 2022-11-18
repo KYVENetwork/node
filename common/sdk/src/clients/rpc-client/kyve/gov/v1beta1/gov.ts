@@ -1,32 +1,33 @@
 import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
-import {DENOM, Network} from "../../../../../constants";
-import { cosmos as cosmosProto } from "@kyve/proto";
+import { DENOM, Network } from "../../../../../constants";
 import { signTx, TxPromise } from "../../../../../utils/helper";
-import { cosmos } from "@keplr-wallet/cosmos";
 
-import { kyve } from "@kyve/proto";
+import { TextProposal } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
+import { ParameterChangeProposal } from "@kyve/proto-beta/client/cosmos/params/v1beta1/params";
 
-import TextProposal = cosmosProto.registry.v1beta1.cosmosGov.TextProposal;
-import ParameterChangeProposal = cosmosProto.registry.v1beta1.cosmosParams.ParameterChangeProposal;
-
-import CreatePoolProposal = kyve.registry.v1beta1.kyveGovPool.CreatePoolProposal;
-import CancelPoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.CancelPoolUpgradeProposal;
-import PausePoolProposal = kyve.registry.v1beta1.kyveGov.PausePoolProposal;
-import SchedulePoolUpgradeProposal = kyve.registry.v1beta1.kyveGov.SchedulePoolUpgradeProposal;
-import UnpausePoolProposal = kyve.registry.v1beta1.kyveGov.UnpausePoolProposal;
-import UpdatePoolProposal = kyve.registry.v1beta1.kyveGov.UpdatePoolProposal;
+import { CreatePoolProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { CancelPoolUpgradeProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { PausePoolProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { SchedulePoolUpgradeProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { UnpausePoolProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { UpdatePoolProposal } from "@kyve/proto-beta/client/kyve/pool/v1beta1/gov";
+import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
 
 export default class KyveGovMsg {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
   private network: Network;
 
-  constructor(client: SigningStargateClient, network: Network, account: AccountData) {
+  constructor(
+    client: SigningStargateClient,
+    network: Network,
+    account: AccountData
+  ) {
     this.account = account;
     this.nativeClient = client;
-    this.network = network
+    this.network = network;
   }
 
   private createGovTx(
@@ -61,7 +62,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network,this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -81,7 +88,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -101,7 +114,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -121,7 +140,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -141,7 +166,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -161,7 +192,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -181,7 +218,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -201,7 +244,13 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(amount, content, options?.isExpedited);
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -213,19 +262,19 @@ export default class KyveGovMsg {
       memo?: string;
     }
   ) {
-    let _option = cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_UNSPECIFIED;
+    let _option = VoteOption.VOTE_OPTION_UNSPECIFIED;
     switch (voteOption) {
       case "Yes":
-        _option = cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_YES;
+        _option = VoteOption.VOTE_OPTION_YES;
         break;
       case "Abstain":
-        _option = cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_ABSTAIN;
+        _option = VoteOption.VOTE_OPTION_ABSTAIN;
         break;
       case "No":
-        _option = cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO;
+        _option = VoteOption.VOTE_OPTION_NO;
         break;
       case "NoWithVeto":
-        _option = cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO_WITH_VETO;
+        _option = VoteOption.VOTE_OPTION_NO_WITH_VETO;
         break;
     }
     const tx = {
@@ -239,7 +288,13 @@ export default class KyveGovMsg {
 
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 }

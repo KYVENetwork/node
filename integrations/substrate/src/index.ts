@@ -1,10 +1,6 @@
-import { Node, Arweave, Gzip, JsonFileCache } from '@kyve/core';
-
+import { Node } from '@kyve/core-beta';
 import Substrate from './runtime';
 
-new Node()
-  .addRuntime(new Substrate())
-  .addStorageProvider(new Arweave())
-  .addCompression(new Gzip())
-  .addCache(new JsonFileCache())
-  .bootstrap();
+const runtime = new Substrate();
+
+new Node(runtime).bootstrap();

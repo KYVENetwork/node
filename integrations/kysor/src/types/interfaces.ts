@@ -1,4 +1,4 @@
-import { KYVE_NETWORK } from "@kyve/sdk/dist/constants";
+import { KYVE_NETWORK } from "@kyve/sdk-beta/dist/constants";
 
 export interface IConfig {
   network: KYVE_NETWORK;

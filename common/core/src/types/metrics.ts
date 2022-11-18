@@ -69,7 +69,7 @@ export interface IMetrics {
   bundles_remaining_upload_interval_time: PromGauge;
   bundles_wait_for_next_round_time: PromGauge;
 
-  bundles_amount: PromGauge;
+  bundles_amount: PromCounter;
   bundles_data_items: PromGauge;
   bundles_byte_size: PromGauge;
 
@@ -77,7 +77,7 @@ export interface IMetrics {
 
   balance_staker: PromGauge;
   balance_valaccount: PromGauge;
-  balance_wallet: PromGauge;
+  balance_storage_provider: PromGauge;
 
   // RUNTIME METRICS
 
@@ -88,6 +88,13 @@ export interface IMetrics {
   // CACHE METRICS
 
   cache_current_items: PromGauge;
-  cache_height_tail: PromGauge;
-  cache_height_head: PromGauge;
+  cache_index_tail: PromGauge;
+  cache_index_head: PromGauge;
+
+  // GAS METRICS
+
+  gas_claim_uploader_role: PromGauge;
+  gas_vote_bundle_proposal: PromGauge;
+  gas_submit_bundle_proposal: PromGauge;
+  gas_skip_uploader_role: PromGauge;
 }

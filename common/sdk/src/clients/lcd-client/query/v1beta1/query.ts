@@ -1,20 +1,16 @@
-import { kyve, cosmos } from "@kyve/proto";
-import kyveQuery = kyve.query.v1beta1.kyveQuery;
-import kyveQueryRes = kyve.query.v1beta1.kyveQuery;
+import kyveQueryAccount from "@kyve/proto-beta/client/kyve/query/v1beta1/account";
+import kyveQueryAccountRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/account";
+import kyveQueryBundles from "@kyve/proto-beta/client/kyve/query/v1beta1/bundles";
+import kyveQueryBundlesRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/bundles";
+import kyveQueryPools from "@kyve/proto-beta/client/kyve/query/v1beta1/pools";
+import kyveQueryPoolsRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
+import kyveQueryStakers from "@kyve/proto-beta/client/kyve/query/v1beta1/stakers";
+import kyveQueryStakersRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/stakers";
+import kyveQueryDelegation from "@kyve/proto-beta/client/kyve/query/v1beta1/delegation";
+import kyveQueryDelegationRes from "@kyve/proto-beta/lcd/kyve/query/v1beta1/delegation";
+import kyveQueryParamsRes from "@kyve/proto-beta/client/kyve/query/v1beta1/params";
+import paginationQuery from "@kyve/proto-beta/client/cosmos/base/query/v1beta1/pagination";
 
-import kyveQueryAccount = kyve.query.v1beta1.kyveQueryAccount;
-import kyveQueryAccountRes = kyve.query.v1beta1.kyveQueryAccountRes;
-import kyveQueryBundles = kyve.query.v1beta1.kyveQueryBundles;
-import kyveQueryBundlesRes = kyve.query.v1beta1.kyveQueryBundlesRes;
-import kyveQueryPools = kyve.query.v1beta1.kyveQueryPools;
-import kyveQueryPoolsRes = kyve.query.v1beta1.kyveQueryPoolsRes;
-import kyveQueryStakersRes = kyve.query.v1beta1.kyveQueryStakersRes;
-import kyveQueryStakers = kyve.query.v1beta1.kyveQueryStakers;
-import kyveQueryDelegation = kyve.query.v1beta1.kyveQueryDelegation;
-import kyveQueryDelegationRes = kyve.query.v1beta1.kyveQueryDelegationRes;
-import kyveQueryParamsReq = kyve.query.v1beta1.kyveQueryParams;
-import kyveQueryParamsRes = kyve.query.v1beta1.kyveQueryParams;
-import PageRequest = cosmos.registry.v1beta1.cosmosPaginationQuery.PageRequest;
 import { AbstractKyveLCDClient } from "../../lcd-client.abstract";
 
 type NestedPartial<T> = {
@@ -30,8 +26,9 @@ type PaginationRequestType = {
   reverse: boolean;
   key: string;
 };
-type PaginationPartialRequestUtilType<T extends { pagination?: PageRequest }> =
-  Overwrite<T, { pagination?: Partial<PaginationRequestType> }>;
+type PaginationPartialRequestUtilType<
+  T extends { pagination?: paginationQuery.PageRequest }
+> = Overwrite<T, { pagination?: Partial<PaginationRequestType> }>;
 type PaginationAllPartialRequestUtilType<T> = NestedPartial<
   Overwrite<
     T,
@@ -88,6 +85,10 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
 
     if (typeof params?.paused !== "undefined") {
       parameters.paused = params.paused;
+    }
+
+    if (typeof params?.storage_provider_id !== "undefined") {
+      parameters.storageProviderId = params.storage_provider_id;
     }
 
     const endpoint = `/kyve/query/v1beta1/pools`;
@@ -174,7 +175,7 @@ export class KyveRegistryLCDClient extends AbstractKyveLCDClient {
   async canPropose(
     params: kyveQueryBundles.QueryCanProposeRequest
   ): Promise<kyveQueryBundles.QueryCanProposeResponse> {
-    const endpoint = `/kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_height}`;
+    const endpoint = `/kyve/query/v1beta1/can_propose/${params.pool_id}/${params.staker}/${params.proposer}/${params.from_index}`;
     return await this.request(endpoint);
   }
   async canVote(

@@ -1,6 +1,6 @@
 {
-  "name": "@kyve/sdk",
-  "version": "3.2.0",
+  "name": "@kyve/sdk-beta",
+  "version": "3.4.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
@@ -15,6 +15,9 @@
   ],
   "author": "Ruslan Hlaznov <ruslan@kyve.network>, John Letey <john@kyve.network>, Troy Kessler <troy@kyve.network>, Max Breithecker <max@kyve.network>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rimraf dist && tsc",
     "format": "prettier --write .",
@@ -32,7 +35,7 @@
     "@cosmjs/tendermint-rpc": "0.28.0",
     "@cosmostation/extension-client": "^0.0.6",
     "@keplr-wallet/cosmos": "0.9.16",
-    "@kyve/proto": "1.9.0",
+    "@kyve/proto-beta": "1.11.0",
     "axios": "0.25.0",
     "bech32": "2.0.0",
     "bignumber.js": "9.0.2",
