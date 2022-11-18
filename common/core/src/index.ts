@@ -46,6 +46,7 @@ import {
 } from "./commander";
 import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
 import { standardizeJSON } from "./utils";
+import os from "os";
 
 /**
  * Main class of KYVE protocol nodes representing a node.
@@ -171,8 +172,12 @@ export class Node {
       .command("version")
       .description("Print runtime and core version")
       .action(() => {
-        console.log(`${this.runtime.name} ${this.runtime.version}`);
-        console.log(`@kyve/core ${this.coreVersion}`);
+        console.log(`${this.runtime.name} version: ${this.runtime.version}`);
+        console.log(`@kyve/core version: ${this.coreVersion}`);
+        console.log(`Node version: ${process.version}`);
+        console.log();
+        console.log(`Platform: ${os.platform()}`);
+        console.log(`Arch: ${os.arch()}`);
       });
 
     // define start command

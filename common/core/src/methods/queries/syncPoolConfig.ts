@@ -14,6 +14,11 @@ export async function syncPoolConfig(this: Node): Promise<void> {
   try {
     this.logger.debug(this.pool.data!.config);
 
+    try {
+      this.poolConfig = JSON.parse(this.pool.data!.config);
+      return;
+    } catch {}
+
     let url: string;
 
     // allow ipfs:// or ar:// as external config urls
