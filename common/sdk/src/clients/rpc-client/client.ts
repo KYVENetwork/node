@@ -19,7 +19,7 @@ export default class KyveClient {
     };
     gov: {
       v1beta1: KyveGovMethods;
-      v1: KyveGovMethodsV1
+      v1: KyveGovMethodsV1;
     };
     bundles: {
       v1beta1: KyveBundlesMethods;
