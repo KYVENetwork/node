@@ -8,6 +8,7 @@ import KyveDelegationMethods from "./kyve/delegation/v1beta1/delegation";
 import KyveGovMethods from "./kyve/gov/v1beta1/gov";
 import KyvePoolMethods from "./kyve/pool/v1beta1/pool";
 import KyveStakersMethods from "./kyve/stakers/v1beta1/stakers";
+import {Network} from "../../constants";
 
 export default class KyveClient {
   public nativeClient: SigningStargateClient;
@@ -33,33 +34,36 @@ export default class KyveClient {
     };
   };
   private aminoSigner: OfflineAminoSigner | null;
+  private network: Network;
 
   constructor(
     client: SigningStargateClient,
     account: AccountData,
+    network: Network,
     aminoSigner: OfflineAminoSigner | null
   ) {
+    this.network = network;
     this.account = account;
     this.nativeClient = client;
     this.aminoSigner = aminoSigner;
     this.kyve = {
       base: {
-        v1beta1: new KyveBaseMethods(this.nativeClient, this.account),
+        v1beta1: new KyveBaseMethods(this.nativeClient, this.network, this.account),
       },
       bundles: {
-        v1beta1: new KyveBundlesMethods(this.nativeClient, this.account),
+        v1beta1: new KyveBundlesMethods(this.nativeClient, this.network, this.account),
       },
       delegation: {
-        v1beta1: new KyveDelegationMethods(this.nativeClient, this.account),
+        v1beta1: new KyveDelegationMethods(this.nativeClient, this.network, this.account),
       },
       gov: {
-        v1beta1: new KyveGovMethods(this.nativeClient, this.account),
+        v1beta1: new KyveGovMethods(this.nativeClient, this.network, this.account),
       },
       pool: {
-        v1beta1: new KyvePoolMethods(this.nativeClient, this.account),
+        v1beta1: new KyvePoolMethods(this.nativeClient,this.network,  this.account),
       },
       stakers: {
-        v1beta1: new KyveStakersMethods(this.nativeClient, this.account),
+        v1beta1: new KyveStakersMethods(this.nativeClient, this.network, this.account),
       },
     };
   }

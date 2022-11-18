@@ -2,7 +2,7 @@ import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { AccountData } from "@cosmjs/amino/build/signer";
 import { BigNumber } from "bignumber.js";
-import { KYVE_DECIMALS } from "../../../../../constants";
+import {KYVE_DECIMALS, Network} from "../../../../../constants";
 import { DENOM } from "../../../../../constants";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
@@ -10,9 +10,11 @@ import { withTypeUrl } from "../../../../../registry/tx.registry";
 export default class KyveBaseMsg {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
+  private network: Network;
 
-  constructor(client: SigningStargateClient, account: AccountData) {
+  constructor(client: SigningStargateClient, network: Network,  account: AccountData) {
     this.account = account;
+    this.network = network;
     this.nativeClient = client;
   }
 
@@ -35,7 +37,7 @@ export default class KyveBaseMsg {
 
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(this.nativeClient, this.network, this.account.address, tx, options)
     );
   }
 

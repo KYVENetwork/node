@@ -5,7 +5,7 @@ import Mock = jest.Mock;
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { Secp256k1HdWallet, Secp256k1Wallet } from "@cosmjs/amino";
-import { PREFIX } from "../../src/constants";
+import {KYVE_ENDPOINTS, PREFIX} from "../../src/constants";
 import KyveSDK from "../../src";
 import { fromHex } from "@cosmjs/encoding";
 import { KeplrAminoSigner } from "../../src/utils/keplr-helper";
@@ -44,6 +44,7 @@ describe("sign string", () => {
     kyvePrivateKeySignerClient = new KyveClient(
       mockNativeClient,
       accountKey,
+      KYVE_ENDPOINTS['local'],
       aminoPrivateKeySigner
     );
     const aminoMnemonicSigner = await Secp256k1HdWallet.fromMnemonic(
@@ -56,6 +57,7 @@ describe("sign string", () => {
     kyveMnemonicSignerClient = new KyveClient(
       mockNativeClient,
       accMnemonic,
+      KYVE_ENDPOINTS['local'],
       aminoMnemonicSigner
     );
     mockKeplrAminoSign = jest.fn((...args) =>
@@ -79,6 +81,7 @@ describe("sign string", () => {
     kyveKeplrSignerClient = new KyveClient(
       mockNativeClient,
       accMnemonic,
+      KYVE_ENDPOINTS['local'],
       aminoKeplrSigner
     );
   });

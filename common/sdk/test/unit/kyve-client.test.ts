@@ -36,12 +36,15 @@ import { UpdatePoolProposal } from '@kyve/proto-beta/client/kyve/pool/v1beta1/go
 
 
 import Mock = jest.Mock;
-import { DENOM  } from "../../src/constants";
+import {DENOM, KYVE_ENDPOINTS} from "../../src/constants";
 
-import { SigningStargateClient } from "@cosmjs/stargate";
+import {GasPrice, SigningStargateClient} from "@cosmjs/stargate";
 import { cosmos } from "@keplr-wallet/cosmos";
 import TxRaw = cosmos.tx.v1beta1.TxRaw;
 import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
+import * as axios from "axios";
+jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 function extractTsFromPath(path: string) {
   return fs
@@ -225,9 +228,12 @@ beforeEach(() => {
     signAmino() {},
     getAccounts() {},
   } as unknown as OfflineAminoSigner;
+  // @ts-ignore
+  mockedAxios.mockImplementation(() => Promise.resolve({data: {params: {'min_gas_price': "1.000000000000000000"}}}));
   kyveClient = new KyveClient(
     mockNativeClient,
     mockAccountData,
+    KYVE_ENDPOINTS['local'],
     mockAminoSigner
   );
 });

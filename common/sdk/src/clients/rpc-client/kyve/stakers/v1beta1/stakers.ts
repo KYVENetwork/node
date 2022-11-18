@@ -5,17 +5,24 @@ import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
 import { MsgCreateStaker as MsgStake } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateMetadata} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateCommission} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgJoinPool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgLeavePool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateMetadata } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateCommission } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgJoinPool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgLeavePool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { Network } from "../../../../../constants";
 
 export default class {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
+  private network: Network;
 
-  constructor(client: SigningStargateClient, account: AccountData) {
+  constructor(
+    client: SigningStargateClient,
+    network: Network,
+    account: AccountData
+  ) {
     this.account = account;
+    this.network = network;
     this.nativeClient = client;
   }
 
@@ -32,7 +39,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -49,7 +62,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -66,7 +85,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
   public async joinPool(
@@ -82,7 +107,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -99,7 +130,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 }

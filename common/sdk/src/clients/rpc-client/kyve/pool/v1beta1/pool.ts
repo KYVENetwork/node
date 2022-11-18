@@ -4,15 +4,22 @@ import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 
-import {MsgDefundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
-import {MsgFundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgDefundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgFundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { Network } from "../../../../../constants";
 
 export default class {
   private nativeClient: SigningStargateClient;
   public readonly account: AccountData;
+  private network: Network;
 
-  constructor(client: SigningStargateClient, account: AccountData) {
+  constructor(
+    client: SigningStargateClient,
+    network: Network,
+    account: AccountData
+  ) {
     this.account = account;
+    this.network = network;
     this.nativeClient = client;
   }
 
@@ -30,7 +37,13 @@ export default class {
 
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 
@@ -47,7 +60,13 @@ export default class {
     });
     return new TxPromise(
       this.nativeClient,
-      await signTx(this.nativeClient, this.account.address, tx, options)
+      await signTx(
+        this.nativeClient,
+        this.network,
+        this.account.address,
+        tx,
+        options
+      )
     );
   }
 }
