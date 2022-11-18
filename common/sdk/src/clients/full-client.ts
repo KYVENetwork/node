@@ -1,13 +1,10 @@
-import {
-  defaultRegistryTypes,
-  GasPrice,
-  SigningStargateClient,
-} from "@cosmjs/stargate";
+import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
 import { OfflineSigner, Registry } from "@cosmjs/proto-signing";
+import { GasPrice, SigningStargateClient } from "@cosmjs/stargate";
+
 import * as KyveRegistryTx from "../registry/tx.registry";
 import KyveClient from "./rpc-client/client";
 import KyveWebClient from "./rpc-client/web.client";
-import { OfflineAminoSigner } from "@cosmjs/amino/build/signer";
 
 export async function getSigningKyveClient(
   rpcEndpoint: string,

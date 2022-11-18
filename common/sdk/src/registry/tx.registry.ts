@@ -1,28 +1,26 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes } from "@cosmjs/stargate"
-
-/** pool **/
-import {MsgFundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
-import {MsgDefundPool} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
-/** stakers **/
-import {MsgCreateStaker} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateMetadata} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgJoinPool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgUpdateCommission} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-import {MsgLeavePool} from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
-/** delegations **/
-import {MsgDelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
-import {MsgWithdrawRewards} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
-import {MsgRedelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
-import {MsgUndelegate} from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
-/** bundles **/
-import {MsgSubmitBundleProposal} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
-import {MsgVoteBundleProposal} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
-import {MsgClaimUploaderRole} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
-import {MsgSkipUploaderRole} from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
-
+import { defaultRegistryTypes } from "@cosmjs/stargate";
 /** cosmos **/
-import {MsgSubmitProposal} from "@kyve/proto-beta/client/cosmos/gov/v1beta1/tx";
+import { MsgSubmitProposal } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/tx";
+/** bundles **/
+import { MsgSubmitBundleProposal } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { MsgVoteBundleProposal } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { MsgClaimUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { MsgSkipUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+/** delegations **/
+import { MsgDelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgWithdrawRewards } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgRedelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgUndelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+/** pool **/
+import { MsgFundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgDefundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+/** stakers **/
+import { MsgCreateStaker } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateMetadata } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgJoinPool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateCommission } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgLeavePool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ...defaultRegistryTypes,
