@@ -28,7 +28,7 @@ import { MsgClaimUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1bet
 import { MsgSkipUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 
 /** cosmos **/
-import { MsgSubmitProposal } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/tx";
+import { MsgSubmitProposal } from "@kyve/proto-beta/client/cosmos/gov/v1/tx";
 import { MsgVote } from "@kyve/proto-beta/client/cosmos/gov/v1/tx";
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
@@ -59,8 +59,8 @@ export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ["/kyve.bundles.v1beta1.MsgClaimUploaderRole", MsgClaimUploaderRole],
   ["/kyve.bundles.v1beta1.MsgSkipUploaderRole", MsgSkipUploaderRole],
   /** cosmos **/
-  ["/cosmos.gov.v1beta1.MsgSubmitProposal", MsgSubmitProposal],
-  ["/cosmos.gov.v1.MsgSubmitProposal", MsgVote],
+  ["/cosmos.gov.v1.MsgSubmitProposal", MsgSubmitProposal],
+  ["/cosmos.gov.v1.MsgVote", MsgVote],
 ];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
