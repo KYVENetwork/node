@@ -13,7 +13,6 @@ export default class UniswapEvents extends EvmContractEvents {
       if (item.value.length) {
         item.value.forEach((log: any) => {
           if (log.parsedEvent.name === 'Swap') {
-            console.log(log.parsedEvent.args.sqrtPriceX96)
             summary = EthersBigNumber.from(log.parsedEvent.args.sqrtPriceX96).toString()
           }
         });

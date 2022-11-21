@@ -25,7 +25,7 @@ export default class EvmContractEvents implements IRuntime {
     try {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
-          source,
+          source + process.env.INFURA_API_KEY,
       );
 
       // try to fetch data item
@@ -52,7 +52,7 @@ export default class EvmContractEvents implements IRuntime {
     // interface of contract-ABI for decoding the logs
     let iface = new utils.Interface(core.poolConfig.contract.abi);
 
-    return item.value.map((log: any) => {
+    const result = item.value.map((log: any) => {
       const info = iface.parseLog(log);
       return {
         ...log,
@@ -63,6 +63,11 @@ export default class EvmContractEvents implements IRuntime {
         }
       };
     });
+
+    return {
+      key: item.key,
+      value: result,
+    }
   }
 
   async validateDataItem(

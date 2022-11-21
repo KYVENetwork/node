@@ -25,7 +25,7 @@ export default class EvmContractEvents implements IRuntime {
     try {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
-          source,
+          source + process.env.INFURA_API_KEY,
       );
 
       // try to fetch data item
@@ -63,7 +63,6 @@ export default class EvmContractEvents implements IRuntime {
         }
       };
     });
-    console.log("TRANSFORM",result)
     return {
       key: item.key,
       value: result,

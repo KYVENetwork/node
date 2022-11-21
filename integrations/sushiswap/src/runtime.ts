@@ -14,7 +14,7 @@ export default class SushiswapEvents extends EvmContractEvents {
         item.value.forEach((log: any) => {
           if (log.parsedEvent.name === 'Swap') {
             if (log.parsedEvent.args.amount0In.hex !== "0x00" && log.parsedEvent.args.amount1In.hex === "0x00") {
-              summary = BigNumber.from(log.parsedEvent.args.amount0In.hex).div(BigNumber.from(log.parsedEvent.args.amount1Out.hex)).toString()
+              summary = BigNumber.from(log.parsedEvent.args.amount1Out.hex).div(BigNumber.from(log.parsedEvent.args.amount0In.hex)).toString()
             } if (log.parsedEvent.args.amount1In.hex !== "0x00" && log.parsedEvent.args.amount0In.hex === "0x00") {
               summary = BigNumber.from(log.parsedEvent.args.amount1In.hex).div(BigNumber.from(log.parsedEvent.args.amount0Out.hex)).toString()
             }
