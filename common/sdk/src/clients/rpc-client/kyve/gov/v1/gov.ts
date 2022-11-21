@@ -4,6 +4,10 @@ import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
 import { signTx, TxPromise } from "../../../../../utils/helper";
 import { DENOM } from "../../../../../constants";
+import { MsgPausePool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+
+// TODO: fetch dynamically?
+const AUTHORITY = "kyve10d07y265gmmuvt4z0w9aw880jnsr700jdv7nah";
 
 export default class KyveGovMsg {
   protected nativeClient: SigningStargateClient;
@@ -14,7 +18,47 @@ export default class KyveGovMsg {
     this.nativeClient = client;
   }
 
-  async submitProposal(
+  private createGovTx(
+    content: { type_url: string; value: Object },
+    amount: string,
+    metadata?: string
+  ) {
+    return {
+      typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+      value: {
+        messages: [content],
+        initial_deposit: coins(amount.toString(), DENOM),
+        proposer: this.account.address,
+        metadata,
+      },
+    };
+  }
+
+  public async pausePoolProposal(
+    value: Omit<MsgPausePool, "authority">,
+    amount: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = this.createGovTx(
+      {
+        type_url: "/cosmos.gov.v1beta1.MsgPausePool",
+        value: MsgPausePool.encode({ ...value, authority: AUTHORITY }).finish(),
+      },
+      amount,
+      metadata
+    );
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async submitProposal(
     messages: any,
     amount: string,
     metadata: string,

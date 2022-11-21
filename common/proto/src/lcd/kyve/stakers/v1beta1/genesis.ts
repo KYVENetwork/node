@@ -50,13 +50,13 @@ export const GenesisState = {
       CommissionChangeEntry.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.queue_state_commission !== undefined) {
-      QueueState.encode(message.queue_state_commission, writer.uint32(66).fork()).ldelim();
+      QueueState.encode(message.queue_state_commission, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.leave_pool_entries) {
       LeavePoolEntry.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.queue_state_leave !== undefined) {
-      QueueState.encode(message.queue_state_leave, writer.uint32(74).fork()).ldelim();
+      QueueState.encode(message.queue_state_leave, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -80,13 +80,13 @@ export const GenesisState = {
         case 4:
           message.commission_change_entries.push(CommissionChangeEntry.decode(reader, reader.uint32()));
           break;
-        case 8:
+        case 5:
           message.queue_state_commission = QueueState.decode(reader, reader.uint32());
           break;
         case 6:
           message.leave_pool_entries.push(LeavePoolEntry.decode(reader, reader.uint32()));
           break;
-        case 9:
+        case 7:
           message.queue_state_leave = QueueState.decode(reader, reader.uint32());
           break;
         default:

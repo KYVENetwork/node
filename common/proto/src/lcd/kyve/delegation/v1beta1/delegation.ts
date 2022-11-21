@@ -9,13 +9,19 @@ export const protobufPackage = "kyve.delegation.v1beta1";
  * It stores important information for the F1-Fee distribution algorithm
  */
 export interface Delegator {
-  /** staker ... */
+  /** staker corresponds to a KYVE-staker on the protocol-side */
   staker: string;
-  /** delegator ... */
+  /**
+   * delegator the user who delegate to the staker.
+   * If staker and delegator are the same we call it: self-delegation
+   */
   delegator: string;
-  /** k_index ... */
+  /** k_index is an internal index for the f1-distribution algorithm */
   k_index: string;
-  /** delegation_amount ... */
+  /**
+   * initial_amount of stake the user had when it delegated.
+   * slashes can cause that the actual stake is lower.
+   */
   initial_amount: string;
 }
 
@@ -32,9 +38,9 @@ export interface DelegationEntry {
   value: string;
 }
 
-/** DelegationPoolData ... */
+/** DelegationPoolData stores general delegation information for every staker */
 export interface DelegationData {
-  /** staker ... */
+  /** Every staker has one DelegationData */
   staker: string;
   /** current_rewards ... */
   current_rewards: string;
@@ -42,19 +48,23 @@ export interface DelegationData {
   total_delegation: string;
   /** latest_index_k ... */
   latest_index_k: string;
-  /** delegator_count ... */
+  /** delegator_count the amount of different addresses delegating to the staker */
   delegator_count: string;
-  /** latest_index_was_undelegation ... */
+  /** latest_index_was_undelegation helps indicates when an entry can be deleted */
   latest_index_was_undelegation: boolean;
 }
 
-/** DelegationSlash ... */
+/**
+ * DelegationSlash represents an f1-slash
+ * these entries needs to be iterated to obtain the current amount of the actual stake
+ * Every staker can have n slash-entries
+ */
 export interface DelegationSlash {
-  /** staker ... */
+  /** staker who got slashed */
   staker: string;
-  /** k_index ... */
+  /** k_index for f1-algorithm */
   k_index: string;
-  /** fraction ... */
+  /** fraction that got slashed */
   fraction: string;
 }
 

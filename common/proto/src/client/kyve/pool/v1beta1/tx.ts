@@ -138,20 +138,6 @@ export interface MsgCancelRuntimeUpgrade {
 export interface MsgCancelRuntimeUpgradeResponse {
 }
 
-/** MsgResetPool defines a SDK message for resetting an existing pool. */
-export interface MsgResetPool {
-  /** authority is the address of the governance account. */
-  authority: string;
-  /** id ... */
-  id: string;
-  /** bundled_id ... */
-  bundle_id: string;
-}
-
-/** MsgResetPoolResponse defines the Msg/ResetPool response type. */
-export interface MsgResetPoolResponse {
-}
-
 function createBaseMsgFundPool(): MsgFundPool {
   return { creator: "", id: "0", amount: "0" };
 }
@@ -1116,112 +1102,6 @@ export const MsgCancelRuntimeUpgradeResponse = {
   },
 };
 
-function createBaseMsgResetPool(): MsgResetPool {
-  return { authority: "", id: "0", bundle_id: "0" };
-}
-
-export const MsgResetPool = {
-  encode(message: MsgResetPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.authority !== "") {
-      writer.uint32(10).string(message.authority);
-    }
-    if (message.id !== "0") {
-      writer.uint32(16).uint64(message.id);
-    }
-    if (message.bundle_id !== "0") {
-      writer.uint32(24).uint64(message.bundle_id);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgResetPool {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgResetPool();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.authority = reader.string();
-          break;
-        case 2:
-          message.id = longToString(reader.uint64() as Long);
-          break;
-        case 3:
-          message.bundle_id = longToString(reader.uint64() as Long);
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgResetPool {
-    return {
-      authority: isSet(object.authority) ? String(object.authority) : "",
-      id: isSet(object.id) ? String(object.id) : "0",
-      bundle_id: isSet(object.bundle_id) ? String(object.bundle_id) : "0",
-    };
-  },
-
-  toJSON(message: MsgResetPool): unknown {
-    const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    message.id !== undefined && (obj.id = message.id);
-    message.bundle_id !== undefined && (obj.bundle_id = message.bundle_id);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgResetPool>, I>>(object: I): MsgResetPool {
-    const message = createBaseMsgResetPool();
-    message.authority = object.authority ?? "";
-    message.id = object.id ?? "0";
-    message.bundle_id = object.bundle_id ?? "0";
-    return message;
-  },
-};
-
-function createBaseMsgResetPoolResponse(): MsgResetPoolResponse {
-  return {};
-}
-
-export const MsgResetPoolResponse = {
-  encode(_: MsgResetPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgResetPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgResetPoolResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(_: any): MsgResetPoolResponse {
-    return {};
-  },
-
-  toJSON(_: MsgResetPoolResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgResetPoolResponse>, I>>(_: I): MsgResetPoolResponse {
-    const message = createBaseMsgResetPoolResponse();
-    return message;
-  },
-};
-
 /** Msg defines the Msg service. */
 export interface Msg {
   /** FundPool ... */
@@ -1258,11 +1138,6 @@ export interface Msg {
    * The authority is hard-coded to the x/gov module account.
    */
   CancelRuntimeUpgrade(request: MsgCancelRuntimeUpgrade): Promise<MsgCancelRuntimeUpgradeResponse>;
-  /**
-   * ResetPool defines a governance operation for resetting an existing pool.
-   * The authority is hard-coded to the x/gov module account.
-   */
-  ResetPool(request: MsgResetPool): Promise<MsgResetPoolResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1279,7 +1154,6 @@ export class MsgClientImpl implements Msg {
     this.UnpausePool = this.UnpausePool.bind(this);
     this.ScheduleRuntimeUpgrade = this.ScheduleRuntimeUpgrade.bind(this);
     this.CancelRuntimeUpgrade = this.CancelRuntimeUpgrade.bind(this);
-    this.ResetPool = this.ResetPool.bind(this);
   }
   FundPool(request: MsgFundPool): Promise<MsgFundPoolResponse> {
     const data = MsgFundPool.encode(request).finish();
@@ -1327,12 +1201,6 @@ export class MsgClientImpl implements Msg {
     const data = MsgCancelRuntimeUpgrade.encode(request).finish();
     const promise = this.rpc.request(this.service, "CancelRuntimeUpgrade", data);
     return promise.then((data) => MsgCancelRuntimeUpgradeResponse.decode(new _m0.Reader(data)));
-  }
-
-  ResetPool(request: MsgResetPool): Promise<MsgResetPoolResponse> {
-    const data = MsgResetPool.encode(request).finish();
-    const promise = this.rpc.request(this.service, "ResetPool", data);
-    return promise.then((data) => MsgResetPoolResponse.decode(new _m0.Reader(data)));
   }
 }
 

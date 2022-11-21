@@ -4,6 +4,12 @@ import { defaultRegistryTypes } from "@cosmjs/stargate";
 /** pool **/
 import { MsgFundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
 import { MsgDefundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgCreatePool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgUpdatePool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgPausePool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgUnpausePool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgScheduleRuntimeUpgrade } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgCancelRuntimeUpgrade } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
 /** stakers **/
 import { MsgCreateStaker } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 import { MsgUpdateMetadata } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
@@ -30,6 +36,12 @@ export const registry: ReadonlyArray<[string, GeneratedType]> = [
   /**pool **/
   ["/kyve.pool.v1beta1.MsgFundPool", MsgFundPool],
   ["/kyve.pool.v1beta1.MsgDefundPool", MsgDefundPool],
+  ["/kyve.pool.v1beta1.MsgCreatePool", MsgCreatePool],
+  ["/kyve.pool.v1beta1.UpdatePool", MsgUpdatePool],
+  ["/kyve.pool.v1beta1.MsgPausePool", MsgPausePool],
+  ["/kyve.pool.v1beta1.MsgUnpausePool", MsgUnpausePool],
+  ["/kyve.pool.v1beta1.MsgScheduleRuntimeUpgrade", MsgScheduleRuntimeUpgrade],
+  ["/kyve.pool.v1beta1.MsgCancelRuntimeUpgrade", MsgCancelRuntimeUpgrade],
   /** stakers **/
   ["/kyve.stakers.v1beta1.MsgCreateStaker", MsgCreateStaker],
   ["/kyve.stakers.v1beta1.MsgUpdateMetadata", MsgUpdateMetadata],
@@ -67,6 +79,48 @@ export const encodeTxMsg = {
     return {
       type_url: "/kyve.pool.v1beta1.MsgDefundPool",
       value: MsgDefundPool.encode(value).finish(),
+    };
+  },
+
+  createPool(value: MsgCreatePool) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgCreatePool",
+      value: MsgCreatePool.encode(value).finish(),
+    };
+  },
+
+  updatePool(value: MsgUpdatePool) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgUpdatePool",
+      value: MsgUpdatePool.encode(value).finish(),
+    };
+  },
+
+  pausePool(value: MsgPausePool) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgPausePool",
+      value: MsgPausePool.encode(value).finish(),
+    };
+  },
+
+  unpausePool(value: MsgUnpausePool) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgUnpausePool",
+      value: MsgUnpausePool.encode(value).finish(),
+    };
+  },
+
+  scheduleRuntimeUpgrade(value: MsgScheduleRuntimeUpgrade) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgScheduleRuntimeUpgrade",
+      value: MsgScheduleRuntimeUpgrade.encode(value).finish(),
+    };
+  },
+
+  cancelRuntimeUpgrade(value: MsgCancelRuntimeUpgrade) {
+    return {
+      type_url: "/kyve.pool.v1beta1.MsgCancelRuntimeUpgrade",
+      value: MsgCancelRuntimeUpgrade.encode(value).finish(),
     };
   },
 
@@ -165,6 +219,48 @@ export const withTypeUrl = {
   defundPool(value: MsgDefundPool) {
     return {
       typeUrl: "/kyve.pool.v1beta1.MsgDefundPool",
+      value,
+    };
+  },
+
+  createPool(value: MsgCreatePool) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgCreatePool",
+      value,
+    };
+  },
+
+  updatePool(value: MsgUpdatePool) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgUpdatePool",
+      value,
+    };
+  },
+
+  pausePool(value: MsgPausePool) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgPausePool",
+      value,
+    };
+  },
+
+  unpausePool(value: MsgUnpausePool) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgUnpausePool",
+      value,
+    };
+  },
+
+  scheduleRuntimeUpgrade(value: MsgScheduleRuntimeUpgrade) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgScheduleRuntimeUpgrade",
+      value,
+    };
+  },
+
+  cancelRuntimeUpgrade(value: MsgCancelRuntimeUpgrade) {
+    return {
+      typeUrl: "/kyve.pool.v1beta1.MsgCancelRuntimeUpgrade",
       value,
     };
   },

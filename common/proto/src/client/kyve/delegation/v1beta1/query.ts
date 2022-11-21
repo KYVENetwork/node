@@ -1,6 +1,5 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { DelegationSlash } from "./delegation";
 import { Params } from "./params";
 
 export const protobufPackage = "kyve.delegation.v1beta1";
@@ -13,16 +12,6 @@ export interface QueryParamsRequest {
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: Params;
-}
-
-/** QueryParamsRequest is request type for the Query/Params RPC method. */
-export interface QuerySlashesRequest {
-}
-
-/** QueryParamsResponse is response type for the Query/Params RPC method. */
-export interface QuerySlashesResponse {
-  /** slashes ... */
-  slashes: DelegationSlash[];
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -113,104 +102,10 @@ export const QueryParamsResponse = {
   },
 };
 
-function createBaseQuerySlashesRequest(): QuerySlashesRequest {
-  return {};
-}
-
-export const QuerySlashesRequest = {
-  encode(_: QuerySlashesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySlashesRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQuerySlashesRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(_: any): QuerySlashesRequest {
-    return {};
-  },
-
-  toJSON(_: QuerySlashesRequest): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QuerySlashesRequest>, I>>(_: I): QuerySlashesRequest {
-    const message = createBaseQuerySlashesRequest();
-    return message;
-  },
-};
-
-function createBaseQuerySlashesResponse(): QuerySlashesResponse {
-  return { slashes: [] };
-}
-
-export const QuerySlashesResponse = {
-  encode(message: QuerySlashesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.slashes) {
-      DelegationSlash.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySlashesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQuerySlashesResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.slashes.push(DelegationSlash.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QuerySlashesResponse {
-    return {
-      slashes: Array.isArray(object?.slashes) ? object.slashes.map((e: any) => DelegationSlash.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: QuerySlashesResponse): unknown {
-    const obj: any = {};
-    if (message.slashes) {
-      obj.slashes = message.slashes.map((e) => e ? DelegationSlash.toJSON(e) : undefined);
-    } else {
-      obj.slashes = [];
-    }
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QuerySlashesResponse>, I>>(object: I): QuerySlashesResponse {
-    const message = createBaseQuerySlashesResponse();
-    message.slashes = object.slashes?.map((e) => DelegationSlash.fromPartial(e)) || [];
-    return message;
-  },
-};
-
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
-  /** Slashes ... */
-  Slashes(request: QuerySlashesRequest): Promise<QuerySlashesResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -220,18 +115,11 @@ export class QueryClientImpl implements Query {
     this.service = opts?.service || "kyve.delegation.v1beta1.Query";
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
-    this.Slashes = this.Slashes.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
-  }
-
-  Slashes(request: QuerySlashesRequest): Promise<QuerySlashesResponse> {
-    const data = QuerySlashesRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Slashes", data);
-    return promise.then((data) => QuerySlashesResponse.decode(new _m0.Reader(data)));
   }
 }
 

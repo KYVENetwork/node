@@ -11,8 +11,8 @@ export const protobufPackage = "kyve.delegation.v1beta1";
 export interface EventDelegate {
   /** address is the account address of the delegator. */
   address: string;
-  /** node is the account address of the protocol node. */
-  node: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** amount ... */
   amount: string;
 }
@@ -24,8 +24,8 @@ export interface EventDelegate {
 export interface EventUndelegate {
   /** address is the account address of the delegator. */
   address: string;
-  /** node is the account address of the protocol node. */
-  node: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** amount ... */
   amount: string;
 }
@@ -37,10 +37,10 @@ export interface EventUndelegate {
 export interface EventRedelegate {
   /** address is the account address of the delegator. */
   address: string;
-  /** from_node ... */
-  from_node: string;
-  /** address is the account address of the new staker in the the pool */
-  to_node: string;
+  /** from_staker ... */
+  from_staker: string;
+  /** to_staker is the account address of the new staker in the the pool */
+  to_staker: string;
   /** amount ... */
   amount: string;
 }
@@ -52,14 +52,14 @@ export interface EventRedelegate {
 export interface EventWithdrawRewards {
   /** address is the account address of the delegator. */
   address: string;
-  /** from_node is the account address of the protocol node the users withdraws from. */
-  from_node: string;
+  /** staker is the account address of the protocol node the users withdraws from. */
+  staker: string;
   /** amount ... */
   amount: string;
 }
 
 function createBaseEventDelegate(): EventDelegate {
-  return { address: "", node: "", amount: "0" };
+  return { address: "", staker: "", amount: "0" };
 }
 
 export const EventDelegate = {
@@ -67,8 +67,8 @@ export const EventDelegate = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.node !== "") {
-      writer.uint32(18).string(message.node);
+    if (message.staker !== "") {
+      writer.uint32(18).string(message.staker);
     }
     if (message.amount !== "0") {
       writer.uint32(24).uint64(message.amount);
@@ -87,7 +87,7 @@ export const EventDelegate = {
           message.address = reader.string();
           break;
         case 2:
-          message.node = reader.string();
+          message.staker = reader.string();
           break;
         case 3:
           message.amount = longToString(reader.uint64() as Long);
@@ -103,7 +103,7 @@ export const EventDelegate = {
   fromJSON(object: any): EventDelegate {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      node: isSet(object.node) ? String(object.node) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
@@ -111,7 +111,7 @@ export const EventDelegate = {
   toJSON(message: EventDelegate): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.node !== undefined && (obj.node = message.node);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -119,14 +119,14 @@ export const EventDelegate = {
   fromPartial<I extends Exact<DeepPartial<EventDelegate>, I>>(object: I): EventDelegate {
     const message = createBaseEventDelegate();
     message.address = object.address ?? "";
-    message.node = object.node ?? "";
+    message.staker = object.staker ?? "";
     message.amount = object.amount ?? "0";
     return message;
   },
 };
 
 function createBaseEventUndelegate(): EventUndelegate {
-  return { address: "", node: "", amount: "0" };
+  return { address: "", staker: "", amount: "0" };
 }
 
 export const EventUndelegate = {
@@ -134,8 +134,8 @@ export const EventUndelegate = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.node !== "") {
-      writer.uint32(18).string(message.node);
+    if (message.staker !== "") {
+      writer.uint32(18).string(message.staker);
     }
     if (message.amount !== "0") {
       writer.uint32(24).uint64(message.amount);
@@ -154,7 +154,7 @@ export const EventUndelegate = {
           message.address = reader.string();
           break;
         case 2:
-          message.node = reader.string();
+          message.staker = reader.string();
           break;
         case 3:
           message.amount = longToString(reader.uint64() as Long);
@@ -170,7 +170,7 @@ export const EventUndelegate = {
   fromJSON(object: any): EventUndelegate {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      node: isSet(object.node) ? String(object.node) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
@@ -178,7 +178,7 @@ export const EventUndelegate = {
   toJSON(message: EventUndelegate): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.node !== undefined && (obj.node = message.node);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -186,14 +186,14 @@ export const EventUndelegate = {
   fromPartial<I extends Exact<DeepPartial<EventUndelegate>, I>>(object: I): EventUndelegate {
     const message = createBaseEventUndelegate();
     message.address = object.address ?? "";
-    message.node = object.node ?? "";
+    message.staker = object.staker ?? "";
     message.amount = object.amount ?? "0";
     return message;
   },
 };
 
 function createBaseEventRedelegate(): EventRedelegate {
-  return { address: "", from_node: "", to_node: "", amount: "0" };
+  return { address: "", from_staker: "", to_staker: "", amount: "0" };
 }
 
 export const EventRedelegate = {
@@ -201,11 +201,11 @@ export const EventRedelegate = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.from_node !== "") {
-      writer.uint32(18).string(message.from_node);
+    if (message.from_staker !== "") {
+      writer.uint32(18).string(message.from_staker);
     }
-    if (message.to_node !== "") {
-      writer.uint32(26).string(message.to_node);
+    if (message.to_staker !== "") {
+      writer.uint32(26).string(message.to_staker);
     }
     if (message.amount !== "0") {
       writer.uint32(32).uint64(message.amount);
@@ -224,10 +224,10 @@ export const EventRedelegate = {
           message.address = reader.string();
           break;
         case 2:
-          message.from_node = reader.string();
+          message.from_staker = reader.string();
           break;
         case 3:
-          message.to_node = reader.string();
+          message.to_staker = reader.string();
           break;
         case 4:
           message.amount = longToString(reader.uint64() as Long);
@@ -243,8 +243,8 @@ export const EventRedelegate = {
   fromJSON(object: any): EventRedelegate {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      from_node: isSet(object.from_node) ? String(object.from_node) : "",
-      to_node: isSet(object.to_node) ? String(object.to_node) : "",
+      from_staker: isSet(object.from_staker) ? String(object.from_staker) : "",
+      to_staker: isSet(object.to_staker) ? String(object.to_staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
@@ -252,8 +252,8 @@ export const EventRedelegate = {
   toJSON(message: EventRedelegate): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.from_node !== undefined && (obj.from_node = message.from_node);
-    message.to_node !== undefined && (obj.to_node = message.to_node);
+    message.from_staker !== undefined && (obj.from_staker = message.from_staker);
+    message.to_staker !== undefined && (obj.to_staker = message.to_staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -261,15 +261,15 @@ export const EventRedelegate = {
   fromPartial<I extends Exact<DeepPartial<EventRedelegate>, I>>(object: I): EventRedelegate {
     const message = createBaseEventRedelegate();
     message.address = object.address ?? "";
-    message.from_node = object.from_node ?? "";
-    message.to_node = object.to_node ?? "";
+    message.from_staker = object.from_staker ?? "";
+    message.to_staker = object.to_staker ?? "";
     message.amount = object.amount ?? "0";
     return message;
   },
 };
 
 function createBaseEventWithdrawRewards(): EventWithdrawRewards {
-  return { address: "", from_node: "", amount: "0" };
+  return { address: "", staker: "", amount: "0" };
 }
 
 export const EventWithdrawRewards = {
@@ -277,8 +277,8 @@ export const EventWithdrawRewards = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.from_node !== "") {
-      writer.uint32(18).string(message.from_node);
+    if (message.staker !== "") {
+      writer.uint32(18).string(message.staker);
     }
     if (message.amount !== "0") {
       writer.uint32(24).uint64(message.amount);
@@ -297,7 +297,7 @@ export const EventWithdrawRewards = {
           message.address = reader.string();
           break;
         case 2:
-          message.from_node = reader.string();
+          message.staker = reader.string();
           break;
         case 3:
           message.amount = longToString(reader.uint64() as Long);
@@ -313,7 +313,7 @@ export const EventWithdrawRewards = {
   fromJSON(object: any): EventWithdrawRewards {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      from_node: isSet(object.from_node) ? String(object.from_node) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
@@ -321,7 +321,7 @@ export const EventWithdrawRewards = {
   toJSON(message: EventWithdrawRewards): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
-    message.from_node !== undefined && (obj.from_node = message.from_node);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -329,7 +329,7 @@ export const EventWithdrawRewards = {
   fromPartial<I extends Exact<DeepPartial<EventWithdrawRewards>, I>>(object: I): EventWithdrawRewards {
     const message = createBaseEventWithdrawRewards();
     message.address = object.address ?? "";
-    message.from_node = object.from_node ?? "";
+    message.staker = object.staker ?? "";
     message.amount = object.amount ?? "0";
     return message;
   },

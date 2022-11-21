@@ -12,8 +12,6 @@ export interface Params {
   upload_slash: string;
   /** timeout_slash ... */
   timeout_slash: string;
-  /** unbonding_staking_time ... */
-  unbonding_staking_time: string;
   /** commission_change_time ... */
   commission_change_time: string;
   /** commission_change_time ... */
@@ -21,14 +19,7 @@ export interface Params {
 }
 
 function createBaseParams(): Params {
-  return {
-    vote_slash: "",
-    upload_slash: "",
-    timeout_slash: "",
-    unbonding_staking_time: "0",
-    commission_change_time: "0",
-    leave_pool_time: "0",
-  };
+  return { vote_slash: "", upload_slash: "", timeout_slash: "", commission_change_time: "0", leave_pool_time: "0" };
 }
 
 export const Params = {
@@ -42,14 +33,11 @@ export const Params = {
     if (message.timeout_slash !== "") {
       writer.uint32(26).string(message.timeout_slash);
     }
-    if (message.unbonding_staking_time !== "0") {
-      writer.uint32(32).uint64(message.unbonding_staking_time);
-    }
     if (message.commission_change_time !== "0") {
-      writer.uint32(40).uint64(message.commission_change_time);
+      writer.uint32(32).uint64(message.commission_change_time);
     }
     if (message.leave_pool_time !== "0") {
-      writer.uint32(48).uint64(message.leave_pool_time);
+      writer.uint32(40).uint64(message.leave_pool_time);
     }
     return writer;
   },
@@ -71,12 +59,9 @@ export const Params = {
           message.timeout_slash = reader.string();
           break;
         case 4:
-          message.unbonding_staking_time = longToString(reader.uint64() as Long);
-          break;
-        case 5:
           message.commission_change_time = longToString(reader.uint64() as Long);
           break;
-        case 6:
+        case 5:
           message.leave_pool_time = longToString(reader.uint64() as Long);
           break;
         default:
@@ -92,7 +77,6 @@ export const Params = {
       vote_slash: isSet(object.vote_slash) ? String(object.vote_slash) : "",
       upload_slash: isSet(object.upload_slash) ? String(object.upload_slash) : "",
       timeout_slash: isSet(object.timeout_slash) ? String(object.timeout_slash) : "",
-      unbonding_staking_time: isSet(object.unbonding_staking_time) ? String(object.unbonding_staking_time) : "0",
       commission_change_time: isSet(object.commission_change_time) ? String(object.commission_change_time) : "0",
       leave_pool_time: isSet(object.leave_pool_time) ? String(object.leave_pool_time) : "0",
     };
@@ -103,7 +87,6 @@ export const Params = {
     message.vote_slash !== undefined && (obj.vote_slash = message.vote_slash);
     message.upload_slash !== undefined && (obj.upload_slash = message.upload_slash);
     message.timeout_slash !== undefined && (obj.timeout_slash = message.timeout_slash);
-    message.unbonding_staking_time !== undefined && (obj.unbonding_staking_time = message.unbonding_staking_time);
     message.commission_change_time !== undefined && (obj.commission_change_time = message.commission_change_time);
     message.leave_pool_time !== undefined && (obj.leave_pool_time = message.leave_pool_time);
     return obj;
@@ -114,7 +97,6 @@ export const Params = {
     message.vote_slash = object.vote_slash ?? "";
     message.upload_slash = object.upload_slash ?? "";
     message.timeout_slash = object.timeout_slash ?? "";
-    message.unbonding_staking_time = object.unbonding_staking_time ?? "0";
     message.commission_change_time = object.commission_change_time ?? "0";
     message.leave_pool_time = object.leave_pool_time ?? "0";
     return message;
