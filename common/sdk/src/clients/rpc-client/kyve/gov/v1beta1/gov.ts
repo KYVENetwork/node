@@ -200,7 +200,7 @@ export default class KyveGovMsg {
     );
   }
 
-  async govVote(
+  async vote(
     id: string,
     voteOption: "Yes" | "Abstain" | "No" | "NoWithVeto",
     options?: {

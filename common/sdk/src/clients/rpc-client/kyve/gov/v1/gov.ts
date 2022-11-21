@@ -1,16 +1,45 @@
-import { SigningStargateClient } from "@cosmjs/stargate";
+import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { AccountData } from "@cosmjs/amino/build/signer";
-import KyveGovMsgV1beta1 from "../v1beta1/gov";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1beta1/gov";
 import { signTx, TxPromise } from "../../../../../utils/helper";
+import { DENOM } from "../../../../../constants";
 
-export default class KyveGovMsg extends KyveGovMsgV1beta1 {
+export default class KyveGovMsg {
+  protected nativeClient: SigningStargateClient;
+  public readonly account: AccountData;
+
   constructor(client: SigningStargateClient, account: AccountData) {
-    super(client, account);
+    this.account = account;
+    this.nativeClient = client;
   }
 
-  async govVote(
+  async submitProposal(
+    messages: any,
+    amount: string,
+    metadata: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = {
+      typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+      value: {
+        messages,
+        initial_deposit: coins(amount.toString(), DENOM),
+        proposer: this.account.address,
+        metadata: metadata,
+      },
+    };
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async vote(
     id: string,
     voteOption: "Yes" | "Abstain" | "No" | "NoWithVeto",
     options?: {
