@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk-beta@3.4.0...@kyve/sdk-beta@3.5.0) (2022-11-22)
+
+### Features
+
+- configure and enable eslint for sdk ([5c000bf](https://github.com/KYVENetwork/node/commit/5c000bf257b431ccb3c33ee02366f754f4b936a2))
+
 # 3.4.0 (2022-11-09)
 
 ### Bug Fixes
