@@ -152,16 +152,16 @@ export const Staker = {
       writer.uint32(10).string(message.address);
     }
     if (message.commission !== "") {
-      writer.uint32(34).string(message.commission);
+      writer.uint32(18).string(message.commission);
     }
     if (message.moniker !== "") {
-      writer.uint32(42).string(message.moniker);
+      writer.uint32(26).string(message.moniker);
     }
     if (message.website !== "") {
-      writer.uint32(50).string(message.website);
+      writer.uint32(34).string(message.website);
     }
     if (message.logo !== "") {
-      writer.uint32(58).string(message.logo);
+      writer.uint32(42).string(message.logo);
     }
     return writer;
   },
@@ -176,16 +176,16 @@ export const Staker = {
         case 1:
           message.address = reader.string();
           break;
-        case 4:
+        case 2:
           message.commission = reader.string();
           break;
-        case 5:
+        case 3:
           message.moniker = reader.string();
           break;
-        case 6:
+        case 4:
           message.website = reader.string();
           break;
-        case 7:
+        case 5:
           message.logo = reader.string();
           break;
         default:

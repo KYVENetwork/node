@@ -294,10 +294,10 @@ function createBaseFunder(): Funder {
 export const Funder = {
   encode(message: Funder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
-      writer.uint32(18).string(message.address);
+      writer.uint32(10).string(message.address);
     }
     if (message.amount !== "0") {
-      writer.uint32(24).uint64(message.amount);
+      writer.uint32(16).uint64(message.amount);
     }
     return writer;
   },
@@ -309,10 +309,10 @@ export const Funder = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2:
+        case 1:
           message.address = reader.string();
           break;
-        case 3:
+        case 2:
           message.amount = longToString(reader.uint64() as Long);
           break;
         default:
@@ -416,7 +416,7 @@ export const Pool = {
       writer.uint32(112).uint64(message.max_bundle_size);
     }
     if (message.paused === true) {
-      writer.uint32(1240).bool(message.paused);
+      writer.uint32(120).bool(message.paused);
     }
     for (const v of message.funders) {
       Funder.encode(v!, writer.uint32(130).fork()).ldelim();
@@ -488,7 +488,7 @@ export const Pool = {
         case 14:
           message.max_bundle_size = longToString(reader.uint64() as Long);
           break;
-        case 155:
+        case 15:
           message.paused = reader.bool();
           break;
         case 16:

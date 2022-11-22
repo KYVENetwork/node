@@ -313,13 +313,13 @@ export const FullStaker = {
       writer.uint32(32).uint64(message.self_delegation_unbonding);
     }
     if (message.total_delegation !== "0") {
-      writer.uint32(64).uint64(message.total_delegation);
+      writer.uint32(40).uint64(message.total_delegation);
     }
     if (message.delegator_count !== "0") {
-      writer.uint32(40).uint64(message.delegator_count);
+      writer.uint32(48).uint64(message.delegator_count);
     }
     for (const v of message.pools) {
-      PoolMembership.encode(v!, writer.uint32(50).fork()).ldelim();
+      PoolMembership.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -343,13 +343,13 @@ export const FullStaker = {
         case 4:
           message.self_delegation_unbonding = longToString(reader.uint64() as Long);
           break;
-        case 8:
+        case 5:
           message.total_delegation = longToString(reader.uint64() as Long);
           break;
-        case 5:
+        case 6:
           message.delegator_count = longToString(reader.uint64() as Long);
           break;
-        case 6:
+        case 7:
           message.pools.push(PoolMembership.decode(reader, reader.uint32()));
           break;
         default:
@@ -420,13 +420,13 @@ export const StakerMetadata = {
       writer.uint32(18).string(message.moniker);
     }
     if (message.website !== "") {
-      writer.uint32(50).string(message.website);
+      writer.uint32(26).string(message.website);
     }
     if (message.logo !== "") {
-      writer.uint32(58).string(message.logo);
+      writer.uint32(34).string(message.logo);
     }
     if (message.pending_commission_change !== undefined) {
-      CommissionChangeEntry.encode(message.pending_commission_change, writer.uint32(74).fork()).ldelim();
+      CommissionChangeEntry.encode(message.pending_commission_change, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -444,13 +444,13 @@ export const StakerMetadata = {
         case 2:
           message.moniker = reader.string();
           break;
-        case 6:
+        case 3:
           message.website = reader.string();
           break;
-        case 7:
+        case 4:
           message.logo = reader.string();
           break;
-        case 9:
+        case 5:
           message.pending_commission_change = CommissionChangeEntry.decode(reader, reader.uint32());
           break;
         default:

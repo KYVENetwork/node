@@ -10,8 +10,8 @@ export const protobufPackage = "kyve.stakers.v1beta1";
  * emitted_by: MsgCreateStaker
  */
 export interface EventCreateStaker {
-  /** address is the account address of the protocol node. */
-  address: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** amount ... */
   amount: string;
 }
@@ -21,8 +21,8 @@ export interface EventCreateStaker {
  * emitted_by: MsgUpdateMetadata
  */
 export interface EventUpdateMetadata {
-  /** address is the account address of the protocol node. */
-  address: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** moniker ... */
   moniker: string;
   /** website ... */
@@ -38,8 +38,8 @@ export interface EventUpdateMetadata {
 export interface EventSlash {
   /** pool_id is the unique ID of the pool. */
   pool_id: string;
-  /** address is the account address of the protocol node. */
-  address: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** amount ... */
   amount: string;
   /** slash_type */
@@ -51,8 +51,8 @@ export interface EventSlash {
  * emitted_by: EndBlock
  */
 export interface EventUpdateCommission {
-  /** address is the account address of the protocol node. */
-  address: string;
+  /** staker is the account address of the protocol node. */
+  staker: string;
   /** commission ... */
   commission: string;
 }
@@ -84,13 +84,13 @@ export interface EventLeavePool {
 }
 
 function createBaseEventCreateStaker(): EventCreateStaker {
-  return { address: "", amount: "0" };
+  return { staker: "", amount: "0" };
 }
 
 export const EventCreateStaker = {
   encode(message: EventCreateStaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.address !== "") {
-      writer.uint32(10).string(message.address);
+    if (message.staker !== "") {
+      writer.uint32(10).string(message.staker);
     }
     if (message.amount !== "0") {
       writer.uint32(16).uint64(message.amount);
@@ -106,7 +106,7 @@ export const EventCreateStaker = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string();
+          message.staker = reader.string();
           break;
         case 2:
           message.amount = longToString(reader.uint64() as Long);
@@ -121,34 +121,34 @@ export const EventCreateStaker = {
 
   fromJSON(object: any): EventCreateStaker {
     return {
-      address: isSet(object.address) ? String(object.address) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
     };
   },
 
   toJSON(message: EventCreateStaker): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<EventCreateStaker>, I>>(object: I): EventCreateStaker {
     const message = createBaseEventCreateStaker();
-    message.address = object.address ?? "";
+    message.staker = object.staker ?? "";
     message.amount = object.amount ?? "0";
     return message;
   },
 };
 
 function createBaseEventUpdateMetadata(): EventUpdateMetadata {
-  return { address: "", moniker: "", website: "", logo: "" };
+  return { staker: "", moniker: "", website: "", logo: "" };
 }
 
 export const EventUpdateMetadata = {
   encode(message: EventUpdateMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.address !== "") {
-      writer.uint32(10).string(message.address);
+    if (message.staker !== "") {
+      writer.uint32(10).string(message.staker);
     }
     if (message.moniker !== "") {
       writer.uint32(18).string(message.moniker);
@@ -170,7 +170,7 @@ export const EventUpdateMetadata = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string();
+          message.staker = reader.string();
           break;
         case 2:
           message.moniker = reader.string();
@@ -191,7 +191,7 @@ export const EventUpdateMetadata = {
 
   fromJSON(object: any): EventUpdateMetadata {
     return {
-      address: isSet(object.address) ? String(object.address) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       moniker: isSet(object.moniker) ? String(object.moniker) : "",
       website: isSet(object.website) ? String(object.website) : "",
       logo: isSet(object.logo) ? String(object.logo) : "",
@@ -200,7 +200,7 @@ export const EventUpdateMetadata = {
 
   toJSON(message: EventUpdateMetadata): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.moniker !== undefined && (obj.moniker = message.moniker);
     message.website !== undefined && (obj.website = message.website);
     message.logo !== undefined && (obj.logo = message.logo);
@@ -209,7 +209,7 @@ export const EventUpdateMetadata = {
 
   fromPartial<I extends Exact<DeepPartial<EventUpdateMetadata>, I>>(object: I): EventUpdateMetadata {
     const message = createBaseEventUpdateMetadata();
-    message.address = object.address ?? "";
+    message.staker = object.staker ?? "";
     message.moniker = object.moniker ?? "";
     message.website = object.website ?? "";
     message.logo = object.logo ?? "";
@@ -218,7 +218,7 @@ export const EventUpdateMetadata = {
 };
 
 function createBaseEventSlash(): EventSlash {
-  return { pool_id: "0", address: "", amount: "0", slash_type: 0 };
+  return { pool_id: "0", staker: "", amount: "0", slash_type: 0 };
 }
 
 export const EventSlash = {
@@ -226,8 +226,8 @@ export const EventSlash = {
     if (message.pool_id !== "0") {
       writer.uint32(8).uint64(message.pool_id);
     }
-    if (message.address !== "") {
-      writer.uint32(18).string(message.address);
+    if (message.staker !== "") {
+      writer.uint32(18).string(message.staker);
     }
     if (message.amount !== "0") {
       writer.uint32(24).uint64(message.amount);
@@ -249,7 +249,7 @@ export const EventSlash = {
           message.pool_id = longToString(reader.uint64() as Long);
           break;
         case 2:
-          message.address = reader.string();
+          message.staker = reader.string();
           break;
         case 3:
           message.amount = longToString(reader.uint64() as Long);
@@ -268,7 +268,7 @@ export const EventSlash = {
   fromJSON(object: any): EventSlash {
     return {
       pool_id: isSet(object.pool_id) ? String(object.pool_id) : "0",
-      address: isSet(object.address) ? String(object.address) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       amount: isSet(object.amount) ? String(object.amount) : "0",
       slash_type: isSet(object.slash_type) ? slashTypeFromJSON(object.slash_type) : 0,
     };
@@ -277,7 +277,7 @@ export const EventSlash = {
   toJSON(message: EventSlash): unknown {
     const obj: any = {};
     message.pool_id !== undefined && (obj.pool_id = message.pool_id);
-    message.address !== undefined && (obj.address = message.address);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.amount !== undefined && (obj.amount = message.amount);
     message.slash_type !== undefined && (obj.slash_type = slashTypeToJSON(message.slash_type));
     return obj;
@@ -286,7 +286,7 @@ export const EventSlash = {
   fromPartial<I extends Exact<DeepPartial<EventSlash>, I>>(object: I): EventSlash {
     const message = createBaseEventSlash();
     message.pool_id = object.pool_id ?? "0";
-    message.address = object.address ?? "";
+    message.staker = object.staker ?? "";
     message.amount = object.amount ?? "0";
     message.slash_type = object.slash_type ?? 0;
     return message;
@@ -294,13 +294,13 @@ export const EventSlash = {
 };
 
 function createBaseEventUpdateCommission(): EventUpdateCommission {
-  return { address: "", commission: "" };
+  return { staker: "", commission: "" };
 }
 
 export const EventUpdateCommission = {
   encode(message: EventUpdateCommission, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.address !== "") {
-      writer.uint32(10).string(message.address);
+    if (message.staker !== "") {
+      writer.uint32(10).string(message.staker);
     }
     if (message.commission !== "") {
       writer.uint32(18).string(message.commission);
@@ -316,7 +316,7 @@ export const EventUpdateCommission = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.address = reader.string();
+          message.staker = reader.string();
           break;
         case 2:
           message.commission = reader.string();
@@ -331,21 +331,21 @@ export const EventUpdateCommission = {
 
   fromJSON(object: any): EventUpdateCommission {
     return {
-      address: isSet(object.address) ? String(object.address) : "",
+      staker: isSet(object.staker) ? String(object.staker) : "",
       commission: isSet(object.commission) ? String(object.commission) : "",
     };
   },
 
   toJSON(message: EventUpdateCommission): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
+    message.staker !== undefined && (obj.staker = message.staker);
     message.commission !== undefined && (obj.commission = message.commission);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<EventUpdateCommission>, I>>(object: I): EventUpdateCommission {
     const message = createBaseEventUpdateCommission();
-    message.address = object.address ?? "";
+    message.staker = object.staker ?? "";
     message.commission = object.commission ?? "";
     return message;
   },

@@ -740,10 +740,10 @@ export const EventPointIncreased = {
       writer.uint32(8).uint64(message.pool_id);
     }
     if (message.staker !== "") {
-      writer.uint32(26).string(message.staker);
+      writer.uint32(18).string(message.staker);
     }
     if (message.current_points !== "0") {
-      writer.uint32(32).uint64(message.current_points);
+      writer.uint32(24).uint64(message.current_points);
     }
     return writer;
   },
@@ -758,10 +758,10 @@ export const EventPointIncreased = {
         case 1:
           message.pool_id = longToString(reader.uint64() as Long);
           break;
-        case 3:
+        case 2:
           message.staker = reader.string();
           break;
-        case 4:
+        case 3:
           message.current_points = longToString(reader.uint64() as Long);
           break;
         default:
@@ -807,7 +807,7 @@ export const EventPointsReset = {
       writer.uint32(8).uint64(message.pool_id);
     }
     if (message.staker !== "") {
-      writer.uint32(26).string(message.staker);
+      writer.uint32(18).string(message.staker);
     }
     return writer;
   },
@@ -822,7 +822,7 @@ export const EventPointsReset = {
         case 1:
           message.pool_id = longToString(reader.uint64() as Long);
           break;
-        case 3:
+        case 2:
           message.staker = reader.string();
           break;
         default:

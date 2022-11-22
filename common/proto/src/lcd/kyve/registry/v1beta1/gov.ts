@@ -2,7 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "kyve.pool.v1beta1";
+export const protobufPackage = "kyve.registry.v1beta1";
 
 /**
  * CreatePoolProposal is a gov Content type for creating a pool.

@@ -6,7 +6,7 @@ import { makeADR36AminoSignDoc } from "@keplr-wallet/cosmos";
 import KyveBaseMethods from "./kyve/base/v1beta1/base";
 import KyveBundlesMethods from "./kyve/bundles/v1beta1/bundles";
 import KyveDelegationMethods from "./kyve/delegation/v1beta1/delegation";
-import KyveGovMethods from "./kyve/gov/v1beta1/gov";
+import KyveGovMethodsV1 from "./kyve/gov/v1/gov";
 import KyvePoolMethods from "./kyve/pool/v1beta1/pool";
 import KyveStakersMethods from "./kyve/stakers/v1beta1/stakers";
 
@@ -18,7 +18,7 @@ export default class KyveClient {
       v1beta1: KyveBaseMethods;
     };
     gov: {
-      v1beta1: KyveGovMethods;
+      v1: KyveGovMethodsV1;
     };
     bundles: {
       v1beta1: KyveBundlesMethods;
@@ -54,7 +54,7 @@ export default class KyveClient {
         v1beta1: new KyveDelegationMethods(this.nativeClient, this.account),
       },
       gov: {
-        v1beta1: new KyveGovMethods(this.nativeClient, this.account),
+        v1: new KyveGovMethodsV1(this.nativeClient, this.account),
       },
       pool: {
         v1beta1: new KyvePoolMethods(this.nativeClient, this.account),

@@ -1,11 +1,15 @@
-import { StdFee } from "@cosmjs/amino/build/signdoc";
+import { coins, SigningStargateClient } from "@cosmjs/stargate";
 import { AccountData } from "@cosmjs/amino/build/signer";
-import { SigningStargateClient } from "@cosmjs/stargate";
-import { MsgDefundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
-import { MsgFundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
-
-import { withTypeUrl } from "../../../../../registry/tx.registry";
+import { StdFee } from "@cosmjs/amino/build/signdoc";
+import { encodeTxMsg, withTypeUrl } from "../../../../../registry/tx.registry";
 import { signTx, TxPromise } from "../../../../../utils/helper";
+
+import {
+  MsgCreatePool,
+  MsgDefundPool,
+} from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { MsgFundPool } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
+import { DENOM, GOV_AUTHORITY } from "../../../../../constants";
 
 export default class {
   private nativeClient: SigningStargateClient;
@@ -45,6 +49,36 @@ export default class {
       ...value,
       creator: this.account.address,
     });
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async createPoolProposal(
+    value: Omit<MsgCreatePool, "authority">,
+    deposit: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = {
+      typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+      value: {
+        messages: [
+          encodeTxMsg.createPool({
+            ...value,
+            authority: GOV_AUTHORITY,
+          }),
+        ],
+        initial_deposit: coins(deposit.toString(), DENOM),
+        proposer: this.account.address,
+        metadata,
+      },
+    };
+
     return new TxPromise(
       this.nativeClient,
       await signTx(this.nativeClient, this.account.address, tx, options)

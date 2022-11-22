@@ -2,7 +2,7 @@
 rm -rf temp
 mkdir temp
 KYVE_CHAIN_REPO="git@github.com:KYVENetwork/chain-beta.git"
-BRANCH_KYVE="v0.7.0_beta8"
+BRANCH_KYVE="final-tests"
 git -C ./temp clone  -b ${BRANCH_KYVE} --single-branch ${KYVE_CHAIN_REPO}
 rm -rf ./src/client
 rm -rf ./src/lcd
