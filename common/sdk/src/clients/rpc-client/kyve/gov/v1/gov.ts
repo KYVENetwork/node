@@ -3,7 +3,7 @@ import { AccountData } from "@cosmjs/amino/build/signer";
 import { StdFee } from "@cosmjs/amino/build/signdoc";
 import { VoteOption } from "@kyve/proto-beta/client/cosmos/gov/v1/gov";
 import { signTx, TxPromise } from "../../../../../utils/helper";
-import { DENOM } from "../../../../../constants";
+import { DENOM, GOV_AUTHORITY } from "../../../../../constants";
 import {
   MsgCancelRuntimeUpgrade,
   MsgCreatePool,
@@ -13,9 +13,10 @@ import {
   MsgUpdatePool,
 } from "@kyve/proto-beta/client/kyve/pool/v1beta1/tx";
 import { encodeTxMsg } from "../../../../../registry/tx.registry";
-
-// TODO: fetch dynamically?
-const AUTHORITY = "kyve10d07y265gmmuvt4z0w9aw880jnsr700jdv7nah";
+import { MsgUpdateParams as MsgUpdateParamsStakers } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsDelegation } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsBundles } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsFees } from "@kyve/proto-beta/client/kyve/fees/v1beta1/tx";
 
 export default class KyveGovMsg {
   protected nativeClient: SigningStargateClient;
@@ -28,23 +29,23 @@ export default class KyveGovMsg {
 
   private createGovTx(
     content: { type_url: string; value: Object },
-    amount: string,
+    deposit: string,
     metadata?: string
   ) {
     return {
       typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
       value: {
         messages: [content],
-        initial_deposit: coins(amount.toString(), DENOM),
+        initial_deposit: coins(deposit.toString(), DENOM),
         proposer: this.account.address,
         metadata,
       },
     };
   }
 
-  public async createPoolProposal(
+  public async createPool(
     value: Omit<MsgCreatePool, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -54,9 +55,9 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.createPool({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
       metadata
     );
 
@@ -66,9 +67,9 @@ export default class KyveGovMsg {
     );
   }
 
-  public async updatePoolProposal(
+  public async updatePool(
     value: Omit<MsgUpdatePool, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -78,9 +79,9 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.updatePool({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
       metadata
     );
 
@@ -90,9 +91,9 @@ export default class KyveGovMsg {
     );
   }
 
-  public async pausePoolProposal(
+  public async pausePool(
     value: Omit<MsgPausePool, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -102,9 +103,9 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.pausePool({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
       metadata
     );
 
@@ -114,9 +115,9 @@ export default class KyveGovMsg {
     );
   }
 
-  public async unpausePoolProposal(
+  public async unpausePool(
     value: Omit<MsgUnpausePool, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -126,9 +127,9 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.unpausePool({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
       metadata
     );
 
@@ -138,9 +139,9 @@ export default class KyveGovMsg {
     );
   }
 
-  public async scheduleRuntimeUpgradeProposal(
+  public async scheduleRuntimeUpgrade(
     value: Omit<MsgScheduleRuntimeUpgrade, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -150,9 +151,9 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.scheduleRuntimeUpgrade({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
       metadata
     );
 
@@ -162,9 +163,9 @@ export default class KyveGovMsg {
     );
   }
 
-  public async cancelRuntimeUpgradeProposal(
+  public async cancelRuntimeUpgrade(
     value: Omit<MsgCancelRuntimeUpgrade, "authority">,
-    amount: string,
+    deposit: string,
     metadata?: string,
     options?: {
       fee?: StdFee | "auto" | number;
@@ -174,9 +175,105 @@ export default class KyveGovMsg {
     const tx = this.createGovTx(
       encodeTxMsg.cancelRuntimeUpgrade({
         ...value,
-        authority: AUTHORITY,
+        authority: GOV_AUTHORITY,
       }),
-      amount,
+      deposit,
+      metadata
+    );
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async updateParamsStakers(
+    value: Omit<MsgUpdateParamsStakers, "authority">,
+    deposit: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = this.createGovTx(
+      encodeTxMsg.updateParamsStakers({
+        ...value,
+        authority: GOV_AUTHORITY,
+      }),
+      deposit,
+      metadata
+    );
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async updateParamsDelegation(
+    value: Omit<MsgUpdateParamsDelegation, "authority">,
+    deposit: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = this.createGovTx(
+      encodeTxMsg.updateParamsDelegation({
+        ...value,
+        authority: GOV_AUTHORITY,
+      }),
+      deposit,
+      metadata
+    );
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async updateParamsBundles(
+    value: Omit<MsgUpdateParamsBundles, "authority">,
+    deposit: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = this.createGovTx(
+      encodeTxMsg.updateParamsBundles({
+        ...value,
+        authority: GOV_AUTHORITY,
+      }),
+      deposit,
+      metadata
+    );
+
+    return new TxPromise(
+      this.nativeClient,
+      await signTx(this.nativeClient, this.account.address, tx, options)
+    );
+  }
+
+  public async updateParamsFees(
+    value: Omit<MsgUpdateParamsFees, "authority">,
+    deposit: string,
+    metadata?: string,
+    options?: {
+      fee?: StdFee | "auto" | number;
+      memo?: string;
+    }
+  ) {
+    const tx = this.createGovTx(
+      encodeTxMsg.updateParamsFees({
+        ...value,
+        authority: GOV_AUTHORITY,
+      }),
+      deposit,
       metadata
     );
 

@@ -35,7 +35,11 @@ export const KYVE_ENDPOINTS: Networks = {
     chainName: "Korellia",
   },
 };
+
 export const PREFIX = "kyve";
+
+export const GOV_AUTHORITY = "kyve10d07y265gmmuvt4z0w9aw880jnsr700jdv7nah";
+
 export const KYVE_KEPLR_CONFIG: ChainInfo = {
   rpc: "",
   rest: "",

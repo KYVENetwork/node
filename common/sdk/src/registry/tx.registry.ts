@@ -16,16 +16,21 @@ import { MsgUpdateMetadata } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/
 import { MsgJoinPool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 import { MsgUpdateCommission } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 import { MsgLeavePool } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsStakers } from "@kyve/proto-beta/client/kyve/stakers/v1beta1/tx";
 /** delegations **/
 import { MsgDelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
 import { MsgWithdrawRewards } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
 import { MsgRedelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
 import { MsgUndelegate } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsDelegation } from "@kyve/proto-beta/client/kyve/delegation/v1beta1/tx";
 /** bundles **/
 import { MsgSubmitBundleProposal } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { MsgVoteBundleProposal } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { MsgClaimUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
 import { MsgSkipUploaderRole } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+import { MsgUpdateParams as MsgUpdateParamsBundles } from "@kyve/proto-beta/client/kyve/bundles/v1beta1/tx";
+/** fees **/
+import { MsgUpdateParams as MsgUpdateParamsFees } from "@kyve/proto-beta/client/kyve/fees/v1beta1/tx";
 
 /** cosmos **/
 import { MsgSubmitProposal } from "@kyve/proto-beta/client/cosmos/gov/v1/tx";
@@ -206,6 +211,34 @@ export const encodeTxMsg = {
       value: MsgClaimUploaderRole.encode(value).finish(),
     };
   },
+
+  updateParamsStakers(value: MsgUpdateParamsStakers) {
+    return {
+      type_url: "/kyve.stakers.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParamsStakers.encode(value).finish(),
+    };
+  },
+
+  updateParamsDelegation(value: MsgUpdateParamsDelegation) {
+    return {
+      type_url: "/kyve.delegation.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParamsDelegation.encode(value).finish(),
+    };
+  },
+
+  updateParamsBundles(value: MsgUpdateParamsBundles) {
+    return {
+      type_url: "/kyve.bundles.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParamsBundles.encode(value).finish(),
+    };
+  },
+
+  updateParamsFees(value: MsgUpdateParamsFees) {
+    return {
+      type_url: "/kyve.fees.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParamsFees.encode(value).finish(),
+    };
+  },
 };
 
 export const withTypeUrl = {
@@ -341,6 +374,30 @@ export const withTypeUrl = {
   claimUploaderRole(value: MsgClaimUploaderRole) {
     return {
       typeUrl: "/kyve.bundles.v1beta1.MsgClaimUploaderRole",
+      value,
+    };
+  },
+  updateParamsStakers(value: MsgUpdateParamsStakers) {
+    return {
+      typeUrl: "/kyve.stakers.v1beta1.MsgUpdateParams",
+      value,
+    };
+  },
+  updateParamsDelegation(value: MsgUpdateParamsDelegation) {
+    return {
+      typeUrl: "/kyve.delegation.v1beta1.MsgUpdateParams",
+      value,
+    };
+  },
+  updateParamsBundles(value: MsgUpdateParamsBundles) {
+    return {
+      typeUrl: "/kyve.bundles.v1beta1.MsgUpdateParams",
+      value,
+    };
+  },
+  updateParamsFees(value: MsgUpdateParamsFees) {
+    return {
+      typeUrl: "/kyve.fees.v1beta1.MsgUpdateParams",
       value,
     };
   },
