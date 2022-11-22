@@ -131,7 +131,7 @@ export async function validateBundleProposal(
     this.logger.debug(`this.runtime.summarizeDataBundle($VALIDATION_BUNDLE)`);
 
     const bundleSummary = await this.runtime
-      .summarizeDataBundle(validationBundle)
+      .summarizeDataBundle(this, validationBundle)
       .catch((err) => {
         this.logger.error(
           `Unexpected error summarizing bundle with runtime. Voting abstain ...`

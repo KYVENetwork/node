@@ -48,10 +48,11 @@ export interface IRuntime {
    * Deterministic behavior is required
    *
    * @method transformDataItem
+   * @param {Node} core the class of @kyve/core
    * @param {DataItem} item data item which gets transformed
    * @return {Promise<DataItem>}
    */
-  transformDataItem(item: DataItem): Promise<DataItem>;
+  transformDataItem(core: Node, item: DataItem): Promise<DataItem>;
 
   /**
    * Validates a single data item of a bundle proposal
@@ -77,10 +78,11 @@ export interface IRuntime {
    * Deterministic behavior is required
    *
    * @method summarizeDataBundle
+   * @param {Node} core the class of @kyve/core
    * @param {DataItem[]} bundle is the bundle which needs to be summarized
    * @return {Promise<string>} returns a formatted value string
    */
-  summarizeDataBundle(bundle: DataItem[]): Promise<string>;
+  summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string>;
 
   /**
    * Gets the next key from the current key so that the data archived has an order.

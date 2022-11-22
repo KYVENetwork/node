@@ -1,13 +1,12 @@
 {
-  "name": "@kyve/solana",
-  "version": "0.6.8",
+  "name": "@kyve/sushiswap",
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
     "build:binaries": "yarn build && rimraf out && pkg --no-bytecode --public-packages '*' --output out/kyve package.json && node ../../common/core/dist/src/scripts/checksum.js",
     "start": "node ./dist/src/index.js",
-    "format": "prettier --write .",
-    "postinstall": "patch-package"
+    "format": "prettier --write ."
   },
   "bin": "./dist/src/index.js",
   "pkg": {
@@ -27,16 +26,13 @@
   },
   "dependencies": {
     "@kyve/core-beta": "1.22.0",
-    "@solana/web3.js": "^1.50.1"
+    "ethers": "^5.6.5"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.6.2",
-    "node-fetch": "^3.2.9",
-    "patch-package": "^6.4.7",
     "pkg": "^5.8.0",
-    "postinstall-postinstall": "^2.1.0",
-    "prettier": "^2.7.1",
+    "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.6.4",
+    "webhook-discord": "^3.7.8"
   }
 }

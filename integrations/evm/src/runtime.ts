@@ -49,7 +49,7 @@ export default class Evm implements IRuntime {
     }
   }
 
-  async transformDataItem(item: DataItem): Promise<DataItem> {
+  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
     // Delete the number of confirmations from a transaction to keep data deterministic.
     item.value.transactions.forEach(
       (tx: Partial<providers.TransactionResponse>) => delete tx.confirmations
@@ -73,7 +73,7 @@ export default class Evm implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 
