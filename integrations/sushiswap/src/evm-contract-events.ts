@@ -1,5 +1,5 @@
-import {DataItem, IRuntime, Node, sha256} from '@kyve/core-beta';
-import {providers, utils} from 'ethers';
+import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
+import { providers, utils } from 'ethers';
 
 // method to just get the named args
 const parseArgs = (struct: any) => {
@@ -14,18 +14,14 @@ const parseArgs = (struct: any) => {
 };
 
 export default class EvmContractEvents implements IRuntime {
-  public name = "";
-  public version = "";
+  public name = '';
+  public version = '';
 
-  async getDataItem(
-      core: any,
-      source: string,
-      key: string
-  ): Promise<DataItem> {
+  async getDataItem(core: any, source: string, key: string): Promise<DataItem> {
     try {
       // setup web3 provider
       const provider = new providers.StaticJsonRpcProvider(
-          source + process.env.INFURA_API_KEY,
+        source + process.env.INFURA_API_KEY
       );
 
       // try to fetch data item
@@ -48,7 +44,6 @@ export default class EvmContractEvents implements IRuntime {
   }
 
   async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
-
     // interface of contract-ABI for decoding the logs
     let iface = new utils.Interface(core.poolConfig.contract.abi);
 
@@ -60,7 +55,7 @@ export default class EvmContractEvents implements IRuntime {
           name: info.name,
           signature: info.signature,
           args: parseArgs(info.args),
-        }
+        },
       };
     });
     return {
@@ -70,22 +65,22 @@ export default class EvmContractEvents implements IRuntime {
   }
 
   async validateDataItem(
-      core: Node,
-      proposedDataItem: DataItem,
-      validationDataItem: DataItem
+    core: Node,
+    proposedDataItem: DataItem,
+    validationDataItem: DataItem
   ): Promise<boolean> {
     const proposedDataItemHash = sha256(
-        Buffer.from(JSON.stringify(proposedDataItem))
+      Buffer.from(JSON.stringify(proposedDataItem))
     );
     const validationDataItemHash = sha256(
-        Buffer.from(JSON.stringify(validationDataItem))
+      Buffer.from(JSON.stringify(validationDataItem))
     );
 
     return proposedDataItemHash === validationDataItemHash;
   }
 
   async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
-    return "";
+    return '';
   }
 
   async nextKey(key: string): Promise<string> {
