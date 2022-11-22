@@ -9,6 +9,7 @@ export default class UniswapEvents extends EvmContractEvents {
 
   async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
     let summary = '';
+
     bundle.forEach((item) => {
       if (item.value.length) {
         item.value.forEach((log: any) => {
