@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/KYVENetwork/node/compare/@kyve/proto-beta@1.12.0...@kyve/proto-beta@1.12.1) (2022-11-25)
+
+**Note:** Version bump only for package @kyve/proto-beta
+
 # [1.12.0](https://github.com/KYVENetwork/node/compare/@kyve/proto-beta@1.11.0...@kyve/proto-beta@1.12.0) (2022-11-22)
 
 ### Features

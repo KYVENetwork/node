@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk-beta@3.5.0...@kyve/sdk-beta@3.6.0) (2022-11-25)
+
+### Features
+
+- register v1 gov methods ([84fe5ab](https://github.com/KYVENetwork/node/commit/84fe5ab0f76ad4c68565f7437d4863a82d80c752))
+- vote v1 ([f044ca1](https://github.com/KYVENetwork/node/commit/f044ca15d88c021bc0c12ae8e3eb2921d381f666))
+
 # [3.5.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk-beta@3.4.0...@kyve/sdk-beta@3.5.0) (2022-11-22)
 
 ### Features
