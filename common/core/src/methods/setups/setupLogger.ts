@@ -1,7 +1,8 @@
-import { Node, standardizeJSON } from "../..";
 import { appendFileSync, existsSync, mkdirSync } from "fs";
-import { ILogObject, Logger } from "tslog";
 import path from "path";
+import { ILogObject, Logger } from "tslog";
+
+import { Node, standardizeJSON } from "../..";
 
 /**
  * setupLogger creates the logger instance and defines the home and file
@@ -43,7 +44,7 @@ export function setupLogger(this: Node): void {
         log.fileName
       }:${log.lineNumber}]`;
 
-      for (let arg of log.argumentsArray) {
+      for (const arg of log.argumentsArray) {
         if (typeof arg === "string") {
           format += ` ${arg}`;
         } else {

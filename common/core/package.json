@@ -24,7 +24,9 @@
     "build": "rimraf dist && yarn format && tsc",
     "test": "jest",
     "format": "prettier --write .",
-    "deploy": "yarn build && yarn npm publish"
+    "deploy": "yarn build && yarn npm publish",
+    "lint": "eslint . --ignore-path ../../.eslintignore --ext ts --ext tsx --ext js --ext jsx",
+    "lint:fix": "eslint --fix . --ignore-path ../../.eslintignore --ext ts --ext tsx --ext js --ext jsx"
   },
   "dependencies": {
     "@bundlr-network/client": "^0.8.9",

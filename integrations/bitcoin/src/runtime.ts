@@ -1,4 +1,5 @@
 import { DataItem, IRuntime, Node, sha256 } from "@kyve/core-beta";
+
 import { name, version } from "../package.json";
 import { fetchBlock, fetchBlockHash } from "./utils";
 
@@ -11,23 +12,9 @@ export default class Bitcoin implements IRuntime {
     source: string,
     key: string
   ): Promise<DataItem> {
-    let hash: string;
-    let block: any;
-
     const headers = await this.generateCoinbaseCloudHeaders(core);
-
-    try {
-      hash = await fetchBlockHash(source, +key, headers);
-    } catch (err) {
-      // The only time this should fail is if the height is out of range.
-      throw err;
-    }
-
-    try {
-      block = await fetchBlock(source, hash, headers);
-    } catch (err) {
-      throw err;
-    }
+    const hash = await fetchBlockHash(source, +key, headers);
+    const block = await fetchBlock(source, hash, headers);
 
     return { key, value: block };
   }

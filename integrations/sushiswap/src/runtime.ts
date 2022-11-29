@@ -1,7 +1,8 @@
-import { name, version } from '../package.json';
-import { BigNumber } from 'ethers';
-import EvmContractEvents from './evm-contract-events';
 import { DataItem, Node } from '@kyve/core-beta';
+import { BigNumber } from 'ethers';
+
+import { name, version } from '../package.json';
+import EvmContractEvents from './evm-contract-events';
 
 export default class SushiswapEvents extends EvmContractEvents {
   public name = name;

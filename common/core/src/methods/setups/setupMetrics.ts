@@ -1,7 +1,8 @@
-import { IMetrics, Node, standardizeJSON } from "../..";
 import http from "http";
-import url from "url";
 import prom_client, { register } from "prom-client";
+import url from "url";
+
+import { IMetrics, Node, standardizeJSON } from "../..";
 
 /**
  * setupMetrics initiates all metrics and starts if enabled a local prometheus

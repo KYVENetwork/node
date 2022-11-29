@@ -1,5 +1,6 @@
-import { Node, standardizeJSON } from "../..";
 import path from "path";
+
+import { Node, standardizeJSON } from "../..";
 import * as cacheProvider from "../../reactors/cacheProvider";
 
 /**

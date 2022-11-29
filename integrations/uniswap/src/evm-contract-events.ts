@@ -18,34 +18,30 @@ export default class EvmContractEvents implements IRuntime {
   public version = '';
 
   async getDataItem(core: any, source: string, key: string): Promise<DataItem> {
-    try {
-      // setup web3 provider
-      const provider = new providers.StaticJsonRpcProvider(
-        source + process.env.INFURA_API_KEY
-      );
+    // setup web3 provider
+    const provider = new providers.StaticJsonRpcProvider(
+      source + process.env.INFURA_API_KEY
+    );
 
-      // try to fetch data item
-      const value = await provider.getLogs({
-        address: core.poolConfig.contract.address,
-        fromBlock: parseInt(key),
-        toBlock: parseInt(key),
-      });
+    // try to fetch data item
+    const value = await provider.getLogs({
+      address: core.poolConfig.contract.address,
+      fromBlock: parseInt(key),
+      toBlock: parseInt(key),
+    });
 
-      // throw if data item is not available
-      if (!value) throw new Error();
+    // throw if data item is not available
+    if (!value) throw new Error();
 
-      return {
-        key,
-        value,
-      };
-    } catch (err) {
-      throw err;
-    }
+    return {
+      key,
+      value,
+    };
   }
 
   async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
     // interface of contract-ABI for decoding the logs
-    let iface = new utils.Interface(core.poolConfig.contract.abi);
+    const iface = new utils.Interface(core.poolConfig.contract.abi);
 
     const result = item.value.map((log: any) => {
       const info = iface.parseLog(log);
@@ -80,7 +76,7 @@ export default class EvmContractEvents implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(_core: Node, _bundle: DataItem[]): Promise<string> {
     return '';
   }
 
