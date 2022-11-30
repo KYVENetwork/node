@@ -61,6 +61,8 @@ export function setupLogger(this: Node): void {
       displayFunctionName: this.debug,
     });
 
+    // set log level depending on debug mode
+    // TODO @regenisis: remove deprecated "--verbose" option flag
     logger.setSettings({
       minLevel: this.debug ? undefined : "info",
     });

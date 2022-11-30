@@ -82,6 +82,8 @@ export class Node {
   protected valaccount!: string;
   protected storagePriv!: string;
   protected network!: string;
+  protected rpc!: string;
+  protected rest!: string;
   protected cache!: string;
   protected debug!: boolean;
   protected metrics!: boolean;
@@ -204,6 +206,14 @@ export class Node {
         parseNetwork
       )
       .option(
+        "--rpc",
+        "Custom rpc endpoint the node uses for submitting transactions to chain"
+      )
+      .option(
+        "--rest",
+        "Custom rest api endpoint the node uses for querying from chain"
+      )
+      .option(
         "--cache <memory|jsonfile|leveldb>",
         "The cache this node should use",
         parseCache,
@@ -254,6 +264,8 @@ export class Node {
     this.valaccount = options.valaccount;
     this.storagePriv = options.storagePriv;
     this.network = options.network;
+    this.rpc = options.rpc;
+    this.rest = options.rest;
     this.cache = options.cache;
     this.debug = options.debug;
     this.metrics = options.metrics;
