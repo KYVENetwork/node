@@ -38,7 +38,7 @@ export default class Cosmos implements IRuntime {
   }
 
   async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
-    return bundle.at(-1)?.value?.hash ?? '';
+    return bundle.at(-1)?.value?.header?.app_hash ?? '';
   }
 
   async nextKey(key: string): Promise<string> {
