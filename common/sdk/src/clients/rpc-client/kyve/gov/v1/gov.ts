@@ -29,7 +29,7 @@ export default class KyveGovMsg {
   }
 
   private createGovTx(
-    content: { type_url: string; value: Object },
+    content: { type_url: string; value: unknown },
     deposit: string,
     metadata?: string
   ) {

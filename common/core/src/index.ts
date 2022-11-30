@@ -1,52 +1,53 @@
-import { IRuntime, ICacheProvider, IMetrics } from "./types";
+import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
+import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk-beta";
+import { Command, OptionValues } from "commander";
+import os from "os";
+import { Logger } from "tslog";
+
 import { version as coreVersion } from "../package.json";
 import {
-  setupLogger,
+  parseCache,
+  parseMnemonic,
+  parseNetwork,
+  parsePoolId,
+} from "./commander";
+import {
+  canPropose,
+  canVote,
+  claimUploaderRole,
+  compressionFactory,
+  continueRound,
+  createBundleProposal,
+  getBalances,
+  runCache,
+  runNode,
+  saveBundleDecompress,
+  saveBundleDownload,
+  saveGetTransformDataItem,
+  saveLoadValidationBundle,
   setupCacheProvider,
+  setupLogger,
   setupMetrics,
   setupSDK,
   setupValidator,
-  validateRuntime,
-  validateVersion,
+  skipUploaderRole,
+  storageProviderFactory,
+  submitBundleProposal,
+  syncPoolConfig,
+  syncPoolState,
+  validateBundleProposal,
   validateIsNodeValidator,
   validateIsPoolActive,
-  waitForAuthorization,
-  waitForUploadInterval,
-  waitForNextBundleProposal,
-  waitForCacheContinuation,
-  continueRound,
-  saveGetTransformDataItem,
-  storageProviderFactory,
-  compressionFactory,
-  claimUploaderRole,
-  skipUploaderRole,
+  validateRuntime,
+  validateVersion,
   voteBundleProposal,
-  submitBundleProposal,
-  syncPoolState,
-  syncPoolConfig,
-  getBalances,
-  canVote,
-  canPropose,
-  saveBundleDownload,
-  saveBundleDecompress,
-  saveLoadValidationBundle,
-  validateBundleProposal,
-  createBundleProposal,
-  runNode,
-  runCache,
+  waitForAuthorization,
+  waitForCacheContinuation,
+  waitForNextBundleProposal,
+  waitForUploadInterval,
 } from "./methods";
-import KyveSDK, { KyveClient, KyveLCDClientType } from "@kyve/sdk-beta";
-import { Logger } from "tslog";
-import { Command, OptionValues } from "commander";
-import {
-  parseNetwork,
-  parsePoolId,
-  parseMnemonic,
-  parseCache,
-} from "./commander";
-import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
+import { ICacheProvider, IMetrics, IRuntime } from "./types";
 import { standardizeJSON } from "./utils";
-import os from "os";
 
 /**
  * Main class of KYVE protocol nodes representing a node.

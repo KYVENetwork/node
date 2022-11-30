@@ -19,7 +19,9 @@
     "build:binaries": "yarn build && rimraf out && pkg --no-bytecode --public-packages '*' --output out/kyve package.json",
     "start": "node ./dist/index.js",
     "format": "prettier --write .",
-    "deploy": "yarn build && yarn npm publish"
+    "deploy": "yarn build && yarn npm publish",
+    "lint": "eslint . --ignore-path ../../.eslintignore --ext ts --ext tsx --ext js --ext jsx",
+    "lint:fix": "eslint --fix . --ignore-path ../../.eslintignore --ext ts --ext tsx --ext js --ext jsx"
   },
   "bin": "./dist/index.js",
   "pkg": {

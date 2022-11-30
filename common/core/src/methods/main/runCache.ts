@@ -1,6 +1,7 @@
+import seedrandom from "seedrandom";
+
 import { DataItem, Node } from "../..";
 import { generateIndexPairs, sleep, standardizeJSON } from "../../utils";
-import seedrandom from "seedrandom";
 
 /**
  * runCache is the other main execution thread for collecting data items
@@ -119,7 +120,7 @@ export async function runCache(this: Node): Promise<void> {
           this.logger.debug(`this.runtime.nextKey(${key})`);
         }
 
-        const nextKey = !!key
+        const nextKey = key
           ? await this.runtime.nextKey(key)
           : this.pool.data!.start_key;
 
@@ -141,7 +142,7 @@ export async function runCache(this: Node): Promise<void> {
           const indexPairs = generateIndexPairs(results.length);
 
           // validate every data item for each possible index pair
-          for (let pair of indexPairs) {
+          for (const pair of indexPairs) {
             try {
               // validate pair of data items
               valid = await this.runtime.validateDataItem(

@@ -1,6 +1,6 @@
 import { Node } from "../..";
 import { callWithBackoffStrategy, sleep, standardizeJSON } from "../../utils";
-
+const INFINITY_LOOP = true;
 /**
  * canPropose checks if the node is able to propose the next
  * bundle proposal by calling a special chain query called "canPropose".
@@ -46,7 +46,7 @@ export async function canPropose(
         // returns an "upload interval not surpassed" that usually
         // means we have to wait for the next block in the blockchain
         // because the chain time only updates on every new block
-        while (true) {
+        while (INFINITY_LOOP) {
           this.logger.debug(
             `this.lcd.kyve.query.v1beta1.canPropose({pool_id: ${this.poolId.toString()},staker: ${
               this.staker
@@ -90,11 +90,13 @@ export async function canPropose(
     this.logger.debug(JSON.stringify(canPropose));
     this.m.query_can_propose_successful.inc();
 
-    if (canPropose.possible) {
+    if (canPropose?.possible) {
       this.logger.info(`Can propose next bundle proposal`);
       return true;
     } else {
-      this.logger.info(`Skipping proposal. Reason: ${canPropose.reason}`);
+      this.logger.info(
+        `Skipping proposal. Reason: ${canPropose?.reason ?? "unknown"}`
+      );
       return false;
     }
   } catch (err) {

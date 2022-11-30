@@ -1,6 +1,7 @@
+import BigNumber from "bignumber.js";
+
 import { Node } from "../..";
 import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
-import BigNumber from "bignumber.js";
 
 /**
  * saveBundleDownload downloads a bundle from the storage provider.
@@ -65,7 +66,7 @@ export async function saveBundleDownload(
       // the timeout should always be 20 seconds less than the upload interval
       // so that the node still has enough time to vote abstain when the
       // download timeout is reached
-      let downloadTimeoutSec = Math.max(
+      const downloadTimeoutSec = Math.max(
         0,
         parseInt(this.pool.data!.upload_interval) - 20
       );

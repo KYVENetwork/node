@@ -1,20 +1,19 @@
-import path from "path";
-import os from "os";
-import fs from "fs";
-
 import TOML from "@iarna/toml";
-import { IConfig, IValaccountConfig } from "./types/interfaces";
-import extract from "extract-zip";
+import { PoolResponse } from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
 import KyveSDK, { KyveLCDClientType } from "@kyve/sdk-beta";
 import download from "download";
-import { getChecksum, setupLogger, startNodeProcess } from "./utils";
+import extract from "extract-zip";
+import fs from "fs";
+import os from "os";
+import path from "path";
 
-import {PoolResponse} from "@kyve/proto-beta/lcd/kyve/query/v1beta1/pools";
+import { IConfig, IValaccountConfig } from "./types/interfaces";
+import { getChecksum, setupLogger, startNodeProcess } from "./utils";
 
 const home = path.join(process.env.HOME!, ".kysor");
 const platform = os.platform() === "darwin" ? "macos" : os.platform();
 const arch = os.arch();
-
+const INFINITY_LOOP = true;
 const logger = setupLogger();
 
 export const run = async (options: any) => {
@@ -108,7 +107,7 @@ export const run = async (options: any) => {
     logger.error(err);
   }
 
-  while (true) {
+  while (INFINITY_LOOP) {
     // create pool directory if it does not exist yet
     if (!fs.existsSync("./upgrades")) {
       logger.info(`Creating "upgrades" directory ...`);

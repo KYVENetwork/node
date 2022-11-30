@@ -1,7 +1,8 @@
-import { Node } from "../..";
 import BigNumber from "bignumber.js";
-import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
+
+import { Node } from "../..";
 import { DataItem } from "../../types";
+import { callWithBackoffStrategy, standardizeJSON, VOTE } from "../../utils";
 
 /**
  * saveLoadValidationBundle loads the bundle from the local

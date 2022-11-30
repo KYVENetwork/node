@@ -1,7 +1,7 @@
 import { Node } from "../..";
-import { NoCompression } from "../../reactors/compression/NoCompression";
-import { Gzip } from "../../reactors/compression/Gzip";
 import { ICompression } from "../..";
+import { Gzip } from "../../reactors/compression/Gzip";
+import { NoCompression } from "../../reactors/compression/NoCompression";
 
 /**
  * compressionFactory creates the correct compression class

@@ -12,7 +12,7 @@ import {
  * @param {Node} this
  * @param {string} source
  * @param {string} key
- * @return {Promise<DataItem | null>}
+ * @return {Promise<DataItem | null>}
  */
 export async function saveGetTransformDataItem(
   this: Node,
