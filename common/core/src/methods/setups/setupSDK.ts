@@ -1,4 +1,4 @@
-import KyveSDK from "@kyve/sdk-beta";
+import KyveSDK, { constants } from "@kyve/sdk-beta";
 import { KYVE_NETWORK } from "@kyve/sdk-beta/dist/constants";
 
 import { Node, standardizeJSON } from "../..";
@@ -15,7 +15,19 @@ export async function setupSDK(this: Node): Promise<void> {
   try {
     this.logger.debug(`Initializing KyveSDK with network ${this.network}`);
 
-    this.sdk = new KyveSDK(this.network as KYVE_NETWORK);
+    // get KYVE network settings from network parameter
+    // TODO @regenisis: use chain-id as new network property
+    let network = constants.KYVE_ENDPOINTS[this.network as KYVE_NETWORK];
+
+    if (this.rpc) {
+      network = { ...network, rpc: this.rpc };
+    }
+
+    if (this.rest) {
+      network = { ...network, rest: this.rest };
+    }
+
+    this.sdk = new KyveSDK(network);
 
     this.logger.debug(`Initializing KyveClient from valaccount mnemonic`);
 
