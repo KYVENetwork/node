@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.23.0](https://github.com/KYVENetwork/node/compare/@kyve/core-beta@1.22.2...@kyve/core-beta@1.23.0) (2022-11-30)
+
+### Features
+
+- full eslint integration ([88d2b20](https://github.com/KYVENetwork/node/commit/88d2b201d08d820664dbefd6eab766a176fce2cf))
+
 ## [1.22.2](https://github.com/KYVENetwork/node/compare/@kyve/core-beta@1.22.1...@kyve/core-beta@1.22.2) (2022-11-25)
 
 **Note:** Version bump only for package @kyve/core-beta

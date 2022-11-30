@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/KYVENetwork/node/compare/@kyve/bitcoin@0.6.11...@kyve/bitcoin@0.7.0) (2022-11-30)
+
+### Features
+
+- full eslint integration ([88d2b20](https://github.com/KYVENetwork/node/commit/88d2b201d08d820664dbefd6eab766a176fce2cf))
+
 ## [0.6.11](https://github.com/KYVENetwork/node/compare/@kyve/bitcoin@0.6.10...@kyve/bitcoin@0.6.11) (2022-11-25)
 
 **Note:** Version bump only for package @kyve/bitcoin

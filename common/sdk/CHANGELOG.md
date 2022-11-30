@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk-beta@3.6.0...@kyve/sdk-beta@3.7.0) (2022-11-30)
+
+### Bug Fixes
+
+- sdk unit tests ([392c0dc](https://github.com/KYVENetwork/node/commit/392c0dcf25e38fc8e48875932b3e21dbad83de0f))
+
+### Features
+
+- full eslint integration ([88d2b20](https://github.com/KYVENetwork/node/commit/88d2b201d08d820664dbefd6eab766a176fce2cf))
+- multiTransfer methods ([c3b327a](https://github.com/KYVENetwork/node/commit/c3b327a486f2f083a648c538e16e49a8f56b7a82))
+
 # [3.6.0](https://github.com/KYVENetwork/node/compare/@kyve/sdk-beta@3.5.0...@kyve/sdk-beta@3.6.0) (2022-11-25)
 
 ### Features

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.8.10...@kyve/evm@1.9.0) (2022-11-30)
+
+### Features
+
+- full eslint integration ([88d2b20](https://github.com/KYVENetwork/node/commit/88d2b201d08d820664dbefd6eab766a176fce2cf))
+
 ## [1.8.10](https://github.com/KYVENetwork/node/compare/@kyve/evm@1.8.9...@kyve/evm@1.8.10) (2022-11-25)
 
 **Note:** Version bump only for package @kyve/evm
