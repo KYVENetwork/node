@@ -93,5 +93,5 @@ export interface IRuntime {
    * @param {string} key which gets inserted by @kyve/core
    * @return {Promise<void>}
    */
-  nextKey(key: string): Promise<string>;
+  nextKey(core: Node, key: string): Promise<string>;
 }
