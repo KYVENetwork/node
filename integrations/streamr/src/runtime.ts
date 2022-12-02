@@ -1,5 +1,5 @@
 import { DataItem, IRuntime, Node, sha256 } from '@kyve/core-beta';
-const StreamrClient = require('streamr-client');
+import client = require('streamr-client');
 
 import { name, version } from '../package.json';
 
@@ -12,7 +12,7 @@ export default class Streamr implements IRuntime {
     source: string,
     key: string
   ): Promise<DataItem> {
-    const streamr = new StreamrClient();
+    const streamr = new client.StreamrClient();
     const group = [];
 
     const fromTimestamp = parseInt(key);
@@ -31,7 +31,7 @@ export default class Streamr implements IRuntime {
       },
     });
 
-    for await (let item of stream) {
+    for await (const item of stream) {
       group.push(item);
     }
 
