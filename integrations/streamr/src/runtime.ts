@@ -43,12 +43,12 @@ export default class Streamr implements IRuntime {
   }
 
   async prevalidateDataItem(_: Node, __: DataItem): Promise<boolean> {
-    // TODO: return valid for now
+    // TODO: validate if signature is valid?
     return true;
   }
 
   async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
-    // don't transform data item
+    // TODO: only save content of message or metadata aswell?
     return item;
   }
 
@@ -67,14 +67,12 @@ export default class Streamr implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(_: Node, __: DataItem[]): Promise<string> {
-    return '';
+  async summarizeDataBundle(_: Node, bundle: DataItem[]): Promise<string> {
+    // TODO: save latest timestamp or nothing?
+    return `${bundle.at(-1)?.value?.timestamp ?? ''}`;
   }
 
   async nextKey(core: Node, key: string): Promise<string> {
-    return (
-      parseInt(key) +
-      1000 * core.poolConfig.timestampGroupSize
-    ).toString();
+    return (parseInt(key) + 1000 * core.poolConfig.timeRange).toString();
   }
 }
