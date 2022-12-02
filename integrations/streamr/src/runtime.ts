@@ -69,7 +69,7 @@ export default class Streamr implements IRuntime {
 
   async summarizeDataBundle(_: Node, bundle: DataItem[]): Promise<string> {
     // TODO: save latest timestamp or nothing?
-    return `${bundle.at(-1)?.value?.timestamp ?? ''}`;
+    return `${bundle.at(-1)?.value?.at(-1)?.timestamp ?? ''}`;
   }
 
   async nextKey(core: Node, key: string): Promise<string> {
