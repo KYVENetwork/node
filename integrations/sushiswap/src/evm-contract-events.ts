@@ -39,6 +39,11 @@ export default class EvmContractEvents implements IRuntime {
     };
   }
 
+  async prevalidateDataItem(_: Node, __: DataItem): Promise<boolean> {
+    // TODO: return valid for now
+    return true;
+  }
+
   async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
     // interface of contract-ABI for decoding the logs
     const iface = new utils.Interface(core.poolConfig.contract.abi);

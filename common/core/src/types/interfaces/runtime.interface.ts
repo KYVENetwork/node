@@ -42,6 +42,22 @@ export interface IRuntime {
   getDataItem(core: Node, source: string, key: string): Promise<DataItem>;
 
   /**
+   * Prevalidates a data item right after is was retrieved from source.
+   * If the prevalidation fails the item gets rejected and never makes
+   * it to the local cache. If the prevalidation succeeds the item gets
+   * transformed and written to cache were it is used from submission
+   * of proposals or bundle validation.
+   *
+   * Deterministic behavior is required
+   *
+   * @method preValidateDataItem
+   * @param {Node} core the class of @kyve/core
+   * @param {DataItem} item data item which gets prevalidated
+   * @return {Promise<boolean>}
+   */
+  prevalidateDataItem(core: Node, item: DataItem): Promise<boolean>;
+
+  /**
    * Transforms a single data item and return it. Used for example
    * to remove unecessary data or format the data in a better way.
    *

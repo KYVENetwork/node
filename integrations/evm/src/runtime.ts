@@ -46,6 +46,11 @@ export default class Evm implements IRuntime {
     };
   }
 
+  async prevalidateDataItem(_: Node, __: DataItem): Promise<boolean> {
+    // TODO: return valid for now
+    return true;
+  }
+
   async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
     // Delete the number of confirmations from a transaction to keep data deterministic.
     item.value.transactions.forEach(

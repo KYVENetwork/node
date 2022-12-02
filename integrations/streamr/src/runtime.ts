@@ -41,6 +41,11 @@ export default class Streamr implements IRuntime {
     };
   }
 
+  async prevalidateDataItem(_: Node, __: DataItem): Promise<boolean> {
+    // TODO: return valid for now
+    return true;
+  }
+
   async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;

@@ -17,6 +17,11 @@ export default class Cosmos implements IRuntime {
     return { key, value: block };
   }
 
+  async prevalidateDataItem(_: Node, __: DataItem): Promise<boolean> {
+    // TODO: return valid for now
+    return true;
+  }
+
   async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;

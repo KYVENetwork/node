@@ -29,6 +29,15 @@ export async function saveGetTransformDataItem(
 
       this.m.runtime_get_data_item_successful.inc();
 
+      // prevalidate data item and reject if it fails
+      const valid = await this.runtime.prevalidateDataItem(this, item);
+
+      if (!valid) {
+        throw new Error(
+          `Prevalidation of data item with key ${key} and source ${source} failed.`
+        );
+      }
+
       // transform data item
       try {
         this.logger.debug(`this.runtime.transformDataItem($ITEM)`);
