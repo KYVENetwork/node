@@ -16,7 +16,7 @@ export default class Streamr implements IRuntime {
     const group = [];
 
     const fromTimestamp = parseInt(key);
-    const toTimestamp = parseInt(await this.nextKey(key));
+    const toTimestamp = parseInt(await this.nextKey(core, key));
 
     if (Date.now() < toTimestamp) {
       throw new Error('reached live limit');
@@ -42,6 +42,7 @@ export default class Streamr implements IRuntime {
   }
 
   async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
+    // don't transform data item
     return item;
   }
 
@@ -64,7 +65,10 @@ export default class Streamr implements IRuntime {
     return '';
   }
 
-  async nextKey(key: string): Promise<string> {
-    return (parseInt(key) + 1000 * 60).toString();
+  async nextKey(core: Node, key: string): Promise<string> {
+    return (
+      parseInt(key) +
+      1000 * core.poolConfig.timestampGroupSize
+    ).toString();
   }
 }

@@ -19,13 +19,13 @@ export default class Bitcoin implements IRuntime {
     return { key, value: block };
   }
 
-  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
+  async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;
   }
 
   async validateDataItem(
-    core: Node,
+    _: Node,
     proposedDataItem: DataItem,
     validationDataItem: DataItem
   ): Promise<boolean> {
@@ -40,13 +40,13 @@ export default class Bitcoin implements IRuntime {
   }
 
   public async summarizeDataBundle(
-    core: Node,
+    _: Node,
     bundle: DataItem[]
   ): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? "";
   }
 
-  public async nextKey(key: string): Promise<string> {
+  public async nextKey(_: Node, key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
   }
 

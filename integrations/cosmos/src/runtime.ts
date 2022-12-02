@@ -23,7 +23,7 @@ export default class Cosmos implements IRuntime {
   }
 
   async validateDataItem(
-    core: Node,
+    _: Node,
     proposedDataItem: DataItem,
     validationDataItem: DataItem
   ): Promise<boolean> {
@@ -37,11 +37,11 @@ export default class Cosmos implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(_: Node, bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.header?.app_hash ?? '';
   }
 
-  async nextKey(key: string): Promise<string> {
+  async nextKey(_: Node, key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
   }
 

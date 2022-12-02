@@ -121,7 +121,7 @@ export async function runCache(this: Node): Promise<void> {
         }
 
         const nextKey = key
-          ? await this.runtime.nextKey(key)
+          ? await this.runtime.nextKey(this, key)
           : this.pool.data!.start_key;
 
         if (!itemFound) {

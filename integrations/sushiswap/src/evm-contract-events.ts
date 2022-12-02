@@ -61,7 +61,7 @@ export default class EvmContractEvents implements IRuntime {
   }
 
   async validateDataItem(
-    core: Node,
+    _: Node,
     proposedDataItem: DataItem,
     validationDataItem: DataItem
   ): Promise<boolean> {
@@ -79,7 +79,7 @@ export default class EvmContractEvents implements IRuntime {
     return '';
   }
 
-  async nextKey(key: string): Promise<string> {
+  async nextKey(_: Node, key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
   }
 }

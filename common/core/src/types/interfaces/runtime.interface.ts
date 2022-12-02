@@ -90,8 +90,9 @@ export interface IRuntime {
    * Deterministic behavior is required
    *
    * @method nextKey
+   * @param {Node} core the class of @kyve/core
    * @param {string} key which gets inserted by @kyve/core
-   * @return {Promise<void>}
+   * @return {Promise<string>}
    */
-  nextKey(key: string): Promise<string>;
+  nextKey(core: Node, key: string): Promise<string>;
 }

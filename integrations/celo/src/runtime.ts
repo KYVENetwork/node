@@ -7,11 +7,7 @@ export default class Celo implements IRuntime {
   public name = name;
   public version = version;
 
-  async getDataItem(
-    core: Node,
-    source: string,
-    key: string
-  ): Promise<DataItem> {
+  async getDataItem(_: Node, source: string, key: string): Promise<DataItem> {
     const block = await fetchBlock(source, +key);
 
     if (!block) throw new Error();
@@ -19,13 +15,13 @@ export default class Celo implements IRuntime {
     return { key, value: block };
   }
 
-  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
+  async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;
   }
 
   async validateDataItem(
-    core: Node,
+    _: Node,
     proposedDataItem: DataItem,
     validationDataItem: DataItem
   ): Promise<boolean> {
@@ -39,11 +35,11 @@ export default class Celo implements IRuntime {
     return proposedDataItemHash === validationDataItemHash;
   }
 
-  async summarizeDataBundle(core: Node, bundle: DataItem[]): Promise<string> {
+  async summarizeDataBundle(_: Node, bundle: DataItem[]): Promise<string> {
     return bundle.at(-1)?.value?.hash ?? '';
   }
 
-  async nextKey(key: string): Promise<string> {
+  async nextKey(_: Node, key: string): Promise<string> {
     return (parseInt(key) + 1).toString();
   }
 }
