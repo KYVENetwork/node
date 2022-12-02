@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.23.1](https://github.com/KYVENetwork/node/compare/@kyve/core-beta@1.23.0...@kyve/core-beta@1.23.1) (2022-12-02)
+
+**Note:** Version bump only for package @kyve/core-beta
+
 # [1.23.0](https://github.com/KYVENetwork/node/compare/@kyve/core-beta@1.22.2...@kyve/core-beta@1.23.0) (2022-11-30)
 
 ### Features

@@ -1,6 +1,6 @@
 {
   "name": "@kyve/streamr",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -27,7 +27,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@kyve/core-beta": "1.23.0",
+    "@kyve/core-beta": "1.23.1",
     "streamr-client": "^7.1.0"
   },
   "devDependencies": {

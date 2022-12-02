@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/KYVENetwork/node/compare/@kyve/uniswap@0.1.0...@kyve/uniswap@0.1.1) (2022-12-02)
+
+**Note:** Version bump only for package @kyve/uniswap
+
 # [0.1.0](https://github.com/KYVENetwork/node/compare/@kyve/uniswap@0.0.4...@kyve/uniswap@0.1.0) (2022-11-30)
 
 ### Features
