@@ -11,9 +11,6 @@
   "bin": "./dist/src/index.js",
   "pkg": {
     "scripts": "./dist/src/index.js",
-    "assets": [
-      "../../node_modules/classic-level/**/*"
-    ],
     "targets": [
       "latest-linux-x64",
       "latest-linux-arm64",

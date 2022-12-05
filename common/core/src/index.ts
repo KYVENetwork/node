@@ -215,10 +215,10 @@ export class Node {
         "Custom rest api endpoint the node uses for querying from chain"
       )
       .option(
-        "--cache <memory|jsonfile|leveldb>",
+        "--cache <jsonfile|memory>",
         "The cache this node should use",
         parseCache,
-        "leveldb"
+        "jsonfile"
       )
       .option("--debug", "Run the validator node in debug mode")
       .option(

@@ -84,11 +84,20 @@ export async function runCache(this: Node): Promise<void> {
         i++
       ) {
         try {
-          this.logger.debug(`this.cacheProvider.del(${i.toString()})`);
-          await this.cacheProvider.del(i.toString());
+          this.logger.debug(`this.cacheProvider.exists(${i.toString()})`);
+          const itemFound = await this.cacheProvider.exists(i.toString());
 
-          this.m.cache_current_items.dec();
-        } catch {
+          if (itemFound) {
+            this.logger.debug(`this.cacheProvider.del(${i.toString()})`);
+            await this.cacheProvider.del(i.toString());
+
+            this.m.cache_current_items.dec();
+          }
+        } catch (err) {
+          this.logger.error(
+            `Unexpected error deleting data item ${i.toString()} from local cache. Continuing ...`
+          );
+          this.logger.error(standardizeJSON(err));
           continue;
         }
       }
