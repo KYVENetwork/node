@@ -281,11 +281,10 @@ export class Node {
 
     // perform async setups
     await this.setupSDK();
-    await this.setupValidator();
-    await this.setupCacheProvider();
-
     await this.syncPoolState();
     await this.validateStorageBalance();
+    await this.setupValidator();
+    await this.setupCacheProvider();
 
     // start the node process. Node and cache should run at the same time.
     // Thats why, although they are async they are called synchronously
