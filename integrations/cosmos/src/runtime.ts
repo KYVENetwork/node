@@ -22,7 +22,7 @@ export default class Cosmos implements IRuntime {
     return true;
   }
 
-  async transformDataItem(core: Node, item: DataItem): Promise<DataItem> {
+  async transformDataItem(_: Node, item: DataItem): Promise<DataItem> {
     // don't transform data item
     return item;
   }

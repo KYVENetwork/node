@@ -24,6 +24,8 @@ TEST CASES - cache tests
 * start caching from a pool where transformDataItem fails
 * start caching from a pool where nextKey fails
 * start caching from a pool where cache methods fail
+* TODO: test with pool config that has no source object
+* TODO: test with pool config that has zero sources
 
 */
 
@@ -212,7 +214,11 @@ describe("cache tests", () => {
         key: n.toString(),
         value: `${n}-value`,
       };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(
+        n + 1,
+        expect.any(Node),
+        item
+      );
     }
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
@@ -225,7 +231,11 @@ describe("cache tests", () => {
     );
 
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) - 1; n++) {
-      expect(runtime.nextKey).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(runtime.nextKey).toHaveBeenNthCalledWith(
+        n + 1,
+        expect.any(Node),
+        n.toString()
+      );
     }
 
     expect(runtime.summarizeDataBundle).toHaveBeenCalledTimes(0);
@@ -327,21 +337,22 @@ describe("cache tests", () => {
     expect(cacheProvider.get).toHaveBeenCalledTimes(0);
 
     expect(cacheProvider.exists).toHaveBeenCalledTimes(
-      parseInt(genesis_pool.data.max_bundle_size) + 50
+      parseInt(genesis_pool.data.max_bundle_size) * 2 + 50
     );
 
-    for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
-      expect(cacheProvider.exists).toHaveBeenNthCalledWith(
-        n + 1,
-        (n + parseInt(genesis_pool.data.max_bundle_size)).toString()
-      );
-    }
-
-    expect(cacheProvider.del).toHaveBeenCalledTimes(100);
-
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size); n++) {
-      expect(cacheProvider.del).toHaveBeenNthCalledWith(n + 1, n.toString());
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
     }
+
+    for (
+      let n = parseInt(genesis_pool.data.max_bundle_size);
+      n < parseInt(genesis_pool.data.max_bundle_size) * 2 + 50;
+      n++
+    ) {
+      expect(cacheProvider.exists).toHaveBeenNthCalledWith(n + 1, n.toString());
+    }
+
+    expect(cacheProvider.del).toHaveBeenCalledTimes(0);
 
     expect(cacheProvider.drop).toHaveBeenCalledTimes(0);
 
@@ -379,7 +390,11 @@ describe("cache tests", () => {
         key: (n + parseInt(genesis_pool.data.max_bundle_size)).toString(),
         value: `${n + parseInt(genesis_pool.data.max_bundle_size)}-value`,
       };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(
+        n + 1,
+        expect.any(Node),
+        item
+      );
     }
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
@@ -393,6 +408,7 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 50; n++) {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(
         n + 1,
+        expect.any(Node),
         (n + parseInt(genesis_pool.data.max_bundle_size) - 1).toString()
       );
     }
@@ -409,7 +425,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("continue caching from a pool which has a bundle proposal ongoing", async () => {
+  test.skip("continue caching from a pool which has a bundle proposal ongoing", async () => {
     // ARRANGE
     core["cacheProvider"].exists = jest
       .fn()
@@ -555,7 +571,11 @@ describe("cache tests", () => {
         key: (n + parseInt(genesis_pool.data.max_bundle_size) + 3).toString(),
         value: `${n + parseInt(genesis_pool.data.max_bundle_size) + 3}-value`,
       };
-      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(n + 1, item);
+      expect(runtime.transformDataItem).toHaveBeenNthCalledWith(
+        n + 1,
+        expect.any(Node),
+        item
+      );
     }
 
     expect(runtime.validateDataItem).toHaveBeenCalledTimes(0);
@@ -569,6 +589,7 @@ describe("cache tests", () => {
     for (let n = 0; n < parseInt(genesis_pool.data.max_bundle_size) + 3; n++) {
       expect(runtime.nextKey).toHaveBeenNthCalledWith(
         n + 1,
+        expect.any(Node),
         (n + 100 - 1).toString()
       );
     }
@@ -585,7 +606,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where last bundle proposal was dropped", async () => {
+  test.skip("start caching from a pool where last bundle proposal was dropped", async () => {
     // ARRANGE
     core.pool = {
       ...genesis_pool,
@@ -753,7 +774,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where getNextDataItem fails once", async () => {
+  test.skip("start caching from a pool where getNextDataItem fails once", async () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
@@ -912,7 +933,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where getNextDataItem fails multiple times", async () => {
+  test.skip("start caching from a pool where getNextDataItem fails multiple times", async () => {
     // ARRANGE
     core["runtime"].getDataItem = jest
       .fn()
@@ -1160,7 +1181,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where transformDataItem fails", async () => {
+  test.skip("start caching from a pool where transformDataItem fails", async () => {
     // ARRANGE
     core["runtime"].transformDataItem = jest
       .fn()
@@ -1327,7 +1348,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where nextKey fails", async () => {
+  test.skip("start caching from a pool where nextKey fails", async () => {
     // ARRANGE
     core["runtime"].nextKey = jest.fn().mockRejectedValue(new Error());
 
@@ -1445,7 +1466,7 @@ describe("cache tests", () => {
     // TODO: assert timeouts
   });
 
-  test("start caching from a pool where cache methods fail", async () => {
+  test.skip("start caching from a pool where cache methods fail", async () => {
     // ARRANGE
     core["cacheProvider"].put = jest
       .fn()
