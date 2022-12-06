@@ -151,7 +151,7 @@ export async function runCache(this: Node): Promise<void> {
 
           // validate if data items from those multiple sources are
           // valid against each other
-          let valid = false;
+          let valid = true;
 
           // we generate all possible index pairs so we can cross-validate
           // each data item with every other data item to ensure that
@@ -217,7 +217,7 @@ export async function runCache(this: Node): Promise<void> {
 
           // add a timeout so that the runtime data source
           // is not overloaded with requests
-          await sleep(50);
+          await sleep(500);
         }
 
         // assign the next key for the next round
