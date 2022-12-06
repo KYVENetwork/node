@@ -116,6 +116,14 @@ export async function runCache(this: Node): Promise<void> {
       );
 
       for (let i = currentIndex; i < targetIndex; i++) {
+        // if there are no sources abort
+        if ((this.poolConfig?.sources ?? []).length === 0) {
+          this.logger.info(
+            `Abort collecting data items. No sources found on pool config`
+          );
+          break;
+        }
+
         // check if data item was already collected. If it was
         // already collected we don't need to retrieve it again
         this.logger.debug(`this.cacheProvider.exists(${i.toString()})`);
@@ -136,14 +144,14 @@ export async function runCache(this: Node): Promise<void> {
         if (!itemFound) {
           // collect and transform data from every source at once
           const results: DataItem[] = await Promise.all(
-            this.poolConfig.sources.map((source: string) =>
+            (this.poolConfig?.sources ?? []).map((source: string) =>
               this.saveGetTransformDataItem(source, nextKey)
             )
           );
 
           // validate if data items from those multiple sources are
           // valid against each other
-          let valid = true;
+          let valid = false;
 
           // we generate all possible index pairs so we can cross-validate
           // each data item with every other data item to ensure that
